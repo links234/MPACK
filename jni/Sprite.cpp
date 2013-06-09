@@ -1,0 +1,84 @@
+/*
+	This file is owned by Murtaza Alexandru and may not be distributed, edited or used without written permission of the owner
+	When using this work you accept to keep this header
+	E-mails from murtaza_alexandru73@yahoo.com with permissions can be seen as valid.
+*/
+
+
+
+#include "Sprite.hpp"
+
+#include "Render.hpp"
+
+Sprite::Sprite()
+	: m_position(0,0), m_rotation(0), m_width(0), m_height(0), m_texture(NULL), m_spriteShadingType(SpriteVertex::ALPHA_TEST)
+{
+	m_color[0]=m_color[1]=m_color[2]=m_color[3]=Math::Vector4f(1.0f,1.0f,1.0f,1.0f);
+}
+
+Sprite::~Sprite()
+{
+}
+
+void Sprite::Render()
+{
+	Math::Vector2f v[4];
+	v[0].x=-m_width;v[0].y=-m_height;
+	v[0].Rotate(m_rotation);
+	v[0]+=m_position;
+
+	v[1].x=+m_width;v[1].y=-m_height;
+	v[1].Rotate(m_rotation);
+	v[1]+=m_position;
+
+	v[2].x=+m_width;v[2].y=+m_height;
+	v[2].Rotate(m_rotation);
+	v[2]+=m_position;
+
+	v[3].x=-m_width;v[3].y=+m_height;
+	v[3].Rotate(m_rotation);
+	v[3]+=m_position;
+
+	swap(v[0],v[3]);
+	swap(v[1],v[2]);
+
+	SpriteVertex vertexData[]={	SpriteVertex(v[0].x,Render::GetScreenHeight()-v[0].y,	1,0,	m_color[0].x,m_color[0].y,m_color[0].z,m_color[0].w,	m_spriteShadingType),
+								SpriteVertex(v[1].x,Render::GetScreenHeight()-v[1].y,	0,0,	m_color[1].x,m_color[1].y,m_color[1].z,m_color[1].w,	m_spriteShadingType),
+								SpriteVertex(v[2].x,Render::GetScreenHeight()-v[2].y,	0,1,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),
+								SpriteVertex(v[3].x,Render::GetScreenHeight()-v[3].y,	1,1,	m_color[3].x,m_color[3].y,m_color[3].z,m_color[3].w,	m_spriteShadingType) };
+
+	SpriteBatcher::Send(vertexData,4,m_texture);
+}
+
+void Sprite::SetSize(GLfloat width,GLfloat height)
+{
+	m_width=width*0.5f;
+	m_height=height*0.5f;
+}
+	
+void Sprite::SetWidth(GLfloat width)
+{
+	m_width=width*0.5f;
+}
+	
+void Sprite::SetHeight(GLfloat height)
+{
+	m_height=height*0.5f;
+}
+
+void Sprite::SetTexture(Texture2D *texture)
+{
+	m_texture=texture;
+	m_width=(GLfloat)(m_texture->GetWidth())*0.5f;
+	m_height=(GLfloat)(m_texture->GetHeight())*0.5f;
+}
+
+GLfloat Sprite::GetWidth()
+{
+	return m_width*2.0f;
+}
+
+GLfloat Sprite::GetHeight()
+{
+	return m_height*2.0f;
+}
