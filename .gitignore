@@ -11,6 +11,10 @@ local.properties
 .classpath
 .cproject
 
+#Eclipse project folders
+.externalToolBuilders/
+.settings/
+
 #Patterns
 *~
 
