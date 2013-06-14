@@ -1,0 +1,16 @@
+#Android NDK/SDK binary folders
+bin/
+libs/
+obj/
+
+#Android local properties
+local.properties
+
+#Eclipse project files
+.project
+.classpath
+.cproject
+
+#Patterns
+*~
+
