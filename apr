@@ -51,24 +51,51 @@ function compile
 {
 	pre_compile
 	ndk-build all
+	STATUS=$?
 	post_compile
+
+	if [[ $STATUS -eq 0 ]] ; then
+		echo "Compile ndk-build success!"
+	else
+		echo "PANIC!!! ndk-build failed!"
+		exit 1
+	fi
 }
 
 function compile_verbose
 {
 	pre_compile
 	ndk-build all v=1
+	STATUS=$?
 	post_compile
+	if [[ $STATUS -eq 0 ]] ; then
+		echo 'Compile: "ndk-build" success!'
+	else
+		echo 'PANIC!!! "ndk-build" failed!'
+		exit 1
+	fi
 }
 
 function link
 {
 	ant debug
+	if [[ $? -eq 0 ]] ; then
+		echo 'Link: "ant debug" success!'
+	else
+		echo 'PANIC!!! "ant debug" failed!'
+		exit 1
+	fi
 }
 
 function push
 {
 	ant installd
+	if [[ $? -eq 0 ]] ; then
+		echo 'Push: "ant installd" success!'
+	else
+		echo 'PANIC!!! "ant debug" failed!'
+		exit 1
+	fi
 }
 
 function run
@@ -76,6 +103,12 @@ function run
 	PACKAGE=$(cat ./AndroidManifest.xml | grep "package=\"*\"" | cut -d"\"" -f2)
 	ACTIVITY=$(cat ./AndroidManifest.xml | grep "<activity android:name=\"*\"" | cut -d"\"" -f2)
 	adb shell am start -n $PACKAGE/$ACTIVITY
+	if [[ $? -eq 0 ]] ; then
+		echo 'Run: "adb shell am start -n <PACKAGE/ACTIVITY>" success!'
+	else
+		echo 'PANIC!!! "adb shell am start -n <PACKAGE/ACTIVITY>" failed!'
+		exit 1
+	fi
 }
 
 function clean
