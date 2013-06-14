@@ -78,11 +78,18 @@ function run
 	adb shell am start -n $PACKAGE/$ACTIVITY
 }
 
+function clean
+{
+	rm -rf bin/ libs/ obj/
+	ndk-build clean
+	ant debug clean
+}
+
 if [[ $# -eq 1 ]] ; then
 	PARAM1=$(tolower $1)
 
 	if [ "$PARAM1" == "clean" ] || [ "$PARAM1" == "-c" ] ; then
-		rm -rf bin/ libs/ obj/
+		clean
 	elif [ "$PARAM1" == "help" ] || [ "$PARAM1" == "-h" ] ; then
 		display_help
 	elif [ "$PARAM1" == "build" ] ; then
