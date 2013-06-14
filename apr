@@ -33,11 +33,11 @@ function pre_compile
 	cp -R -a jni ./tmp_jni
 	rm -R jni/*
 
-	find . -name "*.cpp" -exec cp -a {} ./jni \;
-	find . -name "*.hpp" -exec cp -a {} ./jni \;
-	find . -name "*.c" -exec cp -a {} ./jni \;
-	find . -name "*.h" -exec cp -a {} ./jni \;
-	find . -name "*.mk" -exec cp -a {} ./jni \;
+	find ./tmp_jni -name "*.cpp" -exec cp -a {} ./jni \;
+	find ./tmp_jni -name "*.hpp" -exec cp -a {} ./jni \;
+	find ./tmp_jni -name "*.c" -exec cp -a {} ./jni \;
+	find ./tmp_jni -name "*.h" -exec cp -a {} ./jni \;
+	find ./tmp_jni -name "*.mk" -exec cp -a {} ./jni \;
 }
 
 function post_compile
