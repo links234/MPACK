@@ -68,7 +68,7 @@ function link
 
 function push
 {
-	sudo ant installd
+	ant installd
 }
 
 function run
