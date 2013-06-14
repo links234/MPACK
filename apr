@@ -1,0 +1,116 @@
+#!/bin/bash
+#set -x
+
+tolower() 
+{
+	echo $1 | tr "[:upper:]" "[:lower:]" ;
+} 
+
+toupper() 
+{
+	echo $1 | tr "[:lower:]" "[:upper:]" ;
+}
+
+function invalid_command
+{
+	echo "Invalid command. Run help/-h command to see full usage"
+}
+
+function display_help
+{
+	echo "Android PRoject (APR) usage: "
+	echo "	clean/-c 	= clean project"
+	echo "	build 		= compile, link and upload. Use -v option for verbose mode"
+	echo "	compile		= use ndk-build to build libso. Use -v option for verbose mode"
+	echo "	link 		= link current libso to apk"
+	echo "	push	 	= push apk to default device. Use -l option to link apk before push"
+	echo "	help/-h		= display this help"
+}
+
+function pre_compile
+{
+	#mkdir tmp_jni
+	cp -R -a jni ./tmp_jni
+	rm -R jni/*
+
+	find . -name "*.cpp" -exec cp -a {} ./jni \;
+	find . -name "*.hpp" -exec cp -a {} ./jni \;
+	find . -name "*.c" -exec cp -a {} ./jni \;
+	find . -name "*.h" -exec cp -a {} ./jni \;
+	find . -name "*.mk" -exec cp -a {} ./jni \;
+}
+
+function post_compile
+{
+	rm -R jni
+	cp -R -a tmp_jni ./jni
+	rm -R tmp_jni
+}
+
+function compile
+{
+	pre_compile
+	ndk-build all
+	post_compile
+}
+
+function compile_verbose
+{
+	pre_compile
+	ndk-build all v=1
+	post_compile
+}
+
+function link
+{
+	ant debug
+}
+
+function push
+{
+	sudo ant installd
+}
+
+if [[ $# -eq 1 ]] ; then
+	PARAM1=$(tolower $1)
+
+	if [ "$PARAM1" == "clean" ] || [ "$PARAM1" == "-c" ] ; then
+		rm -rf bin/ libs/ obj/
+	elif [ "$PARAM1" == "help" ] || [ "$PARAM1" == "-h" ] ; then
+		display_help
+	elif [ "$PARAM1" == "build" ] ; then
+		compile
+		link
+		push
+	elif [ "$PARAM1" == "compile" ] ; then
+		compile
+	elif [ "$PARAM1" == "link" ] ; then
+		link
+	elif [ "$PARAM1" == "push" ] ; then
+		push
+	else
+		invalid_command
+		exit 1
+	fi
+elif [[ $# -eq 2 ]] ; then
+	PARAM1=$(tolower $1)
+	PARAM2=$(tolower $2)
+
+	if [ "$PARAM1" == "compile" ] && [ "$PARAM2" == "-v"] ; then
+		compile_verbose
+	elif [ "$PARAM1" == "push" ] || [ "$PARAM1" == "-l" ] ; then
+		link
+		push
+	elif [ "$PARAM1" == "build" ] || [ "$PARAM1" == "-v" ] ; then
+		compile_verbose
+		link
+		push
+	else
+		invalid_command
+		exit 1
+	fi
+else
+	invalid_command
+	exit 1
+fi
+
