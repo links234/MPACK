@@ -97,6 +97,11 @@ if [[ $# -eq 1 ]] ; then
 		push
 	elif [ "$PARAM1" == "run" ] ; then
 		run
+	elif [ "$PARAM1" == "brun" ] ; then
+		compile
+		link
+		push
+		run
 	else
 		invalid_command
 		exit 1
