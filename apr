@@ -71,6 +71,13 @@ function push
 	sudo ant installd
 }
 
+function run
+{
+	PACKAGE=$(cat ./AndroidManifest.xml | grep "package=\"*\"" | cut -d"\"" -f2)
+	ACTIVITY=$(cat ./AndroidManifest.xml | grep "<activity android:name=\"*\"" | cut -d"\"" -f2)
+	adb shell am start -n $PACKAGE/$ACTIVITY
+}
+
 if [[ $# -eq 1 ]] ; then
 	PARAM1=$(tolower $1)
 
@@ -88,6 +95,8 @@ if [[ $# -eq 1 ]] ; then
 		link
 	elif [ "$PARAM1" == "push" ] ; then
 		push
+	elif [ "$PARAM1" == "run" ] ; then
+		run
 	else
 		invalid_command
 		exit 1
