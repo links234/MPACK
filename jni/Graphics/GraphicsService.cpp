@@ -6,6 +6,7 @@
 #include "Texture2D.hpp"
 #include "TextureMappedFont.hpp"
 #include "Log.hpp"
+#include "Particles.hpp"
 
 namespace Core
 {
@@ -152,12 +153,16 @@ namespace Core
     void GraphicsService::Update()
     {
         float lTimeStep = Global::pContext->pTimeService->Elapsed();
+
+        ParticleEmitter::UpdateAll(lTimeStep);
+        Particle::UpdateAll(lTimeStep);
     }
 
     Status GraphicsService::Render()
     {
     	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    	Particle::RenderAll();
 		SpriteBatcher::Flush();
 
 		if(eglSwapBuffers(mDisplay, mSurface)!=EGL_TRUE)
