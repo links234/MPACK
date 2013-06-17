@@ -37,17 +37,13 @@ namespace Game
 		m_pMenuGUI->AddButton("Exit",GUIMENU_BUTTON_EXIT);
 		m_pMenuGUI->BuildLayout();
 
-
 		Texture2D *m_particleTex;
 		ParticleEmitterCircle *m_pEmitter;
 
 		m_particleTex = new Texture2D;
 		m_particleTex->Load("@GUI_Button.tga");
-		LOGD("FINE RIGHT HERE 1");
 
 		m_pEmitter = new ParticleEmitterCircle;
-
-		LOGD("FINE RIGHT HERE 2");
 
 		m_pEmitter->SetAngularVelocity(5.0f,10.0f);
 		m_pEmitter->SetParticleLife(10.0f,13.0f);
