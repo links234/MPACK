@@ -19,7 +19,8 @@ struct Particle_cmp
 };
 
 Particle::Particle()
-	: m_modifiers(NULL), m_width(20.0f), m_height(20.0f), m_rotation(0.0f), m_velocity(0.0f,0.0f), m_angularVelocity(0.0f)
+	: m_modifiers(NULL), m_width(20.0f), m_height(20.0f), m_rotation(0.0f),
+	  m_velocity(0.0f,0.0f), m_angularVelocity(0.0f), m_color(1.0f,1.0f,1.0f,1.0f)
 {
 	m_particles.push_back(this);
 }
@@ -73,7 +74,7 @@ void Particle::RenderAll()
 	{
 		m_spriteInterface.m_position=(*it)->m_position;
 		m_spriteInterface.m_rotation=(*it)->m_rotation;
-		m_spriteInterface.m_spriteShadingType=SpriteVertex::NONE;//SpriteVertex::ALPHA_TEST;
+		m_spriteInterface.m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
 		m_spriteInterface.SetTexture((*it)->m_texture);
 		m_spriteInterface.SetSize((*it)->m_width,(*it)->m_height);
 		m_spriteInterface.SetColor((*it)->m_color);
