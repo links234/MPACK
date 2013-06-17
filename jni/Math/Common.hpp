@@ -16,16 +16,16 @@ namespace Math
 	template <class T> class Misc
 	{
 	public:
-		const static T      c_Pi,
-							c_TwoPi,
-							c_HalfPi,
-							c_InvPi,
-							c_e,
-							c_DegToRad,
-							c_RadToDeg,
-							c_Epsilon,
-							c_Min,
-							c_Max;
+		const static T     	c_Pi,
+						    	c_TwoPi,
+						    	c_HalfPi,
+						    	c_InvPi,
+						    	c_e,
+						    	c_DegToRad,
+						    	c_RadToDeg,
+						    	c_Epsilon,
+						    	c_Min,
+						    	c_Max;
 
 		static T Sin(const T);
 		static T Cos(const T);
@@ -42,18 +42,20 @@ namespace Math
 		static T Max(const T, const T);
 		static T Clamp(const T, const T, const T);
 		static T Sign(const T);
+
+		static T Mod(const T, const T);
 	};
 
-	template<> inline float		Misc<float>::Sin(const float v)			{ return sinf(v);			}
+	template<> inline float	Misc<float>::Sin(const float v)			{ return sinf(v);			}
 	template<> inline double	Misc<double>::Sin(const double v)		{ return sin(v);			}
-	template<> inline float		Misc<float>::Cos(const float v)			{ return cosf(v);			}
+	template<> inline float	Misc<float>::Cos(const float v)			{ return cosf(v);			}
 	template<> inline double	Misc<double>::Cos(const double v)		{ return cos(v);			}
-	template<> inline float		Misc<float>::Tan(const float v)			{ return tanf(v);			}
+	template<> inline float	Misc<float>::Tan(const float v)			{ return tanf(v);			}
 	template<> inline double	Misc<double>::Tan(const double v)		{ return tan(v);			}
-	template<> inline float		Misc<float>::Sqrt(const float v)		{ return sqrtf(v);			}
+	template<> inline float	Misc<float>::Sqrt(const float v)			{ return sqrtf(v);			}
 	template<> inline double	Misc<double>::Sqrt(const double v)		{ return sqrt(v);			}
-	template<> inline float		Misc<float>::InvSqrt(const float v)		{ return 1.0f / sqrtf(v);	}
-	template<> inline double	Misc<double>::InvSqrt(const double v)	{ return 1.0 / sqrt(v);		}
+	template<> inline float	Misc<float>::InvSqrt(const float v)		{ return 1.0f / sqrtf(v);	}
+	template<> inline double	Misc<double>::InvSqrt(const double v)	{ return 1.0 / sqrt(v);	}
 
 	template<class T> inline bool Misc<T>::Equal(T a, const T b)
 	{
@@ -114,6 +116,9 @@ namespace Math
 		}
 		return static_cast<T>(1);
 	}
+
+	template<> inline float	Misc<float>::Mod(const float a, const float b)			{ return (float)fmod((double)(a),(double)(b));		}
+	template<> inline double	Misc<double>::Mod(const double a, const double b)		{ return fmod(a,b);	}
 }
 
 #endif
