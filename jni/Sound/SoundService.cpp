@@ -301,7 +301,8 @@ namespace Core
         int16_t* lBuffer;
         off_t    lLength;
 
-        for(i = 0; i < MAX_SOUNDS; i++){
+        for(i = 0; i < MAX_SOUNDS; i++)
+        {
         	lRes = (*(mPlayerQueue[i]))->GetState(mPlayerQueue[i], &state);
         	if (lRes != SL_RESULT_SUCCESS)  goto ERROR;
 
@@ -339,27 +340,34 @@ namespace Core
     	}
     }
 
-    void SoundService::PauseBGM(){
+    void SoundService::PauseBGM()
+    {
     	SetBGMState(SL_PLAYSTATE_PAUSED);
     }
 
-	void SoundService::PauseSFX(){
+	void SoundService::PauseSFX()
+	{
 		SetSFXState(SL_PLAYSTATE_PAUSED);
 	}
 
-	void SoundService::PauseAll(){
+	void SoundService::PauseAll()
+	{
 		PauseBGM();
 		PauseSFX();
 	}
 
-	void SoundService::ResumeBGM(){
+	void SoundService::ResumeBGM()
+	{
 		SetBGMState(SL_PLAYSTATE_PLAYING);
 	}
 
-	void SoundService::ResumeSFX(){
+	void SoundService::ResumeSFX()
+	{
 		SetSFXState(SL_PLAYSTATE_PLAYING);
 	}
-	void SoundService::ResumeAll(){
+
+	void SoundService::ResumeAll()
+	{
 		ResumeBGM();
 		ResumeSFX();
 	}
