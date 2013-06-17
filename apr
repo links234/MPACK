@@ -150,7 +150,9 @@ elif [[ $# -eq 2 ]] ; then
 	PARAM1=$(tolower $1)
 	PARAM2=$(tolower $2)
 
-	if [ "$PARAM1" == "compile" ] && [ "$PARAM2" == "-v"] ; then
+	echo "$PARAM1			$PARAM2"
+
+	if [[ "$PARAM1" == "compile"  &&  "$PARAM2" == "-v" ]] ; then
 		compile_verbose
 	elif [ "$PARAM1" == "push" ] || [ "$PARAM1" == "-l" ] ; then
 		link
