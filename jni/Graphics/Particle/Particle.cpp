@@ -19,7 +19,7 @@ struct Particle_cmp
 };
 
 Particle::Particle()
-	: m_modifiers(NULL)
+	: m_modifiers(NULL), m_width(20.0f), m_height(20.0f)
 {
 	m_particles.push_back(this);
 }
@@ -33,7 +33,7 @@ bool Particle::Update(GLfloat delta)
 	m_life-=delta;
 	if(m_life<=0.0f)
 	{
-		return true;
+		return false;
 	}
 	if(m_modifiers)
 	{
@@ -48,15 +48,17 @@ bool Particle::Update(GLfloat delta)
 	{
 		m_rotation-=360.0f;
 	}
-	return false;
+	return true;
 }
 
 void Particle::UpdateAll(GLfloat delta)
 {
+	LOGD("particles = %d",m_particles.size());
+
 	vector<Particle*> temp;
 	for(vector<Particle*>::iterator it=m_particles.begin();it!=m_particles.end();++it)
 	{
-		if(!(*it)->Update(delta))
+		if((*it)->Update(delta))
 		{
 			temp.push_back(*it);
 		}
@@ -76,7 +78,7 @@ void Particle::RenderAll()
 	{
 		m_spriteInterface.m_position=(*it)->m_position;
 		m_spriteInterface.m_rotation=(*it)->m_rotation;
-		m_spriteInterface.m_spriteShadingType=SpriteVertex::ALPHA_TEST;
+		m_spriteInterface.m_spriteShadingType=SpriteVertex::NONE;//SpriteVertex::ALPHA_TEST;
 		m_spriteInterface.SetTexture((*it)->m_texture);
 		m_spriteInterface.SetSize((*it)->m_width,(*it)->m_height);
 		m_spriteInterface.SetColor((*it)->m_color);
