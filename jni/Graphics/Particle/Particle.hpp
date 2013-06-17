@@ -6,6 +6,7 @@
 
 #include "Types.hpp"
 #include "Maths.hpp"
+#include "Texture2D.hpp"
 
 using namespace Math;
 
@@ -13,7 +14,7 @@ using std::vector;
 using std::queue;
 
 class ParticleEffector;
-class Texture2D;
+class Sprite;
 
 class Particle
 {
@@ -26,17 +27,16 @@ public:
 	static void UpdateAll(GLfloat delta);
 	static void RenderAll();
 
-	Vector2f					m_position;
-	Vector2f					m_velocity;
-	Vector3f					m_color;
-	GLfloat						m_rotation;
-	GLfloat						m_angularVelocity;
-	GLfloat						m_maxLife;
-	GLfloat						m_life;
-	Texture2D					*m_texture;
+	Vector2f					m_position,m_velocity;
+	Vector4f					m_color;
+	GLfloat						m_rotation,m_angularVelocity;
+	GLfloat						m_width,m_height;
+	GLfloat						m_life,m_maxLife;
+	Core::Texture2D				*m_texture;
 	vector<ParticleEffector*>	*m_modifiers;
 private:
 	static vector<Particle*>	m_particles;
+	static Sprite				m_spriteInterface;
 };
 
 #endif
