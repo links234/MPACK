@@ -16,8 +16,15 @@
 #include "Helper.hpp"
 #include "Log.hpp"
 
+class TextureMappedFont;
+
 namespace Debug
 {
+	extern GLuint	printLines;
+	extern GLfloat	printFontSize;
+
+	void InitFrame();
+	void Print(TextureMappedFont *font, char *message, ...);
 	void AssertGL(const char *pMessage);
 }
 

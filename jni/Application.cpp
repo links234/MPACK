@@ -55,6 +55,7 @@ namespace Game
     Core::Status Application::onStep()
     {
     	// Updates services.
+    	Debug::InitFrame();
     	Global::pContext->pTimeService->Update();
     	Global::pContext->pGraphicsService->Update();
 
@@ -88,6 +89,13 @@ namespace Game
     	}
 
     	m_pGameState->Render();
+
+    	//Debug Messages here
+    	static GLfloat time=0.0f;
+    	time+=Global::pContext->pTimeService->Elapsed();
+
+    	Debug::Print(Global::pFont,"FPS %f",time);
+
 		if (Global::pContext->pGraphicsService->Render() != Core::STATUS_OK) {
 			return Core::STATUS_KO;
 		}

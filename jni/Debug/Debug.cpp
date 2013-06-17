@@ -1,9 +1,41 @@
 #include "Debug.hpp"
+
+#include "TextureMappedFont.hpp"
 #include "Types.hpp"
 #include "Log.hpp"
 
 namespace Debug
 {
+	const int DEBUGMESSAGEBUFFER_SIZE = 1024;
+
+	GLuint	printLines;
+	GLfloat	printFontSize = 40.0f;
+
+	void InitFrame()
+	{
+		printLines=0;
+	}
+
+	void Print(TextureMappedFont *font, char *message, ...)
+	{
+		char buffer[DEBUGMESSAGEBUFFER_SIZE];
+		memset(buffer,NULL,DEBUGMESSAGEBUFFER_SIZE);
+
+		va_list args;
+		va_start(args,message);
+		vsprintf(buffer,message,args);
+		va_end(args);
+
+		GLfloat currentFontSize=font->GetFontSize();
+		font->SetFontSize(printFontSize);
+
+		font->SendString(string(buffer),5.0f,5.0f+printLines*printFontSize);
+
+		font->SetFontSize(currentFontSize);
+
+		++printLines;
+	}
+
 	void AssertGL(const char *pMessage)
 	{
 		GLint error = glGetError();
