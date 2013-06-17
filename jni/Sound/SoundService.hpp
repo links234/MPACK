@@ -24,6 +24,14 @@ namespace Core
         Sound* RegisterSound(const char* pPath);
         void PlaySound(Sound* pSound);
 
+        void PauseBGM();
+        void PauseSFX();
+        void PauseAll();
+
+        void ResumeBGM();
+        void ResumeSFX();
+        void ResumeAll();
+
     private:
         Status StartSoundPlayer();
 
@@ -46,6 +54,9 @@ namespace Core
         SLBufferQueueItf mPlayerQueue[MAX_SOUNDS];
         // Sounds.
         Sound* mSounds[32]; int32_t mSoundCount;
+
+        void SetBGMState(SLuint32 state);
+        void SetSFXState(SLuint32 state);
     };
 }
 #endif

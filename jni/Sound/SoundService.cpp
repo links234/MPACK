@@ -325,4 +325,42 @@ namespace Core
     ERROR:
         LOGE("Error trying to play sound");
     }
+
+
+    void SoundService::SetBGMState(SLuint32 state)
+    {
+       	(*mBGMPlayer)->SetPlayState(mBGMPlayer, state);
+    }
+
+    void SoundService::SetSFXState(SLuint32 state)
+    {
+    	for(int i = 0; i < MAX_SOUNDS; i++){
+    		(*mPlayer[i])->SetPlayState(mPlayer[i], state);
+    	}
+    }
+
+    void SoundService::PauseBGM(){
+    	SetBGMState(SL_PLAYSTATE_PAUSED);
+    }
+
+	void SoundService::PauseSFX(){
+		SetSFXState(SL_PLAYSTATE_PAUSED);
+	}
+
+	void SoundService::PauseAll(){
+		PauseBGM();
+		PauseSFX();
+	}
+
+	void SoundService::ResumeBGM(){
+		SetBGMState(SL_PLAYSTATE_PLAYING);
+	}
+
+	void SoundService::ResumeSFX(){
+		SetSFXState(SL_PLAYSTATE_PLAYING);
+	}
+	void SoundService::ResumeAll(){
+		ResumeBGM();
+		ResumeSFX();
+	}
 }
