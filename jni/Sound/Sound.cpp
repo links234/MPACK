@@ -76,6 +76,7 @@ namespace Core
 				return mBuffer;
 			}
     	}
+    	return NULL;
     }
 
 
