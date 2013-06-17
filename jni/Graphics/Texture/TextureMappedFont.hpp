@@ -46,6 +46,7 @@ public:
 
 	Texture2D* GetTexturePointer();
 
+	GLfloat GetFontSize() const;
 	GLfloat GetTextWidth(const std::string &str);
 
 private:
