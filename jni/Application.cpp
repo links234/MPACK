@@ -67,6 +67,7 @@ namespace Game
     			delete m_pGameState;
     			m_pGameState=new PlayGame;
     			m_pGameState->Update();
+    			LOGD("4");
     		break;
     		case EVENT_MAINMENU_HIGHSCORE:
 
@@ -94,7 +95,7 @@ namespace Game
     	static GLfloat time=0.0f;
     	time+=Global::pContext->pTimeService->Elapsed();
 
-    	Debug::Print(Global::pFont,"FPS %f",time);
+    	Debug::Print(Global::pFont,"Elapsed time: %f",time);
 
 		if (Global::pContext->pGraphicsService->Render() != Core::STATUS_OK) {
 			return Core::STATUS_KO;

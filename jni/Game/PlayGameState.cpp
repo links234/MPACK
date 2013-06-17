@@ -16,15 +16,10 @@ namespace Game
 
 		Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
 
-		LOGD("FINE RIGHT HERE 0");
-
 		m_particleTex = new Texture2D;
 		m_particleTex->Load("@GUI_Button.tga");
-		LOGD("FINE RIGHT HERE 1");
 
 		m_pEmitter = new ParticleEmitterCircle;
-
-		LOGD("FINE RIGHT HERE 2");
 
 		m_pEmitter->SetAngularVelocity(5.0f,10.0f);
 		m_pEmitter->SetParticleLife(2.0f,3.0f);
@@ -33,7 +28,6 @@ namespace Game
 		m_pEmitter->SetPosition(Vector2f(200.0f,200.0f));
 		m_pEmitter->SetSpawnDelay(1.0f/40.0f);
 
-		LOGD("FINE RIGHT HERE 3");
 		/*
 		//Texture loading
 		m_playerTexture=new Texture2D;
@@ -62,7 +56,7 @@ namespace Game
 	{
 		float lTimeStep = Global::pContext->pTimeService->Elapsed();
 
-		m_joystick->Update();
+		//m_joystick->Update();
 
 		if(m_requestExit)
 		{
