@@ -19,12 +19,16 @@ namespace Core
         Status Load();
         Status Unload();
 
+        uint8_t* GetPCMData();
+        off_t GetPCMLength();
+
     private:
         friend class SoundService;
 
     private:
         Asset mResource;
         uint8_t* mBuffer; off_t mLength;
+        char extension[4];
     };
 }
 #endif

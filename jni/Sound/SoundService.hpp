@@ -4,6 +4,9 @@
 #include "Sound.hpp"
 #include "Types.hpp"
 
+//maximum number of simultaneouse sounds, excluding backgroud music
+#define MAX_SOUNDS 5
+
 namespace Core
 {
     class SoundService
@@ -21,6 +24,14 @@ namespace Core
         Sound* RegisterSound(const char* pPath);
         void PlaySound(Sound* pSound);
 
+        void PauseBGM();
+        void PauseSFX();
+        void PauseAll();
+
+        void ResumeBGM();
+        void ResumeSFX();
+        void ResumeAll();
+
     private:
         Status StartSoundPlayer();
 
@@ -36,11 +47,16 @@ namespace Core
         SLObjectItf mBGMPlayerObj; SLPlayItf mBGMPlayer;
         SLSeekItf mBGMPlayerSeek;
 
+
+        //TODO: Struct with all player interfaces
         // Sound player.
-        SLObjectItf mPlayerObj; SLPlayItf mPlayer;
-        SLBufferQueueItf mPlayerQueue;
+        SLObjectItf mPlayerObj[MAX_SOUNDS]; SLPlayItf mPlayer[MAX_SOUNDS];
+        SLBufferQueueItf mPlayerQueue[MAX_SOUNDS];
         // Sounds.
         Sound* mSounds[32]; int32_t mSoundCount;
+
+        void SetBGMState(SLuint32 state);
+        void SetSFXState(SLuint32 state);
     };
 }
 #endif

@@ -7,6 +7,15 @@ namespace Core
         mResource(pPath),
         mBuffer(NULL), mLength(0)
     {
+    	const char* path = GetPath();
+
+		int i;
+		for(i = 0; path[i] != '\0'; i++)
+			;
+		i -= 3; //presume 3 char extension
+
+		strcpy(extension, path+i);
+
     }
 
     const char* Sound::GetPath()
@@ -48,5 +57,25 @@ namespace Core
         mBuffer = NULL; mLength = 0;
 
         return STATUS_OK;
+    }
+
+
+    uint8_t* Sound::GetPCMData(){
+    	if(!mBuffer)
+    		LOGE("Error: Sound buffer null");
+    	else{
+			if(strcmp(extension, "wav") == 0)
+				return (mBuffer + 44);
+			else
+				return mBuffer;
+    	}
+    }
+
+
+    off_t Sound::GetPCMLength(){
+    	if(strcmp(extension, "wav") == 0)
+			return (mLength - 44);
+		else
+			return mLength;
     }
 }
