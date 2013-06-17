@@ -22,6 +22,7 @@ void ParticleEmitterCircle::Update(GLfloat delta)
 		pParticle->m_position=m_position;
 		pParticle->m_angularVelocity=Core::Random::Double(m_minAngularVelocity,m_maxAngularVelocity);
 		pParticle->m_maxLife=Core::Random::Double(m_minParticleLife,m_maxParticleLife);
+		pParticle->m_life=pParticle->m_maxLife;
 		pParticle->m_texture=m_texture;
 		Vector2f velocity(1.0f,0.0f);
 		velocity.Rotate(Core::Random::Double(0.0f,360.0f));

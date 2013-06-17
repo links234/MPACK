@@ -19,7 +19,7 @@ struct Particle_cmp
 };
 
 Particle::Particle()
-	: m_modifiers(NULL), m_width(20.0f), m_height(20.0f)
+	: m_modifiers(NULL), m_width(20.0f), m_height(20.0f), m_rotation(0.0f), m_velocity(0.0f,0.0f), m_angularVelocity(0.0f)
 {
 	m_particles.push_back(this);
 }
@@ -44,17 +44,12 @@ bool Particle::Update(GLfloat delta)
 	}
 	m_position+=m_velocity*delta;
 	m_rotation+=m_angularVelocity*delta;
-	while(m_rotation>360.0f)
-	{
-		m_rotation-=360.0f;
-	}
+	m_rotation=Math::Misc<GLfloat>::Mod(m_rotation,360.0f);
 	return true;
 }
 
 void Particle::UpdateAll(GLfloat delta)
 {
-	LOGD("particles = %d",m_particles.size());
-
 	vector<Particle*> temp;
 	for(vector<Particle*>::iterator it=m_particles.begin();it!=m_particles.end();++it)
 	{
