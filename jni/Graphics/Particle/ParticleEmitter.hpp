@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Types.hpp"
+#include "Particle.hpp"
 
 class ParticleEmitter
 {
