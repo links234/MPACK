@@ -237,6 +237,11 @@ Texture2D* TextureMappedFont::GetTexturePointer()
 	return &m_texture;
 }
 
+GLfloat TextureMappedFont::GetFontSize() const
+{
+	return m_fontSize;
+}
+
 GLfloat TextureMappedFont::GetTextWidth(const std::string &str)
 {
 	GLfloat width=0.0f;

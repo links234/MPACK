@@ -21,10 +21,11 @@ public:
 	~Sprite();
 
 	void Render();
-	void SetSize(GLfloat width,GLfloat height);
-	void SetWidth(GLfloat width);
-	void SetHeight(GLfloat height);
+	void SetSize(const GLfloat &width, const GLfloat &height);
+	void SetWidth(const GLfloat &width);
+	void SetHeight(const GLfloat &height);
 	void SetTexture(Texture2D *texture);
+	void SetColor(const Math::Vector4f &color);
 
 	GLfloat GetWidth();
 	GLfloat GetHeight();

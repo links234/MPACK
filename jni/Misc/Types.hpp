@@ -8,7 +8,8 @@
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
 #include <SLES/OpenSLES_AndroidConfiguration.h>
-#include <stdint.h>
+#include <cstdlib>
+#include <cstdint>
 #include <cstring>
 #include <string>
 

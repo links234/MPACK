@@ -5,6 +5,7 @@
 #include "Texture2D.hpp"
 #include "Global.hpp"
 #include "GUIMenu.hpp"
+#include "Particles.hpp"
 
 using namespace Core;
 

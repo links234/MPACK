@@ -29,5 +29,11 @@ void main(void)
 			discard;
 		}
 	}
+	
+	if(!equal(shadeType,ALPHA_BLEND))
+	{
+		outColor.w=1.0;
+	}
+	
 	gl_FragColor=outColor;
 }

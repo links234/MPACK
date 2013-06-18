@@ -15,6 +15,7 @@ namespace Core
 
 		strcpy(extension, pPath+i);
 
+
     }
 
     Sound::~Sound(){
@@ -63,22 +64,36 @@ namespace Core
     }
 
 
-    uint8_t* Sound::GetPCMData(){
+    uint8_t* Sound::GetPCMData()
+    {
     	if(!mBuffer)
+    	{
     		LOGE("Error: Sound buffer null");
-    	else{
-			if(strcmp(extension, "wav") == 0)
-				return (mBuffer + 44);
-			else
-				return mBuffer;
     	}
+    	else
+    	{
+			if(strcmp(extension, "wav") == 0)
+			{
+				return (mBuffer + 44);
+			}
+			else
+			{
+				return mBuffer;
+			}
+    	}
+    	return NULL;
     }
 
 
-    off_t Sound::GetPCMLength(){
+    off_t Sound::GetPCMLength()
+    {
     	if(strcmp(extension, "wav") == 0)
+    	{
 			return (mLength - 44);
+    	}
 		else
+		{
 			return mLength;
+		}
     }
 }

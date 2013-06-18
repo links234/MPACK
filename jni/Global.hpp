@@ -13,7 +13,7 @@ namespace Global
 	extern Core::Context			*pContext;
 	extern Core::EventLoop			*pEventLoop;
 
-	extern TextureMappedFont		*pFont;
+	extern TextureMappedFont	*pFont;
 }
 
 #endif

@@ -5,6 +5,7 @@
 #include "InputService.hpp"
 #include "SoundService.hpp"
 #include "TimeService.hpp"
+#include "Random.hpp"
 #include "Global.hpp"
 #include "Debug.hpp"
 
@@ -13,6 +14,8 @@ void android_main(android_app* pApplication)
 	//Debug::WaitToConnect(5);
 
 	Global::pAndroidApp=pApplication;
+
+	Core::Random::Init();
 
     Core::TimeService lTimeService;
     Core::GraphicsService lGraphicsService;

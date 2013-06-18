@@ -6,15 +6,31 @@
 #include "Application.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
+#include "Particles.hpp"
 
 namespace Game
 {
 	PlayGame::PlayGame()
 	{
-		m_requestExit=false;
+		m_requestExit = false;
 
 		Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
 
+		m_particleTex = new Texture2D;
+		m_particleTex->Load("@GUI_Button.tga");
+
+		m_pEmitter = new ParticleEmitterCircle;
+
+		m_pEmitter->SetAngularVelocity(15.0f,17.0f);
+		m_pEmitter->SetParticleLife(8.0f,10.0f);
+		m_pEmitter->SetVelocity(10.0f,15.0f);
+		m_pEmitter->SetTexture(m_particleTex);
+		m_pEmitter->SetPosition(Vector2f(200.0f,200.0f));
+		m_pEmitter->SetSpawnDelay(1.0f/10.0f);
+		m_pEmitter->m_modifiers.push_back(new ParticleEffectorGravity());
+		m_pEmitter->m_modifiers.push_back(new ParticleEffectorColor(Vector4f(1.0f,1.0f,0.0f,1.0f),Vector4f(0.0f,0.0f,1.0f,0.0f)));
+
+		/*
 		//Texture loading
 		m_playerTexture=new Texture2D;
 		m_joystickInnerTex=new Texture2D;
@@ -34,15 +50,14 @@ namespace Game
 		m_joystick=new Joystick;
 		m_joystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
 		m_joystick->SetMaxDistance(100.0f);
-
-		Render::EnableAlphaBlend();
+*/
 	}
 
 	int PlayGame::Update()
 	{
 		float lTimeStep = Global::pContext->pTimeService->Elapsed();
 
-		m_joystick->Update();
+		//m_joystick->Update();
 
 		if(m_requestExit)
 		{
@@ -56,16 +71,18 @@ namespace Game
 	{
 		//Global::pFont->SendString("NEW GAME!",Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5,ALIGN_CENTER);
 
-		m_playerSprite->Render();
+		//m_playerSprite->Render();
 
-		m_joystick->Render();
+		//m_joystick->Render();
 
 	}
 
 	PlayGame::~PlayGame()
 	{
-		Render::DisableAlphaBlend();
+		delete m_particleTex;
+		delete m_pEmitter;
 
+		/*
 		delete m_playerTexture;
 		delete m_joystickInnerTex;
 		delete m_joystickOuterTex;
@@ -73,6 +90,7 @@ namespace Game
 		delete m_playerSprite;
 
 		delete m_joystick;
+		*/
 	}
 
 	void PlayGame::onBackKey(void *pointer)

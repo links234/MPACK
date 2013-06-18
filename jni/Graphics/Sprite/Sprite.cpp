@@ -50,18 +50,18 @@ void Sprite::Render()
 	SpriteBatcher::Send(vertexData,4,m_texture);
 }
 
-void Sprite::SetSize(GLfloat width,GLfloat height)
+void Sprite::SetSize(const GLfloat &width, const GLfloat &height)
 {
 	m_width=width*0.5f;
 	m_height=height*0.5f;
 }
 	
-void Sprite::SetWidth(GLfloat width)
+void Sprite::SetWidth(const GLfloat &width)
 {
 	m_width=width*0.5f;
 }
 	
-void Sprite::SetHeight(GLfloat height)
+void Sprite::SetHeight(const GLfloat &height)
 {
 	m_height=height*0.5f;
 }
@@ -71,6 +71,11 @@ void Sprite::SetTexture(Texture2D *texture)
 	m_texture=texture;
 	m_width=(GLfloat)(m_texture->GetWidth())*0.5f;
 	m_height=(GLfloat)(m_texture->GetHeight())*0.5f;
+}
+
+void Sprite::SetColor(const Math::Vector4f &color)
+{
+	m_color[0]=m_color[1]=m_color[2]=m_color[3]=color;
 }
 
 GLfloat Sprite::GetWidth()
