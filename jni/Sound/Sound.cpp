@@ -7,14 +7,19 @@ namespace Core
         mResource(pPath),
         mBuffer(NULL), mLength(0)
     {
-    	const char* path = GetPath();
 
 		int i;
-		for(i = 0; path[i] != '\0'; i++)
+		for(i = 0; pPath[i] != '\0'; i++)
 			;
 		i -= 3; //presume 3 char extension
 
-		strcpy(extension, path+i);
+		strcpy(extension, pPath+i);
+
+
+    }
+
+    Sound::~Sound(){
+    	Unload();
     }
 
     const char* Sound::GetPath()
