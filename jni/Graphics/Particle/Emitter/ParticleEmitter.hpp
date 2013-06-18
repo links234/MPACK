@@ -1,7 +1,7 @@
 #ifndef PARTICLEEMITTER_HPP
 #define PARTICLEEMITTER_HPP
 
-#include <vector>
+#include <set>
 
 #include "Particle.hpp"
 
@@ -16,7 +16,7 @@ public:
 	static void UpdateAll(GLfloat delta);
 
 private:
-	static std::vector<ParticleEmitter*> m_emitters;
+	static std::set<ParticleEmitter*> m_emitters;
 };
 
 #endif
