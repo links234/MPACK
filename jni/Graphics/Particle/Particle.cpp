@@ -84,5 +84,9 @@ void Particle::RenderAll()
 
 void Particle::Clear()
 {
+	for(vector<Particle*>::iterator it=m_particles.begin();it!=m_particles.end();++it)
+	{
+		delete *it;
+	}
 	m_particles.clear();
 }
