@@ -7,6 +7,7 @@
 #include "ParticleEmitterCircle.hpp"
 
 #include "ParticleEffector.hpp"
+#include "ParticleEffectorColor.hpp"
 #include "ParticleEffectorGravity.hpp"
 
 #endif
