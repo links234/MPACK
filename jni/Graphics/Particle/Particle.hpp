@@ -26,6 +26,7 @@ public:
 
 	static void UpdateAll(GLfloat delta);
 	static void RenderAll();
+	static void Clear();
 
 	Vector2f					m_position,m_velocity;
 	Vector4f					m_color;

@@ -81,3 +81,8 @@ void Particle::RenderAll()
 		m_spriteInterface.Render();
 	}
 }
+
+void Particle::Clear()
+{
+	m_particles.clear();
+}
