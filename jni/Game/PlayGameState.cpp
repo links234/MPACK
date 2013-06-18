@@ -21,12 +21,12 @@ namespace Game
 
 		m_pEmitter = new ParticleEmitterCircle;
 
-		m_pEmitter->SetAngularVelocity(5.0f,10.0f);
-		m_pEmitter->SetParticleLife(2.0f,3.0f);
+		m_pEmitter->SetAngularVelocity(15.0f,17.0f);
+		m_pEmitter->SetParticleLife(8.0f,10.0f);
 		m_pEmitter->SetVelocity(10.0f,15.0f);
 		m_pEmitter->SetTexture(m_particleTex);
 		m_pEmitter->SetPosition(Vector2f(200.0f,200.0f));
-		m_pEmitter->SetSpawnDelay(1.0f/40.0f);
+		m_pEmitter->SetSpawnDelay(1.0f/10.0f);
 
 		/*
 		//Texture loading
@@ -49,7 +49,6 @@ namespace Game
 		m_joystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
 		m_joystick->SetMaxDistance(100.0f);
 */
-		Render::EnableAlphaBlend();
 	}
 
 	int PlayGame::Update()
@@ -78,8 +77,6 @@ namespace Game
 
 	PlayGame::~PlayGame()
 	{
-		Render::DisableAlphaBlend();
-
 		delete m_particleTex;
 		delete m_pEmitter;
 

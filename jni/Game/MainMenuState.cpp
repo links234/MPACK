@@ -36,21 +36,6 @@ namespace Game
 		m_pMenuGUI->AddButton("Credits",GUIMENU_BUTTON_CREDITS);
 		m_pMenuGUI->AddButton("Exit",GUIMENU_BUTTON_EXIT);
 		m_pMenuGUI->BuildLayout();
-
-		Texture2D *m_particleTex;
-		ParticleEmitterCircle *m_pEmitter;
-
-		m_particleTex = new Texture2D;
-		m_particleTex->Load("@GUI_Button.tga");
-
-		m_pEmitter = new ParticleEmitterCircle;
-
-		m_pEmitter->SetAngularVelocity(5.0f,10.0f);
-		m_pEmitter->SetParticleLife(10.0f,13.0f);
-		m_pEmitter->SetVelocity(10.0f,15.0f);
-		m_pEmitter->SetTexture(m_particleTex);
-		m_pEmitter->SetPosition(Vector2f(200.0f,200.0f));
-		m_pEmitter->SetSpawnDelay(1.0f/40.0f);
 	}
 
 	int MainMenu::Update()

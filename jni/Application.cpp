@@ -67,7 +67,7 @@ namespace Game
     			delete m_pGameState;
     			m_pGameState=new PlayGame;
     			m_pGameState->Update();
-    			LOGD("4");
+
     		break;
     		case EVENT_MAINMENU_HIGHSCORE:
 
@@ -79,13 +79,9 @@ namespace Game
     			return STATUS_KO;
     		break;
     		case EVENT_PLAYGAME_EXIT:
-    			LOGD("EVENT_PLAYGAME_EXIT start");
-
     			delete m_pGameState;
     			m_pGameState=new MainMenu;
     			m_pGameState->Update();
-
-    			LOGD("EVENT_PLAYGAME_EXIT end");
     		break;
     	}
 
