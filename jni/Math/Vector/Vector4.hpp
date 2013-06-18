@@ -93,12 +93,12 @@ namespace Math
 
 	template<class T> inline Vector4<T> Vector4<T>::operator*  (const T &s) const
 	{
-		return Vector2<T>(x*s,y*s,z*s,w*s);
+		return Vector4<T>(x*s,y*s,z*s,w*s);
 	}
 
 	template<class T> inline Vector4<T>	Vector4<T>::operator/	(const Vector4<T> &v) const
 	{
-		Vector2<T> t;
+		Vector4<T> t;
 		if(v.x==static_cast<T>(0))
 		{
 			t.x=x/Misc<T>::c_Epsilon;
