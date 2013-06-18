@@ -119,6 +119,7 @@ namespace Core
 
     	UnloadResources();
 
+    	Render::DisableAlphaBlend();
     	Render::DisableOrthoMode();
 
         // Destroys OpenGL context.
@@ -146,6 +147,7 @@ namespace Core
 		Render::SetScreenSize(width,height);
 		Render::SetOrthoMode();
 		Render::EnableOrthoMode();
+		Render::EnableAlphaBlend();
 
 		LoadResources();
     }
