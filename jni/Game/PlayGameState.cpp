@@ -27,6 +27,8 @@ namespace Game
 		m_pEmitter->SetTexture(m_particleTex);
 		m_pEmitter->SetPosition(Vector2f(200.0f,200.0f));
 		m_pEmitter->SetSpawnDelay(1.0f/10.0f);
+		m_pEmitter->m_modifiers.push_back(new ParticleEffectorGravity());
+		m_pEmitter->m_modifiers.push_back(new ParticleEffectorColor(Vector4f(1.0f,1.0f,0.0f,1.0f),Vector4f(0.0f,0.0f,1.0f,0.0f)));
 
 		/*
 		//Texture loading
