@@ -1,5 +1,5 @@
-#ifndef _PACKT_SOUND_HPP_
-#define _PACKT_SOUND_HPP_
+#ifndef SOUND_HPP
+#define SOUND_HPP
 
 class SoundService;
 
@@ -13,6 +13,7 @@ namespace Core
     {
     public:
         Sound(const char* pPath);
+        ~Sound();
 
         const char* GetPath();
 
