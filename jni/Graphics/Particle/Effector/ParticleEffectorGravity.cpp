@@ -2,21 +2,21 @@
 
 #include "Particle.hpp"
 
-ParticleGravity::ParticleGravity()
-	: m_gravity(0.0f,-5.0f)
+ParticleEffectorGravity::ParticleEffectorGravity()
+	: m_gravity(0.0f,9.8f)
 {
 }
 
-ParticleGravity::ParticleGravity(const Vector2f &gravity)
+ParticleEffectorGravity::ParticleEffectorGravity(const Vector2f &gravity)
 	: m_gravity(gravity)
 {
 }
 
-ParticleGravity::~ParticleGravity()
+ParticleEffectorGravity::~ParticleEffectorGravity()
 {
 }
 
-void ParticleGravity::UpdateParticle(Particle* particle, const GLfloat &delta)
+void ParticleEffectorGravity::UpdateParticle(Particle* particle, const GLfloat &delta)
 {
 	particle->m_velocity+=m_gravity*delta;
 }

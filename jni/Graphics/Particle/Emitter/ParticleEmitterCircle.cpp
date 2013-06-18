@@ -27,6 +27,7 @@ void ParticleEmitterCircle::Update(GLfloat delta)
 		Vector2f velocity(1.0f,0.0f);
 		velocity.Rotate(Core::Random::Double(0.0f,360.0f));
 		pParticle->m_velocity=velocity*Core::Random::Double(m_minVelocity,m_maxVelocity);
+		pParticle->m_modifiers=&m_modifiers;
 	}
 }
 

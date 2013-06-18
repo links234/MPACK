@@ -15,6 +15,7 @@ public:
 
 	static void UpdateAll(GLfloat delta);
 
+	vector<ParticleEffector*>	m_modifiers;
 private:
 	static std::set<ParticleEmitter*> m_emitters;
 };
