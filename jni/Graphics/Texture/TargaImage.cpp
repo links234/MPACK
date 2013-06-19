@@ -183,7 +183,7 @@ namespace Core
 
 					if(m_bytesPerPixel == 4)
 					{
-						colorBuffer[4]=(unsigned char)(*pointer); ++pointer;
+						colorBuffer[3]=(unsigned char)(*pointer); ++pointer;
 					}
 
 					m_imageData[currentbyte] = colorBuffer[2];
