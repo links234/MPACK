@@ -33,11 +33,11 @@ function pre_compile
 	cp -R -a jni ./tmp_jni
 	rm -R jni/*
 
-	find ./tmp_jni -name "*.cpp" -exec cp -a {} ./jni \;
-	find ./tmp_jni -name "*.hpp" -exec cp -a {} ./jni \;
-	find ./tmp_jni -name "*.c" -exec cp -a {} ./jni \;
-	find ./tmp_jni -name "*.h" -exec cp -a {} ./jni \;
-	find ./tmp_jni -name "*.mk" -exec cp -a {} ./jni \;
+	/usr/bin/find ./tmp_jni -name "*.cpp" -exec cp -a {} ./jni \;
+	/usr/bin/find ./tmp_jni -name "*.hpp" -exec cp -a {} ./jni \;
+	/usr/bin/find ./tmp_jni -name "*.c" -exec cp -a {} ./jni \;
+	/usr/bin/find ./tmp_jni -name "*.h" -exec cp -a {} ./jni \;
+	/usr/bin/find ./tmp_jni -name "*.mk" -exec cp -a {} ./jni \;
 }
 
 function post_compile
@@ -50,7 +50,7 @@ function post_compile
 function compile
 {
 	pre_compile
-	ndk-build all
+	$NDKROOT/ndk-build all
 	STATUS=$?
 	post_compile
 
@@ -65,7 +65,7 @@ function compile
 function compile_verbose
 {
 	pre_compile
-	ndk-build all v=1
+	$NDKROOT/ndk-build all v=1
 	STATUS=$?
 	post_compile
 	if [[ $STATUS -eq 0 ]] ; then
@@ -114,6 +114,8 @@ function run
 function clean
 {
 	rm -rf bin/ libs/ obj/
+	$NDKROOT/ndk-build clean
+	ant debug clean
 }
 
 if [[ $# -eq 1 ]] ; then
@@ -147,8 +149,6 @@ if [[ $# -eq 1 ]] ; then
 elif [[ $# -eq 2 ]] ; then
 	PARAM1=$(tolower $1)
 	PARAM2=$(tolower $2)
-
-	echo "$PARAM1			$PARAM2"
 
 	if [[ "$PARAM1" == "compile"  &&  "$PARAM2" == "-v" ]] ; then
 		compile_verbose

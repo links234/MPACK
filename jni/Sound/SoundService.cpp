@@ -7,7 +7,7 @@ namespace Core
     SoundService::SoundService() :
         mEngineObj(NULL), mEngine(NULL),
         mOutputMixObj(NULL),
-        mBGMPlayerObj(NULL), mBGMPlayer(NULL), mBGMPlayerSeek(NULL),
+        mBGMPlayerObj(NULL), mBGMPlayer(NULL),
         mPlayerObj(), mPlayer(), mPlayerQueue(),
         mSounds(), mSoundCount(0)
     {
@@ -278,7 +278,7 @@ namespace Core
                 (*mBGMPlayer)->SetPlayState(mBGMPlayer,SL_PLAYSTATE_PAUSED);
                 (*mBGMPlayerObj)->Destroy(mBGMPlayerObj);
                 mBGMPlayerObj = NULL;
-                mBGMPlayer = NULL; mBGMPlayerSeek = NULL;
+                mBGMPlayer = NULL;
             }
         }
     }

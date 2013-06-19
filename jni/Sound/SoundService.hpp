@@ -46,7 +46,6 @@ namespace Core
 
         // Background music player.
         SLObjectItf mBGMPlayerObj; SLPlayItf mBGMPlayer;
-        SLSeekItf mBGMPlayerSeek;
         SLBufferQueueItf mBGMPlayerQueue;
 
         //TODO: Struct with all player interfaces
