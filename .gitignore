@@ -2,6 +2,7 @@
 bin/
 libs/
 obj/
+gen/
 
 #Android local properties
 local.properties
