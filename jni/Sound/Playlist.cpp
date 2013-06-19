@@ -1,19 +1,21 @@
 #include "Playlist.hpp"
+#include "Resource.hpp"
 
 namespace Core
 {
 	Playlist::Playlist(const char* pPath) :
-        mResource(pPath),
         mList(NULL), mLength(0), mCurTrack(0)
     {
-		Asset lAsset(pPath);
-		lAsset.Open();
-		int size = lAsset.GetLength();
+		Resource *pResource=Core::LoadResource(pPath);
+		pResource->Open();
+		int size = pResource->GetLength();
 		char *plist;
 		plist = new char[size];
 
 
-		lAsset.Read(plist, size);
+		pResource->Read(plist, size);
+		pResource->Close();
+		delete pResource;
 
 		int len = 0, maxLen = 0, num = 0;
 
@@ -142,10 +144,5 @@ namespace Core
 	Sound* Playlist::GetSound()
 	{
 		return mSound;
-	}
-
-	const char* Playlist::GetPath()
-	{
-		return mResource.GetPath();
 	}
 }
