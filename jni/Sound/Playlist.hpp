@@ -14,15 +14,11 @@ namespace Core
     	Playlist(const char* pPath);
     	~Playlist();
 
-        const char* GetPath();
-
-
         Sound* GetSound();
         Sound* Next();
         Sound* Prev();
 
     private:
-        Asset mResource;
         uint8_t* mRawList; off_t mLength;
         char **mList;
         int mNumTracks, mCurTrack;
