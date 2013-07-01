@@ -19,12 +19,14 @@ namespace Core
         Status Start();
         void Stop();
 
-        Status PlayBGMPlaylist(const char* pPath);
-        void StopBGM();
+        Status PlayBGMPlaylist(const char* pPath, bool forced = false); //uses new playlist for bgm. Chandg occurs after finishing current track if not forced
+        
 
         Sound* RegisterSound(const char* pPath);
         void PlaySound(Sound* pSound);
-
+        
+        void StopBGM();
+        
         void PauseBGM();
         void PauseSFX();
         void PauseAll();
@@ -34,7 +36,8 @@ namespace Core
         void ResumeAll();
 
     private:
-        Status StartSoundPlayer();
+        Status StartSoundPlayers();
+        Status StartBGMPlayer();
 
     private:
         android_app* mApplication;
@@ -55,7 +58,7 @@ namespace Core
         // Sounds.
         Sound* mSounds[32]; int32_t mSoundCount;
 
-        Playlist* mPlaylist;
+        Playlist *mPlaylist;
 
         void SetBGMState(SLuint32 state);
         void SetSFXState(SLuint32 state);
