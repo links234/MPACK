@@ -1,7 +1,6 @@
 #include "Playlist.hpp"
 #include "Resource.hpp"
 
-#define LOG_TRACKS 0
 
 namespace Core
 {
