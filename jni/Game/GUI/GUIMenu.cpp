@@ -28,7 +28,9 @@ int GUIMenu::Update(GLfloat timeStep)
 		}
 	}
 
-	return action;
+	int i = action;
+	action = 0;
+	return i;
 }
 
 void GUIMenu::Render()

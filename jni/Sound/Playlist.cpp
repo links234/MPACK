@@ -1,15 +1,41 @@
 #include "Playlist.hpp"
 #include "Resource.hpp"
 
+
 namespace Core
 {
 	Playlist::Playlist(const char* pPath) :
-        mList(NULL), mLength(0), mCurTrack(0)
+        mSound(NULL), mPlayMode(FORWARD), mLoop(true)
     {
-		Resource *pResource=Core::LoadResource(pPath);
+		Load(pPath, true);
+
+    }
+
+
+	Playlist::~Playlist()
+	{
+		delete mSound;
+
+
+	}
+
+	void Playlist::Load(const char* pPath, bool forced)
+	{
+		strcpy(mNFile, pPath);
+		if(forced)
+			useNewPlist();
+	}
+
+	void Playlist::useNewPlist()
+	{
+		mList.clear();
+
+		char *plist;
+
+		Resource *pResource=Core::LoadResource(mNFile);
 		pResource->Open();
 		int size = pResource->GetLength();
-		char *plist;
+
 		plist = new char[size];
 
 
@@ -41,23 +67,18 @@ namespace Core
 
 
 
-		mNumTracks = num;
 
-		mList = new char*[mNumTracks];
-		for(int i = 0; i < mNumTracks; i++)
-		{
-			mList[i] = new char[maxLen];
-		}
+		mList.resize(num);
 
-
-		int t = 0, p = 0;
+		int p = 0;
+		list<vector<char> >::iterator t = mList.begin();
 		num = 0;
-		for(int i = 0; plist[i] != '\0' && num < mNumTracks; i++)
+		for(int i = 0; plist[i] != '\0' && num < mList.size(); i++)
 		{
 
 			if(plist[i] == '\n')
 			{
-				mList[t][p] = '\0';
+				(*t).push_back('\0');
 				t++;
 				p=0;
 				num++;
@@ -70,79 +91,125 @@ namespace Core
 			}
 			else
 			{
-				mList[t][p] = plist[i];
+				(*t).push_back(plist[i]);
 				p++;
 			}
 		}
 
-		mSound = new Sound(mList[0]);
+		mCurTrackIt = mList.begin();
+
+		if(mSound != NULL)
+			delete mSound;
+
+		mSound = new Sound(&(*mCurTrackIt)[0] );
 		mSound->Load();
 
 		delete [] plist;
 
-		/*
-		LOGI("Playlist:");
-		LOGI("%d Tracks", mNumTracks);
+		strcpy(mCFile, mNFile);
+		mNFile[0] = '\0';
 
-		for(int i = 0; i < mNumTracks; i++)
+
+		Print();
+
+
+	}
+
+	void Playlist::Print()
+	{
+		LOGI("Playlist %s:", mCFile);
+		LOGI("%d Tracks", mList.size());
+
+		int i = 1;
+		for(list<vector <char> >::iterator it = mList.begin(); it != mList.end(); ++it)
 		{
-			LOGI("%d %s", i, mList[i]);
+			LOGI("%d %s", i, &(*it)[0]);
+			i++;
 		}
 		LOGI("End of Playlist");
-		*/
-
-    }
-
-	Playlist::~Playlist()
-	{
-		delete mSound;
-
-		for(int i = 0; i < mNumTracks; i++)
-		{
-			delete[] mList[i];
-		}
-
-		delete[] mList;
 	}
 
-	Sound* Playlist::Next()
-	{
-
-		mCurTrack++;
-
-		mCurTrack %= mNumTracks;
-
-		if(strcmp(mList[mCurTrack], mSound->GetPath()) != 0)
+	void Playlist::updateSound(){
+		if(strcmp(&(*mCurTrackIt)[0], mSound->GetPath()) != 0)
 		{
 			delete mSound;
 
-			mSound = new Sound(mList[mCurTrack]);
+			mSound = new Sound(&(*mCurTrackIt)[0]);
 			mSound->Load();
 		}
-
-		return mSound;
 	}
 
-	Sound* Playlist::Prev()
+	bool Playlist::Next()
 	{
+		if(mNFile[0] != '\0')
+			useNewPlist();
 
-		mCurTrack--;
-
-		mCurTrack = (mCurTrack + mNumTracks) % mNumTracks;
-
-		if(strcmp(mList[mCurTrack], mSound->GetPath()) != 0)
+		switch(mPlayMode)
 		{
-			delete mSound;
 
-			mSound = new Sound(mList[mCurTrack]);
-			mSound->Load();
+		case FORWARD:
+			mCurTrackIt++;
+
+			if(mCurTrackIt == mList.end())
+			{
+
+				if(mLoop)
+				{
+					mCurTrackIt = mList.begin();
+				}
+				else
+				{
+					mCurTrackIt--;
+					return false;
+				}
+			}
+
+			break;
+
+		case BACKWARD:
+			if(mCurTrackIt == mList.begin())
+			{
+				if(mLoop)
+				{
+					mCurTrackIt = mList.end();
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			mCurTrackIt--;
+			break;
+		case SHUFFLE:
+			mCurTrackIt = mList.begin();
+			int n;
+			n = Core::Random::Int(0, mList.size() - 1);
+			LOGI("SHUFFLED FOR %d", n);
+			for(int i = 0; i < n; i++)
+			{
+				mCurTrackIt++;
+			}
+			break;
+
+		default:
+			LOGE("Bad enum value in playlist PlayMode");
 		}
 
-		return mSound;
+
+		updateSound();
+
+		return true;
 	}
+
+
 
 	Sound* Playlist::GetSound()
 	{
 		return mSound;
+	}
+
+	void Playlist::setPlayMode(PlayMode p){
+		mPlayMode = p;
 	}
 }
