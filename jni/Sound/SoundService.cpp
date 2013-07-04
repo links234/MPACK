@@ -2,6 +2,13 @@
 #include "Resource.hpp"
 #include "Log.hpp"
 
+#ifdef SS_DBG
+#define LOGSS(...) LOGI(__VA_ARGS__)
+#else
+#define LOGSS(...)
+#endif
+
+
 namespace Core
 {
     SoundService::SoundService() :
@@ -125,7 +132,7 @@ namespace Core
 
     Status SoundService::StartSoundPlayers()
     {
-    	LOGI("Starting sound player.");
+    	LOGSS("Starting sound players.");
         SLresult lRes;
 
         // Set-up sound audio source.
@@ -199,7 +206,7 @@ namespace Core
 
     Status SoundService::StartBGMPlayer()
     {
-    	LOGI("Starting bgm player.");
+    	LOGSS("Starting bgm player.");
 		SLresult lRes;
 
 
@@ -323,16 +330,16 @@ namespace Core
     
     void SoundService::RegisterSound(const char* pPath)
     {
-    	LOGI("Registering sound");
+    	LOGSS("Registering sound");
         // Finds out if texture already loaded.
     	if(mSounds.count(pPath) == 0){
     		mSounds.insert(pair<string, Sound*>(pPath, new Sound(pPath)));
     		mSounds[pPath]->Load();
-    		LOGI("Just loaded %s", pPath);
+    		LOGSS("Just loaded %s", pPath);
     	}
     	else
     	{
-    		LOGI("Already loaded %s", pPath);
+    		LOGSS("Already loaded %s", pPath);
     		return;
     	}
     }
@@ -344,11 +351,11 @@ namespace Core
     		mSounds[pPath]->Unload();
     		delete mSounds[pPath];
 			mSounds.erase(pPath);
-			LOGI("Unloaded %s", pPath);
+			LOGSS("Unloaded %s", pPath);
 		}
     	else
     	{
-    		LOGI("Not registered %s", pPath);
+    		LOGSS("Not registered %s", pPath);
     		return;
     	}
 
@@ -360,7 +367,7 @@ namespace Core
     	{
     		RegisterSound(pPath);
     	}
-    	LOGI("Playing sound");
+    	LOGSS("Playing sound");
         SLresult lRes;
         SLuint32 lPlayerState;
 
@@ -388,7 +395,7 @@ namespace Core
         	lBuffer = (int16_t*) it->second->GetPCMData();
 			lLength = it->second->GetPCMLength();
 
-			LOGI("Sound was registered %s", pPath);
+			LOGSS("Sound was registered %s", pPath);
         }
         else
         {
@@ -398,8 +405,8 @@ namespace Core
         	lBuffer = (int16_t*) tempSounds[i]->GetPCMData();
 			lLength = tempSounds[i]->GetPCMLength();
 
-			LOGI("Sound was loaded in temp %s", pPath);
-			LOGI("Address %x", tempSounds[i]);
+			LOGSS("Sound was loaded in temp %s", pPath);
+			LOGSS("Address %x", tempSounds[i]);
         }
 
         // Removes any sound from the queue.
@@ -419,7 +426,7 @@ namespace Core
 
     void SoundService::bqBGMPlayerCallback(SLBufferQueueItf bq, void *context)
     {
-    	LOGI("BGM Track done. Loading next one");
+    	LOGSS("BGM Track done. Loading next one");
     	if(((Playlist*)context)->Next())
     	{
     			Sound* snd = ((Playlist*)context)->GetSound();
@@ -432,8 +439,8 @@ namespace Core
     	Sound* &snd = *((Sound**)context);
     	if(snd != NULL)
     	{
-    		LOGI("Unloading temp sound %s", snd->GetPath());
-    		LOGI("Address %x", snd);
+    		LOGSS("Unloading temp sound %s", snd->GetPath());
+    		LOGSS("Address %x", snd);
     		snd->Unload();
     		delete snd;
     		snd = NULL;

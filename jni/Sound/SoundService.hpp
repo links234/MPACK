@@ -8,6 +8,8 @@
 #include <map>
 #include <string>
 
+#define SS_DBG
+
 //maximum number of simultaneouse sounds, excluding backgroud music
 #define MAX_SOUNDS 5
 
