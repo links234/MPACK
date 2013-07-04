@@ -5,8 +5,15 @@
 #include "Types.hpp"
 #include "Playlist.hpp"
 
+#include <map>
+#include <string>
+
+#define SS_DBG
+
 //maximum number of simultaneouse sounds, excluding backgroud music
 #define MAX_SOUNDS 5
+
+using namespace std;
 
 namespace Core
 {
@@ -19,12 +26,15 @@ namespace Core
         Status Start();
         void Stop();
 
-        Status PlayBGMPlaylist(const char* pPath);
+        Status PlayBGMPlaylist(const char* pPath, bool forced = false); //uses new playlist for bgm. Chandg occurs after finishing current track if not forced
+        
+
+        void RegisterSound(const char* pPath);
+        void UnregisterSound(const char* pPath);
+        void PlaySFX(const char* pPath, bool load = false);
+        
         void StopBGM();
-
-        Sound* RegisterSound(const char* pPath);
-        void PlaySound(Sound* pSound);
-
+        
         void PauseBGM();
         void PauseSFX();
         void PauseAll();
@@ -34,7 +44,8 @@ namespace Core
         void ResumeAll();
 
     private:
-        Status StartSoundPlayer();
+        Status StartSoundPlayers();
+        Status StartBGMPlayer();
 
     private:
         android_app* mApplication;
@@ -52,15 +63,19 @@ namespace Core
         // Sound player.
         SLObjectItf mPlayerObj[MAX_SOUNDS]; SLPlayItf mPlayer[MAX_SOUNDS];
         SLBufferQueueItf mPlayerQueue[MAX_SOUNDS];
+        Sound* tempSounds[MAX_SOUNDS];
         // Sounds.
-        Sound* mSounds[32]; int32_t mSoundCount;
+        //Sound* mSounds[32]; int32_t mSoundCount;
+        map<string, Sound*> mSounds;
 
-        Playlist* mPlaylist;
+        Playlist *mPlaylist;
 
         void SetBGMState(SLuint32 state);
         void SetSFXState(SLuint32 state);
 
-        static void bqPlayerCallback(SLBufferQueueItf bq, void *context);
+        static void bqBGMPlayerCallback(SLBufferQueueItf bq, void *context);
+        static void bqSFXPlayerCallback(SLBufferQueueItf bq, void *context);
+
     };
 }
 #endif

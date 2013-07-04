@@ -2,6 +2,13 @@
 #include "Resource.hpp"
 #include "Log.hpp"
 
+#ifdef SS_DBG
+#define LOGSS(...) LOGI(__VA_ARGS__)
+#else
+#define LOGSS(...)
+#endif
+
+
 namespace Core
 {
     SoundService::SoundService() :
@@ -9,7 +16,7 @@ namespace Core
         mOutputMixObj(NULL),
         mBGMPlayerObj(NULL), mBGMPlayer(NULL),
         mPlayerObj(), mPlayer(), mPlayerQueue(),
-        mSounds(), mSoundCount(0)
+        mSounds(), mPlaylist(NULL)
     {
         LOGI("Creating SoundService.");
     }
@@ -19,13 +26,13 @@ namespace Core
     {
         LOGI("Destroying SoundService.");
 
-        for (int32_t i = 0; i < mSoundCount; ++i)
+        for (map<string, Sound*>::iterator it = mSounds.begin(); it != mSounds.end(); ++it)
         {
-            delete mSounds[i];
-            mSoundCount = 0;
+        	it->second->Unload();
+        	delete it->second;
         }
 
-        delete mPlaylist;
+        mSounds.clear();
     }
 
     Status SoundService::Start()
@@ -61,19 +68,17 @@ namespace Core
         lRes = (*mOutputMixObj)->Realize(mOutputMixObj, SL_BOOLEAN_FALSE);
 
         // Set-up sound player.
-        if (StartSoundPlayer() != STATUS_OK)
+        if (StartSoundPlayers() != STATUS_OK)
         {
         	goto ERROR;
         }
 
-        // Loads resources
-        for (int32_t i = 0; i < mSoundCount; ++i)
+        if (StartBGMPlayer() != STATUS_OK)
         {
-            if (mSounds[i]->Load() != STATUS_OK)
-            {
-            	goto ERROR;
-            }
-        }
+			goto ERROR;
+		}
+
+
         return STATUS_OK;
 
     ERROR:
@@ -87,7 +92,12 @@ namespace Core
     	LOGI("Stopping SoundService.");
 
         // Stops and destroys BGM player.
-        StopBGM();
+        //StopBGM();
+    	if (mBGMPlayerObj != NULL)
+		{
+			(*mBGMPlayerObj)->Destroy(mBGMPlayerObj);
+			mBGMPlayerObj = NULL; mBGMPlayer = NULL; mBGMPlayerQueue = NULL;
+		}
 
         // Destroys sound player.
         for(int i = 0; i < MAX_SOUNDS; i++)
@@ -111,16 +121,18 @@ namespace Core
             mEngineObj = NULL; mEngine = NULL;
         }
 
-        // Frees sound resources.
-        for (int32_t i = 0; i < mSoundCount; ++i)
-        {
-            mSounds[i]->Unload();
-        }
+        for (map<string, Sound*>::iterator it = mSounds.begin(); it != mSounds.end(); ++it)
+		{
+        	it->second->Unload();
+        	delete it->second;
+		}
+
+		mSounds.clear();
     }
 
-    Status SoundService::StartSoundPlayer()
+    Status SoundService::StartSoundPlayers()
     {
-    	LOGI("Starting sound player.");
+    	LOGSS("Starting sound players.");
         SLresult lRes;
 
         // Set-up sound audio source.
@@ -133,7 +145,7 @@ namespace Core
         SLDataFormat_PCM lDataFormat;
         lDataFormat.formatType = SL_DATAFORMAT_PCM;
         lDataFormat.numChannels = 1; // Mono sound.
-        lDataFormat.samplesPerSec = SL_SAMPLINGRATE_11_025;
+        lDataFormat.samplesPerSec = SL_SAMPLINGRATE_22_05;
         lDataFormat.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
         lDataFormat.containerSize = SL_PCMSAMPLEFORMAT_FIXED_16;
         lDataFormat.channelMask = SL_SPEAKER_FRONT_CENTER;
@@ -173,6 +185,11 @@ namespace Core
 				SL_IID_BUFFERQUEUE, &mPlayerQueue[i]);
 			if (lRes != SL_RESULT_SUCCESS) goto ERROR;
 
+			lRes = (*mPlayerQueue[i])->RegisterCallback(mPlayerQueue[i], bqSFXPlayerCallback, &tempSounds[i]);
+			if (lRes != SL_RESULT_SUCCESS) goto ERROR;
+
+
+			tempSounds[i] = NULL;
 			// Starts the sound player. Nothing can be heard while the
 			// sound queue remains empty.
 			lRes = (*mPlayer[i])->SetPlayState(mPlayer[i],
@@ -183,14 +200,14 @@ namespace Core
         return STATUS_OK;
 
     ERROR:
-        LOGE("Error while starting SoundPlayer");
+        LOGE("Error while starting sound players");
         return STATUS_KO;
     }
 
-    Status SoundService::PlayBGMPlaylist(const char* pPath)
+    Status SoundService::StartBGMPlayer()
     {
-    	SLresult lRes;
-    	mPlaylist = new Playlist(pPath);
+    	LOGSS("Starting bgm player.");
+		SLresult lRes;
 
 
     	SLDataLocator_AndroidSimpleBufferQueue lDataLocatorIn;
@@ -203,7 +220,7 @@ namespace Core
 		SLDataFormat_PCM lDataFormat;
 		lDataFormat.formatType = SL_DATAFORMAT_PCM;
 		lDataFormat.numChannels = 1; // Mono sound.
-		lDataFormat.samplesPerSec = SL_SAMPLINGRATE_11_025;
+		lDataFormat.samplesPerSec = SL_SAMPLINGRATE_22_05;
 		lDataFormat.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
 		lDataFormat.containerSize = SL_PCMSAMPLEFORMAT_FIXED_16;
 		lDataFormat.channelMask = SL_SPEAKER_FRONT_CENTER;
@@ -211,55 +228,98 @@ namespace Core
 
 
 
-        // Here you can set USB settings.
-        SLDataSource lDataSource;
-        lDataSource.pLocator = &lDataLocatorIn;
-        lDataSource.pFormat  = &lDataFormat;
+		// Here you can set USB settings.
+		SLDataSource lDataSource;
+		lDataSource.pLocator = &lDataLocatorIn;
+		lDataSource.pFormat  = &lDataFormat;
 
-        SLDataLocator_OutputMix lDataLocatorOut;
-        lDataLocatorOut.locatorType = SL_DATALOCATOR_OUTPUTMIX;
-        lDataLocatorOut.outputMix   = mOutputMixObj;
+		SLDataLocator_OutputMix lDataLocatorOut;
+		lDataLocatorOut.locatorType = SL_DATALOCATOR_OUTPUTMIX;
+		lDataLocatorOut.outputMix   = mOutputMixObj;
 
-        SLDataSink lDataSink;
-        lDataSink.pLocator = &lDataLocatorOut;
-        lDataSink.pFormat  = NULL;
+		SLDataSink lDataSink;
+		lDataSink.pLocator = &lDataLocatorOut;
+		lDataSink.pFormat  = NULL;
 
-        // Creates BGM player and retrieves its interfaces.
-        const SLuint32 lBGMPlayerIIDCount = 2;
-        const SLInterfaceID lBGMPlayerIIDs[] =
-            { SL_IID_BUFFERQUEUE, SL_IID_PLAY};
-        const SLboolean lBGMPlayerReqs[] =
-            { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
+		// Creates BGM player and retrieves its interfaces.
+		const SLuint32 lBGMPlayerIIDCount = 2;
+		const SLInterfaceID lBGMPlayerIIDs[] =
+			{ SL_IID_BUFFERQUEUE, SL_IID_PLAY};
+		const SLboolean lBGMPlayerReqs[] =
+			{ SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE};
 
-        lRes = (*mEngine)->CreateAudioPlayer(mEngine,
-            &mBGMPlayerObj, &lDataSource, &lDataSink,
-            lBGMPlayerIIDCount, lBGMPlayerIIDs, lBGMPlayerReqs);
-        if (lRes != SL_RESULT_SUCCESS) goto ERROR;
-        lRes = (*mBGMPlayerObj)->Realize(mBGMPlayerObj,
-            SL_BOOLEAN_FALSE);
-        if (lRes != SL_RESULT_SUCCESS) goto ERROR;
-
-
-        lRes = (*mBGMPlayerObj)->GetInterface(mBGMPlayerObj,
-            SL_IID_PLAY, &mBGMPlayer);
-        if (lRes != SL_RESULT_SUCCESS) goto ERROR;
-        lRes = (*mBGMPlayerObj)->GetInterface(mBGMPlayerObj,
-        		SL_IID_BUFFERQUEUE, &mBGMPlayerQueue);
+		lRes = (*mEngine)->CreateAudioPlayer(mEngine,
+			&mBGMPlayerObj, &lDataSource, &lDataSink,
+			lBGMPlayerIIDCount, lBGMPlayerIIDs, lBGMPlayerReqs);
+		if (lRes != SL_RESULT_SUCCESS) goto ERROR;
+		lRes = (*mBGMPlayerObj)->Realize(mBGMPlayerObj,
+			SL_BOOLEAN_FALSE);
 		if (lRes != SL_RESULT_SUCCESS) goto ERROR;
 
 
-
-        // Enables looping and starts playing.
-		lRes = (*mBGMPlayerQueue)->RegisterCallback(mBGMPlayerQueue, bqPlayerCallback, (void*)mPlaylist);
+		lRes = (*mBGMPlayerObj)->GetInterface(mBGMPlayerObj,
+			SL_IID_PLAY, &mBGMPlayer);
+		if (lRes != SL_RESULT_SUCCESS) goto ERROR;
+		lRes = (*mBGMPlayerObj)->GetInterface(mBGMPlayerObj,
+				SL_IID_BUFFERQUEUE, &mBGMPlayerQueue);
 		if (lRes != SL_RESULT_SUCCESS) goto ERROR;
 
-		lRes = (*mBGMPlayer)->SetPlayState(mBGMPlayer,
-			SL_PLAYSTATE_PLAYING);
-		if (lRes != SL_RESULT_SUCCESS) goto ERROR;
+        return STATUS_OK;
 
-		Sound *snd;
-		snd = mPlaylist->GetSound();
-		(*mBGMPlayerQueue)->Enqueue(mBGMPlayerQueue, snd->GetPCMData(), snd->GetPCMLength());
+    ERROR:
+        LOGE("Error while starting bgm players");
+        return STATUS_KO;
+    }
+
+    Status SoundService::PlayBGMPlaylist(const char* pPath, bool forced)
+    {
+    	SLresult lRes;
+
+    	if(mPlaylist == NULL)
+    	{
+    		mPlaylist = new Playlist(pPath);
+			mPlaylist->setPlayMode(FORWARD);
+
+			// Enables looping and starts playing.
+			lRes = (*mBGMPlayerQueue)->RegisterCallback(mBGMPlayerQueue, bqBGMPlayerCallback, (void*)mPlaylist);
+			if (lRes != SL_RESULT_SUCCESS) goto ERROR;
+
+			lRes = (*mBGMPlayer)->SetPlayState(mBGMPlayer,
+				SL_PLAYSTATE_PLAYING);
+			if (lRes != SL_RESULT_SUCCESS) goto ERROR;
+
+			Sound *snd;
+			snd = mPlaylist->GetSound();
+			(*mBGMPlayerQueue)->Enqueue(mBGMPlayerQueue, snd->GetPCMData(), snd->GetPCMLength());
+    	}
+    	else
+    	{
+    	    SLuint32 state;
+            (*mBGMPlayer)->GetPlayState(mBGMPlayer, &state);
+            
+    		if(forced || state == SL_PLAYSTATE_STOPPED)
+    		{
+    			lRes = (*mBGMPlayer)->SetPlayState(mBGMPlayer,
+    						SL_PLAYSTATE_STOPPED);
+    			if (lRes != SL_RESULT_SUCCESS) goto ERROR;
+                (*mBGMPlayerQueue)->Clear(mBGMPlayerQueue);
+                
+    			mPlaylist->Load(pPath, forced);
+                
+				Sound* snd = mPlaylist->GetSound();
+				(*mBGMPlayerQueue)->Enqueue(mBGMPlayerQueue, snd->GetPCMData(), snd->GetPCMLength());
+
+    			lRes = (*mBGMPlayer)->SetPlayState(mBGMPlayer,
+							SL_PLAYSTATE_PLAYING);
+				if (lRes != SL_RESULT_SUCCESS) goto ERROR;
+
+    		}
+    		else
+    		{
+    			mPlaylist->Load(pPath, forced);
+    		}
+
+    	}
 
         return STATUS_OK;
 
@@ -267,40 +327,47 @@ namespace Core
         return STATUS_KO;
     }
 
-    void SoundService::StopBGM()
+    
+    void SoundService::RegisterSound(const char* pPath)
     {
-        if (mBGMPlayer != NULL)
-        {
-            SLuint32 lBGMPlayerState;
-            (*mBGMPlayerObj)->GetState(mBGMPlayerObj,&lBGMPlayerState);
-            if (lBGMPlayerState == SL_OBJECT_STATE_REALIZED)
-            {
-                (*mBGMPlayer)->SetPlayState(mBGMPlayer,SL_PLAYSTATE_PAUSED);
-                (*mBGMPlayerObj)->Destroy(mBGMPlayerObj);
-                mBGMPlayerObj = NULL;
-                mBGMPlayer = NULL;
-            }
-        }
-    }
-
-    Sound* SoundService::RegisterSound(const char* pPath)
-    {
+    	LOGSS("Registering sound");
         // Finds out if texture already loaded.
-        for (int32_t i = 0; i < mSoundCount; ++i)
-        {
-            if (strcmp(pPath, mSounds[i]->GetPath()) == 0)
-            {
-                return mSounds[i];
-            }
-        }
-
-        Sound* lSound = new Sound(pPath);
-        mSounds[mSoundCount++] = lSound;
-        return lSound;
+    	if(mSounds.count(pPath) == 0){
+    		mSounds.insert(pair<string, Sound*>(pPath, new Sound(pPath)));
+    		mSounds[pPath]->Load();
+    		LOGSS("Just loaded %s", pPath);
+    	}
+    	else
+    	{
+    		LOGSS("Already loaded %s", pPath);
+    		return;
+    	}
     }
 
-    void SoundService::PlaySound(Sound* pSound)
+    void SoundService::UnregisterSound(const char* pPath)
     {
+    	LOGI("Unregistering sound");
+    	if(mSounds.count(pPath) == 1){
+    		mSounds[pPath]->Unload();
+    		delete mSounds[pPath];
+			mSounds.erase(pPath);
+			LOGSS("Unloaded %s", pPath);
+		}
+    	else
+    	{
+    		LOGSS("Not registered %s", pPath);
+    		return;
+    	}
+
+    }
+
+    void SoundService::PlaySFX(const char* pPath, bool load)
+    {
+    	if(load)
+    	{
+    		RegisterSound(pPath);
+    	}
+    	LOGSS("Playing sound");
         SLresult lRes;
         SLuint32 lPlayerState;
 
@@ -310,7 +377,9 @@ namespace Core
         int16_t* lBuffer;
         off_t    lLength;
 
-        for(i = 0; i < MAX_SOUNDS; i++)
+        map<string, Sound*>::iterator it;
+
+        for(i = 0; i < MAX_SOUNDS - 1; i++)
         {
         	lRes = (*(mPlayerQueue[i]))->GetState(mPlayerQueue[i], &state);
         	if (lRes != SL_RESULT_SUCCESS)  goto ERROR;
@@ -319,8 +388,26 @@ namespace Core
         		break;
         }
 
-        lBuffer = (int16_t*) pSound->GetPCMData();
-        lLength = pSound->GetPCMLength();
+
+        it = mSounds.find(pPath);
+        if(it != mSounds.end())
+        {
+        	lBuffer = (int16_t*) it->second->GetPCMData();
+			lLength = it->second->GetPCMLength();
+
+			LOGSS("Sound was registered %s", pPath);
+        }
+        else
+        {
+        	tempSounds[i] = new Sound(pPath);
+        	tempSounds[i]->Load();
+
+        	lBuffer = (int16_t*) tempSounds[i]->GetPCMData();
+			lLength = tempSounds[i]->GetPCMLength();
+
+			LOGSS("Sound was loaded in temp %s", pPath);
+			LOGSS("Address %x", tempSounds[i]);
+        }
 
         // Removes any sound from the queue.
         lRes = (*mPlayerQueue[i])->Clear(mPlayerQueue[i]);
@@ -337,11 +424,29 @@ namespace Core
     }
 
 
-    void SoundService::bqPlayerCallback(SLBufferQueueItf bq, void *context){
-    	LOGI("BGM Track done. Loading next one");
-    	Sound* snd = ((Playlist*)context)->Next();
-    	(*bq)->Enqueue(bq, snd->GetPCMData(), snd->GetPCMLength());
+    void SoundService::bqBGMPlayerCallback(SLBufferQueueItf bq, void *context)
+    {
+    	LOGSS("BGM Track done. Loading next one");
+    	if(((Playlist*)context)->Next())
+    	{
+    			Sound* snd = ((Playlist*)context)->GetSound();
+    			(*bq)->Enqueue(bq, snd->GetPCMData(), snd->GetPCMLength());
+    	}
     }
+
+    void SoundService::bqSFXPlayerCallback(SLBufferQueueItf bq, void *context)
+    {
+    	Sound* &snd = *((Sound**)context);
+    	if(snd != NULL)
+    	{
+    		LOGSS("Unloading temp sound %s", snd->GetPath());
+    		LOGSS("Address %x", snd);
+    		snd->Unload();
+    		delete snd;
+    		snd = NULL;
+    	}
+    }
+
 
     void SoundService::SetBGMState(SLuint32 state)
     {
@@ -353,6 +458,11 @@ namespace Core
     	for(int i = 0; i < MAX_SOUNDS; i++){
     		(*mPlayer[i])->SetPlayState(mPlayer[i], state);
     	}
+    }
+    
+    void SoundService::StopBGM()
+    {
+        SetBGMState(SL_PLAYSTATE_STOPPED);
     }
 
     void SoundService::PauseBGM()

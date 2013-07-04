@@ -4,7 +4,7 @@
 class SoundService;
 
 #include "Context.hpp"
-#include "Asset.hpp"
+#include "Resource.hpp"
 #include "Types.hpp"
 
 namespace Core
@@ -27,7 +27,7 @@ namespace Core
         friend class SoundService;
 
     private:
-        Asset mResource;
+        Resource* mResource;
         uint8_t* mBuffer; off_t mLength;
         char extension[4];
     };
