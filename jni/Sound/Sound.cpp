@@ -4,9 +4,9 @@
 namespace Core
 {
     Sound::Sound(const char* pPath) :
-        mResource(pPath),
         mBuffer(NULL), mLength(0)
     {
+    	mResource = Core::LoadResource(pPath);
 
 		int i;
 		for(i = 0; pPath[i] != '\0'; i++)
@@ -24,25 +24,27 @@ namespace Core
 
     const char* Sound::GetPath()
     {
-        return mResource.GetPath();
+        return mResource->GetPath();
     }
 
     Status Sound::Load()
     {
-        LOGI("Loading sound %s", mResource.GetPath());
+        //LOGI("Loading sound %s", mResource.GetPath());
         Status lRes;
 
         // Opens sound file.
-        if (mResource.Open() != STATUS_OK)
+        if (mResource->Open() != STATUS_OK)
         {
             return STATUS_KO;
         }
 
         // Reads sound file.
-        mLength = mResource.GetLength();
+        mLength = mResource->GetLength();
+
         mBuffer = new uint8_t[mLength];
-        lRes = mResource.Read(mBuffer, mLength);
-        mResource.Close();
+
+        lRes = mResource->Read(mBuffer, mLength);
+        mResource->Close();
 
         if (lRes != STATUS_OK)
         {
