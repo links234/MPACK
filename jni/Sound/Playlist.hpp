@@ -2,7 +2,7 @@
 #define PLAYLIST_HPP
 
 #include "Context.hpp"
-#include "Asset.hpp"
+#include "Resource.hpp"
 #include "Types.hpp"
 #include "Sound.hpp"
 #include "Random.hpp"
