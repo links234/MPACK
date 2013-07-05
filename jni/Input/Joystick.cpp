@@ -19,6 +19,9 @@ void Joystick::SetTextures(Texture2D *innerTex, Texture2D *outerTex)
 
 	m_outerSprite.SetSize(70.0f,70.0f);
 	m_innerSprite.SetSize(60.0f,60.0f);
+
+	m_outerSprite.m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
+	m_innerSprite.m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
 }
 
 void Joystick::SetMaxDistance(GLfloat maxDist)
