@@ -22,6 +22,9 @@ void Joystick::SetTextures(Texture2D *innerTex, Texture2D *outerTex)
 
 	m_outerSprite.m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
 	m_innerSprite.m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
+
+	m_outerSprite.m_layer=HUD_LAYER;
+	m_innerSprite.m_layer=HUD_LAYER;
 }
 
 void Joystick::SetMaxDistance(GLfloat maxDist)
