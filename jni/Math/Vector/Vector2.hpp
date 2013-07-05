@@ -9,6 +9,7 @@
 #ifndef VECTOR2_HPP
 #define VECTOR2_HPP
 
+#include "Common.hpp"
 #include "Geom.hpp"
 
 namespace Math
@@ -20,6 +21,7 @@ namespace Math
 
 		T Length() const;
 		T Magnitude() const;
+		T Angle() const;
 		T Distance(const Vector2<T> &point) const;
 		T Dot(const Vector2<T> &v) const;
 		void Normalize();
@@ -57,6 +59,17 @@ namespace Math
 		return Misc<T>::Sqrt(x*x+y*y);
 	}
 
+	template<class T> inline T Vector2<T>::Angle() const
+	{
+		T angle=Misc<T>::RadToDeg((T)atan2((double)y,(double)x));
+		angle=-angle;
+		if(angle<0)
+		{
+			angle=360+angle;
+		}
+		return angle;
+	}
+
 	template<class T> inline T Vector2<T>::Distance(const Vector2<T> &point)const
 	{
 		T dx=x-point.x;
@@ -81,7 +94,7 @@ namespace Math
 
 	template<class T> inline void Vector2<T>::Rotate(T amount)
 	{
-		amount = Misc<T>::DegToRad(amount);
+		amount = -Misc<T>::DegToRad(amount);
 		T xx = Misc<T>::Cos(amount)*x - Misc<T>::Sin(amount)*y;
 		T yy = Misc<T>::Sin(amount)*x + Misc<T>::Cos(amount)*y;
 		x = xx;
