@@ -160,14 +160,18 @@ namespace Core
         Object::UpdateAll(lTimeStep);
         ParticleEmitter::UpdateAll(lTimeStep);
         Particle::UpdateAll(lTimeStep);
+        Camera2D::UpdateAll(lTimeStep);
     }
 
     Status GraphicsService::Render()
     {
     	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    	SpriteBatcher::EnableCamera();
     	Object::RenderAll();
     	Particle::RenderAll();
+    	SpriteBatcher::DisableCamera();
+
 		SpriteBatcher::FlushAll();
 
 		if(eglSwapBuffers(mDisplay, mSurface)!=EGL_TRUE)

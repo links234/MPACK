@@ -8,14 +8,19 @@
 
 #include "SpriteBatcher.hpp"
 
+#include "Global.hpp"
+#include "Maths.hpp"
 #include "Debug.hpp"
+
+using namespace Math;
 
 SpriteBatch::SpriteBatch(GLushort indexSize, Texture2D *texture)
 	: m_indexSize(indexSize), m_texture(texture)
 {
 }
 
-map<GLfloat, SpriteBatcher*> SpriteBatcher::s_spriteBatcherLayer;
+map<GLfloat, SpriteBatcher*> 	SpriteBatcher::s_spriteBatcherLayer;
+bool							SpriteBatcher::s_useCamera=false;
 
 SpriteBatcher::SpriteBatcher()
 	: m_currentIndexBatchSize(0), m_lastTexture(NULL)
@@ -48,6 +53,16 @@ void SpriteBatcher::FlushAll()
 	}
 }
 
+void SpriteBatcher::EnableCamera()
+{
+	s_useCamera=true;
+}
+
+void SpriteBatcher::DisableCamera()
+{
+	s_useCamera=false;
+}
+
 void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture)
 {
 	if(vertexCount&3!=0)
@@ -72,7 +87,15 @@ void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture
 	SpriteVertex 	*vertexPointerEnd=vertexPointer+vertexCount;
 	for(;vertexPointer<vertexPointerEnd;++vertexPointer)
 	{
-		m_vertexData.push_back(*vertexPointer);
+		Vector2f point(vertexPointer->x,vertexPointer->y);
+		if(s_useCamera && Global::pActiveCamera)
+		{
+			Global::pActiveCamera->Transform(point);
+		}
+		SpriteVertex vertex=*vertexPointer;
+		vertex.x=point.x;
+		vertex.y=point.y;
+		m_vertexData.push_back(vertex);
 	}
 
 	GLushort quadIndex[]={ 	0,1,2,
@@ -108,7 +131,15 @@ void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushor
 	SpriteVertex 	*vertexPointerEnd=vertexPointer+vertexCount;
 	for(;vertexPointer<vertexPointerEnd;++vertexPointer)
 	{
-		m_vertexData.push_back(*vertexPointer);
+		Vector2f point(vertexPointer->x,vertexPointer->y);
+		if(s_useCamera && Global::pActiveCamera)
+		{
+			Global::pActiveCamera->Transform(point);
+		}
+		SpriteVertex vertex=*vertexPointer;
+		vertex.x=point.x;
+		vertex.y=point.y;
+		m_vertexData.push_back(vertex);
 	}
 
 	GLushort		*indexPointerEnd=indexPointer+indexCount;

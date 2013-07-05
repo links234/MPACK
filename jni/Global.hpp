@@ -5,6 +5,7 @@
 #include "Context.hpp"
 #include "TextureMappedFont.hpp"
 #include "EventLoop.hpp"
+#include "Camera2D.hpp"
 
 #define HUD_LAYER		500.0f
 
@@ -15,7 +16,9 @@ namespace Global
 	extern Core::Context			*pContext;
 	extern Core::EventLoop			*pEventLoop;
 
-	extern TextureMappedFont	*pFont;
+	extern TextureMappedFont		*pFont;
+
+	extern Camera2D					*pActiveCamera;
 }
 
 #endif

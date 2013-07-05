@@ -39,6 +39,9 @@ public:
 	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, GLfloat layer);
 	static void FlushAll();
 
+	static void EnableCamera();
+	static void DisableCamera();
+
 private:
 	SpriteBatcher();
 	~SpriteBatcher(){}
@@ -56,6 +59,7 @@ private:
 	Texture2D				*m_lastTexture;
 
 	static map<GLfloat, SpriteBatcher*> s_spriteBatcherLayer;
+	static bool						 s_useCamera;
 };
 
 #endif

@@ -13,11 +13,10 @@ class Object
 {
 public:
 	Object();
+	virtual ~Object();
 
 	virtual void Update(GLfloat delta);
 	virtual void Render();
-
-	virtual ~Object();
 
 	Sprite *m_sprite;
 	Vector2f m_velocity;
