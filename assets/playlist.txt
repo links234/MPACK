@@ -1,2 +1,2 @@
-bgm.wav
+@bgm.wav
 
