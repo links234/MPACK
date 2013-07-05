@@ -30,7 +30,7 @@ namespace Game
 		m_pEmitter->m_modifiers.push_back(new ParticleEffectorGravity());
 		m_pEmitter->m_modifiers.push_back(new ParticleEffectorColor(Vector4f(1.0f,1.0f,0.0f,1.0f),Vector4f(0.0f,0.0f,1.0f,0.0f)));
 
-		/*
+
 		//Texture loading
 		m_playerTexture=new Texture2D;
 		m_joystickInnerTex=new Texture2D;
@@ -47,22 +47,33 @@ namespace Game
 		m_playerSprite->SetSize(50.0f,50.0f);
 		m_playerSprite->m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
 
+		//Player setup
+		m_playerObject=new Player;
+		m_playerObject->m_sprite=m_playerSprite;
+
+		//Joystick setup
 		m_joystick=new Joystick;
 		m_joystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
 		m_joystick->SetMaxDistance(100.0f);
-*/
+
 	}
 
 	int PlayGame::Update()
 	{
 		float lTimeStep = Global::pContext->pTimeService->Elapsed();
 
-		//m_joystick->Update();
+		m_joystick->Update();
 
 		if(m_requestExit)
 		{
 			return EVENT_PLAYGAME_EXIT;
 		}
+
+
+		//DON"T!!! RUN!!!
+		m_playerObject->m_acceleration=m_joystick->m_dir*5.0f;
+		m_playerObject->m_direction=m_playerObject->m_velocity.Normalized();
+
 
 		return EVENT_NOTHING;
 	}
@@ -71,10 +82,7 @@ namespace Game
 	{
 		//Global::pFont->SendString("NEW GAME!",Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5,ALIGN_CENTER);
 
-		//m_playerSprite->Render();
-
-		//m_joystick->Render();
-
+		m_joystick->Render();
 	}
 
 	PlayGame::~PlayGame()
@@ -82,15 +90,13 @@ namespace Game
 		delete m_particleTex;
 		delete m_pEmitter;
 
-		/*
 		delete m_playerTexture;
 		delete m_joystickInnerTex;
 		delete m_joystickOuterTex;
 
-		delete m_playerSprite;
+		delete m_playerObject;
 
 		delete m_joystick;
-		*/
 	}
 
 	void PlayGame::onBackKey(void *pointer)

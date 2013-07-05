@@ -5,6 +5,7 @@
 #include "Texture2D.hpp"
 #include "Sprite.hpp"
 #include "Joystick.hpp"
+#include "Player.hpp"
 #include "ParticleEmitterCircle.hpp"
 
 using namespace Core;
@@ -29,6 +30,7 @@ namespace Game
 		Texture2D 	*m_enemyTexture;
 		Texture2D 	*m_playerTexture;
 		Sprite		*m_playerSprite;
+		Player		*m_playerObject;
 
 		Texture2D	*m_joystickInnerTex;
 		Texture2D	*m_joystickOuterTex;
