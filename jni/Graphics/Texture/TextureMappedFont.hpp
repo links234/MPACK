@@ -42,12 +42,14 @@ public:
 	void SetMonospaced(bool monospaced=true);
     void SendString(const std::string& str, GLfloat x, GLfloat y, Align alignType=ALIGN_LEFT_TOP, vector<Math::Vector4f> *colorPattern=NULL);
 
-    bool Load(const string& textureName);
+    bool 		Load(const string& textureName);
 
-	Texture2D* GetTexturePointer();
+	Texture2D* 	GetTexturePointer();
 
-	GLfloat GetFontSize() const;
-	GLfloat GetTextWidth(const std::string &str);
+	GLfloat 	GetFontSize() const;
+	GLfloat 	GetTextWidth(const std::string &str);
+
+	GLfloat 		m_layer;
 
 private:
     Texture2D		m_texture;

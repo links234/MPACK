@@ -13,7 +13,7 @@
 #include "Types.hpp"
 
 TextureMappedFont::TextureMappedFont()
-	: m_fontSize(40.0f), m_charSpacing(0.6f), m_monospaced(false)
+	: m_layer(1000.0f), m_fontSize(40.0f), m_charSpacing(0.6f), m_monospaced(false)
 {
 }
 
@@ -149,7 +149,7 @@ void TextureMappedFont::SendString(const string& str, GLfloat x, GLfloat y, Alig
 		}
 	}
 
-	SpriteBatcher::Send(&quadData[0],quadData.size(),&m_texture);
+	SpriteBatcher::Send(&quadData[0],quadData.size(),&m_texture,m_layer);
 }
 
 void TextureMappedFont::SetFontSize(GLfloat fontSize)

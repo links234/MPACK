@@ -32,6 +32,7 @@ public:
 
 	GLfloat			m_rotation;
 	GLfloat			m_spriteShadingType;
+	GLfloat			m_layer;
 	Math::Vector2f	m_position;
 	Math::Vector4f	m_color[4];
 
