@@ -7,6 +7,7 @@
 #include "TextureMappedFont.hpp"
 #include "Log.hpp"
 #include "Particles.hpp"
+#include "Object.hpp"
 
 namespace Core
 {
@@ -156,6 +157,7 @@ namespace Core
     {
         float lTimeStep = Global::pContext->pTimeService->Elapsed();
 
+        Object::UpdateAll(lTimeStep);
         ParticleEmitter::UpdateAll(lTimeStep);
         Particle::UpdateAll(lTimeStep);
     }
@@ -164,6 +166,7 @@ namespace Core
     {
     	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    	Object::RenderAll();
     	Particle::RenderAll();
 		SpriteBatcher::Flush();
 
