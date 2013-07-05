@@ -6,6 +6,8 @@
 #include "TextureMappedFont.hpp"
 #include "EventLoop.hpp"
 
+#define HUD_LAYER		500.0f
+
 namespace Global
 {
 	extern android_app 				*pAndroidApp;
