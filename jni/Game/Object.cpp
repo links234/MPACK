@@ -12,6 +12,19 @@ Object::Object()
 	s_objects.push_back(this);
 }
 
+Object::~Object()
+{
+	for(vector<Object*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
+	{
+		if(this==*it)
+		{
+			*it=s_objects[s_objects.size()-1];
+			s_objects.pop_back();
+			break;
+		}
+	}
+}
+
 void Object::Update(GLfloat delta)
 {
 	m_velocity+=m_acceleration*delta;
@@ -38,19 +51,6 @@ void Object::Update(GLfloat delta)
 void Object::Render()
 {
 	m_sprite->Render();
-}
-
-Object::~Object()
-{
-	for(vector<Object*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
-	{
-		if(this==*it)
-		{
-			*it=s_objects[s_objects.size()-1];
-			s_objects.pop_back();
-			break;
-		}
-	}
 }
 
 void Object::UpdateAll(GLfloat delta)

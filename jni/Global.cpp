@@ -8,5 +8,7 @@ namespace Global
 	Core::EventLoop			*pEventLoop;
 
 	TextureMappedFont		*pFont;
+
+	Camera2D				*pActiveCamera;
 }
 

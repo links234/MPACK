@@ -7,6 +7,7 @@
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
 #include "Particles.hpp"
+#include "Camera2D.hpp"
 
 namespace Game
 {
@@ -56,6 +57,9 @@ namespace Game
 		m_joystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
 		m_joystick->SetMaxDistance(100.0f);
 
+		//Camera setup
+		Global::pActiveCamera=new Camera2D();
+		Global::pActiveCamera->Link(m_playerObject);
 	}
 
 	int PlayGame::Update()
@@ -70,9 +74,10 @@ namespace Game
 		}
 
 
-		//DON"T!!! RUN!!!
+		//NOT FINAL HERE!!!
 		m_playerObject->m_acceleration=m_joystick->m_dir*5.0f;
 		m_playerObject->m_direction=m_playerObject->m_velocity.Normalized();
+		//NOT FINAL HERE!!!
 
 
 		return EVENT_NOTHING;
@@ -97,6 +102,9 @@ namespace Game
 		delete m_playerObject;
 
 		delete m_joystick;
+
+		delete Global::pActiveCamera;
+		Global::pActiveCamera=NULL;
 	}
 
 	void PlayGame::onBackKey(void *pointer)
