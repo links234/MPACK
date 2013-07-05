@@ -15,11 +15,38 @@ SpriteBatch::SpriteBatch(GLushort indexSize, Texture2D *texture)
 {
 }
 
-GLushort				SpriteBatcher::m_currentIndexBatchSize;
-vector<SpriteVertex>	SpriteBatcher::m_vertexData;
-vector<GLushort>		SpriteBatcher::m_indexData;
-vector<SpriteBatch>		SpriteBatcher::m_batches;
-Texture2D				*SpriteBatcher::m_lastTexture;
+map<GLfloat, SpriteBatcher*> SpriteBatcher::s_spriteBatcherLayer;
+
+SpriteBatcher::SpriteBatcher()
+	: m_currentIndexBatchSize(0), m_lastTexture(NULL)
+{
+}
+
+void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, GLfloat layer)
+{
+	if(!s_spriteBatcherLayer.count(layer))
+	{
+		s_spriteBatcherLayer[layer]=new SpriteBatcher;
+	}
+	s_spriteBatcherLayer[layer]->Send(vertexPointer,vertexCount,texture);
+}
+
+void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, GLfloat layer)
+{
+	if(!s_spriteBatcherLayer.count(layer))
+	{
+		s_spriteBatcherLayer[layer]=new SpriteBatcher;
+	}
+	s_spriteBatcherLayer[layer]->Send(vertexPointer,vertexCount,indexPointer,indexCount,texture);
+}
+
+void SpriteBatcher::FlushAll()
+{
+	for(map<GLfloat,SpriteBatcher*>::iterator it=s_spriteBatcherLayer.begin();it!=s_spriteBatcherLayer.end();++it)
+	{
+		(*it).second->Flush();
+	}
+}
 
 void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture)
 {

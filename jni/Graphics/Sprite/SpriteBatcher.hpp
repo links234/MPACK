@@ -15,6 +15,7 @@
 #include "BufferObject.hpp"
 
 #include <vector>
+#include <map>
 
 class SpriteBatcher;
 
@@ -34,21 +35,27 @@ private:
 class SpriteBatcher
 {
 public:
-	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture);
-	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture);
-	static void Flush();
+	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, GLfloat layer);
+	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, GLfloat layer);
+	static void FlushAll();
 
 private:
-	SpriteBatcher(){}
+	SpriteBatcher();
 	~SpriteBatcher(){}
 
-	static void CompleteBatch();
+	void Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture);
+	void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture);
+	void Flush();
 
-	static GLushort					m_currentIndexBatchSize;
-	static vector<SpriteVertex> 	m_vertexData;
-	static vector<GLushort> 		m_indexData;
-	static vector<SpriteBatch>		m_batches;
-	static Texture2D				*m_lastTexture;
+	void CompleteBatch();
+
+	GLushort				m_currentIndexBatchSize;
+	vector<SpriteVertex> 	m_vertexData;
+	vector<GLushort> 		m_indexData;
+	vector<SpriteBatch>		m_batches;
+	Texture2D				*m_lastTexture;
+
+	static map<GLfloat, SpriteBatcher*> s_spriteBatcherLayer;
 };
 
 #endif

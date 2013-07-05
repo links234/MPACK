@@ -168,7 +168,7 @@ namespace Core
 
     	Object::RenderAll();
     	Particle::RenderAll();
-		SpriteBatcher::Flush();
+		SpriteBatcher::FlushAll();
 
 		if(eglSwapBuffers(mDisplay, mSurface)!=EGL_TRUE)
 		{

@@ -11,7 +11,7 @@
 #include "Render.hpp"
 
 Sprite::Sprite()
-	: m_position(0,0), m_rotation(0), m_width(0), m_height(0), m_texture(NULL), m_spriteShadingType(SpriteVertex::ALPHA_TEST)
+	: m_position(0,0), m_rotation(0), m_width(0), m_height(0), m_texture(NULL), m_spriteShadingType(SpriteVertex::ALPHA_TEST), m_layer(0)
 {
 	m_color[0]=m_color[1]=m_color[2]=m_color[3]=Math::Vector4f(1.0f,1.0f,1.0f,1.0f);
 }
@@ -47,7 +47,7 @@ void Sprite::Render()
 								SpriteVertex(v[2].x,Render::GetScreenHeight()-v[2].y,	0,1,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),
 								SpriteVertex(v[3].x,Render::GetScreenHeight()-v[3].y,	1,1,	m_color[3].x,m_color[3].y,m_color[3].z,m_color[3].w,	m_spriteShadingType) };
 
-	SpriteBatcher::Send(vertexData,4,m_texture);
+	SpriteBatcher::Send(vertexData,4,m_texture,m_layer);
 }
 
 void Sprite::SetSize(const GLfloat &width, const GLfloat &height)
