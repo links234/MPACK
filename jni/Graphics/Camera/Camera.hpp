@@ -11,6 +11,7 @@ class Camera
 {
 public:
 	Camera();
+	virtual ~Camera();
 
 	Matrix4f GetViewMatrix();
 	Matrix4f GetProjMatrix();
