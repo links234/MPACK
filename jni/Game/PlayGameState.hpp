@@ -4,6 +4,7 @@
 #include "GameState.hpp"
 #include "Texture2D.hpp"
 #include "Sprite.hpp"
+#include "AnimatedSprite.hpp"
 #include "Joystick.hpp"
 #include "Player.hpp"
 #include "ParticleEmitterCircle.hpp"
@@ -38,6 +39,9 @@ namespace Game
 
 		Texture2D				*m_particleTex;
 		ParticleEmitterCircle 	*m_pEmitter;
+
+		Texture2D		*m_testTexture;
+		AnimatedSprite	*m_testSprite;
 	};
 }
 

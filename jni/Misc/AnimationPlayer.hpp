@@ -6,7 +6,10 @@
 class AnimationPlayer
 {
 public:
-	void 		Update(GLfloat delta);
+	AnimationPlayer();
+	virtual ~AnimationPlayer();
+
+	virtual void 		Update(GLfloat delta);
 
 	void 		SetAnimation(const Animation &animation);
 	Animation 	GetAnimation() const;
@@ -15,7 +18,7 @@ public:
 	GLint		GetNextFrame() 		const;
 	GLfloat		GetInterpolation() 	const;
 
-private:
+protected:
 	Animation 	m_animation;
 
 	GLint 		m_currentFrame;

@@ -8,6 +8,10 @@
 #include "Log.hpp"
 #include "Particles.hpp"
 #include "Object.hpp"
+#include "Context.hpp"
+#include "Camera2D.hpp"
+#include "Sprite.hpp"
+#include "AnimatedSprite.hpp"
 
 namespace Core
 {
