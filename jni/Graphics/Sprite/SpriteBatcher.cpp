@@ -10,6 +10,7 @@
 
 #include "Global.hpp"
 #include "Maths.hpp"
+#include "Camera2D.hpp"
 #include "Debug.hpp"
 
 using namespace Math;

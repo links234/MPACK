@@ -13,14 +13,16 @@
 #include "Types.hpp"
 #include "SpriteBatcher.hpp"
 #include "Texture2D.hpp"
+#include "Render.hpp"
 
 class Sprite
 {
 public:
 	Sprite();
-	~Sprite();
+	virtual ~Sprite();
 
 	void Render();
+
 	void SetSize(const GLfloat &width, const GLfloat &height);
 	void SetWidth(const GLfloat &width);
 	void SetHeight(const GLfloat &height);
@@ -36,7 +38,7 @@ public:
 	Math::Vector2f	m_position;
 	Math::Vector4f	m_color[4];
 
-private:
+protected:
 	GLfloat			m_width,m_height;
 	Texture2D		*m_texture;
 };

@@ -8,8 +8,6 @@
 
 #include "Sprite.hpp"
 
-#include "Render.hpp"
-
 Sprite::Sprite()
 	: m_position(0,0), m_rotation(0), m_width(0), m_height(0), m_texture(NULL), m_spriteShadingType(SpriteVertex::ALPHA_TEST), m_layer(0)
 {

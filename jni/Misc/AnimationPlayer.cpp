@@ -1,5 +1,14 @@
 #include "AnimationPlayer.hpp"
 
+AnimationPlayer::AnimationPlayer()
+	: m_animation(0,0,1.0f)
+{
+}
+
+AnimationPlayer::~AnimationPlayer()
+{
+}
+
 void AnimationPlayer::Update(GLfloat delta)
 {
 	if(m_animation.startFrame==m_animation.endFrame)

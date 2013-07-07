@@ -2,12 +2,17 @@
 #define GLOBAL_HPP
 
 #include "Types.hpp"
-#include "Context.hpp"
-#include "TextureMappedFont.hpp"
-#include "EventLoop.hpp"
-#include "Camera2D.hpp"
 
 #define HUD_LAYER		500.0f
+
+class Camera2D;
+class TextureMappedFont;
+
+namespace Core
+{
+	class Context;
+	class EventLoop;
+};
 
 namespace Global
 {

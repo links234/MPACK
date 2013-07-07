@@ -60,11 +60,33 @@ namespace Game
 		//Camera setup
 		Global::pActiveCamera=new Camera2D();
 		Global::pActiveCamera->Link(m_playerObject);
+
+
+
+
+
+
+
+		//should be deleted in final version
+		m_testTexture=new Texture2D();
+		m_testTexture->Load("@explosion.png");
+
+		m_testSprite=new AnimatedSprite();
+		m_testSprite->m_position=Vector2f(Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5);
+		m_testSprite->SetTexture(m_testTexture);
+		m_testSprite->SetSize(200.0f,200.0f);
+		m_testSprite->m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
+		m_testSprite->m_layer=1.0f;
+
+		m_testSprite->BuildFrameGrid(5,4);
+		m_testSprite->SetAnimation(Animation(0,20,10.0f));
 	}
 
 	int PlayGame::Update()
 	{
 		float lTimeStep = Global::pContext->pTimeService->Elapsed();
+
+		m_testSprite->Update(lTimeStep);
 
 		m_joystick->Update();
 
@@ -86,6 +108,7 @@ namespace Game
 	void PlayGame::Render()
 	{
 		//Global::pFont->SendString("NEW GAME!",Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5,ALIGN_CENTER);
+		m_testSprite->Render();
 
 		m_joystick->Render();
 	}
@@ -105,6 +128,10 @@ namespace Game
 
 		delete Global::pActiveCamera;
 		Global::pActiveCamera=NULL;
+
+		//should be deleted in final version
+		delete m_testSprite;
+		delete m_testTexture;
 	}
 
 	void PlayGame::onBackKey(void *pointer)
