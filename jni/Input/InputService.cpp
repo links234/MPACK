@@ -81,6 +81,7 @@ namespace Core
 	{
 		Finger *pFinger=new Finger();
 		pFinger->m_id=id;
+		pFinger->m_flag=FF_FREE;
 		pFinger->m_pos=pos;
 		m_finger.push_back(pFinger);
 
