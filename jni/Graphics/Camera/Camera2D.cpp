@@ -48,9 +48,9 @@ void Camera2D::Update(GLfloat delta)
 void Camera2D::Transform(Vector2f &vertex) const
 {
 	vertex-=m_position;
-	//vertex*=m_scale;
+	vertex*=m_scale;
 
-	//vertex+=Vector2f(+Render::GetScreenWidth()*0.5f,-Render::GetScreenHeight()*0.5f);
+	vertex+=Vector2f(Render::GetScreenWidth()*0.5f,Render::GetScreenHeight()*0.5f);
 }
 
 void Camera2D::SetPosition(const Vector2f &position)
