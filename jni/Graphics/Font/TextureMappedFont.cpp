@@ -30,7 +30,6 @@ void TextureMappedFont::SendString(const string& str, GLfloat x, GLfloat y, Alig
 
 	GLfloat spacing(m_fontSize*m_charSpacing);
 
-	y=Render::GetScreenHeight()-y-m_fontSize;
 	vector<SpriteVertex> quadData;
 	SpriteVertex vertex;
 	vertex.stype=SpriteVertex::ALPHA_TEST;
@@ -51,31 +50,10 @@ void TextureMappedFont::SendString(const string& str, GLfloat x, GLfloat y, Alig
 			x-=m_fontSize*m_cellSpacing[chX][chY].left;
 		}
 
+		////////////////////////////////////
 		vertex.x=x;
-		vertex.y=y;
+		vertex.y=y+m_fontSize;
 		vertex.s=xPos;
-		vertex.t=1.0f-yPos-oneOverSixteen;
-		if(!colorPattern)
-		{
-			vertex.r=vertex.g=vertex.b=vertex.a=1.0;
-		}
-		else
-		{
-			vertex.r=(*colorPattern)[ind].x;
-			vertex.g=(*colorPattern)[ind].y;
-			vertex.b=(*colorPattern)[ind].z;
-			vertex.a=(*colorPattern)[ind].w;
-			++ind;
-			if(ind==colorPattern->size())
-			{
-				ind=0;
-			}
-		}
-		quadData.push_back(vertex);
-
-		vertex.x=x+m_fontSize;
-		vertex.y=y;
-		vertex.s=xPos+oneOverSixteen;
 		vertex.t=1.0f-yPos-oneOverSixteen;
 		if(!colorPattern)
 		{
@@ -98,6 +76,28 @@ void TextureMappedFont::SendString(const string& str, GLfloat x, GLfloat y, Alig
 		vertex.x=x+m_fontSize;
 		vertex.y=y+m_fontSize;
 		vertex.s=xPos+oneOverSixteen;
+		vertex.t=1.0f-yPos-oneOverSixteen;
+		if(!colorPattern)
+		{
+			vertex.r=vertex.g=vertex.b=vertex.a=1.0;
+		}
+		else
+		{
+			vertex.r=(*colorPattern)[ind].x;
+			vertex.g=(*colorPattern)[ind].y;
+			vertex.b=(*colorPattern)[ind].z;
+			vertex.a=(*colorPattern)[ind].w;
+			++ind;
+			if(ind==colorPattern->size())
+			{
+				ind=0;
+			}
+		}
+		quadData.push_back(vertex);
+
+		vertex.x=x+m_fontSize;
+		vertex.y=y;
+		vertex.s=xPos+oneOverSixteen;
 		vertex.t=1.0f-yPos-0.001f;
 		if(!colorPattern)
 		{
@@ -118,7 +118,7 @@ void TextureMappedFont::SendString(const string& str, GLfloat x, GLfloat y, Alig
 		quadData.push_back(vertex);
 
 		vertex.x=x;
-		vertex.y=y+m_fontSize;
+		vertex.y=y;
 		vertex.s=xPos;
 		vertex.t=1.0f-yPos-0.001f;
 		if(!colorPattern)
@@ -138,6 +138,7 @@ void TextureMappedFont::SendString(const string& str, GLfloat x, GLfloat y, Alig
 			}
 		}
 		quadData.push_back(vertex);
+
 
 		if(!m_monospaced)
 		{

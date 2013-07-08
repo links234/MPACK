@@ -34,8 +34,9 @@ private:
 	Object		*m_target;
 
 	GLfloat		m_springConstant,m_dampingConstant;
-
 	bool		m_useSpringSystem;
+
+	GLfloat 	m_scale;
 
 	static vector<Camera2D*> s_cameras;
 };
