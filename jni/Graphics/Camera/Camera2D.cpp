@@ -5,10 +5,10 @@
 vector<Camera2D*> Camera2D::s_cameras;
 
 Camera2D::Camera2D()
-	: m_position(), m_velocity(), m_target(NULL), m_idealPosition(), m_useSpringSystem(false), m_scale(2.0f)
+	: m_position(), m_velocity(), m_target(NULL), m_idealPosition(), m_useSpringSystem(true), m_scale(1.0f)
 {
 	s_cameras.push_back(this);
-	SetSpringConstant(15.0f);
+	SetSpringConstant(50.0f);
 }
 
 Camera2D::~Camera2D()
@@ -50,12 +50,14 @@ void Camera2D::Transform(Vector2f &vertex) const
 	vertex-=m_position;
 	vertex*=m_scale;
 
+	vertex.Rotate(-m_direction.Angle());
+
 	vertex+=Vector2f(Render::GetScreenWidth()*0.5f,Render::GetScreenHeight()*0.5f);
 }
 
 void Camera2D::SetPosition(const Vector2f &position)
 {
-	m_idealPosition=position;//-Vector2f(Render::GetScreenWidth()*0.5f,Render::GetScreenHeight()*0.5f);;
+	m_idealPosition=position;
 }
 
 void Camera2D::Link(Object *target)

@@ -38,6 +38,8 @@ private:
 
 	GLfloat 	m_scale;
 
+	Vector2f	m_direction;
+
 	static vector<Camera2D*> s_cameras;
 };
 
