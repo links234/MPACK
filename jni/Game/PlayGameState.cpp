@@ -61,11 +61,10 @@ namespace Game
 		Global::pActiveCamera=new Camera2D();
 		Global::pActiveCamera->Link(m_playerObject);
 
-
-
-
-
-
+		//Setup input surface
+		m_fingers[0]=m_fingers[1]=NULL;
+		Global::pContext->pInputService->Link_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
+		Global::pContext->pInputService->Link_FUP(Param2PtrCallbackStruct(UP_callback,this));
 
 		//should be deleted in final version
 		m_testTexture=new Texture2D();
@@ -95,6 +94,13 @@ namespace Game
 			return EVENT_PLAYGAME_EXIT;
 		}
 
+		if(m_fingers[1]!=NULL)
+		{
+			GLfloat firstDistance=m_firstPosition[0].Distance(m_firstPosition[1]);
+			GLfloat currentDistance=m_fingers[0]->m_pos.Distance(m_fingers[1]->m_pos);
+			GLfloat ratio=currentDistance/firstDistance;
+			Global::pActiveCamera->SetScale(m_firstScale*ratio);
+		}
 
 		//NOT FINAL HERE!!!
 		m_playerObject->m_acceleration=m_joystick->m_dir*5.0f;
@@ -108,7 +114,8 @@ namespace Game
 	void PlayGame::Render()
 	{
 		//Global::pFont->SendString("NEW GAME!",Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5,ALIGN_CENTER);
-		m_testSprite->Render();
+
+		//m_testSprite->Render();
 
 		m_joystick->Render();
 	}
@@ -138,5 +145,53 @@ namespace Game
 	{
 		PlayGame *pPlayGame=(PlayGame*)(pointer);
 		pPlayGame->m_requestExit=true;
+	}
+
+	void PlayGame::DOWN_callback(void *param1, void *param2)
+	{
+		PlayGame *pPlayGame=(PlayGame*)(param1);
+		Finger *pFinger=(Finger*)(param2);
+		if(pFinger->m_flag==FF_LOCKED)
+		{
+			return;
+		}
+		if(pPlayGame->m_fingers[0]==NULL)
+		{
+			pFinger->m_flag=FF_LOCKED;
+			pPlayGame->m_firstPosition[0]=pFinger->m_pos;
+			pPlayGame->m_fingers[0]=pFinger;
+			return;
+		}
+		if(pPlayGame->m_fingers[1]==NULL)
+		{
+			pFinger->m_flag==FF_LOCKED;
+			pPlayGame->m_firstPosition[1]=pFinger->m_pos;
+			pPlayGame->m_fingers[1]=pFinger;
+			pPlayGame->m_firstScale=Global::pActiveCamera->GetScale();
+		}
+	}
+
+	void PlayGame::UP_callback(void *param1, void *param2)
+	{
+		PlayGame *pPlayGame=(PlayGame*)(param1);
+		Finger *pFinger=(Finger*)(param2);
+		if(pPlayGame->m_fingers[1]==pFinger)
+		{
+			pFinger->m_flag=FF_FREE;
+			pPlayGame->m_fingers[1]=NULL;
+		}
+		if(pPlayGame->m_fingers[0]==pFinger)
+		{
+			pFinger->m_flag==FF_FREE;
+			if(pPlayGame->m_fingers[1]!=NULL)
+			{
+				pPlayGame->m_fingers[0]=pPlayGame->m_fingers[1];
+				pPlayGame->m_fingers[1]=NULL;
+			}
+			else
+			{
+				pPlayGame->m_fingers[0]=NULL;
+			}
+		}
 	}
 }
