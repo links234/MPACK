@@ -1,7 +1,7 @@
 #ifndef PHYSICSSHAPE_HPP
 #define PHYSICSSHAPE_HPP
 
-#include "PhysicsService.hpp"
+#include "PMath.hpp"
 
 namespace Core
 {
@@ -14,12 +14,14 @@ namespace Core
 			e_circle
 		};
 
-		virtual void ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) = 0;
+		virtual void ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const = 0;
 
-		Type GetType();
+		const Type GetType() const;
 
 		Type m_type;
 	};
+
+	inline const PShape::Type PShape::GetType() const { return m_type; }
 }
 
 #endif

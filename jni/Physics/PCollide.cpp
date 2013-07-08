@@ -11,10 +11,10 @@ namespace Core
 
 		return true;
 
-		if(obj1.GetShape()->GetType() == e_poly && obj2.GetShape()->GetType() == e_poly)
+		if(obj1.GetShape()->GetType() == PShape::e_poly && obj2.GetShape()->GetType() == PShape::e_poly)
 		{
-			PPoly &s1 = (PPoly)obj1.GetShape(),
-				  &s2 = (PPoly)obj2.GetShape();
+			PPoly &s1 = *((PPoly*)obj1.GetShape()),
+				  &s2 = *((PPoly*)obj2.GetShape());
 
 
 		}

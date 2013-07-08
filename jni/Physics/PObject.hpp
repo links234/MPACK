@@ -1,20 +1,28 @@
 #ifndef PHYSICSOBJECT_HPP
 #define PHYSICSOBJECT_HPP
 
-#include "PhysicsService.hpp"
+
+#include "PMath.hpp"
+#include "list"
+
 #include "PShape.hpp"
+#include "PPoly.hpp"
 
 using namespace std;
 
 namespace Core
 {
+	class PShape;
+	class PPoly;
+
 	class PObject
 	{
 	public:
-		PObject(PShape p_shape);
+		PObject();
+		PObject(const PShape* p_shape);
 
-		void SetPosition(PVec2 p_position);
-		void SetLinearVelocity(PVec2 p_linearVelocity);
+		void SetPosition(const PVec2& p_position);
+		void SetLinearVelocity(const PVec2& p_linearVelocity);
 		void SetAngle(float p_angle);
 		void SetAngularVelocity(float p_angularVelocity);
 		void SetUserData(void* p_userData);
@@ -53,7 +61,7 @@ namespace Core
 	inline float PObject::GetAngle() const { return m_angle; }
 	inline float PObject::GetAngularVelocity() const { return m_angularVelocity; }
 	inline void* PObject::GetUserData() const { return m_userData; }
-	inline PAABB& PObject::GetAABB() const { return m_aabb; }
+	inline const PAABB& PObject::GetAABB() const { return m_aabb; }
 	inline const PShape* PObject::GetShape() const { return m_shape; }
 }
 

@@ -1,21 +1,25 @@
 #ifndef PHYSICSPOLY_HPP
 #define PHYSICSPOLY_HPP
 
-#include "PhysicsService.hpp"
+#include "PMath.hpp"
+
 #include "PShape.hpp"
+
 
 namespace Core
 {
-	class PPoly : PShape
+	class PShape;
+
+	class PPoly : public PShape
 	{
 	public:
 		PPoly();
-		PPoly(PPoly p_poly);
+		PPoly(const PPoly& p_poly);
 
-		void ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle);
+		void ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const;
 
-		int GetVertexCount();
-		const PVec2& GetVertex(int index);
+		int GetVertexCount() const;
+		const PVec2& GetVertex(int index) const;
 
 		void Set(PVec2* p_vertices, int p_count);
 
@@ -24,8 +28,8 @@ namespace Core
 		PVec2* m_vertices;
 	};
 
-	inline int PPoly::GetVertexCount() { return m_vertexCount; }
-	inline PVec2& PPoly::GetVertex(int index) { return m_vertices[index]; }
+	inline int PPoly::GetVertexCount() const { return m_vertexCount; }
+	inline const PVec2& PPoly::GetVertex(int index) const { return m_vertices[index]; }
 }
 
 #endif

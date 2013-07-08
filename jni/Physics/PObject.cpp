@@ -2,18 +2,22 @@
 
 namespace Core
 {
-	PObject::PObject(PShape p_shape):
+	PObject::PObject(): m_position(), m_linearVelocity(),
+			m_angle(0.0f), m_angularVelocity(), m_shape(NULL),
+			m_aabb(), m_userData(NULL), m_iterator() {}
+
+	PObject::PObject(const PShape* p_shape):
 			m_position(), m_linearVelocity(), m_angle(0.0f),
 			m_angularVelocity(0.0f), m_aabb(), m_userData(NULL)
 	{
-		if(p_shape.GetType() == e_poly)
+		if(p_shape->GetType() == PShape::e_poly)
 		{
-			m_shape = new PPoly((PPoly)p_shape);
+			m_shape = new PPoly(*((PPoly*)p_shape));
 		}
-		else if(p_shape.GetType() == e_circle)
+		/*else if(p_shape.GetType() == e_circle)
 		{
-			m_shape = new PCircle((PCircle)p_shape);
-		}
+			m_shape = new PCircle(*((PCircle*)p_shape));
+		}*/
 	}
 
 	void PObject::Advance(float dt)

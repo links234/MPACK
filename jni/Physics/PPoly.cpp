@@ -9,19 +9,20 @@ namespace Core
         m_vertices = NULL;
 	}
 
-	PPoly::PPoly(PPoly p_poly)
+	PPoly::PPoly(const PPoly& p_poly)
 	{
 		m_type = e_poly;
 
-		Set(&(p_poly.GetVertex(0)), p_poly.GetVertexCount());
+		//Set(&(p_poly.GetVertex(0)), p_poly.GetVertexCount());
+		this->Set(p_poly.m_vertices, p_poly.m_vertexCount);
 	}
 
-	void PPoly::ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle)
+	void PPoly::ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const
 	{
 		*p_aabb = PAABB();
 		for(int i = 0; i < m_vertexCount; i++)
 		{
-			p_aabb->AddPoint(m_vertices[i].Rotate(p_angle));
+			p_aabb->AddPoint(m_vertices[i].Rotated(p_angle));
 		}
 
 		p_aabb->xmin += p_translate.x;
