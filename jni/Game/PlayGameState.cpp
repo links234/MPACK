@@ -186,6 +186,7 @@ namespace Game
 			if(pPlayGame->m_fingers[1]!=NULL)
 			{
 				pPlayGame->m_fingers[0]=pPlayGame->m_fingers[1];
+				pPlayGame->m_firstPosition[0]=pPlayGame->m_firstPosition[1];
 				pPlayGame->m_fingers[1]=NULL;
 			}
 			else
