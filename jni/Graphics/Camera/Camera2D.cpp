@@ -75,10 +75,20 @@ void Camera2D::DisableSpringSystem()
 	m_useSpringSystem=false;
 }
 
-void Camera2D::SetSpringConstant(GLfloat springConstant)
+void Camera2D::SetSpringConstant(const GLfloat &springConstant)
 {
 	m_springConstant = springConstant;
 	m_dampingConstant = 2.0f * Misc<GLfloat>::Sqrt(springConstant);
+}
+
+void Camera2D::SetScale(const GLfloat &scale)
+{
+	m_scale=scale;
+}
+
+GLfloat Camera2D::GetScale() const
+{
+	return m_scale;
 }
 
 void Camera2D::UpdateAll(GLfloat delta)
