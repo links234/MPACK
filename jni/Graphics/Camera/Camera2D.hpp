@@ -24,7 +24,10 @@ public:
 	void EnableSpringSystem();
 	void DisableSpringSystem();
 
-	void SetSpringConstant(GLfloat springConstant);
+	void SetSpringConstant(const GLfloat &springConstant);
+
+	void SetScale(const GLfloat &scale);
+	GLfloat GetScale() const;
 
 	static void UpdateAll(GLfloat delta);
 
