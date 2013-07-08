@@ -9,6 +9,7 @@ namespace Core
 	class InputService;
 	class SoundService;
     class TimeService;
+    class PhysicsService;
 
     struct Context
     {
@@ -16,6 +17,7 @@ namespace Core
     	InputService*		pInputService;
     	SoundService*		pSoundService;
         TimeService* 		pTimeService;
+        PhysicsService* 	pPhysicsService;
     };
 }
 #endif
