@@ -69,8 +69,13 @@ void Joystick::DOWN_callback(void *param1, void *param2)
 	if(!pJoystick->m_pFinger)
 	{
 		Finger *pFinger=(Finger*)(param2);
+		if(pFinger->m_flag==FF_LOCKED)
+		{
+			return;
+		}
 		if(pJoystick->m_actionCircleCenter.Distance(pFinger->m_pos)<=pJoystick->m_actionCircleRadius)
 		{
+			pFinger->m_flag=FF_LOCKED;
 			pJoystick->m_pFinger=pFinger;
 			pJoystick->m_firstPos=pFinger->m_pos;
 		}
@@ -83,6 +88,7 @@ void Joystick::UP_callback(void *param1, void *param2)
 	Finger *pFinger=(Finger*)(param2);
 	if(pJoystick->m_pFinger==pFinger)
 	{
+		pJoystick->m_pFinger->m_flag=FF_FREE;
 		pJoystick->m_pFinger=NULL;
 		pJoystick->m_dir=Vector2f();
 	}
