@@ -102,7 +102,6 @@ namespace Game
 			Global::pActiveCamera->SetScale(m_firstScale*ratio);
 		}
 
-
 		//NOT FINAL HERE!!!
 		m_playerObject->m_acceleration=m_joystick->m_dir*5.0f;
 		m_playerObject->m_direction=m_playerObject->m_velocity.Normalized();
@@ -115,6 +114,7 @@ namespace Game
 	void PlayGame::Render()
 	{
 		//Global::pFont->SendString("NEW GAME!",Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5,ALIGN_CENTER);
+
 		//m_testSprite->Render();
 
 		m_joystick->Render();

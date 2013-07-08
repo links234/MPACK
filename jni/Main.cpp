@@ -5,6 +5,7 @@
 #include "InputService.hpp"
 #include "SoundService.hpp"
 #include "TimeService.hpp"
+#include "Physics.hpp"
 #include "Random.hpp"
 #include "Global.hpp"
 #include "Debug.hpp"
@@ -21,7 +22,8 @@ void android_main(android_app* pApplication)
     Core::GraphicsService lGraphicsService;
     Core::SoundService lSoundService;
     Core::InputService lInputService;
-    Core::Context lContext={&lGraphicsService, &lInputService, &lSoundService, &lTimeService};
+    Core::PhysicsService IPhysicsService;
+    Core::Context lContext={&lGraphicsService, &lInputService, &lSoundService, &lTimeService, &IPhysicsService};
 
     Global::pContext = &lContext;
     Global::pAAssetManager=pApplication->activity->assetManager;
