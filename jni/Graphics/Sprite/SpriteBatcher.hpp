@@ -51,6 +51,7 @@ private:
 	void Flush();
 
 	void CompleteBatch();
+	void PushVertexData(SpriteVertex *vertexPointer, GLint vertexCount);
 
 	GLushort				m_currentIndexBatchSize;
 	vector<SpriteVertex> 	m_vertexData;

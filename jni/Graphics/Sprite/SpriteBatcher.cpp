@@ -85,19 +85,7 @@ void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture
 
 	GLushort indexOffset=m_vertexData.size();
 
-	SpriteVertex 	*vertexPointerEnd=vertexPointer+vertexCount;
-	for(;vertexPointer<vertexPointerEnd;++vertexPointer)
-	{
-		Vector2f point(vertexPointer->x,vertexPointer->y);
-		if(s_useCamera && Global::pActiveCamera)
-		{
-			Global::pActiveCamera->Transform(point);
-		}
-		SpriteVertex vertex=*vertexPointer;
-		vertex.x=point.x;
-		vertex.y=point.y;
-		m_vertexData.push_back(vertex);
-	}
+	PushVertexData(vertexPointer,vertexCount);
 
 	GLushort quadIndex[]={ 	0,1,2,
 							2,3,0 };
@@ -129,19 +117,7 @@ void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushor
 
 	GLushort indexOffset=m_vertexData.size();
 
-	SpriteVertex 	*vertexPointerEnd=vertexPointer+vertexCount;
-	for(;vertexPointer<vertexPointerEnd;++vertexPointer)
-	{
-		Vector2f point(vertexPointer->x,vertexPointer->y);
-		if(s_useCamera && Global::pActiveCamera)
-		{
-			Global::pActiveCamera->Transform(point);
-		}
-		SpriteVertex vertex=*vertexPointer;
-		vertex.x=point.x;
-		vertex.y=point.y;
-		m_vertexData.push_back(vertex);
-	}
+	PushVertexData(vertexPointer,vertexCount);
 
 	GLushort		*indexPointerEnd=indexPointer+indexCount;
 	for(;indexPointer<indexPointerEnd;++indexPointer)
@@ -193,5 +169,25 @@ void SpriteBatcher::CompleteBatch()
 	{
 		m_batches.push_back(SpriteBatch(m_currentIndexBatchSize,m_lastTexture));
 		m_currentIndexBatchSize=0;
+	}
+}
+
+void SpriteBatcher::PushVertexData(SpriteVertex *vertexPointer, GLint vertexCount)
+{
+	SpriteVertex 	*vertexPointerEnd=vertexPointer+vertexCount;
+	for(;vertexPointer<vertexPointerEnd;++vertexPointer)
+	{
+		Vector2f point(vertexPointer->x,vertexPointer->y);
+		if(s_useCamera && Global::pActiveCamera)
+		{
+			Global::pActiveCamera->Transform(point);
+		}
+		SpriteVertex vertex=*vertexPointer;
+		vertex.x=point.x;
+		vertex.y=point.y;
+
+		vertex.y=Render::GetScreenHeight()-vertex.y;
+
+		m_vertexData.push_back(vertex);
 	}
 }
