@@ -14,9 +14,16 @@ using namespace Math;
 
 namespace Core
 {
+	enum FingerFlag
+	{
+		FF_FREE,
+		FF_LOCKED
+	};
+
 	struct Finger
 	{
 		GLuint m_id;
+		FingerFlag m_flag;
 		Vector2f m_pos;
 	};
 
