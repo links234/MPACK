@@ -42,6 +42,7 @@ namespace Game
 
 		Finger		*m_fingers[2];
 		Vector2f	m_firstPosition[2];
+		Vector2f	m_lastFramePosition[2];
 		GLfloat		m_firstScale;
 
 		Texture2D				*m_particleTex;

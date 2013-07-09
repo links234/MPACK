@@ -85,38 +85,45 @@ namespace Game
 	{
 		float lTimeStep = Global::pContext->pTimeService->Elapsed();
 
-		m_testSprite->Update(lTimeStep);
-
 		m_joystick->Update();
 
-		if(m_requestExit)
-		{
-			return EVENT_PLAYGAME_EXIT;
-		}
-
-		if(m_fingers[1]!=NULL)
+		if(m_fingers[1])
 		{
 			GLfloat firstDistance=m_firstPosition[0].Distance(m_firstPosition[1]);
 			GLfloat currentDistance=m_fingers[0]->m_pos.Distance(m_fingers[1]->m_pos);
 			GLfloat ratio=currentDistance/firstDistance;
 			Global::pActiveCamera->SetScale(m_firstScale*ratio);
+
+			GLfloat lastAngle=(m_lastFramePosition[1]-m_lastFramePosition[0]).Angle();
+			GLfloat	currentAngle=(m_fingers[1]->m_pos-m_fingers[0]->m_pos).Angle();
+			GLfloat angle=currentAngle-lastAngle;
+			Global::pActiveCamera->RotateDirection(angle);
 		}
 
 		//NOT FINAL HERE!!!
 		m_playerObject->m_acceleration=m_joystick->m_dir*5.0f;
+		m_playerObject->m_acceleration.Rotate(Global::pActiveCamera->GetDirection().Angle());
 		m_playerObject->m_direction=m_playerObject->m_velocity.Normalized();
 		//NOT FINAL HERE!!!
 
+		if(m_fingers[0])
+		{
+			m_lastFramePosition[0]=m_fingers[0]->m_pos;
+		}
+		if(m_fingers[1])
+		{
+			m_lastFramePosition[1]=m_fingers[1]->m_pos;
+		}
 
+		if(m_requestExit)
+		{
+			return EVENT_PLAYGAME_EXIT;
+		}
 		return EVENT_NOTHING;
 	}
 
 	void PlayGame::Render()
 	{
-		//Global::pFont->SendString("NEW GAME!",Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5,ALIGN_CENTER);
-
-		//m_testSprite->Render();
-
 		m_joystick->Render();
 	}
 
@@ -159,6 +166,7 @@ namespace Game
 		{
 			pFinger->m_flag=FF_LOCKED;
 			pPlayGame->m_firstPosition[0]=pFinger->m_pos;
+			pPlayGame->m_lastFramePosition[0]=pFinger->m_pos;
 			pPlayGame->m_fingers[0]=pFinger;
 			return;
 		}
@@ -166,6 +174,7 @@ namespace Game
 		{
 			pFinger->m_flag==FF_LOCKED;
 			pPlayGame->m_firstPosition[1]=pFinger->m_pos;
+			pPlayGame->m_lastFramePosition[1]=pFinger->m_pos;
 			pPlayGame->m_fingers[1]=pFinger;
 			pPlayGame->m_firstScale=Global::pActiveCamera->GetScale();
 		}
@@ -187,6 +196,7 @@ namespace Game
 			{
 				pPlayGame->m_fingers[0]=pPlayGame->m_fingers[1];
 				pPlayGame->m_firstPosition[0]=pPlayGame->m_firstPosition[1];
+				pPlayGame->m_lastFramePosition[0]=pPlayGame->m_lastFramePosition[1];
 				pPlayGame->m_fingers[1]=NULL;
 			}
 			else
