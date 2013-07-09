@@ -2,13 +2,20 @@
 
 #include "Render.hpp"
 
+const	GLfloat	DEFAULT_CAMERA2D_DIRECTION_X	=	1.0f;
+const	GLfloat DEFAULT_CAMERA2D_DIRECTION_Y	=	0.0f;
+const 	GLfloat	DEFAULT_CAMERA2D_SCALE			=	1.0f;
+const 	GLfloat	DEFAULT_CAMERA2D_SPRINGCONSTANT	=	50.0f;
+const 	bool	DEFAULT_CAMERA2D_SPRINGSYSTEM	=	true;
+
 vector<Camera2D*> Camera2D::s_cameras;
 
 Camera2D::Camera2D()
-	: m_position(), m_velocity(), m_target(NULL), m_idealPosition(), m_useSpringSystem(true), m_scale(1.0f)
+	: m_position(), m_velocity(), m_target(NULL), m_idealPosition(), m_useSpringSystem(DEFAULT_CAMERA2D_SPRINGSYSTEM), m_scale(DEFAULT_CAMERA2D_SCALE),
+	  m_direction(DEFAULT_CAMERA2D_DIRECTION_X,DEFAULT_CAMERA2D_DIRECTION_Y)
 {
 	s_cameras.push_back(this);
-	SetSpringConstant(50.0f);
+	SetSpringConstant(DEFAULT_CAMERA2D_SPRINGCONSTANT);
 }
 
 Camera2D::~Camera2D()
@@ -89,6 +96,21 @@ void Camera2D::SetScale(const GLfloat &scale)
 GLfloat Camera2D::GetScale() const
 {
 	return m_scale;
+}
+
+void Camera2D::RotateDirection(const GLfloat &angle)
+{
+	m_direction.Rotate(angle);
+}
+
+void Camera2D::SetDirection(const Vector2f &direction)
+{
+	m_direction=direction;
+}
+
+Vector2f Camera2D::GetDirection() const
+{
+	return m_direction;
 }
 
 void Camera2D::UpdateAll(GLfloat delta)

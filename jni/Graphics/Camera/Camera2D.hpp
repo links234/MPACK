@@ -26,8 +26,12 @@ public:
 
 	void SetSpringConstant(const GLfloat &springConstant);
 
-	void SetScale(const GLfloat &scale);
+	void 	SetScale(const GLfloat &scale);
 	GLfloat GetScale() const;
+
+	void 		RotateDirection(const GLfloat &angle);
+	void 		SetDirection(const Vector2f &direction);
+	Vector2f 	GetDirection() const;
 
 	static void UpdateAll(GLfloat delta);
 
