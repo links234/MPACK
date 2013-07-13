@@ -23,6 +23,7 @@ namespace Core
 
 		void Set(PVec2* p_vertices, int p_count);
 		void Set(float* p_vertices, int p_count, bool cooordsAre3D = false);
+		void SetAsBox(float halfHeight, float halfWidth);
 
 	private:
 		int m_vertexCount;

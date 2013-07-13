@@ -7,6 +7,8 @@ namespace Core
         m_type = e_poly;
         m_vertexCount = 0;
         m_vertices = NULL;
+
+        SetAsBox(0.5, 0.5);
 	}
 
 	PPoly::PPoly(const PPoly& p_poly):
@@ -65,6 +67,20 @@ namespace Core
 			m_vertices[i].x = p_vertices[step*i];
 			m_vertices[i].y = p_vertices[step*i+1];
 		}
+	}
+
+	void PPoly::SetAsBox(float halfHeight, float halfWidth)
+	{
+		if (m_vertices != NULL)
+			delete [] m_vertices;
+
+
+		m_vertexCount = 4;
+		m_vertices = new PVec2[4];
+		m_vertices[0] = PVec2(-halfWidth,  halfHeight);
+		m_vertices[1] = PVec2(-halfWidth, -halfHeight);
+		m_vertices[2] = PVec2( halfWidth, -halfHeight);
+		m_vertices[3] = PVec2( halfWidth,  halfHeight);
 	}
 
 
