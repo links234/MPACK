@@ -22,6 +22,7 @@ namespace Core
 		const PVec2& GetVertex(int index) const;
 
 		void Set(PVec2* p_vertices, int p_count);
+		void Set(float* p_vertices, int p_count, bool cooordsAre3D = false);
 
 	private:
 		int m_vertexCount;
