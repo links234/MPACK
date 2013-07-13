@@ -2,7 +2,10 @@
 
 namespace Core
 {
-	PhysicsService::PhysicsService(): m_objectList() {};
+	PhysicsService::PhysicsService(): m_objectList()
+	{
+		callback = NULL;
+	};
 
 	PObject* PhysicsService::CreateObject(const PShape* p_shape)
 	{
@@ -10,7 +13,6 @@ namespace Core
 		list<PObject*>::iterator it = m_objectList.end();
 		it--;
 		(*it)->m_iterator = it;
-
 		return *it;
 	}
 
@@ -38,9 +40,11 @@ namespace Core
 			{
 				if(CollideObjects(*(*it), *(*it2)))
 				{
-					callback(*(*it), *(*it2));
+					if(callback != NULL)
+						callback(*(*it), *(*it2));
 				}
 			}
 		}
+
 	}
 }
