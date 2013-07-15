@@ -57,8 +57,8 @@ namespace Game
     	// Updates services.
     	Debug::InitFrame();
     	Global::pContext->pTimeService->Update();
-    	Global::pContext->pGraphicsService->Update();
     	Global::pContext->pPhysicsService->Update();
+    	Global::pContext->pGraphicsService->Update();
 
     	int action=m_pGameState->Update();
 

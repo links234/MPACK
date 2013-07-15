@@ -5,7 +5,7 @@
 
 using namespace Math;
 
-class Player : public Object
+class Player : public Object, public PObject
 {
 public:
 	Player();
