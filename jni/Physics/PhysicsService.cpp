@@ -1,5 +1,7 @@
 #include "PhysicsService.hpp"
 
+#include "Global.hpp"
+
 namespace Core
 {
 	PhysicsService::PhysicsService(): m_objectList()
@@ -23,12 +25,14 @@ namespace Core
 		m_objectList.erase(it);
 	}
 
-	void PhysicsService::Step(float delta_time)
+	void PhysicsService::Update()
 	{
+		GLfloat delta=Global::pContext->pTimeService->Elapsed();
+
 		//update state
 		for(list<PObject*>::iterator it = m_objectList.begin(); it != m_objectList.end(); it++)
 		{
-			(*it)->Advance(delta_time);
+			(*it)->Advance(delta);
 		}
 
 

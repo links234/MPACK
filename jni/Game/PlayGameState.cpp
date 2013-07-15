@@ -100,12 +100,6 @@ namespace Game
 			Global::pActiveCamera->RotateDirection(angle);
 		}
 
-		//NOT FINAL HERE!!!
-		m_playerObject->m_acceleration=m_joystick->m_dir*5.0f;
-		m_playerObject->m_acceleration.Rotate(Global::pActiveCamera->GetDirection().Angle());
-		m_playerObject->m_direction=m_playerObject->m_velocity.Normalized();
-		//NOT FINAL HERE!!!
-
 		if(m_fingers[0])
 		{
 			m_lastFramePosition[0]=m_fingers[0]->m_pos;
@@ -114,6 +108,12 @@ namespace Game
 		{
 			m_lastFramePosition[1]=m_fingers[1]->m_pos;
 		}
+
+		//NOT FINAL HERE!!!
+		m_playerObject->m_acceleration=m_joystick->m_dir*5.0f;
+		m_playerObject->m_acceleration.Rotate(Global::pActiveCamera->GetDirection().Angle());
+		m_playerObject->m_direction=m_playerObject->m_velocity.Normalized();
+		//NOT FINAL HERE!!!
 
 		if(m_requestExit)
 		{

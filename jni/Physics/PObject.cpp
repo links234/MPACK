@@ -1,18 +1,21 @@
 #include "PObject.hpp"
 
+const float POBJECT_MAXLINEARVELOCITY=200.0f;
+
 namespace Core
 {
-	PObject::PObject(): m_position(), m_linearVelocity(),
-			m_angle(0.0f), m_angularVelocity(), m_shape(NULL),
-			m_aabb(), m_userData(NULL), m_iterator() {}
-
-	PObject::PObject(const PShape* p_shape):
-			m_position(), m_linearVelocity(), m_angle(0.0f),
-			m_angularVelocity(0.0f), m_aabb(), m_userData(NULL)
+	PObject::PObject(const PShape* pShape)
+		:	m_position(), m_linearVelocity(), m_linearAcceleration(), m_angle(0.0f), m_angularVelocity(0.0f), m_frictionThreshold(0.0f), m_frictionDynamic(0.0f),
+		 	m_maxLinearVelocity(POBJECT_MAXLINEARVELOCITY), m_shape(NULL), m_aabb(), m_userData(NULL)
 	{
-		if(p_shape->GetType() == PShape::e_poly)
+		if(pShape==NULL)
 		{
-			m_shape = new PPoly(*((PPoly*)p_shape));
+			return;
+		}
+
+		if(pShape->GetType() == PShape::e_poly)
+		{
+			m_shape = new PPoly(*((PPoly*)pShape));
 		}
 		/*else if(p_shape.GetType() == e_circle)
 		{
@@ -20,11 +23,24 @@ namespace Core
 		}*/
 	}
 
-	void PObject::Advance(float dt)
+	void PObject::Advance(float delta)
 	{
 		//update state
-		m_position += m_linearVelocity * dt;
-		m_angle += m_angularVelocity * dt;
+		m_linearVelocity+=m_linearAcceleration * delta;
+		if(m_linearVelocity.Length()>m_maxLinearVelocity)
+		{
+			m_linearVelocity.Normalize();
+			m_linearVelocity*=m_maxLinearVelocity;
+		}
+
+		m_linearVelocity*=(1.0f-m_frictionDynamic * delta);
+		if(m_linearVelocity.Length()<m_frictionThreshold)
+		{
+			m_linearVelocity=Vector2f();
+		}
+
+		m_position+=m_linearVelocity * delta;
+		m_angle += m_angularVelocity * delta;
 
 		//update AABB
 		m_shape->ComputeAABB(&m_aabb, m_position, m_angle);

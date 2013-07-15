@@ -23,7 +23,7 @@ namespace Core
 		PObject* CreateObject(const PShape* shape);
 		void DestroyObject(PObject* p_object);
 
-		void Step(float delta_time);
+		void Update();
 
 		void (*callback)(PObject& obj1, PObject& obj2); //final version will have a third parameter
 
