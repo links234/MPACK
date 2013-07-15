@@ -15,16 +15,8 @@ public:
 	Object();
 	virtual ~Object();
 
-	virtual void Update(GLfloat delta);
-	virtual void Render();
-
-	Sprite *m_sprite;
-	Vector2f m_velocity;
-	Vector2f m_acceleration;
-	Vector2f m_direction;
-	GLfloat m_frictionDynamic;
-	GLfloat m_frictionStatic;
-	GLfloat m_maxVelocity;
+	virtual void Update(GLfloat delta) = 0;
+	virtual void Render() = 0;
 
 	static void UpdateAll(GLfloat delta);
 	static void RenderAll();

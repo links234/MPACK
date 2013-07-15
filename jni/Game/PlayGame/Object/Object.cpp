@@ -25,34 +25,6 @@ Object::~Object()
 	}
 }
 
-void Object::Update(GLfloat delta)
-{
-	m_velocity+=m_acceleration*delta;
-	if(m_velocity.Length()>m_maxVelocity)
-	{
-		m_velocity.Normalize();
-		m_velocity*=m_maxVelocity;
-	}
-
-	m_velocity*=(1.0f-m_frictionDynamic*delta);
-	if(m_velocity.Length()<m_frictionStatic)
-	{
-		m_velocity=Vector2f();
-	}
-
-	m_sprite->m_position+=m_velocity*delta;
-	if(m_direction.Length())
-	{
-		m_sprite->m_rotation=m_direction.Angle();
-		Debug::Print(Global::pFont,"Angle = %f",m_direction.Angle());
-	}
-}
-
-void Object::Render()
-{
-	m_sprite->Render();
-}
-
 void Object::UpdateAll(GLfloat delta)
 {
 	for(vector<Object*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
