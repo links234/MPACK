@@ -1,12 +1,13 @@
 #ifndef PHYSICSOBJECT_HPP
 #define PHYSICSOBJECT_HPP
 
+#include "Types.hpp"
 
 #include "PMath.hpp"
-#include "list"
-
 #include "PShape.hpp"
 #include "PPoly.hpp"
+
+#include <list>
 
 using namespace std;
 
@@ -19,6 +20,7 @@ namespace Core
 	{
 	public:
 		PObject(const PShape* pShape=NULL);
+		virtual ~PObject();
 
 		void 	SetPosition(const PVec2& position);
 		const 	PVec2& GetPosition() const;

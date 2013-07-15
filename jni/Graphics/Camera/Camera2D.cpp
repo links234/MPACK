@@ -35,7 +35,7 @@ void Camera2D::Update(GLfloat delta)
 {
 	if(m_target)
 	{
-		SetPosition(m_target->m_sprite->m_position);
+		SetPosition(m_target->GetCameraPosition());
 	}
 
 	if(m_useSpringSystem)

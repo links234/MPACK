@@ -14,7 +14,7 @@ namespace Core
         void Setup(int width, int height);
         void Stop();
 
-        void Update();
+        void Update(GLfloat delta);
         Status Render();
 
 	protected:

@@ -19,6 +19,10 @@ namespace Core
 		Set(p_poly.m_vertices, p_poly.m_vertexCount);
 	}
 
+	PPoly::~PPoly()
+	{
+	}
+
 	void PPoly::ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const
 	{
 		*p_aabb = PAABB();

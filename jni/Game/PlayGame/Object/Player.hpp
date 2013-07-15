@@ -1,19 +1,23 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
-#include "Object.hpp"
+#include "PObject.hpp"
+#include "SpriteObject.hpp"
 
 using namespace Math;
+using namespace Core;
 
-class Player : public Object, public PObject
+class Player : public SpriteObject, public PObject
 {
 public:
 	Player();
 
-	void Update(GLfloat delta);
-	void Render();
+	virtual void Update(GLfloat delta);
+	virtual void Render();
 
-	~Player();
+	Vector2f GetCameraPosition() const;
+
+	virtual ~Player();
 };
 
 #endif

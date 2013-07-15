@@ -1,5 +1,6 @@
 #include "Application.hpp"
 #include "GraphicsService.hpp"
+#include "PhysicsService.hpp"
 #include "SoundService.hpp"
 #include "TimeService.hpp"
 #include "Global.hpp"
@@ -54,14 +55,24 @@ namespace Game
 
     Core::Status Application::onStep()
     {
-    	// Updates services.
-    	Debug::InitFrame();
+    	// Update clock
     	Global::pContext->pTimeService->Update();
-    	Global::pContext->pPhysicsService->Update();
-    	Global::pContext->pGraphicsService->Update();
+    	const GLfloat &delta = Global::pContext->pTimeService->Elapsed();
 
+    	// Debug messages here
+		static GLfloat time=0.0f;
+		time+=delta;
+		Debug::Print(Global::pFont,"Elapsed time: %f",time);
+
+    	// Update per-frame debug
+    	Debug::InitFrame();
+
+    	// Updates services
+    	Global::pContext->pPhysicsService->Update(delta);
+    	Global::pContext->pGraphicsService->Update(delta);
+
+    	// Event dispatcher
     	int action=m_pGameState->Update();
-
     	switch(action)
     	{
     		case EVENT_MAINMENU_NEWGAME:
@@ -86,14 +97,10 @@ namespace Game
     		break;
     	}
 
+    	// Render current game state
     	m_pGameState->Render();
 
-    	//Debug Messages here
-    	static GLfloat time=0.0f;
-    	time+=Global::pContext->pTimeService->Elapsed();
-
-    	Debug::Print(Global::pFont,"Elapsed time: %f",time);
-
+    	// Render current scene and swap buffers
 		if (Global::pContext->pGraphicsService->Render() != Core::STATUS_OK) {
 			return Core::STATUS_KO;
 		}

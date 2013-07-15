@@ -1,9 +1,9 @@
 #ifndef PHYSICSSERVICE_HPP
 #define PHYSICSSERVICE_HPP
 
+#include "Types.hpp"
 #include "PCollide.hpp"
 #include "PMath.hpp"
-
 
 #include <list>
 
@@ -11,7 +11,6 @@ using namespace std;
 
 namespace Core
 {
-
 	class PShape;
 	class PObject;
 
@@ -20,12 +19,12 @@ namespace Core
 	public:
 		PhysicsService();
 
-		PObject* CreateObject(const PShape* shape);
-		void DestroyObject(PObject* p_object);
+		void AddObject(PObject* pObject);
+		void RemoveObject(PObject* pObject);
 
-		void Update();
+		void Update(float delta);
 
-		void (*callback)(PObject& obj1, PObject& obj2); //final version will have a third parameter
+		Param2PtrCallbackFunc callback;
 
 	private:
 		list<PObject*> m_objectList;

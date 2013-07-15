@@ -157,14 +157,12 @@ namespace Core
 		LoadResources();
     }
 
-    void GraphicsService::Update()
+    void GraphicsService::Update(GLfloat delta)
     {
-        float lTimeStep = Global::pContext->pTimeService->Elapsed();
-
-        Object::UpdateAll(lTimeStep);
-        ParticleEmitter::UpdateAll(lTimeStep);
-        Particle::UpdateAll(lTimeStep);
-        Camera2D::UpdateAll(lTimeStep);
+        Object::UpdateAll(delta);
+        ParticleEmitter::UpdateAll(delta);
+        Particle::UpdateAll(delta);
+        Camera2D::UpdateAll(delta);
     }
 
     Status GraphicsService::Render()

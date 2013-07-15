@@ -43,14 +43,14 @@ namespace Game
 
 		//Sprite setup
 		m_playerSprite=new Sprite;
-		m_playerSprite->m_position=Vector2f(Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5);
 		m_playerSprite->SetTexture(m_playerTexture);
 		m_playerSprite->SetSize(50.0f,50.0f);
 		m_playerSprite->m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
 
 		//Player setup
 		m_playerObject=new Player;
-		m_playerObject->m_sprite=m_playerSprite;
+		m_playerObject->SetSprite(m_playerSprite);
+		m_playerObject->SetPosition(Vector2f(Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5));
 
 		//Joystick setup
 		m_joystick=new Joystick;
@@ -110,9 +110,7 @@ namespace Game
 		}
 
 		//NOT FINAL HERE!!!
-		m_playerObject->m_acceleration=m_joystick->m_dir*5.0f;
-		m_playerObject->m_acceleration.Rotate(Global::pActiveCamera->GetDirection().Angle());
-		m_playerObject->m_direction=m_playerObject->m_velocity.Normalized();
+		m_playerObject->SetLinearAcceleration( (m_joystick->m_dir*5.0f).Rotated(Global::pActiveCamera->GetDirection().Angle()) );
 		//NOT FINAL HERE!!!
 
 		if(m_requestExit)
@@ -124,6 +122,8 @@ namespace Game
 
 	void PlayGame::Render()
 	{
+		//Debug::Print(Global::pFont,"X = %lf  Y = %lf",m_playerObject->GetLinearAcceleration().x,m_playerObject->GetLinearAcceleration().y);
+
 		m_joystick->Render();
 	}
 
