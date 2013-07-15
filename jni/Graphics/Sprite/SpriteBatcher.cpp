@@ -10,6 +10,7 @@
 
 #include "Global.hpp"
 #include "Maths.hpp"
+#include "Render.hpp"
 #include "Camera2D.hpp"
 #include "Debug.hpp"
 

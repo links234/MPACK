@@ -16,6 +16,7 @@ namespace Core
 	public:
 		PPoly();
 		PPoly(const PPoly& p_poly);
+		virtual ~PPoly();
 
 		void ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const;
 

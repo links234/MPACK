@@ -7,7 +7,6 @@
 vector<Object*> Object::s_objects;
 
 Object::Object()
-	: m_sprite(NULL), m_velocity(), m_acceleration(), m_direction(), m_maxVelocity(200.0f), m_frictionDynamic(0.55f),  m_frictionStatic(2.5f)
 {
 	s_objects.push_back(this);
 }

@@ -13,6 +13,7 @@
 #include <cstring>
 #include <string>
 
+#include "Context.hpp"
 #include "Debug.hpp"
 
 typedef unsigned int	 	GLenum;

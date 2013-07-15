@@ -9,26 +9,21 @@ namespace Core
 		callback = NULL;
 	};
 
-	PObject* PhysicsService::CreateObject(const PShape* p_shape)
+	void PhysicsService::AddObject(PObject* pObject)
 	{
-		m_objectList.push_back(new Core::PObject(p_shape));
+		m_objectList.push_back(pObject);
 		list<PObject*>::iterator it = m_objectList.end();
-		it--;
+		--it;
 		(*it)->m_iterator = it;
-		return *it;
 	}
 
-	void PhysicsService::DestroyObject(PObject* p_object)
+	void PhysicsService::RemoveObject(PObject* pObject)
 	{
-		list<PObject*>::iterator it =  p_object->m_iterator;
-		delete (*it);
-		m_objectList.erase(it);
+		m_objectList.erase(pObject->m_iterator);
 	}
 
 	void PhysicsService::Update(float delta)
 	{
-		//GLfloat delta=Global::pContext->pTimeService->Elapsed();
-
 		//update state
 		for(list<PObject*>::iterator it = m_objectList.begin(); it != m_objectList.end(); it++)
 		{
@@ -37,15 +32,17 @@ namespace Core
 
 
 		//detect collisions
-		for(list<PObject*>::iterator it = m_objectList.begin(); it != m_objectList.end(); it++)
+		for(list<PObject*>::iterator first = m_objectList.begin(); first != m_objectList.end(); first++)
 		{
-			list<PObject*>::iterator it2 = it;
-			for(it2++; it2 != m_objectList.end(); it2++)
+			list<PObject*>::iterator second = first;
+			for(second++; second != m_objectList.end(); second++)
 			{
-				if(PCollide::CollideObjects(*(*it), *(*it2)))
+				if(PCollide::CollideObjects(*(*first), *(*second)))
 				{
 					if(callback != NULL)
-						callback(*(*it), *(*it2));
+					{
+						callback((void*)(*first), (void*)(*second));
+					}
 				}
 			}
 		}
