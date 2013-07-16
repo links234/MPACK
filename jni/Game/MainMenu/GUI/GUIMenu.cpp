@@ -78,7 +78,7 @@ void GUIMenu::Render()
 				}
 				factor/=mid.xmin;
 
-				Vector3f lrColor(1.0f,0.0f,1.0f);
+				Vector3f lrColor(173.0f/255.0f,113.0f/255.0f,52.0f/255.0f);
 				Vector3f midColor(1.0f,1.0f,1.0f);
 				factor=1.0f-factor;
 				//factor=factor*factor;
