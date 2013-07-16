@@ -73,8 +73,8 @@ void Particle::RenderAll()
 	for(vector<Particle*>::iterator it=m_particles.begin();it!=m_particles.end();++it)
 	{
 		m_spriteInterface.m_position=(*it)->m_position;
-		m_spriteInterface.m_rotation=(*it)->m_rotation;
-		m_spriteInterface.m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
+		m_spriteInterface.SetAngle((*it)->m_rotation);
+		m_spriteInterface.SetShading(SpriteVertex::ALPHA_BLEND);
 		m_spriteInterface.SetTexture((*it)->m_texture);
 		m_spriteInterface.SetSize((*it)->m_width,(*it)->m_height);
 		m_spriteInterface.SetColor((*it)->m_color);

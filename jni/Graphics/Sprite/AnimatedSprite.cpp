@@ -18,19 +18,19 @@ void AnimatedSprite::Render()
 
 	Math::Vector2f v[4];
 	v[0].x=-m_width;v[0].y=-m_height;
-	v[0].Rotate(m_rotation);
+	v[0].Rotate(m_angle);
 	v[0]+=m_position;
 
 	v[1].x=+m_width;v[1].y=-m_height;
-	v[1].Rotate(m_rotation);
+	v[1].Rotate(m_angle);
 	v[1]+=m_position;
 
 	v[2].x=+m_width;v[2].y=+m_height;
-	v[2].Rotate(m_rotation);
+	v[2].Rotate(m_angle);
 	v[2]+=m_position;
 
 	v[3].x=-m_width;v[3].y=+m_height;
-	v[3].Rotate(m_rotation);
+	v[3].Rotate(m_angle);
 	v[3]+=m_position;
 
 	swap(v[0],v[3]);

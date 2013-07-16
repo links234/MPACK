@@ -35,7 +35,7 @@ namespace Game
 		m_pBackgroundSprite->SetTexture(m_pBackgroundTexture);
 		m_pBackgroundSprite->SetSize(Render::GetScreenWidth(),Render::GetScreenHeight());
 		m_pBackgroundSprite->m_position=Vector2f(Render::GetScreenWidth()*0.5f,Render::GetScreenHeight()*0.5f);
-		m_pBackgroundSprite->m_spriteShadingType=SpriteVertex::NONE;
+		m_pBackgroundSprite->SetShading(SpriteVertex::NONE);
 
 		m_pMenuGUI=new GUIMenu;
 		m_pMenuGUI->m_sprite=m_pButtonSprite;

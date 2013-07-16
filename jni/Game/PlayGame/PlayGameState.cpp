@@ -45,7 +45,7 @@ namespace Game
 		m_playerSprite=new Sprite;
 		m_playerSprite->SetTexture(m_playerTexture);
 		m_playerSprite->SetSize(50.0f,50.0f);
-		m_playerSprite->m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
+		m_playerSprite->SetShading(SpriteVertex::ALPHA_BLEND);
 
 		//Player setup
 		m_playerObject=new Player;
@@ -74,8 +74,8 @@ namespace Game
 		m_testSprite->m_position=Vector2f(Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5);
 		m_testSprite->SetTexture(m_testTexture);
 		m_testSprite->SetSize(200.0f,200.0f);
-		m_testSprite->m_spriteShadingType=SpriteVertex::ALPHA_BLEND;
-		m_testSprite->m_layer=1.0f;
+		m_testSprite->SetShading(SpriteVertex::ALPHA_BLEND);
+		m_testSprite->SetLayer(1.0f);
 
 		m_testSprite->BuildFrameGrid(5,4);
 		m_testSprite->SetAnimation(Animation(0,20,10.0f));
