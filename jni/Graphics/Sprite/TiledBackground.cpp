@@ -40,16 +40,22 @@ void TiledBackground::Render()
 
 		position.y*=-1.0f;
 
+		swap(position.x,position.y);
+
 		position.x/=m_texture->GetWidth();
 		position.y/=m_texture->GetHeight();
 
-		swap(position.x,position.y);
+		GLfloat scale=1.0f/Global::pActiveCamera->GetScale();
 
 		Umin+=position.y;
 		Umax+=position.y;
 		Vmin+=position.x;
 		Vmax+=position.x;
 
+		Umin*=scale;
+		Umax*=scale;
+		Vmin*=scale;
+		Vmax*=scale;
 
 		for(int i=0;i<4;++i)
 		{
