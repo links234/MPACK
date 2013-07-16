@@ -25,8 +25,17 @@ namespace Game
 		m_pButtonTexture=new Texture2D();
 		m_pButtonTexture->Load("@Sprites/GUI_Button.tga",Bilinear);
 
+		m_pBackgroundTexture=new Texture2D();
+		m_pBackgroundTexture->Load("@Backgrounds/background.tga",Bilinear);
+
 		m_pButtonSprite=new Sprite();
 		m_pButtonSprite->SetTexture(m_pButtonTexture);
+
+		m_pBackgroundSprite=new Sprite();
+		m_pBackgroundSprite->SetTexture(m_pBackgroundTexture);
+		m_pBackgroundSprite->SetSize(Render::GetScreenWidth(),Render::GetScreenHeight());
+		m_pBackgroundSprite->m_position=Vector2f(Render::GetScreenWidth()*0.5f,Render::GetScreenHeight()*0.5f);
+		m_pBackgroundSprite->m_spriteShadingType=SpriteVertex::NONE;
 
 		m_pMenuGUI=new GUIMenu;
 		m_pMenuGUI->m_sprite=m_pButtonSprite;
@@ -64,6 +73,7 @@ namespace Game
 
 	void MainMenu::Render()
 	{
+		m_pBackgroundSprite->Render();
 		m_pMenuGUI->Render();
 	}
 
