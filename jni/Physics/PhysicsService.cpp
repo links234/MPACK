@@ -25,9 +25,9 @@ namespace Core
 		m_objectList.erase(it);
 	}
 
-	void PhysicsService::Update()
+	void PhysicsService::Update(float delta)
 	{
-		GLfloat delta=Global::pContext->pTimeService->Elapsed();
+		//GLfloat delta=Global::pContext->pTimeService->Elapsed();
 
 		//update state
 		for(list<PObject*>::iterator it = m_objectList.begin(); it != m_objectList.end(); it++)
@@ -42,7 +42,7 @@ namespace Core
 			list<PObject*>::iterator it2 = it;
 			for(it2++; it2 != m_objectList.end(); it2++)
 			{
-				if(CollideObjects(*(*it), *(*it2)))
+				if(PCollide::CollideObjects(*(*it), *(*it2)))
 				{
 					if(callback != NULL)
 						callback(*(*it), *(*it2));

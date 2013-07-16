@@ -16,6 +16,12 @@ namespace Core
 		m_radius = p_circle.GetRadius();
 	}
 
+	PCircle::PCircle(float p_radius)
+	{
+		m_type = e_circle;
+
+		m_radius = p_radius;
+	}
 	void PCircle::ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const
 	{
 		*p_aabb = PAABB();

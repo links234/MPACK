@@ -8,6 +8,7 @@
 
 #include "PShape.hpp"
 #include "PPoly.hpp"
+#include "PCircle.hpp"
 
 #include "PObject.hpp"
 #include "PCollide.hpp"

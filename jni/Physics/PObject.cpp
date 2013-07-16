@@ -1,5 +1,4 @@
 #include "PObject.hpp"
-
 const float POBJECT_MAXLINEARVELOCITY=200.0f;
 
 namespace Core
@@ -17,10 +16,10 @@ namespace Core
 		{
 			m_shape = new PPoly(*((PPoly*)pShape));
 		}
-		/*else if(p_shape.GetType() == e_circle)
+		else if(pShape->GetType() == PShape::e_circle)
 		{
-			m_shape = new PCircle(*((PCircle*)p_shape));
-		}*/
+			m_shape = new PCircle(*((PCircle*)pShape));
+		}
 	}
 
 	void PObject::Advance(float delta)
@@ -36,7 +35,7 @@ namespace Core
 		m_linearVelocity*=(1.0f-m_frictionDynamic * delta);
 		if(m_linearVelocity.Length()<m_frictionThreshold)
 		{
-			m_linearVelocity=Vector2f();
+			m_linearVelocity= PVec2();
 		}
 
 		m_position+=m_linearVelocity * delta;
@@ -44,7 +43,6 @@ namespace Core
 
 		//update AABB
 		m_shape->ComputeAABB(&m_aabb, m_position, m_angle);
-
 
 	}
 }

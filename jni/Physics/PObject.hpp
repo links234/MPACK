@@ -7,6 +7,7 @@
 
 #include "PShape.hpp"
 #include "PPoly.hpp"
+#include "PCircle.hpp"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ namespace Core
 {
 	class PShape;
 	class PPoly;
+	class PCircle;
 
 	class PObject
 	{
