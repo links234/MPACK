@@ -36,7 +36,7 @@ namespace Game
 			return Core::STATUS_KO;
 		}
 
-		Global::pContext->pSoundService->PlayBGMPlaylist("@playlist.txt");
+		Global::pContext->pSoundService->PlayBGMPlaylist("@Sounds/playlist.txt");
 
 		Global::pContext->pTimeService->Reset();
 

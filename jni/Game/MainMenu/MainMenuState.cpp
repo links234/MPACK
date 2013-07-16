@@ -23,7 +23,7 @@ namespace Game
 	MainMenu::MainMenu()
 	{
 		m_pButtonTexture=new Texture2D();
-		m_pButtonTexture->Load("@GUI_Button.tga",Bilinear);
+		m_pButtonTexture->Load("@Sprites/GUI_Button.tga",Bilinear);
 
 		m_pButtonSprite=new Sprite();
 		m_pButtonSprite->SetTexture(m_pButtonTexture);

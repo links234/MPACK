@@ -17,7 +17,7 @@ AbstractProgramType* Basic2_Program;
 
 bool InitVertexPrograms()
 {
-	Sprite_Program = (AbstractProgramType*)(new ProgramType_Sprite("@Sprite.vert","@Sprite.frag"));
+	Sprite_Program = (AbstractProgramType*)(new ProgramType_Sprite("@Shaders/Sprite.vert","@Shaders/Sprite.frag"));
 	if(!Sprite_Program->Initialize())
 	{
 		return false;
@@ -28,7 +28,7 @@ bool InitVertexPrograms()
 		return false;
 	}
 
-	Basic2_Program = (AbstractProgramType*)(new ProgramType_Basic2("@basic2.vert","@basic2.frag"));
+	Basic2_Program = (AbstractProgramType*)(new ProgramType_Basic2("@Shaders/basic2.vert","@Shaders/basic2.frag"));
 	if(!Basic2_Program->Initialize())
 	{
 		return false;
