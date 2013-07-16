@@ -38,6 +38,7 @@ namespace Core
 			for(second++; second != m_objectList.end(); second++)
 			{
 				if(PCollide::CollideObjects(*(*first), *(*second)))
+				{
 					if(callback != NULL)
 					{
 						callback((void*)(*first), (void*)(*second));
