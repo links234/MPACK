@@ -21,7 +21,7 @@ public:
 	Sprite();
 	virtual ~Sprite();
 
-	void Render();
+	virtual void Render();
 
 	void SetSize(const GLfloat &width, const GLfloat &height);
 	void SetWidth(const GLfloat &width);
@@ -32,15 +32,26 @@ public:
 	GLfloat GetWidth();
 	GLfloat GetHeight();
 
-	GLfloat			m_rotation;
-	GLfloat			m_spriteShadingType;
-	GLfloat			m_layer;
+	void SetAngle(const GLfloat &angle);
+	GLfloat GetAngle() const;
+
+	void SetShading(const GLfloat &shading);
+	GLfloat GetShading() const;
+
+	void SetLayer(const GLfloat &layer);
+	GLfloat GetLayer() const;
+
 	Math::Vector2f	m_position;
 	Math::Vector4f	m_color[4];
 
 protected:
 	GLfloat			m_width,m_height;
 	Texture2D		*m_texture;
+
+	GLfloat			m_spriteShadingType;
+	GLfloat			m_layer;
+	GLfloat			m_angle;
+	bool 			m_useCamera;
 };
 
 #endif
