@@ -190,7 +190,7 @@ namespace Core
     	InitVertexPrograms();
 
     	Global::pFont=new TextureMappedFont;
-    	Global::pFont->Load("@Font.tga");
+    	Global::pFont->Load("@Fonts/Font.tga");
 
     	return STATUS_OK;
     }

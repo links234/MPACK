@@ -23,7 +23,9 @@ namespace Game
 	private:
 		GUIMenu 	*m_pMenuGUI;
 		Texture2D 	*m_pButtonTexture;
+		Texture2D	*m_pBackgroundTexture;
 		Sprite 		*m_pButtonSprite;
+		Sprite		*m_pBackgroundSprite;
 	};
 }
 

@@ -18,7 +18,7 @@ namespace Game
 		Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
 
 		m_particleTex = new Texture2D;
-		m_particleTex->Load("@GUI_Button.tga");
+		m_particleTex->Load("@Sprites/GUI_Button.tga");
 
 		m_pEmitter = new ParticleEmitterCircle;
 
@@ -37,9 +37,9 @@ namespace Game
 		m_joystickInnerTex=new Texture2D;
 		m_joystickOuterTex=new Texture2D;
 
-		m_playerTexture->Load("@Player.png");
-		m_joystickInnerTex->Load("@joystick_inner.png");
-		m_joystickOuterTex->Load("@joystick_outer.png");
+		m_playerTexture->Load("@Sprites/Ships/Player.png");
+		m_joystickInnerTex->Load("@Sprites/joystick_inner.png");
+		m_joystickOuterTex->Load("@Sprites/joystick_outer.png");
 
 		//Sprite setup
 		m_playerSprite=new Sprite;
@@ -68,7 +68,7 @@ namespace Game
 
 		//should be deleted in final version
 		m_testTexture=new Texture2D();
-		m_testTexture->Load("@explosion.png");
+		m_testTexture->Load("@Sprites/Animations/explosion.png");
 
 		m_testSprite=new AnimatedSprite();
 		m_testSprite->m_position=Vector2f(Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5);
