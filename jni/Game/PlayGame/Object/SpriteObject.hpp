@@ -4,16 +4,18 @@
 #include "Object.hpp"
 #include "Sprite.hpp"
 
-class SpriteObject : public Object
+class SpriteObject : virtual public Object
 {
 public:
 	SpriteObject();
 	virtual ~SpriteObject();
 
-	void Update(GLfloat delta);
-	void Render();
+	virtual void Update(GLfloat delta);
+	virtual void Render();
 
-	void SetSprite(Sprite *pSprite);
+	virtual Vector2f GetCameraPosition() const = 0;
+
+	virtual void SetSprite(Sprite *pSprite);
 
 protected:
 	Sprite	*m_sprite;

@@ -1,5 +1,7 @@
 #include "PhysicalObject.hpp"
 
+#include "SpriteBatcher.hpp"
+
 PhysicalObject::PhysicalObject()
 {
 }
@@ -14,6 +16,22 @@ void PhysicalObject::Update(GLfloat delta)
 
 void PhysicalObject::Render()
 {
+	if(m_shape)
+	{
+		Vector4f GREEN=Vector4f(0.0f,1.0f,0.0f,1.0f);
+		Vector4f RED=Vector4f(1.0f,0.0f,0.0f,1.0f);
+		Vector4f color=GREEN;
+		TransformState2f transformState=TransformState2f(m_position,m_angle,1.0f);
+		if(m_shape->m_type==PShape::e_poly)
+		{
+			PPoly *poly=(PPoly*)(m_shape);
+			SpriteBatcher::SendDebugPolygon(&poly->GetVertex(0),poly->GetVertexCount(),color,transformState);
+		}
+		else if(m_shape->m_type==PShape::e_circle)
+		{
+
+		}
+	}
 }
 
 Vector2f PhysicalObject::GetCameraPosition() const

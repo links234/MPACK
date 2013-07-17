@@ -4,6 +4,10 @@ Player::Player()
 {
 }
 
+Player::~Player()
+{
+}
+
 void Player::Update(GLfloat delta)
 {
 	m_angle=m_linearVelocity.Angle();
@@ -14,6 +18,7 @@ void Player::Update(GLfloat delta)
 void Player::Render()
 {
 	SpriteObject::Render();
+	PhysicalObject::Render();
 }
 
 Vector2f Player::GetCameraPosition() const
@@ -21,6 +26,9 @@ Vector2f Player::GetCameraPosition() const
 	return m_sprite->m_position;
 }
 
-Player::~Player()
+void Player::SetSprite(Sprite *pSprite)
 {
+	m_sprite=pSprite;
+	PPoly *poly=(PPoly*)(m_shape);
+	poly->SetAsBox(m_sprite->GetWidth()*0.5f,m_sprite->GetHeight()*0.5f);
 }

@@ -2,9 +2,7 @@
 #define PHYSICSPOLY_HPP
 
 #include "PMath.hpp"
-
 #include "PShape.hpp"
-
 
 namespace Core
 {
@@ -20,8 +18,8 @@ namespace Core
 
 		void ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const;
 
-		int GetVertexCount() const;
-		const PVec2& GetVertex(int index) const;
+		int 	GetVertexCount() const;
+		PVec2& 	GetVertex(int index) const;
 
 		void Set(PVec2* p_vertices, int p_count);
 		void Set(float* p_vertices, int p_count, bool cooordsAre3D = false);
@@ -35,7 +33,7 @@ namespace Core
 	};
 
 	inline int PPoly::GetVertexCount() const { return m_vertexCount; }
-	inline const PVec2& PPoly::GetVertex(int index) const { return m_vertices[index]; }
+	inline PVec2& PPoly::GetVertex(int index) const { return m_vertices[index]; }
 }
 
 #endif
