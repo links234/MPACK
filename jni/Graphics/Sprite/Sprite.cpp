@@ -45,7 +45,7 @@ void Sprite::Render()
 								SpriteVertex(v[2].x,v[2].y,	1,1,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),
 								SpriteVertex(v[3].x,v[3].y,	0,1,	m_color[3].x,m_color[3].y,m_color[3].z,m_color[3].w,	m_spriteShadingType) };
 
-	SpriteBatcher::Send(vertexData,4,m_texture,m_layer);
+	SpriteBatcher::SendQuad(vertexData,4,m_texture,m_layer);
 }
 
 void Sprite::SetSize(const GLfloat &width, const GLfloat &height)

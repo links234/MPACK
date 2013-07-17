@@ -21,13 +21,25 @@ class SpriteBatcher;
 
 using namespace Core;
 
+namespace IndexData
+{
+	enum Type
+	{
+		NONE,
+		POINTS,
+		LINES,
+		TRIANGLES
+	};
+}
+
 class SpriteBatch
 {
 private:
-	SpriteBatch(GLushort indexSize=0, Texture2D *texture=NULL);
+	SpriteBatch(GLushort indexSize=0, Texture2D *texture=NULL, IndexData::Type type=IndexData::NONE);
 
-	GLushort	m_indexSize;
-	Texture2D	*m_texture;
+	GLushort		m_indexSize;
+	IndexData::Type	m_type;
+	Texture2D		*m_texture;
 
 	friend class SpriteBatcher;
 };
@@ -35,8 +47,8 @@ private:
 class SpriteBatcher
 {
 public:
-	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, GLfloat layer);
-	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, GLfloat layer);
+	static void SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, GLfloat layer);
+	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
 	static void FlushAll();
 
 	static void EnableCamera();
@@ -46,18 +58,22 @@ private:
 	SpriteBatcher();
 	~SpriteBatcher(){}
 
-	void Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture);
-	void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture);
+	void SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture);
+	void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type);
 	void Flush();
 
 	void CompleteBatch();
+	void PushMergeBatch(Texture2D *texture, IndexData::Type type);
 	void PushVertexData(SpriteVertex *vertexPointer, GLint vertexCount);
+
+	GLenum GetGLType(const GLint type);
 
 	GLushort				m_currentIndexBatchSize;
 	vector<SpriteVertex> 	m_vertexData;
 	vector<GLushort> 		m_indexData;
 	vector<SpriteBatch>		m_batches;
 	Texture2D				*m_lastTexture;
+	IndexData::Type			m_lastType;
 
 	static map<GLfloat, SpriteBatcher*> s_spriteBatcherLayer;
 	static bool						 s_useCamera;

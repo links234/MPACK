@@ -16,8 +16,8 @@
 
 using namespace Math;
 
-SpriteBatch::SpriteBatch(GLushort indexSize, Texture2D *texture)
-	: m_indexSize(indexSize), m_texture(texture)
+SpriteBatch::SpriteBatch(GLushort indexSize, Texture2D *texture, IndexData::Type type)
+	: m_indexSize(indexSize), m_texture(texture), m_type(type)
 {
 }
 
@@ -29,22 +29,22 @@ SpriteBatcher::SpriteBatcher()
 {
 }
 
-void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, GLfloat layer)
+void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, GLfloat layer)
 {
 	if(!s_spriteBatcherLayer.count(layer))
 	{
 		s_spriteBatcherLayer[layer]=new SpriteBatcher;
 	}
-	s_spriteBatcherLayer[layer]->Send(vertexPointer,vertexCount,texture);
+	s_spriteBatcherLayer[layer]->SendQuad(vertexPointer,vertexCount,texture);
 }
 
-void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, GLfloat layer)
+void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer)
 {
 	if(!s_spriteBatcherLayer.count(layer))
 	{
 		s_spriteBatcherLayer[layer]=new SpriteBatcher;
 	}
-	s_spriteBatcherLayer[layer]->Send(vertexPointer,vertexCount,indexPointer,indexCount,texture);
+	s_spriteBatcherLayer[layer]->Send(vertexPointer,vertexCount,indexPointer,indexCount,texture,type);
 }
 
 void SpriteBatcher::FlushAll()
@@ -65,7 +65,7 @@ void SpriteBatcher::DisableCamera()
 	s_useCamera=false;
 }
 
-void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture)
+void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture)
 {
 	if(vertexCount&3!=0)
 	{
@@ -73,16 +73,7 @@ void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture
 		return;
 	}
 
-	if(!m_lastTexture)
-	{
-		m_lastTexture=texture;
-	}
-
-	if(texture!=m_lastTexture)
-	{
-		CompleteBatch();
-		m_lastTexture=texture;
-	}
+	PushMergeBatch(texture,IndexData::TRIANGLES);
 
 	GLushort indexOffset=m_vertexData.size();
 
@@ -103,18 +94,9 @@ void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, Texture
 	m_currentIndexBatchSize+=quadCount*6;
 }
 
-void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture)
+void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type)
 {
-	if(!m_lastTexture)
-	{
-		m_lastTexture=texture;
-	}
-
-	if(texture!=m_lastTexture)
-	{
-		CompleteBatch();
-		m_lastTexture=texture;
-	}
+	PushMergeBatch(texture,type);
 
 	GLushort indexOffset=m_vertexData.size();
 
@@ -149,9 +131,11 @@ void SpriteBatcher::Flush()
 	for(vector<SpriteBatch>::iterator it=m_batches.begin();it!=m_batches.end();++it)
 	{
 		//LOGD("Batch index size = %d",it->m_indexSize);
-
-		it->m_texture->Bind(GL_TEXTURE0);
-		glDrawElements(GL_TRIANGLES,it->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]);
+		if(it->m_texture)
+		{
+			it->m_texture->Bind(GL_TEXTURE0);
+		}
+		glDrawElements(GetGLType(it->m_type),it->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]);
 
 		firstIndex+=it->m_indexSize;
 	}
@@ -162,14 +146,35 @@ void SpriteBatcher::Flush()
 	m_vertexData.clear();
 	m_indexData.clear();
 	m_lastTexture=NULL;
+	m_lastType=IndexData::NONE;
 }
 
 void SpriteBatcher::CompleteBatch()
 {
 	if(m_currentIndexBatchSize)
 	{
-		m_batches.push_back(SpriteBatch(m_currentIndexBatchSize,m_lastTexture));
+		m_batches.push_back(SpriteBatch(m_currentIndexBatchSize,m_lastTexture,m_lastType));
 		m_currentIndexBatchSize=0;
+	}
+}
+
+void SpriteBatcher::PushMergeBatch(Texture2D *texture, IndexData::Type type)
+{
+	if(!m_lastTexture)
+	{
+		m_lastTexture=texture;
+	}
+
+	if(m_lastType==IndexData::NONE)
+	{
+		m_lastType=type;
+	}
+
+	if(m_lastTexture!=texture || m_lastType!=type)
+	{
+		CompleteBatch();
+		m_lastTexture=texture;
+		m_lastType=type;
 	}
 }
 
@@ -191,4 +196,21 @@ void SpriteBatcher::PushVertexData(SpriteVertex *vertexPointer, GLint vertexCoun
 
 		m_vertexData.push_back(vertex);
 	}
+}
+
+GLenum SpriteBatcher::GetGLType(const GLint type)
+{
+	if(type==IndexData::POINTS)
+	{
+		return GL_POINTS;
+	}
+	if(type==IndexData::LINES)
+	{
+		return GL_LINES;
+	}
+	if(type==IndexData::TRIANGLES)
+	{
+		return GL_TRIANGLES;
+	}
+	return -1;
 }

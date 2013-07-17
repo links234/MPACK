@@ -150,7 +150,7 @@ void TextureMappedFont::SendString(const string& str, GLfloat x, GLfloat y, Alig
 		}
 	}
 
-	SpriteBatcher::Send(&quadData[0],quadData.size(),&m_texture,m_layer);
+	SpriteBatcher::SendQuad(&quadData[0],quadData.size(),&m_texture,m_layer);
 }
 
 void TextureMappedFont::SetFontSize(GLfloat fontSize)
