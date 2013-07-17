@@ -23,10 +23,13 @@ void TiledBackground::Render()
 	Ulength*=m_uScale;
 	Vlength*=m_vScale;
 
-	GLfloat Umin=0;
-	GLfloat Umax=Umin+Ulength;
-	GLfloat Vmin=0;
-	GLfloat Vmax=Vmin+Vlength;
+	Ulength*=0.5f;
+	Vlength*=0.5f;
+
+	GLfloat Umin=-Ulength;
+	GLfloat Umax=+Ulength;
+	GLfloat Vmin=-Vlength;
+	GLfloat Vmax=+Vlength;
 
 	Math::Vector2f center(Render::GetScreenWidth()*0.5f,Render::GetScreenHeight()*0.5f);
 
