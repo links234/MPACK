@@ -22,7 +22,7 @@ public:
 
 	GLfloat x,y,s,t,r,g,b,a,stype;
 
-	enum SpriteShadingMode{NONE, ALPHA_TEST, ALPHA_BLEND};
+	enum SpriteShadingMode{NONE, ALPHA_TEST, ALPHA_BLEND, NOTEXTURE};
 };
 
 bool InitVertexPrograms();

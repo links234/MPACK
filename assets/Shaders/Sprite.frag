@@ -1,6 +1,7 @@
 #define NONE 			0.0
 #define ALPHA_TEST 		1.0
 #define ALPHA_BLEND		2.0
+#define NOTEXTURE		3.0
 
 #define EPS			1.0e-4;
 
@@ -21,7 +22,13 @@ bool equal(const float a, const float b)
 
 void main(void)
 {
-	outColor = texture2D(texture0, texCoord)*color;
+	outColor = color;
+	
+	if(!equal(shadeType,NOTEXTURE))
+	{
+		outColor = outColor * texture2D(texture0, texCoord);
+	}
+	
 	if(equal(shadeType,ALPHA_TEST))
 	{
 		if (dot(outColor.rgb,vec3(0.35,0.35,0.35))<=0.1)
@@ -30,7 +37,7 @@ void main(void)
 		}
 	}
 	
-	if(!equal(shadeType,ALPHA_BLEND))
+	if(!equal(shadeType,ALPHA_BLEND) && !equal(shadeType,NOTEXTURE))
 	{
 		outColor.w=1.0;
 	}
