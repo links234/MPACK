@@ -1,6 +1,7 @@
 This Framework is intended to be a cross-platform starting point for 2D games running on Android and Windows. Everything is written in C++ and some Bash for building scripts.
 
 Cross-platform features:
+
 	- Custom bash scripts transparent to source tree (folders are only used for better)
 	- Math library
 		- 2D, 3D and 4D vectors
@@ -72,7 +73,6 @@ Cross-platform features:
 		- Circle collision
 		- Circle-AABB collision
 		- basic physics (linear velocity, linear acceleration, angular velocity and friction system)
-
 	- General purpose animation player (AnimationPlayer)
 		- forward, backward, loop
 		- interpolation between frames (usefull for MD2 model animation)
@@ -83,6 +83,7 @@ Cross-platform features:
 		- Assert on OpenGL fault
 
 Android specific features:
+
 	- Transparent resource system (automatic switch from assets to SD files)
 	- Multi-touch input (event-based with simple mutex)
 		- Pinch to zoom and rotate
