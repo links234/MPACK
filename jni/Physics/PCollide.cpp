@@ -30,6 +30,7 @@ namespace Core
 		{
 			return CollideCirclePoly(obj2, obj1);
 		}
+		return false;
 	}
 
 	bool PCollide::CollidePolys(const PObject& obj1, const PObject& obj2)
