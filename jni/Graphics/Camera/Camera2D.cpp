@@ -35,7 +35,7 @@ void Camera2D::Update(GLfloat delta)
 {
 	if(m_target)
 	{
-		SetPosition(m_target->GetCameraPosition());
+		SetIdealPosition(m_target->GetCameraPosition());
 	}
 
 	if(m_useSpringSystem)
@@ -62,14 +62,29 @@ void Camera2D::Transform(Vector2f &vertex) const
 	vertex+=Vector2f(Render::GetScreenWidth()*0.5f,Render::GetScreenHeight()*0.5f);
 }
 
-void Camera2D::SetPosition(const Vector2f &position)
-{
-	m_idealPosition=position;
-}
-
 void Camera2D::Link(Object *target)
 {
 	m_target=target;
+}
+
+void Camera2D::SetIdealPosition(const Vector2f &idealPosition)
+{
+	m_idealPosition=idealPosition;
+}
+
+Vector2f Camera2D::GetIdealPosition() const
+{
+	return m_idealPosition;
+}
+
+void Camera2D::SetPosition(const Vector2f &position)
+{
+	m_position=position;
+}
+
+Vector2f Camera2D::GetPosition() const
+{
+	return m_position;
 }
 
 void Camera2D::EnableSpringSystem()

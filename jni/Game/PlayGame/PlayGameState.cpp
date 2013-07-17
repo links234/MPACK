@@ -17,6 +17,17 @@ namespace Game
 
 		Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
 
+		m_backgroundTexture = new Texture2D;
+		m_backgroundTexture->Load("@Backgrounds/spacebk1.png");
+		m_backgroundTexture->SetWrapMode(GL_REPEAT,GL_REPEAT);
+
+		m_background = new TiledBackground;
+		m_background->SetTexture(m_backgroundTexture);
+		m_background->SetShading(SpriteVertex::NONE);
+		m_background->SetDepth(2.0f);
+		m_background->SetUVScale(0.5f,0.5f);
+		m_background->EnableCamera();
+
 		m_particleTex = new Texture2D;
 		m_particleTex->Load("@Sprites/GUI_Button.tga");
 
@@ -124,6 +135,8 @@ namespace Game
 	{
 		//Debug::Print(Global::pFont,"X = %lf  Y = %lf",m_playerObject->GetLinearAcceleration().x,m_playerObject->GetLinearAcceleration().y);
 
+		m_background->Render();
+
 		m_joystick->Render();
 	}
 
@@ -139,6 +152,9 @@ namespace Game
 		delete m_playerObject;
 
 		delete m_joystick;
+
+		delete m_backgroundTexture;
+		delete m_background;
 
 		delete Global::pActiveCamera;
 		Global::pActiveCamera=NULL;

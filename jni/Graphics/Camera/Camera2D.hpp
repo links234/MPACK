@@ -18,8 +18,13 @@ public:
 	void Update(GLfloat delta);
 
 	void Transform(Vector2f &vertex) const;
-	void SetPosition(const Vector2f &position);
 	void Link(Object *target=NULL);
+
+	void SetIdealPosition(const Vector2f &idealPosition);
+	Vector2f GetIdealPosition() const;
+
+	void SetPosition(const Vector2f &position);
+	Vector2f GetPosition() const;
 
 	void EnableSpringSystem();
 	void DisableSpringSystem();

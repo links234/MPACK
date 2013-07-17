@@ -82,5 +82,7 @@ namespace Game
 		delete m_pMenuGUI;
 		delete m_pButtonSprite;
 		delete m_pButtonTexture;
+		delete m_pBackgroundTexture;
+		delete m_pBackgroundSprite;
 	}
 }
