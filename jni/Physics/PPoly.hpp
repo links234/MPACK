@@ -9,6 +9,7 @@
 namespace Core
 {
 	class PShape;
+	class PCollide;
 
 	class PPoly : public PShape
 	{
@@ -27,6 +28,8 @@ namespace Core
 		void SetAsBox(float halfHeight, float halfWidth);
 
 	private:
+		friend class PCollide;
+
 		int m_vertexCount;
 		PVec2* m_vertices;
 	};
