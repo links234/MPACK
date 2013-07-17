@@ -4,7 +4,7 @@
 #include "Camera2D.hpp"
 
 TiledBackground::TiledBackground()
-	: m_depth(2.0f), m_isCameraEnabled(false)
+	: m_depth(2.0f), m_uScale(1.0f), m_vScale(1.0f), m_isCameraEnabled(false)
 {
 }
 
@@ -19,6 +19,9 @@ void TiledBackground::Render()
 
 	GLfloat Ulength=Render::GetScreenWidth()*2.0f/m_texture->GetWidth();
 	GLfloat Vlength=Render::GetScreenHeight()*2.0f/m_texture->GetHeight();
+
+	Ulength*=m_uScale;
+	Vlength*=m_vScale;
 
 	GLfloat Umin=0;
 	GLfloat Umax=Umin+Ulength;
@@ -46,16 +49,15 @@ void TiledBackground::Render()
 		position.y/=m_texture->GetHeight();
 
 		GLfloat scale=1.0f/Global::pActiveCamera->GetScale();
+		Umin*=scale;
+		Umax*=scale;
+		Vmin*=scale;
+		Vmax*=scale;
 
 		Umin+=position.y;
 		Umax+=position.y;
 		Vmin+=position.x;
 		Vmax+=position.x;
-
-		Umin*=scale;
-		Umax*=scale;
-		Vmin*=scale;
-		Vmax*=scale;
 
 		for(int i=0;i<4;++i)
 		{
@@ -101,4 +103,30 @@ void TiledBackground::SetDepth(const GLfloat depth)
 GLfloat TiledBackground::GetDepth() const
 {
 	return m_depth;
+}
+
+void TiledBackground::SetUVScale(const GLfloat uScale, const GLfloat vScale)
+{
+	m_uScale=uScale;
+	m_vScale=vScale;
+}
+
+void TiledBackground::SetUScale(const GLfloat uScale)
+{
+	m_uScale=uScale;
+}
+
+GLfloat TiledBackground::GetUScale() const
+{
+	return m_uScale;
+}
+
+void TiledBackground::SetVScale(const GLfloat vScale)
+{
+	m_vScale=vScale;
+}
+
+GLfloat TiledBackground::GetVScale() const
+{
+	return m_vScale;
 }
