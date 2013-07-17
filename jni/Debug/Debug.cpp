@@ -17,7 +17,7 @@ namespace Debug
 		printLines=0;
 	}
 
-	void Print(TextureMappedFont *font, char *message, ...)
+	void Print(TextureMappedFont *font, const char *message, ...)
 	{
 		char buffer[DEBUGMESSAGEBUFFER_SIZE];
 		memset(buffer,NULL,DEBUGMESSAGEBUFFER_SIZE);

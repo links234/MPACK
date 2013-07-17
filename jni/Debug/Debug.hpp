@@ -25,7 +25,7 @@ namespace Debug
 	extern GLfloat	layer;
 
 	void InitFrame();
-	void Print(TextureMappedFont *font, char *message, ...);
+	void Print(TextureMappedFont *font, const char *message, ...);
 	void AssertGL(const char *pMessage);
 }
 
