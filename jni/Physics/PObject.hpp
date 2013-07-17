@@ -6,6 +6,11 @@
 #include "PMath.hpp"
 #include "PShape.hpp"
 #include "PPoly.hpp"
+#include "PCircle.hpp"
+
+#include <list>
+
+#include <list>
 
 #include <list>
 
@@ -15,6 +20,7 @@ namespace Core
 {
 	class PShape;
 	class PPoly;
+	class PCircle;
 
 	class PObject
 	{

@@ -37,7 +37,7 @@ namespace Core
 			list<PObject*>::iterator second = first;
 			for(second++; second != m_objectList.end(); second++)
 			{
-				if(CollideObjects(*(*first), *(*second)))
+				if(PCollide::CollideObjects(*(*first), *(*second)))
 				{
 					if(callback != NULL)
 					{

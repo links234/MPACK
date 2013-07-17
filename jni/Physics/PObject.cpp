@@ -18,10 +18,10 @@ namespace Core
 			{
 				m_shape = new PPoly(*((PPoly*)pShape));
 			}
-			/*else if(p_shape.GetType() == e_circle)
-			{
-				m_shape = new PCircle(*((PCircle*)p_shape));
-			}*/
+		else if(pShape->GetType() == PShape::e_circle)
+		{
+			m_shape = new PCircle(*((PCircle*)pShape));
+		}
 		}
 		else
 		{
@@ -55,7 +55,7 @@ namespace Core
 		m_linearVelocity*=(1.0f-m_frictionDynamic * delta);
 		if(m_linearVelocity.Length()<m_frictionThreshold)
 		{
-			m_linearVelocity=PVec2();
+			m_linearVelocity = PVec2();
 		}
 
 		// Update position and rotation
