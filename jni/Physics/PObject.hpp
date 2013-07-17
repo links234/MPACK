@@ -12,6 +12,8 @@
 
 #include <list>
 
+#include <list>
+
 using namespace std;
 
 namespace Core
