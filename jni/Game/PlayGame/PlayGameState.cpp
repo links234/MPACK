@@ -24,6 +24,7 @@ namespace Game
 		m_background = new TiledBackground;
 		m_background->SetTexture(m_backgroundTexture);
 		m_background->SetShading(SpriteVertex::NONE);
+		m_background->SetDepth(2.0f);
 		m_background->SetUVScale(0.5f,0.5f);
 		m_background->EnableCamera();
 

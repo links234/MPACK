@@ -42,7 +42,7 @@ void TiledBackground::Render()
 	if(m_isCameraEnabled && Global::pActiveCamera)
 	{
 		Vector2f position=Global::pActiveCamera->GetPosition();
-		position/=m_depth;
+		position/=2.0f*m_depth;
 
 		position.y*=-1.0f;
 
