@@ -80,7 +80,7 @@ void TiledBackground::Render()
 								SpriteVertex(v[2].x,v[2].y,	Umax,Vmax,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),
 								SpriteVertex(v[3].x,v[3].y,	Umin,Vmax,	m_color[3].x,m_color[3].y,m_color[3].z,m_color[3].w,	m_spriteShadingType) };
 
-	SpriteBatcher::SendQuad(vertexData,4,m_texture,m_layer);
+	SpriteBatcher::SendQuad(vertexData,4,m_texture,IndexData::TRIANGLES,m_layer);
 }
 
 void TiledBackground::EnableCamera()
