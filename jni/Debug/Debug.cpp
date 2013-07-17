@@ -10,6 +10,7 @@ namespace Debug
 
 	GLuint	printLines;
 	GLfloat	printFontSize = 40.0f;
+	GLfloat	layer=805.0f;
 
 	void InitFrame()
 	{

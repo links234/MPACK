@@ -10,9 +10,11 @@
 #define SPRITEBATCHER_HPP
 
 #include "Types.hpp"
+#include "Maths.hpp"
 #include "Texture2D.hpp"
 #include "Vertex.hpp"
 #include "BufferObject.hpp"
+#include "Debug.hpp"
 
 #include <vector>
 #include <map>
@@ -20,6 +22,7 @@
 class SpriteBatcher;
 
 using namespace Core;
+using namespace Math;
 
 namespace IndexData
 {
@@ -47,8 +50,10 @@ private:
 class SpriteBatcher
 {
 public:
-	static void SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, GLfloat layer);
-	static void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
+	static void SendDebugPolygon(Vector2f *posPointer,GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
+
+	static void SendQuad(SpriteVertex *vertexPointer, GLuint vertexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
+	static void Send(SpriteVertex *vertexPointer, GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
 	static void FlushAll();
 
 	static void EnableCamera();
@@ -58,8 +63,8 @@ private:
 	SpriteBatcher();
 	~SpriteBatcher(){}
 
-	void SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture);
-	void Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type);
+	void SendQuad(SpriteVertex *vertexPointer, GLuint vertexCount, Texture2D *texture, IndexData::Type type);
+	void Send(SpriteVertex *vertexPointer, GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type);
 	void Flush();
 
 	void CompleteBatch();

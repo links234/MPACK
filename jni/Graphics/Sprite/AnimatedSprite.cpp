@@ -41,7 +41,7 @@ void AnimatedSprite::Render()
 								SpriteVertex(v[2].x,v[2].y,	UM,VM,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),
 								SpriteVertex(v[3].x,v[3].y,	Um,VM,	m_color[3].x,m_color[3].y,m_color[3].z,m_color[3].w,	m_spriteShadingType) };
 
-	SpriteBatcher::SendQuad(vertexData,4,m_texture,m_layer);
+	SpriteBatcher::SendQuad(vertexData,4,m_texture,IndexData::TRIANGLES,m_layer);
 }
 
 void AnimatedSprite::BuildFrameGrid(int rows, int cols)

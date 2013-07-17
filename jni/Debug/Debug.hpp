@@ -22,6 +22,7 @@ namespace Debug
 {
 	extern GLuint	printLines;
 	extern GLfloat	printFontSize;
+	extern GLfloat	layer;
 
 	void InitFrame();
 	void Print(TextureMappedFont *font, char *message, ...);

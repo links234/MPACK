@@ -9,7 +9,6 @@
 #include "SpriteBatcher.hpp"
 
 #include "Global.hpp"
-#include "Maths.hpp"
 #include "Render.hpp"
 #include "Camera2D.hpp"
 #include "Debug.hpp"
@@ -29,13 +28,49 @@ SpriteBatcher::SpriteBatcher()
 {
 }
 
-void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, GLfloat layer)
+void SpriteBatcher::SendDebugPolygon(Vector2f *posPointer,GLuint count,Vector4f color,TransformState2f transformState,GLfloat layer)
 {
 	if(!s_spriteBatcherLayer.count(layer))
 	{
 		s_spriteBatcherLayer[layer]=new SpriteBatcher;
 	}
-	s_spriteBatcherLayer[layer]->SendQuad(vertexPointer,vertexCount,texture);
+
+	vector<SpriteVertex> vertexData;
+	for(GLuint index=0;index<count;++index)
+	{
+		Vector2f point=posPointer[index];
+		transformState.Transform(point);
+		SpriteVertex vertex;
+		vertex.x=point.x;
+		vertex.y=point.y;
+		vertex.s=vertex.t=0.0f;
+		vertex.r=color.x;
+		vertex.g=color.y;
+		vertex.b=color.z;
+		vertex.a=color.w;
+		vertex.stype=SpriteVertex::NOTEXTURE;
+		vertexData.push_back(vertex);
+	}
+
+	vector<GLushort> indexData;
+	GLushort lastPoint=count-1;
+	for(GLushort currentPoint=0;currentPoint<count;++currentPoint)
+	{
+		indexData.push_back(lastPoint);
+		indexData.push_back(currentPoint);
+		lastPoint=currentPoint;
+	}
+
+	s_spriteBatcherLayer[layer]->Send(&vertexData[0],vertexData.size(),&indexData[0],indexData.size(),NULL,IndexData::LINES);
+}
+
+void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, IndexData::Type type, GLfloat layer)
+{
+	if(!s_spriteBatcherLayer.count(layer))
+	{
+		s_spriteBatcherLayer[layer]=new SpriteBatcher;
+	}
+	s_spriteBatcherLayer[layer]->SendQuad(vertexPointer,vertexCount,texture,type);
 }
 
 void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer)
@@ -65,7 +100,7 @@ void SpriteBatcher::DisableCamera()
 	s_useCamera=false;
 }
 
-void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture)
+void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, IndexData::Type type)
 {
 	if(vertexCount&3!=0)
 	{
@@ -73,10 +108,8 @@ void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Tex
 		return;
 	}
 
-	PushMergeBatch(texture,IndexData::TRIANGLES);
-
+	PushMergeBatch(texture,type);
 	GLushort indexOffset=m_vertexData.size();
-
 	PushVertexData(vertexPointer,vertexCount);
 
 	GLushort quadIndex[]={ 	0,1,2,
@@ -97,9 +130,7 @@ void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Tex
 void SpriteBatcher::Send(SpriteVertex *vertexPointer,GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type)
 {
 	PushMergeBatch(texture,type);
-
 	GLushort indexOffset=m_vertexData.size();
-
 	PushVertexData(vertexPointer,vertexCount);
 
 	GLushort		*indexPointerEnd=indexPointer+indexCount;
@@ -124,18 +155,20 @@ void SpriteBatcher::Flush()
 	Sprite_Program->EnableVertexAttributes();
 	Sprite_Program->SendVertexBuffer((GLfloat*)(&m_vertexData[0]));
 
-	//LOGD("Sprite::Batcher batches = %d",m_batches.size());
+	//LOGD("Sprite::Batcher batches = %d vertex size = %d",m_batches.size(),m_vertexData.size());
 
 	GLuint firstVertex=0;
 	GLuint firstIndex=0;
 	for(vector<SpriteBatch>::iterator it=m_batches.begin();it!=m_batches.end();++it)
 	{
-		//LOGD("Batch index size = %d",it->m_indexSize);
+		//LOGD("Batch index size = %d type = %d",it->m_indexSize,it->m_type);
 		if(it->m_texture)
 		{
 			it->m_texture->Bind(GL_TEXTURE0);
 		}
+
 		glDrawElements(GetGLType(it->m_type),it->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]);
+		Debug::AssertGL("ERROR!");
 
 		firstIndex+=it->m_indexSize;
 	}
