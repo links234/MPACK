@@ -51,6 +51,7 @@ class SpriteBatcher
 {
 public:
 	static void SendDebugPolygon(Vector2f *posPointer,GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
+	static void SendDebugCircle(GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
 
 	static void SendQuad(SpriteVertex *vertexPointer, GLuint vertexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
 	static void Send(SpriteVertex *vertexPointer, GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);

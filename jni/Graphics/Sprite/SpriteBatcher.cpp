@@ -64,6 +64,51 @@ void SpriteBatcher::SendDebugPolygon(Vector2f *posPointer,GLuint count,Vector4f 
 	s_spriteBatcherLayer[layer]->Send(&vertexData[0],vertexData.size(),&indexData[0],indexData.size(),NULL,IndexData::LINES);
 }
 
+void SpriteBatcher::SendDebugCircle(GLuint count,Vector4f color,TransformState2f transformState,GLfloat layer)
+{
+	if(!s_spriteBatcherLayer.count(layer))
+	{
+		s_spriteBatcherLayer[layer]=new SpriteBatcher;
+	}
+
+	if(count<3)
+	{
+		count=3;
+	}
+
+	vector<SpriteVertex> vertexData;
+	GLfloat angle=0.0f;
+	GLfloat angleStep=360.0f/count;
+	for(GLuint index=0;index<count;++index)
+	{
+		Vector2f point=Vector2f(1.0f,0.0f);
+		point.Rotate(angle);
+		angle+=angleStep;
+		transformState.Transform(point);
+		SpriteVertex vertex;
+		vertex.x=point.x;
+		vertex.y=point.y;
+		vertex.s=vertex.t=0.0f;
+		vertex.r=color.x;
+		vertex.g=color.y;
+		vertex.b=color.z;
+		vertex.a=color.w;
+		vertex.stype=SpriteVertex::NOTEXTURE;
+		vertexData.push_back(vertex);
+	}
+
+	vector<GLushort> indexData;
+	GLushort lastPoint=count-1;
+	for(GLushort currentPoint=0;currentPoint<count;++currentPoint)
+	{
+		indexData.push_back(lastPoint);
+		indexData.push_back(currentPoint);
+		lastPoint=currentPoint;
+	}
+
+	s_spriteBatcherLayer[layer]->Send(&vertexData[0],vertexData.size(),&indexData[0],indexData.size(),NULL,IndexData::LINES);
+}
+
 void SpriteBatcher::SendQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, IndexData::Type type, GLfloat layer)
 {
 	if(!s_spriteBatcherLayer.count(layer))
