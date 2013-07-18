@@ -69,13 +69,14 @@ Cross-platform features:
 		- PNG (pnglib)
 		- Targa
 	- Physics service
-		- AABB collision
+		- AABB fast test
+		- Convex polygon collision using Separating Axis Theorem (SAT)
 		- Circle collision
-		- Circle-AABB collision
-		- basic physics (linear velocity, linear acceleration, angular velocity and friction system)
+		- Circle-Convex polygon collision (SAT)
+		- Basic physics (linear velocity, linear acceleration, angular velocity and friction system)
 	- General purpose animation player (AnimationPlayer)
-		- forward, backward, loop
-		- interpolation between frames (usefull for MD2 model animation)
+		- Forward, backward, loop
+		- Interpolation between frames (usefull for MD2 model animation)
 	- Random number generation (int and double)
 	- Debug 
 		- Console/logcat printing
