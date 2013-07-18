@@ -16,7 +16,7 @@ public:
 	virtual void Update(GLfloat delta);
 	virtual void Render();
 
-	Vector2f GetCameraPosition() const;
+	virtual Vector2f GetCameraPosition() const;
 
 	virtual void SetSprite(Sprite *pSprite);
 };

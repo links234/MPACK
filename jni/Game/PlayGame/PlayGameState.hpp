@@ -8,6 +8,7 @@
 #include "TiledBackground.hpp"
 #include "Joystick.hpp"
 #include "Player.hpp"
+#include "Enemy.hpp"
 #include "Particles.hpp"
 
 using namespace Core;
@@ -30,15 +31,20 @@ namespace Game
 		static void DOWN_callback(void *param1, void *param2);
 		static void UP_callback(void *param1, void *param2);
 
+		static void Physics_callback(void *param1, void *param2);
+
 		bool m_requestExit;
 
 		Texture2D		*m_backgroundTexture;
 		TiledBackground	*m_background;
 
-		Texture2D 	*m_enemyTexture;
 		Texture2D 	*m_playerTexture;
 		Sprite		*m_playerSprite;
 		Player		*m_playerObject;
+
+		Texture2D 	*m_enemyTexture;
+		Sprite		*m_enemySprite;
+		Enemy		*m_enemyObject;
 
 		Texture2D	*m_joystickInnerTex;
 		Texture2D	*m_joystickOuterTex;

@@ -18,10 +18,10 @@ namespace Core
 			{
 				m_shape = new PPoly(*((PPoly*)pShape));
 			}
-		else if(pShape->GetType() == PShape::e_circle)
-		{
-			m_shape = new PCircle(*((PCircle*)pShape));
-		}
+			else if(pShape->GetType() == PShape::e_circle)
+			{
+				m_shape = new PCircle(*((PCircle*)pShape));
+			}
 		}
 		else
 		{

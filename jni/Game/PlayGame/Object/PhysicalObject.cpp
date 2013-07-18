@@ -4,6 +4,7 @@
 
 PhysicalObject::PhysicalObject()
 {
+	m_userData=this;
 }
 
 PhysicalObject::~PhysicalObject()
@@ -21,6 +22,10 @@ void PhysicalObject::Render()
 		Vector4f GREEN=Vector4f(0.0f,1.0f,0.0f,1.0f);
 		Vector4f RED=Vector4f(1.0f,0.0f,0.0f,1.0f);
 		Vector4f color=GREEN;
+		if(m_debugInCollision)
+		{
+			color=RED;
+		}
 		TransformState2f transformState=TransformState2f(m_position,m_angle,1.0f);
 		if(m_shape->m_type==PShape::e_poly)
 		{
@@ -32,6 +37,7 @@ void PhysicalObject::Render()
 
 		}
 	}
+	m_debugInCollision=false;
 }
 
 Vector2f PhysicalObject::GetCameraPosition() const

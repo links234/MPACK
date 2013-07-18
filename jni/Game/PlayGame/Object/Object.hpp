@@ -23,6 +23,8 @@ public:
 	static void UpdateAll(GLfloat delta);
 	static void RenderAll();
 
+	bool m_debugInCollision;
+
 protected:
 	static vector<Object*> s_objects;
 };

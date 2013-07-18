@@ -3,6 +3,7 @@
 #include "Render.hpp"
 #include "InputService.hpp"
 #include "TimeService.hpp"
+#include "PhysicsService.hpp"
 #include "Application.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
@@ -16,6 +17,7 @@ namespace Game
 		m_requestExit = false;
 
 		Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
+		Global::pContext->pPhysicsService->callback=Physics_callback;
 
 		m_backgroundTexture = new Texture2D;
 		m_backgroundTexture->Load("@Backgrounds/spacebk1.png");
@@ -44,15 +46,17 @@ namespace Game
 
 
 		//Texture loading
+		m_enemyTexture=new Texture2D;
 		m_playerTexture=new Texture2D;
 		m_joystickInnerTex=new Texture2D;
 		m_joystickOuterTex=new Texture2D;
 
+		m_enemyTexture->Load("@Sprites/Ships/enemy1.png");
 		m_playerTexture->Load("@Sprites/Ships/Player.png");
 		m_joystickInnerTex->Load("@Sprites/joystick_inner.png");
 		m_joystickOuterTex->Load("@Sprites/joystick_outer.png");
 
-		//Sprite setup
+		//Player sprite setup
 		m_playerSprite=new Sprite;
 		m_playerSprite->SetTexture(m_playerTexture);
 		m_playerSprite->SetSize(50.0f,50.0f);
@@ -63,10 +67,22 @@ namespace Game
 		m_playerObject->SetSprite(m_playerSprite);
 		m_playerObject->SetPosition(Vector2f(Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5));
 
+		//Enemy sprite setup
+		m_enemySprite=new Sprite;
+		m_enemySprite->SetTexture(m_enemyTexture);
+		m_enemySprite->SetSize(100.0f,17.0f*4.0f);
+		m_enemySprite->SetShading(SpriteVertex::ALPHA_BLEND);
+
+		//Enemy setup
+		m_enemyObject=new Enemy;
+		m_enemyObject->SetSprite(m_enemySprite);
+		m_enemyObject->SetPosition(Vector2f(50.0f,50.0f));
+
 		//Joystick setup
 		m_joystick=new Joystick;
 		m_joystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
 		m_joystick->SetMaxDistance(100.0f);
+
 
 		//Camera setup
 		Global::pActiveCamera=new Camera2D();
@@ -145,10 +161,15 @@ namespace Game
 		delete m_particleTex;
 		delete m_pEmitter;
 
+		delete m_enemyTexture;
 		delete m_playerTexture;
 		delete m_joystickInnerTex;
 		delete m_joystickOuterTex;
 
+		delete m_enemySprite;
+		delete m_playerSprite;
+
+		delete m_enemyObject;
 		delete m_playerObject;
 
 		delete m_joystick;
@@ -220,5 +241,29 @@ namespace Game
 				pPlayGame->m_fingers[0]=NULL;
 			}
 		}
+	}
+
+	void PlayGame::Physics_callback(void *param1, void *param2)
+	{
+		/* 		This  piece of code is here to show you how NOT to cast pointer in diamond-structure inheritance
+		 * Object *pobj1p=(Object*)param1;
+		 * Object *pobj2p=(Object*)param2;
+ 	 	 *
+		 * PObject *pobj1=(PObject*)param1;
+		 * PObject *pobj2=(PObject*)param2;
+		 * Object *obj1=(Object*)pobj1->GetUserData();
+		 * Object *obj2=(Object*)pobj2->GetUserData();
+		 */
+
+		//ALLWAYS use dynamic_cast properly in situations like this!!
+		PObject *pobj1=(PObject*)param1;
+		PObject *pobj2=(PObject*)param2;
+		PhysicalObject *tobj1=(PhysicalObject*)pobj1->GetUserData();
+		PhysicalObject *tobj2=(PhysicalObject*)pobj2->GetUserData();
+		Object *obj1=dynamic_cast<Object*>(tobj1);
+		Object *obj2=dynamic_cast<Object*>(tobj2);
+
+		obj1->m_debugInCollision=true;
+		obj2->m_debugInCollision=true;
 	}
 }
