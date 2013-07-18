@@ -39,15 +39,15 @@ namespace Math
 	template<class T> inline void TransformState2<T>::Transform(Vector2<T> &vec2) const
 	{
 		vec2.Rotate(m_rotation);
-		vec2+=m_translation;
 		vec2*=m_scale;
+		vec2+=m_translation;
 	}
 
 	template<class T> inline Vector2<T> TransformState2<T>::Transformed(Vector2<T> vec2) const
 	{
 		vec2.Rotate(m_rotation);
-		vec2+=m_translation;
 		vec2*=m_scale;
+		vec2+=m_translation;
 		return vec2;
 	}
 
