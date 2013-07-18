@@ -42,6 +42,7 @@ Cross-platform features:
 			- Multiple shading options implemented in fragment shader:
 				- alpha blending, alpha testing and none (does not take care of alpha)
 				- per vertex color
+			- Debug polygon and circle rendering
 		- Texture mapped font rendering
 			- load from raw font texture (16x16 cells, one per character)
 			- monospaced font option
