@@ -202,7 +202,6 @@ namespace Game
 		if(pPlayGame->m_fingers[0]==NULL)
 		{
 			pFinger->m_flag=FF_LOCKED;
-			pPlayGame->m_firstPosition[0]=pFinger->m_pos;
 			pPlayGame->m_lastFramePosition[0]=pFinger->m_pos;
 			pPlayGame->m_fingers[0]=pFinger;
 			return;
@@ -210,6 +209,7 @@ namespace Game
 		if(pPlayGame->m_fingers[1]==NULL)
 		{
 			pFinger->m_flag==FF_LOCKED;
+			pPlayGame->m_firstPosition[0]=pPlayGame->m_fingers[0]->m_pos;
 			pPlayGame->m_firstPosition[1]=pFinger->m_pos;
 			pPlayGame->m_lastFramePosition[1]=pFinger->m_pos;
 			pPlayGame->m_fingers[1]=pFinger;
@@ -225,14 +225,15 @@ namespace Game
 		{
 			pFinger->m_flag=FF_FREE;
 			pPlayGame->m_fingers[1]=NULL;
+			return;
 		}
 		if(pPlayGame->m_fingers[0]==pFinger)
 		{
 			pFinger->m_flag==FF_FREE;
 			if(pPlayGame->m_fingers[1]!=NULL)
 			{
+				LOGD("SECOND FINGER GETS TO BE FIRST");
 				pPlayGame->m_fingers[0]=pPlayGame->m_fingers[1];
-				pPlayGame->m_firstPosition[0]=pPlayGame->m_firstPosition[1];
 				pPlayGame->m_lastFramePosition[0]=pPlayGame->m_lastFramePosition[1];
 				pPlayGame->m_fingers[1]=NULL;
 			}

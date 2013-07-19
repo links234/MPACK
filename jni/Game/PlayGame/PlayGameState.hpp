@@ -2,14 +2,19 @@
 #define PLAYGAME_HPP
 
 #include "GameState.hpp"
+#include "PGInputController.hpp"
 #include "Texture2D.hpp"
 #include "Sprite.hpp"
 #include "AnimatedSprite.hpp"
 #include "TiledBackground.hpp"
-#include "Joystick.hpp"
+#include "Particles.hpp"
+
 #include "Player.hpp"
 #include "Enemy.hpp"
-#include "Particles.hpp"
+
+
+//temp
+#include "Joystick.hpp"
 
 using namespace Core;
 
