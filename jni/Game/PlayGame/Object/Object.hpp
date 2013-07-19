@@ -15,7 +15,7 @@ public:
 	Object();
 	virtual ~Object();
 
-	virtual void Update(GLfloat delta) = 0;
+	virtual bool Update(GLfloat delta) = 0;
 	virtual void Render() = 0;
 
 	virtual Vector2f GetCameraPosition() const = 0;

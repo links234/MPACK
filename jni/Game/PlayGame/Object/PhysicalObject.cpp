@@ -11,8 +11,9 @@ PhysicalObject::~PhysicalObject()
 {
 }
 
-void PhysicalObject::Update(GLfloat delta)
+bool PhysicalObject::Update(GLfloat delta)
 {
+	return true;
 }
 
 void PhysicalObject::Render()
@@ -32,9 +33,12 @@ void PhysicalObject::Render()
 			PPoly *poly=(PPoly*)(m_shape);
 			SpriteBatcher::SendDebugPolygon(&poly->GetVertex(0),poly->GetVertexCount(),color,transformState);
 		}
+
 		else if(m_shape->m_type==PShape::e_circle)
 		{
-
+			PCircle *circle=(PCircle*)(m_shape);
+			transformState.SetScale(circle->GetRadius());
+			SpriteBatcher::SendDebugCircle(Debug::CirclePoints,color,transformState);
 		}
 	}
 	m_debugInCollision=false;

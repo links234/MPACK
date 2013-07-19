@@ -8,8 +8,9 @@ SpriteObject::~SpriteObject()
 {
 }
 
-void SpriteObject::Update(GLfloat delta)
+bool SpriteObject::Update(GLfloat delta)
 {
+	return true;
 }
 
 void SpriteObject::Render()

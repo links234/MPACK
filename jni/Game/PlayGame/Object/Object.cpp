@@ -27,10 +27,19 @@ Object::~Object()
 
 void Object::UpdateAll(GLfloat delta)
 {
+	vector<Object*> objects;
 	for(vector<Object*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
 	{
-		(*it)->Update(delta);
+		if((*it)->Update(delta))
+		{
+			objects.push_back(*it);
+		}
+		else
+		{
+			delete *it;
+		}
 	}
+	s_objects=objects;
 }
 
 void Object::RenderAll()

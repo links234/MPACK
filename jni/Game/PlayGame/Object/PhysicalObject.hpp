@@ -12,7 +12,7 @@ public:
 	PhysicalObject();
 	virtual ~PhysicalObject();
 
-	virtual void Update(GLfloat delta);
+	virtual bool Update(GLfloat delta);
 	virtual void Render();
 
 	virtual Vector2f GetCameraPosition() const;

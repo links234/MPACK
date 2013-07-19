@@ -8,11 +8,12 @@ Player::~Player()
 {
 }
 
-void Player::Update(GLfloat delta)
+bool Player::Update(GLfloat delta)
 {
 	m_angle=m_linearVelocity.Angle();
 	m_sprite->m_position=m_position;
 	m_sprite->SetAngle(m_angle);
+	return true;
 }
 
 void Player::Render()
