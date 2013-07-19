@@ -1,5 +1,7 @@
 #include "Global.hpp"
 
+#include "Context.hpp"
+
 namespace Global
 {
 	android_app 			*pAndroidApp=NULL;

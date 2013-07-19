@@ -14,9 +14,8 @@ namespace Game
 {
 	PlayGame::PlayGame()
 	{
-		m_requestExit = false;
+		m_pPGInputController = PGInputController::InitializeController();
 
-		Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
 		Global::pContext->pPhysicsService->callback=Physics_callback;
 
 		m_backgroundTexture = new Texture2D;
@@ -48,13 +47,9 @@ namespace Game
 		//Texture loading
 		m_enemyTexture=new Texture2D;
 		m_playerTexture=new Texture2D;
-		m_joystickInnerTex=new Texture2D;
-		m_joystickOuterTex=new Texture2D;
 
 		m_enemyTexture->Load("@Sprites/Ships/enemy1.png");
 		m_playerTexture->Load("@Sprites/Ships/Player.png");
-		m_joystickInnerTex->Load("@Sprites/joystick_inner.png");
-		m_joystickOuterTex->Load("@Sprites/joystick_outer.png");
 
 		//Player sprite setup
 		m_playerSprite=new Sprite;
@@ -78,20 +73,9 @@ namespace Game
 		m_enemyObject->SetSprite(m_enemySprite);
 		m_enemyObject->SetPosition(Vector2f(50.0f,50.0f));
 
-		//Joystick setup
-		m_joystick=new Joystick;
-		m_joystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
-		m_joystick->SetMaxDistance(100.0f);
-
-
 		//Camera setup
 		Global::pActiveCamera=new Camera2D();
 		Global::pActiveCamera->Link(m_playerObject);
-
-		//Setup input surface
-		m_fingers[0]=m_fingers[1]=NULL;
-		Global::pContext->pInputService->Link_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
-		Global::pContext->pInputService->Link_FUP(Param2PtrCallbackStruct(UP_callback,this));
 
 		//should be deleted in final version
 		m_testTexture=new Texture2D();
@@ -112,35 +96,11 @@ namespace Game
 	{
 		float lTimeStep = Global::pContext->pTimeService->Elapsed();
 
-		m_joystick->Update();
+		m_pPGInputController->Update(lTimeStep);
 
-		if(m_fingers[1])
-		{
-			GLfloat firstDistance=m_firstPosition[0].Distance(m_firstPosition[1]);
-			GLfloat currentDistance=m_fingers[0]->m_pos.Distance(m_fingers[1]->m_pos);
-			GLfloat ratio=currentDistance/firstDistance;
-			Global::pActiveCamera->SetScale(m_firstScale*ratio);
+		m_playerObject->SetLinearAcceleration(m_pPGInputController->GetMovementDirection());
 
-			GLfloat lastAngle=(m_lastFramePosition[1]-m_lastFramePosition[0]).Angle();
-			GLfloat	currentAngle=(m_fingers[1]->m_pos-m_fingers[0]->m_pos).Angle();
-			GLfloat angle=currentAngle-lastAngle;
-			Global::pActiveCamera->RotateDirection(angle);
-		}
-
-		if(m_fingers[0])
-		{
-			m_lastFramePosition[0]=m_fingers[0]->m_pos;
-		}
-		if(m_fingers[1])
-		{
-			m_lastFramePosition[1]=m_fingers[1]->m_pos;
-		}
-
-		//NOT FINAL HERE!!!
-		m_playerObject->SetLinearAcceleration( (m_joystick->m_dir*5.0f).Rotated(Global::pActiveCamera->GetDirection().Angle()) );
-		//NOT FINAL HERE!!!
-
-		if(m_requestExit)
+		if(m_pPGInputController->IsUserRequestingExit())
 		{
 			return EVENT_PLAYGAME_EXIT;
 		}
@@ -153,26 +113,24 @@ namespace Game
 
 		m_background->Render();
 
-		m_joystick->Render();
+		m_pPGInputController->Render();
 	}
 
 	PlayGame::~PlayGame()
 	{
+		delete m_pPGInputController;
+
 		delete m_particleTex;
 		delete m_pEmitter;
 
 		delete m_enemyTexture;
 		delete m_playerTexture;
-		delete m_joystickInnerTex;
-		delete m_joystickOuterTex;
 
 		delete m_enemySprite;
 		delete m_playerSprite;
 
 		delete m_enemyObject;
 		delete m_playerObject;
-
-		delete m_joystick;
 
 		delete m_backgroundTexture;
 		delete m_background;
@@ -183,65 +141,6 @@ namespace Game
 		//should be deleted in final version
 		delete m_testSprite;
 		delete m_testTexture;
-	}
-
-	void PlayGame::onBackKey(void *pointer)
-	{
-		PlayGame *pPlayGame=(PlayGame*)(pointer);
-		pPlayGame->m_requestExit=true;
-	}
-
-	void PlayGame::DOWN_callback(void *param1, void *param2)
-	{
-		PlayGame *pPlayGame=(PlayGame*)(param1);
-		Finger *pFinger=(Finger*)(param2);
-		if(pFinger->m_flag==FF_LOCKED)
-		{
-			return;
-		}
-		if(pPlayGame->m_fingers[0]==NULL)
-		{
-			pFinger->m_flag=FF_LOCKED;
-			pPlayGame->m_lastFramePosition[0]=pFinger->m_pos;
-			pPlayGame->m_fingers[0]=pFinger;
-			return;
-		}
-		if(pPlayGame->m_fingers[1]==NULL)
-		{
-			pFinger->m_flag==FF_LOCKED;
-			pPlayGame->m_firstPosition[0]=pPlayGame->m_fingers[0]->m_pos;
-			pPlayGame->m_firstPosition[1]=pFinger->m_pos;
-			pPlayGame->m_lastFramePosition[1]=pFinger->m_pos;
-			pPlayGame->m_fingers[1]=pFinger;
-			pPlayGame->m_firstScale=Global::pActiveCamera->GetScale();
-		}
-	}
-
-	void PlayGame::UP_callback(void *param1, void *param2)
-	{
-		PlayGame *pPlayGame=(PlayGame*)(param1);
-		Finger *pFinger=(Finger*)(param2);
-		if(pPlayGame->m_fingers[1]==pFinger)
-		{
-			pFinger->m_flag=FF_FREE;
-			pPlayGame->m_fingers[1]=NULL;
-			return;
-		}
-		if(pPlayGame->m_fingers[0]==pFinger)
-		{
-			pFinger->m_flag==FF_FREE;
-			if(pPlayGame->m_fingers[1]!=NULL)
-			{
-				LOGD("SECOND FINGER GETS TO BE FIRST");
-				pPlayGame->m_fingers[0]=pPlayGame->m_fingers[1];
-				pPlayGame->m_lastFramePosition[0]=pPlayGame->m_lastFramePosition[1];
-				pPlayGame->m_fingers[1]=NULL;
-			}
-			else
-			{
-				pPlayGame->m_fingers[0]=NULL;
-			}
-		}
 	}
 
 	void PlayGame::Physics_callback(void *param1, void *param2)

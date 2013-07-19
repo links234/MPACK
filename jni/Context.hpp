@@ -3,10 +3,11 @@
 
 #include "Types.hpp"
 
+#include "InputService.hpp"
+
 namespace Core
 {
 	class GraphicsService;
-	class InputService;
 	class SoundService;
     class TimeService;
     class PhysicsService;

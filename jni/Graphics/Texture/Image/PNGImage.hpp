@@ -2,7 +2,6 @@
 #define PNGIMAGE_HPP
 
 #include "Image.hpp"
-#include "Context.hpp"
 #include "Types.hpp"
 
 #include <png.h>

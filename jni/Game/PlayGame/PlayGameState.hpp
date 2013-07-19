@@ -12,10 +12,6 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 
-
-//temp
-#include "Joystick.hpp"
-
 using namespace Core;
 
 namespace Game
@@ -31,34 +27,20 @@ namespace Game
 		~PlayGame();
 
 	private:
-		static void onBackKey(void *pointer);
-
-		static void DOWN_callback(void *param1, void *param2);
-		static void UP_callback(void *param1, void *param2);
-
 		static void Physics_callback(void *param1, void *param2);
 
-		bool m_requestExit;
+		PGInputController	*m_pPGInputController;
 
 		Texture2D		*m_backgroundTexture;
 		TiledBackground	*m_background;
 
-		Texture2D 	*m_playerTexture;
-		Sprite		*m_playerSprite;
-		Player		*m_playerObject;
+		Texture2D 		*m_playerTexture;
+		Sprite			*m_playerSprite;
+		Player			*m_playerObject;
 
-		Texture2D 	*m_enemyTexture;
-		Sprite		*m_enemySprite;
-		Enemy		*m_enemyObject;
-
-		Texture2D	*m_joystickInnerTex;
-		Texture2D	*m_joystickOuterTex;
-		Joystick 	*m_joystick;
-
-		Finger		*m_fingers[2];
-		Vector2f	m_firstPosition[2];
-		Vector2f	m_lastFramePosition[2];
-		GLfloat		m_firstScale;
+		Texture2D 		*m_enemyTexture;
+		Sprite			*m_enemySprite;
+		Enemy			*m_enemyObject;
 
 		Texture2D				*m_particleTex;
 		ParticleEmitterCircle 	*m_pEmitter;

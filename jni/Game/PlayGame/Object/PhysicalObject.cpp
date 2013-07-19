@@ -38,7 +38,7 @@ void PhysicalObject::Render()
 		{
 			PCircle *circle=(PCircle*)(m_shape);
 			transformState.SetScale(circle->GetRadius());
-			SpriteBatcher::SendDebugCircle(Debug::CirclePoints,color,transformState);
+			SpriteBatcher::SendDebugCircle(Debug::circlePoints,color,transformState);
 		}
 	}
 	m_debugInCollision=false;

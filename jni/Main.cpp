@@ -1,3 +1,4 @@
+#include "Platform.hpp"
 #include "Context.hpp"
 #include "Application.hpp"
 #include "EventLoop.hpp"

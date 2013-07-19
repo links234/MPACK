@@ -6,8 +6,10 @@
 GUIMenu::GUIMenu()
 	: action(0)
 {
-	Global::pContext->pInputService->Link_FDOWN(Param2PtrCallbackStruct(GUIMenu::DOWNEvent,this));
-	Global::pContext->pInputService->Link_FUP(Param2PtrCallbackStruct(GUIMenu::UPEvent,this));
+	m_pMMInputController=MMInputController::InitializeController();
+
+	m_pMMInputController->Link_FDOWN(Param2PtrCallbackStruct(GUIMenu::DOWNEvent,this));
+	m_pMMInputController->Link_FUP(Param2PtrCallbackStruct(GUIMenu::UPEvent,this));
 }
 
 GUIMenu::~GUIMenu()
@@ -16,6 +18,8 @@ GUIMenu::~GUIMenu()
 	{
 		delete (*it);
 	}
+
+	delete m_pMMInputController;
 }
 
 int GUIMenu::Update(GLfloat timeStep)

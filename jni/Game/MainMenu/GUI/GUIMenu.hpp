@@ -1,6 +1,7 @@
 #ifndef GUIMENU_HPP
 #define GUIMENU_HPP
 
+#include "MMInputController.hpp"
 #include "GUIMenuButton.hpp"
 #include "Sprite.hpp"
 #include "Global.hpp"
@@ -28,6 +29,8 @@ public:
 	Sprite *m_sprite;
 private:
 	vector<GUIMenuButton*> m_button;
+
+	MMInputController *m_pMMInputController;
 
 	int action;
 };

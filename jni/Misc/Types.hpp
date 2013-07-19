@@ -1,19 +1,25 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
-#include <android_native_app_glue.h>
-#include <EGL/egl.h>
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
-#include <SLES/OpenSLES.h>
-#include <SLES/OpenSLES_Android.h>
-#include <SLES/OpenSLES_AndroidConfiguration.h>
+#include "Platform.hpp"
+
+#ifdef ANDROID_PLATFORM
+	#include <android_native_app_glue.h>
+	#include <EGL/egl.h>
+	#include <GLES2/gl2.h>
+	#include <GLES2/gl2ext.h>
+	#include <SLES/OpenSLES.h>
+	#include <SLES/OpenSLES_Android.h>
+	#include <SLES/OpenSLES_AndroidConfiguration.h>
+#elif WINDOWS_PLATFORM
+
+#endif
+
 #include <cstdlib>
 #include <cstdint>
 #include <cstring>
 #include <string>
 
-#include "Context.hpp"
 #include "Debug.hpp"
 
 typedef unsigned int	 	GLenum;
