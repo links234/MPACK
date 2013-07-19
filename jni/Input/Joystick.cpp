@@ -17,7 +17,7 @@ void Joystick::SetTextures(Texture2D *innerTex, Texture2D *outerTex)
 	m_outerSprite.SetTexture(outerTex);
 	m_innerSprite.SetTexture(innerTex);
 
-	m_outerSprite.SetSize(70.0f,70.0f);
+	m_outerSprite.SetSize(80.0f,80.0f);
 	m_innerSprite.SetSize(60.0f,60.0f);
 
 	m_outerSprite.SetShading(SpriteVertex::ALPHA_BLEND);
@@ -53,10 +53,14 @@ void Joystick::Render()
 	{
 		m_outerSprite.m_position=m_firstPos;
 		m_innerSprite.m_position=m_currentPos;
-
-		m_outerSprite.Render();
-		m_innerSprite.Render();
 	}
+	else
+	{
+		GLfloat dist=m_actionCircleRadius*0.25f;
+		m_outerSprite.m_position=m_innerSprite.m_position=m_actionCircleCenter+Vector2f(dist,-dist);
+	}
+	m_outerSprite.Render();
+	m_innerSprite.Render();
 }
 
 Joystick::~Joystick()
