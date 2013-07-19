@@ -21,6 +21,7 @@ class TextureMappedFont;
 namespace Debug
 {
 	extern GLuint	printLines;
+	extern GLuint	circlePoints;
 	extern GLfloat	printFontSize;
 	extern GLfloat	layer;
 
