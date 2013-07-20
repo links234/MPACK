@@ -1,6 +1,11 @@
 #include "Playlist.hpp"
+
+#include "Sound.hpp"
+#include "Random.hpp"
+#include "Context.hpp"
 #include "Resource.hpp"
 
+using namespace std;
 
 namespace Core
 {
@@ -8,22 +13,20 @@ namespace Core
         mSound(NULL), mPlayMode(FORWARD), mLoop(true)
     {
 		Load(pPath, true);
-
     }
-
 
 	Playlist::~Playlist()
 	{
 		delete mSound;
-
-
 	}
 
 	void Playlist::Load(const char* pPath, bool forced)
 	{
 		strcpy(mNFile, pPath);
 		if(forced)
+		{
 			useNewPlist();
+		}
 	}
 
 	void Playlist::useNewPlist()
@@ -37,7 +40,6 @@ namespace Core
 		int size = pResource->GetLength();
 
 		plist = new char[size];
-
 
 		pResource->Read(plist, size);
 		pResource->Close();
@@ -65,9 +67,6 @@ namespace Core
 			}
 		}
 
-
-
-
 		mList.resize(num);
 
 		int p = 0;
@@ -75,7 +74,6 @@ namespace Core
 		num = 0;
 		for(int i = 0; plist[i] != '\0' && num < mList.size(); i++)
 		{
-
 			if(plist[i] == '\n')
 			{
 				(*t).push_back('\0');
@@ -87,7 +85,6 @@ namespace Core
 				{
 					i++;
 				}
-
 			}
 			else
 			{
@@ -109,10 +106,7 @@ namespace Core
 		strcpy(mCFile, mNFile);
 		mNFile[0] = '\0';
 
-
 		Print();
-
-
 	}
 
 	void Playlist::Print()
@@ -129,7 +123,8 @@ namespace Core
 		LOGI("End of Playlist");
 	}
 
-	void Playlist::updateSound(){
+	void Playlist::updateSound()
+	{
 		if(strcmp(&(*mCurTrackIt)[0], mSound->GetPath()) != 0)
 		{
 			delete mSound;
@@ -142,67 +137,63 @@ namespace Core
 	bool Playlist::Next()
 	{
 		if(mNFile[0] != '\0')
+		{
 			useNewPlist();
+		}
 
 		switch(mPlayMode)
 		{
-
-		case FORWARD:
-			mCurTrackIt++;
-
-			if(mCurTrackIt == mList.end())
-			{
-
-				if(mLoop)
-				{
-					mCurTrackIt = mList.begin();
-				}
-				else
-				{
-					mCurTrackIt--;
-					return false;
-				}
-			}
-
-			break;
-
-		case BACKWARD:
-			if(mCurTrackIt == mList.begin())
-			{
-				if(mLoop)
-				{
-					mCurTrackIt = mList.end();
-				}
-				else
-				{
-					return false;
-				}
-			}
-
-			mCurTrackIt--;
-			break;
-		case SHUFFLE:
-			mCurTrackIt = mList.begin();
-			int n;
-			n = Core::Random::Int(0, mList.size() - 1);
-			LOGI("SHUFFLED FOR %d", n);
-			for(int i = 0; i < n; i++)
-			{
+			case FORWARD:
 				mCurTrackIt++;
-			}
+
+				if(mCurTrackIt == mList.end())
+				{
+
+					if(mLoop)
+					{
+						mCurTrackIt = mList.begin();
+					}
+					else
+					{
+						mCurTrackIt--;
+						return false;
+					}
+				}
 			break;
 
-		default:
-			LOGE("Bad enum value in playlist PlayMode");
+			case BACKWARD:
+				if(mCurTrackIt == mList.begin())
+				{
+					if(mLoop)
+					{
+						mCurTrackIt = mList.end();
+					}
+					else
+					{
+						return false;
+					}
+				}
+				mCurTrackIt--;
+			break;
+			case SHUFFLE:
+				mCurTrackIt = mList.begin();
+				int n;
+				n = Core::Random::Int(0, mList.size() - 1);
+				LOGI("SHUFFLED FOR %d", n);
+				for(int i = 0; i < n; i++)
+				{
+					mCurTrackIt++;
+				}
+			break;
+			default:
+				LOGE("Bad enum value in playlist PlayMode");
+			break;
 		}
-
 
 		updateSound();
 
 		return true;
 	}
-
-
 
 	Sound* Playlist::GetSound()
 	{

@@ -12,7 +12,6 @@
     #define D if(1)
 #endif
 
-#include "Types.hpp"
 #include "Helper.hpp"
 #include "Log.hpp"
 
@@ -20,10 +19,10 @@ class TextureMappedFont;
 
 namespace Debug
 {
-	extern GLuint	printLines;
-	extern GLuint	circlePoints;
-	extern GLfloat	printFontSize;
-	extern GLfloat	layer;
+	extern int		printLines;
+	extern int		circlePoints;
+	extern float	printFontSize;
+	extern float	layer;
 
 	void InitFrame();
 	void Print(TextureMappedFont *font, const char *message, ...);

@@ -7,6 +7,7 @@
 #include "Application.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
+#include "Context.hpp"
 #include "Particles.hpp"
 #include "Camera2D.hpp"
 

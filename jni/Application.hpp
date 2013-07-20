@@ -1,12 +1,17 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
-#include "ActivityHandler.hpp"
-#include "GameState.hpp"
-#include "Context.hpp"
 #include "Types.hpp"
+#include "ActivityHandler.hpp"
 
-#include <android_native_app_glue.h>
+namespace Core
+{
+	class Context;
+}
+namespace Game
+{
+	class GameState;
+}
 
 namespace Game
 {

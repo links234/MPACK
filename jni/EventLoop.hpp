@@ -1,10 +1,12 @@
 #ifndef EVENTLOOP_HPP
 #define EVENTLOOP_HPP
 
-#include "ActivityHandler.hpp"
 #include "Types.hpp"
 
-#include <android_native_app_glue.h>
+namespace Core
+{
+	class ActivityHandler;
+}
 
 namespace Core
 {

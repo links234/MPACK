@@ -4,6 +4,7 @@
 #include "TimeService.hpp"
 #include "Texture2D.hpp"
 #include "Global.hpp"
+#include "Context.hpp"
 #include "GUIMenu.hpp"
 #include "Particles.hpp"
 

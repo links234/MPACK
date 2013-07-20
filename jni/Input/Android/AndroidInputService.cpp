@@ -9,6 +9,9 @@
 
 #include "InputService.hpp"
 
+using namespace std;
+using namespace Math;
+
 namespace Core
 {
 	AndroidInputService::AndroidInputService()

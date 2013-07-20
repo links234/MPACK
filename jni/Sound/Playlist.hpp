@@ -1,16 +1,16 @@
 #ifndef PLAYLIST_HPP
 #define PLAYLIST_HPP
 
-#include "Context.hpp"
-#include "Resource.hpp"
 #include "Types.hpp"
-#include "Sound.hpp"
-#include "Random.hpp"
 
 #include <vector>
 #include <list>
 
-using namespace std;
+namespace Core
+{
+	class Context;
+	class Sound;
+}
 
 namespace Core
 {
@@ -39,8 +39,8 @@ namespace Core
     private:
 
         char mCFile[40], mNFile[40]; // current file name, new file name
-        list<vector<char> > mList;
-        list<vector<char> >::iterator mCurTrackIt;
+        std::list<std::vector<char> > mList;
+        std::list<std::vector<char> >::iterator mCurTrackIt;
         PlayMode mPlayMode;
         bool mLoop;
 

@@ -7,7 +7,6 @@
 
 class Camera2D;
 class TextureMappedFont;
-
 namespace Core
 {
 	class Context;

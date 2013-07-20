@@ -1,5 +1,6 @@
 #include "EventLoop.hpp"
 
+#include "ActivityHandler.hpp"
 #include "Context.hpp"
 #include "InputService.hpp"
 #include "Global.hpp"

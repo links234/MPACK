@@ -8,10 +8,10 @@ namespace Debug
 {
 	const int DEBUGMESSAGEBUFFER_SIZE = 1024;
 
-	GLuint	printLines;
-	GLuint	circlePoints = 30;
-	GLfloat	printFontSize = 40.0f;
-	GLfloat	layer = 805.0f;
+	int		printLines;
+	int		circlePoints = 30;
+	float	printFontSize = 40.0f;
+	float	layer = 805.0f;
 
 	void InitFrame()
 	{

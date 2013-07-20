@@ -2,7 +2,6 @@
 #define CONTEXT_HPP
 
 #include "Types.hpp"
-
 #include "InputService.hpp"
 
 namespace Core
@@ -11,9 +10,13 @@ namespace Core
 	class SoundService;
     class TimeService;
     class PhysicsService;
+}
 
-    struct Context
+namespace Core
+{
+    class Context
     {
+    public:
     	GraphicsService* 	pGraphicsService;
     	InputService*		pInputService;
     	SoundService*		pSoundService;

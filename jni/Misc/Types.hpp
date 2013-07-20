@@ -20,7 +20,8 @@
 #include <cstring>
 #include <string>
 
-#include "Debug.hpp"
+#include "Maths.hpp"
+#include "../Debug/Debug.hpp"
 
 typedef unsigned int	 	GLenum;
 typedef unsigned char	 	GLboolean;

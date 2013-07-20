@@ -3,8 +3,8 @@
 
 #include "Platform.hpp"
 
-#include "AndroidInputService.hpp"
-#include "WindowsInputService.hpp"
+#include "Android/AndroidInputService.hpp"
+#include "Windows/WindowsInputService.hpp"
 
 namespace Core
 {
@@ -16,9 +16,9 @@ namespace Core
 			LOCKED
 		};
 
-		GLuint 		m_id;
-		Flag 		m_flag;
-		Vector2f 	m_pos;
+		GLuint 			m_id;
+		Flag 			m_flag;
+		Math::Vector2f 	m_pos;
 	};
 
 #ifdef ANDROID_PLATFORM

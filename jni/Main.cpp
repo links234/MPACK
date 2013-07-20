@@ -2,14 +2,14 @@
 #include "Context.hpp"
 #include "Application.hpp"
 #include "EventLoop.hpp"
-#include "GraphicsService.hpp"
+#include "Graphics/GraphicsService.hpp"
 #include "InputService.hpp"
-#include "SoundService.hpp"
-#include "TimeService.hpp"
-#include "Physics.hpp"
-#include "Random.hpp"
+#include "Sound/SoundService.hpp"
+#include "Misc/TimeService.hpp"
+#include "Physics/Physics.hpp"
+#include "Misc/Random.hpp"
 #include "Global.hpp"
-#include "Debug.hpp"
+#include "Debug/Debug.hpp"
 
 void android_main(android_app* pApplication)
 {
