@@ -25,7 +25,6 @@ namespace Game
 	Core::Status Application::onActivate()
     {
 		LOGI("Application::onActivate");
-
         // Starts services.
 		if (Global::pContext->pGraphicsService->Start() != Core::STATUS_OK)
 		{

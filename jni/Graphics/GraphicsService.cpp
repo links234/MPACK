@@ -66,10 +66,10 @@ namespace Core
 
     Status GraphicsService::LoadResources()
     {
-    	InitVertexPrograms();
+		Global::pFont=new TextureMappedFont;
+		Global::pFont->Load("@Fonts/Font.tga");
 
-    	Global::pFont=new TextureMappedFont;
-    	Global::pFont->Load("@Fonts/Font.tga");
+    	InitVertexPrograms();
 
     	return STATUS_OK;
     }

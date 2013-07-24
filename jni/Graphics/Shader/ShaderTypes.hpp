@@ -9,6 +9,7 @@ class AbstractProgramType: public GLSLProgram
 {
 public:
 	AbstractProgramType(const char* vertexShader, const char* fragmentShader, const char* header=NULL): GLSLProgram(vertexShader, fragmentShader, header){};
+
 	virtual ~AbstractProgramType(){};
 
 	virtual void BindAttributeLocations() = 0;

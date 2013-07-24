@@ -23,6 +23,10 @@ namespace Core
     Status WindowsEventLoop::Run(ActivityHandler* pActivityHandler)
     {
     	m_pActivityHandler = pActivityHandler;
+    	m_isRunning=true;
+
+    	InitializeDisplay();
+    	m_pActivityHandler->onActivate();
 
         // Global step loop.
         while(m_isRunning)
@@ -34,6 +38,9 @@ namespace Core
 			}
 			SwapBuffers();
 		}
+
+        m_pActivityHandler->onDeactivate();
+        DestroyDisplay();
         return STATUS_OK;
     }
 

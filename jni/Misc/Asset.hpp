@@ -26,7 +26,7 @@ namespace Core
         virtual void Close();
         virtual Status Read(void* pBuffer, size_t pCount);
 
-        virtual off_t GetLength();
+        virtual int GetLength();
         virtual const void* Bufferize();
 
         virtual ~Asset();

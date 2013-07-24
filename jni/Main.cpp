@@ -12,6 +12,8 @@
 #include "Global.hpp"
 #include "Debug/Debug.hpp"
 
+#include <fstream>
+
 #ifdef ANDROID_PLATFORM
 void android_main(android_app* pApplication)
 #elif 	defined(WINDOWS_PLATFORM)
@@ -23,13 +25,29 @@ int WINAPI WinMain(HINSTANCE hInstance,
 {
 	//Debug::WaitToConnect(5);
 
+	std::ifstream file1( "assets/Shaders/sprite.vert", ios::binary | ios::ate);
+		LOGD("size = %d",(int)file1.tellg());
+		file1.close();
+
+	std::ifstream ffile( "assets/Shaders/sprite.vert", ios::binary );
+
+	std::ifstream file( "assets/Shaders/sprite.vert", ios::binary | ios::ate);
+	LOGD("size = %d",(int)file.tellg());
+	file.close();
+
+	ffile.close();
+
+	std::ifstream file2( "assets/Shaders/sprite.vert", ios::binary | ios::ate);
+		LOGD("size = %d",(int)file2.tellg());
+		file2.close();
+
+
 #ifdef ANDROID_PLATFORM
 	Global::pAndroidApp=pApplication;
 	Global::pAAssetManager=pApplication->activity->assetManager;
 #endif
 
 	Core::Random::Init();
-
     Core::TimeService *pTimeService = Core::TimeService::Initialize();
     Core::GraphicsService lGraphicsService;
     Core::SoundService lSoundService;

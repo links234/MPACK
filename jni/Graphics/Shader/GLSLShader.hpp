@@ -39,11 +39,17 @@ public:
     	{
     		m_header="";
     	}
+    	MessageBox(NULL,"GLSLProgram startaaaaaaaaa","Fatal error",MB_OK);
 
     	Resource *vertexShaderResourcePointer=LoadResource(vertexShader);
+    	MessageBox(NULL,"GLSLProgram load res ok","Fatal error",MB_OK);
     	vertexShaderResourcePointer->Open();
+    	MessageBox(NULL,"GLSLProgram open ok","Fatal error",MB_OK);
+    	MessageBox(NULL,(const char*)vertexShaderResourcePointer->Bufferize(),"Fatal error",MB_OK);
     	m_vertexShader.source=string((const char*)(vertexShaderResourcePointer->Bufferize()));
+    	MessageBox(NULL,"conversion ok","Fatal error",MB_OK);
     	delete vertexShaderResourcePointer;
+    	MessageBox(NULL,"delete ok","Fatal error",MB_OK);
 
     	Resource *fragmentShaderResourcePointer=LoadResource(fragmentShader);
 		fragmentShaderResourcePointer->Open();

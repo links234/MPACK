@@ -28,8 +28,9 @@ namespace Core
 
 	Status TargaImage::Load(const string& filename)
 	{
+		LOGD("BLA!!! 11111");
 		Resource *resource=LoadResource(filename.c_str());
-
+LOGD("BLA!!!");
 		if (resource->Open()!=STATUS_OK)
 		{
 			LOGE("Could not open the targa image file for reading");

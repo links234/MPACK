@@ -49,7 +49,7 @@ namespace Core
         return (lReadCount == pCount) ? STATUS_OK : STATUS_KO;
     }
 
-    off_t Asset::GetLength()
+    int Asset::GetLength()
     {
         return AAsset_getLength(mAsset);
     }

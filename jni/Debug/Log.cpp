@@ -3,11 +3,16 @@
 #include "Platform.hpp"
 
 #include <stdarg.h>
+
 #ifdef ANDROID_PLATFORM
 #include <android/log.h>
+#elif	defined(WINDOWS_PLATFORM)
+#include <windows.h>
+#include <cstdio>
 #endif
 
-#define LOG_TAG "MPACK"
+#define LOG_TAG 		"MPACK"
+#define	 BUFFERSIZE 	512
 
 namespace Core
 {
@@ -52,6 +57,14 @@ namespace Core
         __android_log_vprint(ANDROID_LOG_DEBUG, LOG_TAG, pMessage, lVarArgs);
         __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
         va_end(lVarArgs);
+#elif	defined(WINDOWS_PLATFORM)
+        char buffer[BUFFERSIZE];
+        va_list lVarArgs;
+		va_start(lVarArgs, pMessage);
+		vsprintf (buffer,pMessage,lVarArgs);
+		va_end(lVarArgs);
+
+		MessageBox(NULL,buffer,"Debug message",MB_OK);
 #endif
     }
 }

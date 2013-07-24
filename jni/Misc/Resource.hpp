@@ -9,6 +9,7 @@ namespace Core
     {
     public:
         Resource(const char* pPath);
+        virtual ~Resource();
 
         const char* GetPath();
 
@@ -16,12 +17,10 @@ namespace Core
         virtual void Close() = 0;
         virtual Status Read(void* pBuffer, size_t pCount) = 0;
 
-        virtual off_t GetLength() = 0;
+        virtual int GetLength() = 0;
         virtual const void* Bufferize() = 0;
-
-        virtual ~Resource();
     protected:
-        const char* 	mPath;
+        char* 	mPath;
     };
 
     Resource* LoadResource(const char* pPath);

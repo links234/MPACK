@@ -1,21 +1,23 @@
 #include "SDInputFile.hpp"
 #include "Log.hpp"
 
-#include <sys/stat.h>
-
 namespace Core
 {
     SDInputFile::SDInputFile(const char* pPath):
         Resource(pPath), mInputStream(), mBuffer(NULL)
     {
+    	LOGD("Test3");
     }
 
     Status SDInputFile::Open()
     {
+    	LOGD("Test4 |%s| ",mPath);
         mInputStream.open(mPath, std::ios::in | std::ios::binary);
+        LOGD("Test5");
         if(mInputStream)
         {
-        	LOGE("Failed to open SD file: %s",mPath);
+        	LOGD("ADASDASJDASKHDASKH");
+        	LOGD("Failed to open SD file: |%s|",mPath);
         }
         return mInputStream ? STATUS_OK : STATUS_KO;
     }
@@ -39,23 +41,22 @@ namespace Core
         return (!mInputStream.fail()) ? STATUS_OK : STATUS_KO;
     }
 
-    off_t SDInputFile::GetLength()
+    int SDInputFile::GetLength()
     {
-        struct stat filestatus;
-        if (stat(mPath, &filestatus) >= 0)
-        {
-            return filestatus.st_size;
-        }
-        else
-        {
-            return -1;
-        }
+    	LOGD("%s",mPath);
+    	std::ifstream file( mPath, std::ios::binary | std::ios::ate);
+    	return (int)file.tellg();
     }
 
     const void* SDInputFile::Bufferize()
     {
-        off_t lSize = GetLength();
-        if (lSize <= 0) return NULL;
+        int lSize = GetLength();
+        LOGD("lSize = %d",lSize);
+        if (lSize <= 0)
+        {
+        	MessageBox(NULL,"GetLength()==NULL ....","Fatal error",MB_OK);
+        	return NULL;
+        }
 
         mBuffer = new char[lSize];
         mInputStream.read(mBuffer, lSize);
