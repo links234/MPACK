@@ -11,12 +11,14 @@
 
 namespace Core
 {
-    SoundService::SoundService() :
-        mEngineObj(NULL), mEngine(NULL),
+    SoundService::SoundService()
+#ifdef ANDROID_PLATFORM
+       : mEngineObj(NULL), mEngine(NULL),
         mOutputMixObj(NULL),
         mBGMPlayerObj(NULL), mBGMPlayer(NULL),
         mPlayerObj(), mPlayer(), mPlayerQueue(),
         mSounds(), mPlaylist(NULL)
+#endif
     {
         LOGI("Creating SoundService.");
     }
@@ -24,6 +26,7 @@ namespace Core
 
     SoundService::~SoundService()
     {
+#ifdef ANDROID_PLATFORM
         LOGI("Destroying SoundService.");
 
         for (map<string, Sound*>::iterator it = mSounds.begin(); it != mSounds.end(); ++it)
@@ -33,11 +36,13 @@ namespace Core
         }
 
         mSounds.clear();
+#endif
     }
 
     Status SoundService::Start()
     {
         LOGI("Starting SoundService.");
+#ifdef ANDROID_PLATFORM
         SLresult lRes;
         const SLuint32      lEngineMixIIDCount = 0;
         const SLInterfaceID lEngineMixIIDs[]   = {};
@@ -84,13 +89,14 @@ namespace Core
     ERROR:
         LOGE("Error while starting SoundService");
         Stop();
+#endif
         return STATUS_KO;
     }
 
     void SoundService::Stop()
     {
     	LOGI("Stopping SoundService.");
-
+#ifdef ANDROID_PLATFORM
         // Stops and destroys BGM player.
         //StopBGM();
     	if (mBGMPlayerObj != NULL)
@@ -128,11 +134,13 @@ namespace Core
 		}
 
 		mSounds.clear();
+#endif
     }
 
     Status SoundService::StartSoundPlayers()
     {
     	LOGSS("Starting sound players.");
+#ifdef ANDROID_PLATFORM
         SLresult lRes;
 
         // Set-up sound audio source.
@@ -201,12 +209,14 @@ namespace Core
 
     ERROR:
         LOGE("Error while starting sound players");
+#endif
         return STATUS_KO;
     }
 
     Status SoundService::StartBGMPlayer()
     {
     	LOGSS("Starting bgm player.");
+#ifdef ANDROID_PLATFORM
 		SLresult lRes;
 
 
@@ -268,11 +278,13 @@ namespace Core
 
     ERROR:
         LOGE("Error while starting bgm players");
+#endif
         return STATUS_KO;
     }
 
     Status SoundService::PlayBGMPlaylist(const char* pPath, bool forced)
     {
+#ifdef ANDROID_PLATFORM
     	SLresult lRes;
 
     	if(mPlaylist == NULL)
@@ -324,6 +336,7 @@ namespace Core
         return STATUS_OK;
 
     ERROR:
+#endif
         return STATUS_KO;
     }
 
@@ -331,6 +344,7 @@ namespace Core
     void SoundService::RegisterSound(const char* pPath)
     {
     	LOGSS("Registering sound");
+#ifdef ANDROID_PLATFORM
         // Finds out if texture already loaded.
     	if(mSounds.count(pPath) == 0){
     		mSounds.insert(pair<string, Sound*>(pPath, new Sound(pPath)));
@@ -342,11 +356,13 @@ namespace Core
     		LOGSS("Already loaded %s", pPath);
     		return;
     	}
+#endif
     }
 
     void SoundService::UnregisterSound(const char* pPath)
     {
     	LOGI("Unregistering sound");
+#ifdef ANDROID_PLATFORM
     	if(mSounds.count(pPath) == 1){
     		mSounds[pPath]->Unload();
     		delete mSounds[pPath];
@@ -358,11 +374,12 @@ namespace Core
     		LOGSS("Not registered %s", pPath);
     		return;
     	}
-
+#endif
     }
 
     void SoundService::PlaySFX(const char* pPath, bool load)
     {
+#ifdef ANDROID_PLATFORM
     	if(load)
     	{
     		RegisterSound(pPath);
@@ -421,9 +438,10 @@ namespace Core
 
     ERROR:
         LOGE("Error trying to play sound");
+#endif
     }
 
-
+#ifdef ANDROID_PLATFORM
     void SoundService::bqBGMPlayerCallback(SLBufferQueueItf bq, void *context)
     {
     	LOGSS("BGM Track done. Loading next one");
@@ -433,7 +451,9 @@ namespace Core
     			(*bq)->Enqueue(bq, snd->GetPCMData(), snd->GetPCMLength());
     	}
     }
+#endif
 
+#ifdef ANDROID_PLATFORM
     void SoundService::bqSFXPlayerCallback(SLBufferQueueItf bq, void *context)
     {
     	Sound* &snd = *((Sound**)context);
@@ -446,8 +466,10 @@ namespace Core
     		snd = NULL;
     	}
     }
+#endif
 
 
+#ifdef ANDROID_PLATFORM
     void SoundService::SetBGMState(SLuint32 state)
     {
        	(*mBGMPlayer)->SetPlayState(mBGMPlayer, state);
@@ -459,41 +481,56 @@ namespace Core
     		(*mPlayer[i])->SetPlayState(mPlayer[i], state);
     	}
     }
+#endif
     
     void SoundService::StopBGM()
     {
+#ifdef ANDROID_PLATFORM
         SetBGMState(SL_PLAYSTATE_STOPPED);
+#endif
     }
 
     void SoundService::PauseBGM()
     {
+#ifdef ANDROID_PLATFORM
     	SetBGMState(SL_PLAYSTATE_PAUSED);
+#endif
     }
 
 	void SoundService::PauseSFX()
 	{
+#ifdef ANDROID_PLATFORM
 		SetSFXState(SL_PLAYSTATE_PAUSED);
+#endif
 	}
 
 	void SoundService::PauseAll()
 	{
+#ifdef ANDROID_PLATFORM
 		PauseBGM();
 		PauseSFX();
+#endif
 	}
 
 	void SoundService::ResumeBGM()
 	{
+#ifdef ANDROID_PLATFORM
 		SetBGMState(SL_PLAYSTATE_PLAYING);
+#endif
 	}
 
 	void SoundService::ResumeSFX()
 	{
+#ifdef ANDROID_PLATFORM
 		SetSFXState(SL_PLAYSTATE_PLAYING);
+#endif
 	}
 
 	void SoundService::ResumeAll()
 	{
+#ifdef ANDROID_PLATFORM
 		ResumeBGM();
 		ResumeSFX();
+#endif
 	}
 }

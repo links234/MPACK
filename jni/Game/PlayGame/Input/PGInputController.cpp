@@ -12,12 +12,12 @@ PGInputController::~PGInputController()
 {
 }
 
-PGInputController* PGInputController::InitializeController()
+PGInputController* PGInputController::Initialize()
 {
 	PGInputController *pPGInputController=NULL;
 #ifdef ANDROID_PLATFORM
 	pPGInputController=new PGAndroidInput();
-#elif 	WINDOWS_PLATFORM
+#elif 	defined(WINDOWS_PLATFORM)
 	pPGInputController=new PGWindowsInput();
 #endif
 	return pPGInputController;

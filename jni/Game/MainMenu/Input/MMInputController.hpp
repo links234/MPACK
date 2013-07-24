@@ -19,7 +19,7 @@ public:
 	void Link_FUP(const Param2PtrCallbackStruct &link);
 	void Link_FDOWN(const Param2PtrCallbackStruct &link);
 
-	static MMInputController* InitializeController();
+	static MMInputController* Initialize();
 
 protected:
 	vector<Param2PtrCallbackStruct> m_callbackFunc_FUP;

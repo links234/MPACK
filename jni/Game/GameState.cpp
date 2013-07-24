@@ -16,7 +16,7 @@ namespace Game
 	{
 #ifdef ANDROID_PLATFORM
 		Global::pContext->pInputService->ClearLinks();
-#elif 	WINDOWS_PLATFORM
+#elif 	defined(WINDOWS_PLATFORM)
 
 #endif
 		Particle::Clear();

@@ -1,40 +1,48 @@
-#include "TimeService.hpp"
+#include "Platform.hpp"
+
+#ifdef ANDROID_PLATFORM
+
+#include "AndroidTimeService.hpp"
+
 #include "Log.hpp"
 
+#include <time.h>
 #include <cstdlib>
 
 namespace Core
 {
-    TimeService::TimeService() :
+	AndroidTimeService::AndroidTimeService() :
         mElapsed(0.0f),
         mLastTime(0.0f)
     {
-    	srand(time(NULL));
     }
 
-    void TimeService::Reset()
+    void AndroidTimeService::Reset()
     {
         LOGI("Resetting TimeService.");
         mElapsed = 0.0f;
         mLastTime = Now();
     }
 
-    void TimeService::Update()
+    void AndroidTimeService::Update()
     {
         double lCurrentTime = Now();
         mElapsed = (lCurrentTime - mLastTime);
         mLastTime = lCurrentTime;
     }
 
-    double TimeService::Now()
+    double AndroidTimeService::Now()
     {
         timespec lTimeVal;
         clock_gettime(CLOCK_MONOTONIC, &lTimeVal);
         return lTimeVal.tv_sec + (lTimeVal.tv_nsec * 1.0e-9);
     }
 
-    float TimeService::Elapsed()
+    float AndroidTimeService::Elapsed()
     {
         return mElapsed;
     }
 }
+
+#endif
+

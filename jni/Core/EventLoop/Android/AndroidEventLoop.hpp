@@ -1,7 +1,12 @@
-#ifndef EVENTLOOP_HPP
-#define EVENTLOOP_HPP
+#include "Platform.hpp"
+
+#ifdef ANDROID_PLATFORM
+
+#ifndef ANDROIDEVENTLOOP_HPP
+#define ANDROIDEVENTLOOP_HPP
 
 #include "Types.hpp"
+#include "EventLoop.hpp"
 
 namespace Core
 {
@@ -10,11 +15,11 @@ namespace Core
 
 namespace Core
 {
-    class EventLoop
+    class AndroidEventLoop : public EventLoop
     {
     public:
-        EventLoop();
-        void Run(ActivityHandler* pActivityHandler);
+        AndroidEventLoop(void *data);
+        Status Run(ActivityHandler* pActivityHandler);
 
     protected:
         void Activate();
@@ -23,6 +28,9 @@ namespace Core
         void ProcessAppEvent(int32_t pCommand);
         int32_t ProcessInputEvent(AInputEvent* pEvent);
         void ProcessSensorEvent();
+
+        Status InitializeDisplay();
+        void DestroyDisplay();
 
     private:
         // Private callbacks handling events occuring in the thread loop.
@@ -34,8 +42,13 @@ namespace Core
         bool mEnabled;
         // Indicates if the event handler wants to exit.
         bool mQuit;
-        // Activity event observer.
-        ActivityHandler* mActivityHandler;
+
+        EGLDisplay mDisplay;
+		EGLSurface mSurface;
+		EGLContext mContext;
     };
 }
 #endif
+
+#endif
+

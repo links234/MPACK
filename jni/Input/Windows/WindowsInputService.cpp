@@ -4,12 +4,15 @@
 
 #include "WindowsInputService.hpp"
 
-WindowsInputService::WindowsInputService()
+namespace Core
 {
-}
+	WindowsInputService::WindowsInputService()
+	{
+	}
 
-WindowsInputService::~WindowsInputService()
-{
+	WindowsInputService::~WindowsInputService()
+	{
+	}
 }
 
 #endif

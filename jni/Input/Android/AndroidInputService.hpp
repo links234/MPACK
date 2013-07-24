@@ -1,3 +1,7 @@
+#include "Platform.hpp"
+
+#ifdef ANDROID_PLATFORM
+
 #ifndef ANDROIDINPUTSERVICE_HPP
 #define ANDROIDINPUTSERVICE_HPP
 
@@ -39,3 +43,6 @@ namespace Core
 	};
 }
 #endif
+
+#endif
+

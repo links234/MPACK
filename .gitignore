@@ -1,3 +1,6 @@
+#Windows binary folders
+obj_win/
+
 #Android NDK/SDK binary folders
 bin/
 libs/
@@ -15,6 +18,9 @@ local.properties
 #Eclipse project folders
 .externalToolBuilders/
 .settings/
+
+#Files
+lint.xml
 
 #Patterns
 *~

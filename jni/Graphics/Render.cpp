@@ -19,7 +19,10 @@ void Render::Init()
 {
 	s_orthoModeEnabled=false;
 	s_needUpdateOrtho=true;
-	s_screenWidth=s_screenHeight=1.0f;
+	if(s_screenWidth==-1.0f)
+	{
+		s_screenWidth=s_screenHeight=1.0f;
+	}
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -28,6 +31,11 @@ void Render::Init()
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
+}
+
+void Render::Uninit()
+{
+	s_screenWidth=-1.0f;
 }
 
 void Render::SetOrthoMode(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top)

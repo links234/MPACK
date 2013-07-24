@@ -15,7 +15,7 @@ namespace Game
 {
 	PlayGame::PlayGame()
 	{
-		m_pPGInputController = PGInputController::InitializeController();
+		m_pPGInputController = PGInputController::Initialize();
 
 		Global::pContext->pPhysicsService->callback=Physics_callback;
 

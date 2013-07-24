@@ -1,6 +1,11 @@
+#include "Platform.hpp"
+
+#ifdef ANDROID_PLATFORM
+
+#include "Asset.hpp"
+
 #include "Log.hpp"
 #include "Global.hpp"
-#include "Asset.hpp"
 
 #include <cstring>
 
@@ -75,3 +80,5 @@ namespace Core
         return lDescriptor;
     }
 }
+
+#endif

@@ -48,6 +48,7 @@ namespace Core
         Status StartBGMPlayer();
 
     private:
+#ifdef ANDROID_PLATFORM
         android_app* mApplication;
 
         // OpenSL ES engine.
@@ -75,7 +76,7 @@ namespace Core
 
         static void bqBGMPlayerCallback(SLBufferQueueItf bq, void *context);
         static void bqSFXPlayerCallback(SLBufferQueueItf bq, void *context);
-
+#endif
     };
 }
 #endif

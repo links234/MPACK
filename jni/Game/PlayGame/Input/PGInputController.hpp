@@ -19,7 +19,7 @@ public:
 	virtual Vector2f 	GetShootingDirection() const = 0;
 	virtual bool 		IsUserRequestingExit() const = 0;
 
-	static PGInputController* InitializeController();
+	static PGInputController* Initialize();
 };
 
 #endif

@@ -1,3 +1,7 @@
+#include "Platform.hpp"
+
+#ifdef ANDROID_PLATFORM
+
 #ifndef ASSET_HPP
 #define ASSET_HPP
 
@@ -33,4 +37,7 @@ namespace Core
         char* mBuffer;
     };
 }
+
+#endif
+
 #endif

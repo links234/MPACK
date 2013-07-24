@@ -1,10 +1,13 @@
 #include "Sound.hpp"
+
+#include "Context.hpp"
+#include "Resource.hpp"
 #include "Log.hpp"
 
 namespace Core
 {
-    Sound::Sound(const char* pPath) :
-        mBuffer(NULL), mLength(0)
+    Sound::Sound(const char* pPath)
+    	: mBuffer(NULL), mLength(0)
     {
     	mResource = Core::LoadResource(pPath);
 
@@ -14,8 +17,6 @@ namespace Core
 		i -= 3; //presume 3 char extension
 
 		strcpy(extension, pPath+i);
-
-
     }
 
     Sound::~Sound(){

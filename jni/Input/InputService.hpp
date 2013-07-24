@@ -3,6 +3,7 @@
 
 #include "Platform.hpp"
 
+#include "Types.hpp"
 #include "Android/AndroidInputService.hpp"
 #include "Windows/WindowsInputService.hpp"
 
@@ -23,7 +24,7 @@ namespace Core
 
 #ifdef ANDROID_PLATFORM
 	typedef	 AndroidInputService	InputService;
-#elif	WINDOWS_PLATFORM
+#elif	defined(WINDOWS_PLATFORM)
 	typedef	 WindowsInputService	InputService;
 #endif
 }

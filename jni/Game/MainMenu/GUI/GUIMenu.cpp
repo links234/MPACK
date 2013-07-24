@@ -6,7 +6,7 @@
 GUIMenu::GUIMenu()
 	: action(0)
 {
-	m_pMMInputController=MMInputController::InitializeController();
+	m_pMMInputController=MMInputController::Initialize();
 
 	m_pMMInputController->Link_FDOWN(Param2PtrCallbackStruct(GUIMenu::DOWNEvent,this));
 	m_pMMInputController->Link_FUP(Param2PtrCallbackStruct(GUIMenu::UPEvent,this));
@@ -30,6 +30,11 @@ int GUIMenu::Update(GLfloat timeStep)
 		{
 			(*it)->m_pos.x=(*it)->m_fixedPos.x+((*it)->m_pFinger->m_pos.x-(*it)->m_fingerStartPos.x);
 		}
+	}
+
+	if(action)
+	{
+		LOGE("action = %d",action);
 	}
 
 	int i = action;

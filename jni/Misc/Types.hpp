@@ -11,12 +11,16 @@
 	#include <SLES/OpenSLES.h>
 	#include <SLES/OpenSLES_Android.h>
 	#include <SLES/OpenSLES_AndroidConfiguration.h>
-#elif WINDOWS_PLATFORM
-
+#elif defined(WINDOWS_PLATFORM)
+	#include <windows.h>
+	#include <map>
+	#include <vector>
+	#include "GLee.h"
+	#include <GL/gl.h>
+	#include <GL/glu.h>
 #endif
 
 #include <cstdlib>
-#include <cstdint>
 #include <cstring>
 #include <string>
 
@@ -42,7 +46,8 @@ typedef unsigned char		BYTE;
 
 namespace Core
 {
-    typedef int32_t Status;
+	typedef int		int32_t;
+    typedef int32_t 	Status;
 
     const Status STATUS_OK   = 0;
     const Status STATUS_KO   = -1;

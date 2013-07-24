@@ -2,8 +2,8 @@
 
 #ifdef WINDOWS_PLATFORM
 
-#ifndef MMINPUTCONTROLLER_HPP
-#define MMINPUTCONTROLLER_HPP
+#ifndef MMWINDOWSINPUT_HPP
+#define MMWINDOWSINPUT_HPP
 
 #include "MMInputController.hpp"
 

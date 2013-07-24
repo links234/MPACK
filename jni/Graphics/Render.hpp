@@ -19,6 +19,7 @@ class Render
 {
 public:
 	static void Init();
+	static void Uninit();
 	static void SetOrthoMode(GLfloat left=0.0f, GLfloat right=s_screenWidth, GLfloat bottom=0.0f, GLfloat top=s_screenHeight);
 	static void EnableOrthoMode();
 	static void DisableOrthoMode();

@@ -3,9 +3,12 @@
 
 class SoundService;
 
-#include "Context.hpp"
-#include "Resource.hpp"
 #include "Types.hpp"
+
+namespace Core
+{
+	class Resource;
+}
 
 namespace Core
 {

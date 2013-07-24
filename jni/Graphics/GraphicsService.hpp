@@ -11,7 +11,6 @@ namespace Core
         GraphicsService();
 
         Status Start();
-        void Setup(int width, int height);
         void Stop();
 
         void Update(GLfloat delta);
@@ -20,12 +19,6 @@ namespace Core
 	protected:
 		Status LoadResources();
 		Status UnloadResources();
-
-    private:
-        // Display properties.
-        EGLDisplay mDisplay;
-        EGLSurface mSurface;
-        EGLContext mContext;
     };
 }
 #endif
