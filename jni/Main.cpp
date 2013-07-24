@@ -6,7 +6,7 @@
 #include "Graphics/GraphicsService.hpp"
 #include "InputService.hpp"
 #include "Sound/SoundService.hpp"
-#include "Misc/TimeService.hpp"
+#include "Time/TimeService.hpp"
 #include "Physics/Physics.hpp"
 #include "Misc/Random.hpp"
 #include "Global.hpp"
