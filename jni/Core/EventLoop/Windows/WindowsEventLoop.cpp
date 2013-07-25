@@ -74,7 +74,7 @@ namespace Core
         m_windowClass.hCursor         = NULL;
         m_windowClass.hbrBackground   = NULL;
         m_windowClass.lpszMenuName    = NULL;
-        m_windowClass.lpszClassName   = "GLClass";
+        m_windowClass.lpszClassName   = "FrameworkClass";
         m_windowClass.hIconSm         = LoadIcon(NULL, IDI_WINLOGO);
 
         if (!RegisterClassEx(&m_windowClass))
@@ -115,6 +115,7 @@ namespace Core
 
         AdjustWindowRectEx(&m_windowRect, dwStyle, false, dwExStyle);
 
+        LOGI("Creating window");
         m_hwnd = CreateWindowEx(NULL,
             "FrameworkClass",
             "Framework",
@@ -129,8 +130,12 @@ namespace Core
             this);
 
         if (!m_hwnd)
-            return STATUS_KO;
-
+        {
+            LOGE("WINDOW NOT CREATED!");
+            LOGE("Code %d",  GetLastError());
+        	return STATUS_KO;
+        }
+        LOGI("Window created");
         m_hdc = GetDC(m_hwnd);
 
     	ShowCursor(false);
