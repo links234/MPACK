@@ -15,6 +15,7 @@ namespace Game
 	Application::Application()
     {
 		LOGI("Application::Aplication");
+		m_pGameState = NULL;
     }
 
 	Application::~Application()
@@ -51,7 +52,11 @@ namespace Game
     	Global::pContext->pGraphicsService->Stop();
     	Global::pContext->pSoundService->Stop();
 
-    	delete m_pGameState;
+    	if(m_pGameState != NULL)
+    	{
+    		delete m_pGameState;
+    	}
+
     }
 
     Core::Status Application::onStep()
