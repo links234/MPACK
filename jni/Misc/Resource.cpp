@@ -8,11 +8,9 @@ namespace Core
 
     Resource::Resource(const char* pPath)
     {
-    	LOGD("%s = %d",pPath,strlen(pPath)+2);
+    	LOGD("%s = %d",pPath,strlen(pPath));
     	mPath = new char[strlen(pPath)+2];
-    	LOGD("test");
     	strcpy(mPath,pPath);
-    	LOGD("test2");
     }
 
     const char* Resource::GetPath()
@@ -47,9 +45,9 @@ namespace Core
 		{
 			strcpy(pathBuffer,pPath+1);
 		}
-		MessageBox(NULL,"LoadResource:","Fatal error",MB_OK);
-		MessageBox(NULL,pPath,"Fatal error",MB_OK);
-		MessageBox(NULL,pathBuffer,"Fatal error",MB_OK);
+		LOGI("LoadResource:");
+		LOGI("%s", pPath);
+		LOGI("%s", pathBuffer);
 		return (Resource*)(new SDInputFile(pathBuffer));
 #endif
     	LOGE("LoadResource: invalid path %s",pPath);
