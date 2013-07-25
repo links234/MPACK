@@ -39,18 +39,22 @@ public:
     	{
     		m_header="";
     	}
-    	MessageBox(NULL,"GLSLProgram startaaaaaaaaa","Fatal error",MB_OK);
-
+    	//MessageBox(NULL,"GLSLProgram startaaaaaaaaa","Fatal error",MB_OK);
+	LOGE("GLSLProgram startaaaaaaaaa");
     	Resource *vertexShaderResourcePointer=LoadResource(vertexShader);
-    	MessageBox(NULL,"GLSLProgram load res ok","Fatal error",MB_OK);
+	//MessageBox(NULL,"GLSLProgram load res ok","Fatal error",MB_OK);
+	LOGE("GLSLProgram load res ok");
     	vertexShaderResourcePointer->Open();
-    	MessageBox(NULL,"GLSLProgram open ok","Fatal error",MB_OK);
-    	MessageBox(NULL,(const char*)vertexShaderResourcePointer->Bufferize(),"Fatal error",MB_OK);
-    	m_vertexShader.source=string((const char*)(vertexShaderResourcePointer->Bufferize()));
-    	MessageBox(NULL,"conversion ok","Fatal error",MB_OK);
+    	//MessageBox(NULL,"GLSLProgram open ok","Fatal error",MB_OK);
+	LOGE("GLSLProgram open ok");
+	//MessageBox(NULL,(const char*)vertexShaderResourcePointer->Bufferize(),"Fatal error",MB_OK);
+	LOGE("%s", (const char*)vertexShaderResourcePointer->Bufferize());
+	m_vertexShader.source=string((const char*)(vertexShaderResourcePointer->Bufferize()));
+    	//MessageBox(NULL,"conversion ok","Fatal error",MB_OK);
+	LOGE("conversion ok");
     	delete vertexShaderResourcePointer;
-    	MessageBox(NULL,"delete ok","Fatal error",MB_OK);
-
+    	//MessageBox(NULL,"delete ok","Fatal error",MB_OK);
+	LOGE("delete ok");
     	Resource *fragmentShaderResourcePointer=LoadResource(fragmentShader);
 		fragmentShaderResourcePointer->Open();
 		m_fragmentShader.source=string((const char*)(fragmentShaderResourcePointer->Bufferize()));

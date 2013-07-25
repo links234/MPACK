@@ -24,6 +24,14 @@ namespace Core
         __android_log_vprint(ANDROID_LOG_INFO, LOG_TAG, pMessage, lVarArgs);
         __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
         va_end(lVarArgs);
+#elif	defined(WINDOWS_PLATFORM)
+        char buffer[BUFFERSIZE];
+        va_list lVarArgs;
+		va_start(lVarArgs, pMessage);
+		vsprintf (buffer,pMessage,lVarArgs);
+		va_end(lVarArgs);
+		
+		printf("Info: %s\n", buffer);
 #endif
     }
 
@@ -35,6 +43,14 @@ namespace Core
         __android_log_vprint(ANDROID_LOG_ERROR, LOG_TAG, pMessage, lVarArgs);
         __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "\n");
         va_end(lVarArgs);
+#elif	defined(WINDOWS_PLATFORM)
+        char buffer[BUFFERSIZE];
+        va_list lVarArgs;
+		va_start(lVarArgs, pMessage);
+		vsprintf (buffer,pMessage,lVarArgs);
+		va_end(lVarArgs);
+		
+		printf("ERROR: %s\n", buffer);
 #endif
     }
 
@@ -46,6 +62,14 @@ namespace Core
         __android_log_vprint(ANDROID_LOG_WARN, LOG_TAG, pMessage, lVarArgs);
         __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
         va_end(lVarArgs);
+#elif	defined(WINDOWS_PLATFORM)
+        char buffer[BUFFERSIZE];
+        va_list lVarArgs;
+		va_start(lVarArgs, pMessage);
+		vsprintf (buffer,pMessage,lVarArgs);
+		va_end(lVarArgs);
+		
+		printf("Warn: %s\n", buffer);
 #endif
     }
 
@@ -63,8 +87,10 @@ namespace Core
 		va_start(lVarArgs, pMessage);
 		vsprintf (buffer,pMessage,lVarArgs);
 		va_end(lVarArgs);
-
-		MessageBox(NULL,buffer,"Debug message",MB_OK);
+		
+		printf("Debug: %s\n", buffer);
+		
+		//MessageBox(NULL,buffer,"Debug message",MB_OK);
 #endif
     }
 }
