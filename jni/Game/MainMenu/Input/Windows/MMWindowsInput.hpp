@@ -7,6 +7,11 @@
 
 #include "MMInputController.hpp"
 
+namespace Core
+{
+	class Finger;
+}
+
 class MMWindowsInput : public MMInputController
 {
 public:
@@ -14,6 +19,9 @@ public:
 	virtual ~MMWindowsInput();
 
 	virtual void Update(GLfloat delta);
+
+private:
+	Finger	*m_pFinger;
 };
 
 #endif

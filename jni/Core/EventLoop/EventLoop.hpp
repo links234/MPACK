@@ -18,6 +18,8 @@ namespace Core
 
         virtual Status Run(ActivityHandler *pActivityHandler)=0;
 
+        virtual void* GetWindowHandle() const = 0;
+
         static EventLoop* Initialize(void *data);
 
     protected:

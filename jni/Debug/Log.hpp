@@ -8,6 +8,9 @@ namespace Core
     class Log
     {
     public:
+    	static void Initialize();
+    	static void Destroy();
+
         static void Error(const char* pMessage, ...);
         static void Warn(const char* pMessage, ...);
         static void Info(const char* pMessage, ...);

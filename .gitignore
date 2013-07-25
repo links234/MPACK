@@ -1,3 +1,7 @@
+#Windows distro files
+game.exe
+log.html
+
 #Windows binary folders
 obj_win/
 

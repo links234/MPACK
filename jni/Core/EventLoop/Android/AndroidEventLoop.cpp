@@ -72,6 +72,11 @@ namespace Core
         return STATUS_OK;
     }
 
+    void* AndroidEventLoop::GetWindowHandle() const
+    {
+    	return NULL;
+    }
+
     void AndroidEventLoop::Activate()
     {
         // Enables activity only if a window is available.

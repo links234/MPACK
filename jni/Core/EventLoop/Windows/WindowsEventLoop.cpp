@@ -44,6 +44,11 @@ namespace Core
         return STATUS_OK;
     }
 
+    void* WindowsEventLoop::GetWindowHandle() const
+    {
+    	return (void*)(&m_hwnd);
+    }
+
     Status WindowsEventLoop::InitializeDisplay()
     {
     	int width=800;
@@ -96,7 +101,8 @@ namespace Core
 
             if (ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL)
             {
-                MessageBox(NULL, "Display mode failed", NULL, MB_OK);
+            	LOGE("Display mode failed");
+            	MessageBox(NULL, "Display mode failed", NULL, MB_OK);
                 m_isFullscreen = false;
             }
         }
@@ -254,10 +260,7 @@ namespace Core
     		}
     		break;
     		case WM_KEYDOWN:
-    			if (wParam == VK_ESCAPE)
-    			{
-    				DestroyWindow(m_hwnd);
-    			}
+
     		break;
     		case WM_MOUSEWHEEL:
     			zDelta = GET_WHEEL_DELTA_WPARAM(wParam);

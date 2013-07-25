@@ -5,6 +5,7 @@
 #include "TimeService.hpp"
 #include "Context.hpp"
 #include "Global.hpp"
+#include "Cursor.hpp"
 
 #include "MainMenuState.hpp"
 #include "PlayGameState.hpp"
@@ -40,7 +41,17 @@ namespace Game
 
 		Global::pContext->pSoundService->PlayBGMPlaylist("@Sounds/playlist.txt");
 
+		Global::pContext->pInputService->Reset();
+
 		Global::pContext->pTimeService->Reset();
+
+		m_pCursorTex = new Texture2D();
+		m_pCursorTex->Load("@Sprites/Cursor.png",Bilinear);
+
+#ifdef WINDOWS_PLATFORM
+		Cursor::GetInstance()->SetIcon(m_pCursorTex);
+		Cursor::GetInstance()->EnableAutohide();
+#endif
 
 		m_pGameState = new MainMenu;
 		return Core::STATUS_OK;
@@ -57,6 +68,7 @@ namespace Game
     		delete m_pGameState;
     	}
 
+    	delete m_pCursorTex;
     }
 
     Core::Status Application::onStep()
@@ -64,6 +76,8 @@ namespace Game
     	// Update clock
     	Global::pContext->pTimeService->Update();
     	const GLfloat &delta = Global::pContext->pTimeService->Elapsed();
+
+    	Global::pContext->pInputService->Update();
 
     	// Debug messages here
 		static GLfloat time=0.0f;
@@ -105,6 +119,10 @@ namespace Game
 
     	// Render current game state
     	m_pGameState->Render();
+
+#ifdef WINDOWS_PLATFORM
+    	Cursor::GetInstance()->Render();
+#endif
 
     	// Render current scene and swap buffers
 		if (Global::pContext->pGraphicsService->Render() != Core::STATUS_OK) {

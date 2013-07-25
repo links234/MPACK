@@ -27,6 +27,14 @@ namespace Core
 		m_finger.clear();
 	}
 
+	void AndroidInputService::Update()
+	{
+	}
+
+	void AndroidInputService::Reset()
+	{
+	}
+
 	void AndroidInputService::ClearLinks()
 	{
 		m_callbackFunc_FDOWN.clear();

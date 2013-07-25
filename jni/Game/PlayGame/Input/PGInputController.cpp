@@ -12,6 +12,11 @@ PGInputController::~PGInputController()
 {
 }
 
+void PGInputController::SetMaxAcceleration(const GLfloat &maxAcceleration)
+{
+	m_maxAcceleration=maxAcceleration;
+}
+
 PGInputController* PGInputController::Initialize()
 {
 	PGInputController *pPGInputController=NULL;

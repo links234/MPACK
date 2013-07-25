@@ -1,5 +1,6 @@
 #include "Platform.hpp"
 #include "Types.hpp"
+#include "Log.hpp"
 #include "Context.hpp"
 #include "Application.hpp"
 #include "EventLoop.hpp"
@@ -23,24 +24,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    int cmdShow)
 #endif
 {
+	Core::Log::Initialize();
+
 	//Debug::WaitToConnect(5);
-
-	std::ifstream file1( "assets/Shaders/sprite.vert", ios::binary | ios::ate);
-		LOGD("size = %d",(int)file1.tellg());
-		file1.close();
-
-	std::ifstream ffile( "assets/Shaders/sprite.vert", ios::binary );
-
-	std::ifstream file( "assets/Shaders/sprite.vert", ios::binary | ios::ate);
-	LOGD("size = %d",(int)file.tellg());
-	file.close();
-
-	ffile.close();
-
-	std::ifstream file2( "assets/Shaders/sprite.vert", ios::binary | ios::ate);
-		LOGD("size = %d",(int)file2.tellg());
-		file2.close();
-
 
 #ifdef ANDROID_PLATFORM
 	Global::pAndroidApp=pApplication;
@@ -66,9 +52,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     Global::pEventLoop=Core::EventLoop::Initialize(data);
     Game::Application lApplication;
-#ifdef ANDROID_PLATFORM
-    Global::pEventLoop->Run(&lApplication);
-#elif	defined(WINDOWS_PLATFORM)
-    return Global::pEventLoop->Run(&lApplication);
+    int result = Global::pEventLoop->Run(&lApplication);
+
+    Core::Log::Destroy();
+
+#ifdef WINDOWS_PLATFORM
+    return result;
 #endif
 }

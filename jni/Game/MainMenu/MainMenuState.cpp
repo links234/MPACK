@@ -76,6 +76,8 @@ namespace Game
 	{
 		m_pBackgroundSprite->Render();
 		m_pMenuGUI->Render();
+
+		Debug::Print(Global::pFont,"%lf %lf",Global::pContext->pInputService->m_currMouse->Pos.x,Global::pContext->pInputService->m_currMouse->Pos.y);
 	}
 
 	MainMenu::~MainMenu()

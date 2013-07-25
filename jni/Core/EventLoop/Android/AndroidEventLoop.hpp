@@ -21,6 +21,8 @@ namespace Core
         AndroidEventLoop(void *data);
         Status Run(ActivityHandler* pActivityHandler);
 
+        void* GetWindowHandle() const;
+
     protected:
         void Activate();
         void Deactivate();

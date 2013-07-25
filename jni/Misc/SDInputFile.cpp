@@ -71,7 +71,6 @@ namespace Core
         LOGD("lSize = %d",lSize);
         if (lSize <= 0)
         {
-        	MessageBox(NULL,"GetLength()==NULL ....","Fatal error",MB_OK);
         	return NULL;
         }
 

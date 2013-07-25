@@ -3,6 +3,9 @@
 #include "Platform.hpp"
 
 #include <stdarg.h>
+#include <cstdio>
+
+#include "FileLogger.hpp"
 
 #ifdef ANDROID_PLATFORM
 #include <android/log.h>
@@ -12,85 +15,93 @@
 #endif
 
 #define LOG_TAG 		"MPACK"
-#define	 BUFFERSIZE 	512
+#define	 BUFFERSIZE 	65536
+
+#ifdef WINDOWS_PLATFORM
+FileLogger *pFileLogger;
+#endif
 
 namespace Core
 {
+	void Log::Initialize()
+	{
+#ifdef WINDOWS_PLATFORM
+		pFileLogger=new FileLogger("log.html");
+#endif
+	}
+
+	void Log::Destroy()
+	{
+#ifdef WINDOWS_PLATFORM
+		delete pFileLogger;
+#endif
+	}
+
     void Log::Info(const char* pMessage, ...)
     {
-#ifdef ANDROID_PLATFORM
-        va_list lVarArgs;
-        va_start(lVarArgs, pMessage);
-        __android_log_vprint(ANDROID_LOG_INFO, LOG_TAG, pMessage, lVarArgs);
-        __android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
-        va_end(lVarArgs);
-#elif	defined(WINDOWS_PLATFORM)
         char buffer[BUFFERSIZE];
         va_list lVarArgs;
 		va_start(lVarArgs, pMessage);
 		vsprintf (buffer,pMessage,lVarArgs);
 		va_end(lVarArgs);
 		
+#ifdef ANDROID_PLATFORM
+		__android_log_print(ANDROID_LOG_INFO, LOG_TAG, buffer);
+		__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
+#elif	defined(WINDOWS_PLATFORM)
 		printf("Info: %s\n", buffer);
+		pFileLogger->Print(FileLogger::Succes,"%s",buffer);
 #endif
     }
 
     void Log::Error(const char* pMessage, ...)
     {
-#ifdef ANDROID_PLATFORM
-        va_list lVarArgs;
-        va_start(lVarArgs, pMessage);
-        __android_log_vprint(ANDROID_LOG_ERROR, LOG_TAG, pMessage, lVarArgs);
-        __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "\n");
-        va_end(lVarArgs);
-#elif	defined(WINDOWS_PLATFORM)
-        char buffer[BUFFERSIZE];
-        va_list lVarArgs;
+    	char buffer[BUFFERSIZE];
+		va_list lVarArgs;
 		va_start(lVarArgs, pMessage);
 		vsprintf (buffer,pMessage,lVarArgs);
 		va_end(lVarArgs);
 		
-		printf("ERROR: %s\n", buffer);
+#ifdef ANDROID_PLATFORM
+		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, buffer);
+		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "\n");
+#elif	defined(WINDOWS_PLATFORM)
+		printf("Error: %s\n", buffer);
+		pFileLogger->Print(FileLogger::CriticalFailure,"%s",buffer);
 #endif
     }
 
     void Log::Warn(const char* pMessage, ...)
     {
-#ifdef ANDROID_PLATFORM
-        va_list lVarArgs;
-        va_start(lVarArgs, pMessage);
-        __android_log_vprint(ANDROID_LOG_WARN, LOG_TAG, pMessage, lVarArgs);
-        __android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
-        va_end(lVarArgs);
-#elif	defined(WINDOWS_PLATFORM)
-        char buffer[BUFFERSIZE];
-        va_list lVarArgs;
+    	char buffer[BUFFERSIZE];
+		va_list lVarArgs;
 		va_start(lVarArgs, pMessage);
 		vsprintf (buffer,pMessage,lVarArgs);
 		va_end(lVarArgs);
 		
-		printf("Warn: %s\n", buffer);
+#ifdef ANDROID_PLATFORM
+		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, buffer);
+		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
+#elif	defined(WINDOWS_PLATFORM)
+		printf("Info: %s\n", buffer);
+		pFileLogger->Print(FileLogger::Warning,"%s",buffer);
 #endif
     }
 
     void Log::Debug(const char* pMessage, ...)
     {
-#ifdef ANDROID_PLATFORM
-        va_list lVarArgs;
-        va_start(lVarArgs, pMessage);
-        __android_log_vprint(ANDROID_LOG_DEBUG, LOG_TAG, pMessage, lVarArgs);
-        __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
-        va_end(lVarArgs);
-#elif	defined(WINDOWS_PLATFORM)
-        char buffer[BUFFERSIZE];
-        va_list lVarArgs;
+    	char buffer[BUFFERSIZE];
+		va_list lVarArgs;
 		va_start(lVarArgs, pMessage);
 		vsprintf (buffer,pMessage,lVarArgs);
 		va_end(lVarArgs);
 		
-		printf("Debug: %s\n", buffer);
-		
-		//MessageBox(NULL,buffer,"Debug message",MB_OK);
+#ifdef ANDROID_PLATFORM
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, buffer);
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
+#elif	defined(WINDOWS_PLATFORM)
+		printf("Info: %s\n", buffer);
+		pFileLogger->Print(FileLogger::Information,"%s",buffer);
 #endif
     }
 }

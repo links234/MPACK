@@ -16,6 +16,7 @@ namespace Game
 	PlayGame::PlayGame()
 	{
 		m_pPGInputController = PGInputController::Initialize();
+		m_pPGInputController->SetMaxAcceleration(500.0f);
 
 		Global::pContext->pPhysicsService->callback=Physics_callback;
 

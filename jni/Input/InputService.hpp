@@ -9,8 +9,9 @@
 
 namespace Core
 {
-	struct Finger
+	class Finger
 	{
+	public:
 		enum Flag
 		{
 			FREE,

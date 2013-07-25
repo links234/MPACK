@@ -21,6 +21,8 @@ namespace Core
     	WindowsEventLoop(void *data);
         Status Run(ActivityHandler* pActivityHandler);
 
+        void* GetWindowHandle() const;
+
     protected:
         static LRESULT CALLBACK StaticWndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
         LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);

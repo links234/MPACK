@@ -13,7 +13,6 @@
 #include "Maths.hpp"
 
 extern AbstractProgramType* Sprite_Program;
-extern AbstractProgramType* Basic2_Program;
 
 class SpriteVertex
 {

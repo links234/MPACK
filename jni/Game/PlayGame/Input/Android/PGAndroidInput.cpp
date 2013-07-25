@@ -71,7 +71,9 @@ void PGAndroidInput::Render()
 
 Vector2f PGAndroidInput::GetMovementDirection() const
 {
-	return (m_joystick->m_dir*5.0f).Rotated(Global::pActiveCamera->GetDirection().Angle());
+	GLfloat acceleration=m_joystick->m_dir.Length()/m_joystick->;
+	acceleration*=m_maxAcceleration;
+	return (m_joystick->m_dir.Normalized()*acceleration).Rotated(Global::pActiveCamera->GetDirection().Angle());
 }
 
 Vector2f PGAndroidInput::GetShootingDirection() const

@@ -24,6 +24,8 @@ GUIMenu::~GUIMenu()
 
 int GUIMenu::Update(GLfloat timeStep)
 {
+	m_pMMInputController->Update(timeStep);
+
 	for(vector<GUIMenuButton*>::iterator it=m_button.begin();it!=m_button.end();++it)
 	{
 		if((*it)->m_pFinger)

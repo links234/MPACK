@@ -19,6 +19,9 @@ namespace Core
 		AndroidInputService();
 		~AndroidInputService();
 
+		void Update();
+		void Reset();
+
 		void ClearLinks();
 
 		void Link_FUP(const Param2PtrCallbackStruct &link);

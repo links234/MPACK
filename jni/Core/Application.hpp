@@ -7,6 +7,7 @@
 namespace Core
 {
 	class Context;
+	class Texture2D;
 }
 namespace Game
 {
@@ -52,7 +53,8 @@ namespace Game
         void onLostFocus();
 
 	private:
-        GameState *m_pGameState;
+        GameState 		*m_pGameState;
+        Core::Texture2D *m_pCursorTex;
     };
 }
 #endif

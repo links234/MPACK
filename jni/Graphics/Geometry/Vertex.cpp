@@ -8,16 +8,25 @@
 
 #include "Vertex.hpp"
 
+#include "Platform.hpp"
+
 #include <sstream>
 
 using std::ostringstream;
 
 AbstractProgramType* Sprite_Program;
-AbstractProgramType* Basic2_Program;
+
+#ifdef ANDROID_PLATFORM
+#define		VERTEXSHADER_SPRITE		"@Shaders/Android/Sprite.vert"
+#define		FRAGMENTSHADER_SPRITE	"@Shaders/Android/Sprite.frag"
+#elif	defined(WINDOWS_PLATFORM)
+#define		VERTEXSHADER_SPRITE		"@Shaders/Windows/Sprite.vert"
+#define		FRAGMENTSHADER_SPRITE	"@Shaders/Windows/Sprite.frag"
+#endif
 
 bool InitVertexPrograms()
 {
-	Sprite_Program = (AbstractProgramType*)(new ProgramType_Sprite("@Shaders/Sprite.vert","@Shaders/Sprite.frag"));
+	Sprite_Program = (AbstractProgramType*)(new ProgramType_Sprite(VERTEXSHADER_SPRITE,FRAGMENTSHADER_SPRITE));
 	if(!Sprite_Program->Initialize())
 	{
 		return false;
@@ -28,22 +37,10 @@ bool InitVertexPrograms()
 		return false;
 	}
 
-	Basic2_Program = (AbstractProgramType*)(new ProgramType_Basic2("@Shaders/basic2.vert","@Shaders/basic2.frag"));
-	if(!Basic2_Program->Initialize())
-	{
-		return false;
-	}
-	Basic2_Program->BindAttributeLocations();
-	if(!Basic2_Program->LinkProgram())
-	{
-		return false;
-	}
-
 	return true;
 }
 
 void DeleteVertexPrograms()
 {
 	delete Sprite_Program;
-	delete Basic2_Program;
 }
