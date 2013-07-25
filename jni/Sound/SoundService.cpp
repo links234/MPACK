@@ -90,7 +90,7 @@ namespace Core
         LOGE("Error while starting SoundService");
         Stop();
 #endif
-        return STATUS_KO;
+        return STATUS_OK;
     }
 
     void SoundService::Stop()
