@@ -6,18 +6,20 @@ namespace Core
     SDInputFile::SDInputFile(const char* pPath):
         Resource(pPath), mInputStream(), mBuffer(NULL)
     {
-    	LOGD("Test3");
+    	LOGD("SDInputFile constructor");
     }
 
     Status SDInputFile::Open()
     {
-    	LOGD("Test4 |%s| ",mPath);
+    	LOGD("SDInputFile Opening |%s| ",mPath);
         mInputStream.open(mPath, std::ios::in | std::ios::binary);
-        LOGD("Test5");
-        if(mInputStream)
+        if(mInputStream.fail())
         {
-        	LOGD("ADASDASJDASKHDASKH");
         	LOGD("Failed to open SD file: |%s|",mPath);
+        }
+        else
+        {
+        	LOGD("Successfully opened SD file");
         }
         return mInputStream ? STATUS_OK : STATUS_KO;
     }
@@ -43,9 +45,24 @@ namespace Core
 
     int SDInputFile::GetLength()
     {
-    	LOGD("%s",mPath);
-    	std::ifstream file( mPath, std::ios::binary | std::ios::ate);
-    	return (int)file.tellg();
+    	int len;
+    	LOGD("getting size of %s",mPath);
+
+    	if(mInputStream.is_open())
+    	{
+    		int pos = mInputStream.tellg();
+    		mInputStream.seekg(0, mInputStream.end);
+    		len = mInputStream.tellg();
+    		mInputStream.seekg(pos);
+    	}
+    	else
+    	{
+    		std::ifstream file( mPath, std::ios::binary | std::ios::ate);
+			len = file.tellg();
+			file.close();
+    	}
+
+    	return len;
     }
 
     const void* SDInputFile::Bufferize()
@@ -58,14 +75,26 @@ namespace Core
         	return NULL;
         }
 
+        if(mBuffer != NULL)
+        {
+        	LOGI("Already bufferized");
+        	return mBuffer;
+        }
         mBuffer = new char[lSize];
+
+        int pos = mInputStream.tellg();
+        mInputStream.seekg(0);
+
         mInputStream.read(mBuffer, lSize);
+
+        mInputStream.seekg(pos);
         if (!mInputStream.fail())
         {
             return mBuffer;
         }
         else
         {
+        	LOGE("Bufferize failed for SDInputFile %s", mPath);
             return NULL;
         }
     }

@@ -1,5 +1,5 @@
 #Location and name of your application (i.e. in the bin/ folder, named game.exe
-OUT = bin/game.exe
+OUT = game.exe
 
 #Compiler (i.e. g++ for C++, or gcc for C)
 CC = i586-mingw32msvc-g++
