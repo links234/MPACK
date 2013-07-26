@@ -66,6 +66,15 @@ namespace Core
 
 		Param1PtrCallbackFunc function;
 		void *param1;
+
+		bool operator== (const Param1PtrCallbackStruct &other)
+		{
+			if(function!=other.function)
+				return false;
+			if(param1!=other.param1)
+				return false;
+			return true;
+		}
 	};
 
     struct Param2PtrCallbackStruct
@@ -77,6 +86,15 @@ namespace Core
 
     	Param2PtrCallbackFunc function;
     	void *param1;
+
+    	bool operator== (const Param2PtrCallbackStruct &other)
+		{
+    		if(function!=other.function)
+    		    return false;
+    		if(param1!=other.param1)
+    		    return false;
+    		return true;
+		}
     };
 }
 #endif

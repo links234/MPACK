@@ -15,10 +15,15 @@ public:
 	Joystick(Vector2f point=Vector2f(0.0f,Render::GetScreenHeight()), GLfloat radius=250.0f);
 
 	void SetTextures(Texture2D *innerTex, Texture2D *outerTex);
-	void SetMaxDistance(GLfloat maxDist);
+
+	void 	SetMaxDistance(GLfloat maxDist);
+	GLfloat GetMaxDistance() const;
 
 	void Update();
 	void Render();
+
+	void Pause();
+	void Continue();
 
 	~Joystick();
 

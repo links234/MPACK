@@ -20,7 +20,10 @@ public:
 
 	virtual Vector2f 	GetMovementDirection() const;
 	virtual Vector2f 	GetShootingDirection() const;
-	virtual bool 		IsUserRequestingExit() const;
+	virtual bool 		IsUserRequestingExit();
+
+	virtual void Pause();
+	virtual void Continue();
 
 private:
 	static void onBackKey(void *pointer);

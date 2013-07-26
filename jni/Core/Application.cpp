@@ -17,6 +17,7 @@ namespace Game
     {
 		LOGI("Application::Aplication");
 		m_pGameState = NULL;
+		m_pSavedGameState = NULL;
     }
 
 	Application::~Application()
@@ -88,18 +89,32 @@ namespace Game
     	Debug::InitFrame();
 
     	// Updates services
-    	Global::pContext->pPhysicsService->Update(delta);
+    	if(!m_pSavedGameState)
+    	{
+    		Global::pContext->pPhysicsService->Update(delta);
+    	}
     	Global::pContext->pGraphicsService->Update(delta);
 
     	// Event dispatcher
     	int action=m_pGameState->Update();
     	switch(action)
     	{
-    		case EVENT_MAINMENU_NEWGAME:
+    		case EVENT_MAINMENU_CONTINUE:
     			delete m_pGameState;
-    			m_pGameState=new PlayGame;
+    			m_pGameState=m_pSavedGameState;
+    			m_pGameState->Continue();
     			m_pGameState->Update();
-
+    			m_pSavedGameState=NULL;
+    		break;
+    		case EVENT_MAINMENU_NEWGAME:
+    			if(m_pSavedGameState)
+    			{
+    				delete m_pSavedGameState;
+    				m_pSavedGameState=NULL;
+    			}
+    			delete m_pGameState;
+    			m_pGameState=new PlayGame();
+    			m_pGameState->Update();
     		break;
     		case EVENT_MAINMENU_HIGHSCORE:
 
@@ -110,11 +125,17 @@ namespace Game
     		case EVENT_MAINMENU_EXIT:
     			return STATUS_KO;
     		break;
-    		case EVENT_PLAYGAME_EXIT:
-    			delete m_pGameState;
-    			m_pGameState=new MainMenu;
+    		case EVENT_PLAYGAME_PAUSE:
+    			m_pGameState->Pause();
+    			m_pSavedGameState=m_pGameState;
+    			m_pGameState=new MainMenu(true);
     			m_pGameState->Update();
     		break;
+    		case EVENT_PLAYGAME_EXIT:
+				delete m_pGameState;
+				m_pGameState=new MainMenu();
+				m_pGameState->Update();
+			break;
     	}
 
     	// Render current game state

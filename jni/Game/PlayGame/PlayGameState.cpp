@@ -97,14 +97,20 @@ namespace Game
 	int PlayGame::Update()
 	{
 		float lTimeStep = Global::pContext->pTimeService->Elapsed();
+		float delta=lTimeStep;
 
 		m_pPGInputController->Update(lTimeStep);
 
 		m_playerObject->SetLinearAcceleration(m_pPGInputController->GetMovementDirection());
 
+		Object::UpdateAll(delta);
+		ParticleEmitter::UpdateAll(delta);
+		Particle::UpdateAll(delta);
+		Camera2D::UpdateAll(delta);
+
 		if(m_pPGInputController->IsUserRequestingExit())
 		{
-			return EVENT_PLAYGAME_EXIT;
+			return EVENT_PLAYGAME_PAUSE;
 		}
 		return EVENT_NOTHING;
 	}
@@ -115,7 +121,24 @@ namespace Game
 
 		m_background->Render();
 
+		SpriteBatcher::EnableCamera();
+		Object::RenderAll();
+		Particle::RenderAll();
+		SpriteBatcher::DisableCamera();
+
 		m_pPGInputController->Render();
+	}
+
+	void PlayGame::Pause()
+	{
+		Global::pContext->pPhysicsService->callback=NULL;
+		m_pPGInputController->Pause();
+	}
+
+	void PlayGame::Continue()
+	{
+		Global::pContext->pPhysicsService->callback=Physics_callback;
+		m_pPGInputController->Continue();
 	}
 
 	PlayGame::~PlayGame()
@@ -143,6 +166,8 @@ namespace Game
 		//should be deleted in final version
 		delete m_testSprite;
 		delete m_testTexture;
+
+		Particle::Clear();
 	}
 
 	void PlayGame::Physics_callback(void *param1, void *param2)

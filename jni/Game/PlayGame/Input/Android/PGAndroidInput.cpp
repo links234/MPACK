@@ -71,7 +71,7 @@ void PGAndroidInput::Render()
 
 Vector2f PGAndroidInput::GetMovementDirection() const
 {
-	GLfloat acceleration=m_joystick->m_dir.Length()/m_joystick->;
+	float acceleration=m_joystick->m_dir.Length()/m_joystick->GetMaxDistance();
 	acceleration*=m_maxAcceleration;
 	return (m_joystick->m_dir.Normalized()*acceleration).Rotated(Global::pActiveCamera->GetDirection().Angle());
 }
@@ -81,9 +81,27 @@ Vector2f PGAndroidInput::GetShootingDirection() const
 	return Vector2f();
 }
 
-bool PGAndroidInput::IsUserRequestingExit() const
+bool PGAndroidInput::IsUserRequestingExit()
 {
-	return m_requestExit;
+	bool value=m_requestExit;
+	m_requestExit=false;
+	return value;
+}
+
+void PGAndroidInput::Pause()
+{
+	m_joystick->Pause();
+	Global::pContext->pInputService->UnLink_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
+	Global::pContext->pInputService->UnLink_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
+	Global::pContext->pInputService->UnLink_FUP(Param2PtrCallbackStruct(UP_callback,this));
+}
+
+void PGAndroidInput::Continue()
+{
+	m_joystick->Continue();
+	Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
+	Global::pContext->pInputService->Link_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
+	Global::pContext->pInputService->Link_FUP(Param2PtrCallbackStruct(UP_callback,this));
 }
 
 void PGAndroidInput::onBackKey(void *pointer)

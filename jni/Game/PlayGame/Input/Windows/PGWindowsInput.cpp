@@ -54,6 +54,14 @@ void PGWindowsInput::Render()
 {
 }
 
+void PGWindowsInput::Pause()
+{
+}
+
+void PGWindowsInput::Continue()
+{
+}
+
 Vector2f PGWindowsInput::GetMovementDirection() const
 {
 	return m_movementDirection;
@@ -64,7 +72,7 @@ Vector2f PGWindowsInput::GetShootingDirection() const
 	return Vector2f();
 }
 
-bool PGWindowsInput::IsUserRequestingExit() const
+bool PGWindowsInput::IsUserRequestingExit()
 {
 	return m_requestExit;
 }

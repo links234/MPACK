@@ -14,10 +14,13 @@ namespace Game
 	class MainMenu : public GameState
 	{
 	public:
-		MainMenu();
+		MainMenu(bool isGamePaused=false);
 
 		int Update();
 		void Render();
+
+		void Pause();
+		void Continue();
 
 		~MainMenu();
 	private:

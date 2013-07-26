@@ -28,6 +28,10 @@ namespace Core
 		void Link_FDOWN(const Param2PtrCallbackStruct &link);
 		void Link_KEYBACK(const Param1PtrCallbackStruct &link);
 
+		void UnLink_FUP(const Param2PtrCallbackStruct &link);
+		void UnLink_FDOWN(const Param2PtrCallbackStruct &link);
+		void UnLink_KEYBACK(const Param1PtrCallbackStruct &link);
+
 		std::vector<Finger*> m_finger;
 
 	public:

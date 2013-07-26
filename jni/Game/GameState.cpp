@@ -19,6 +19,5 @@ namespace Game
 #elif 	defined(WINDOWS_PLATFORM)
 
 #endif
-		Particle::Clear();
 	}
 }

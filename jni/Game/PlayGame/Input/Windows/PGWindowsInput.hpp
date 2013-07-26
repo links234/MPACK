@@ -18,9 +18,12 @@ public:
 	virtual void Update(GLfloat delta);
 	virtual void Render();
 
+	virtual void Pause();
+	virtual void Continue();
+
 	virtual Math::Vector2f 	GetMovementDirection() const;
 	virtual Math::Vector2f 	GetShootingDirection() const;
-	virtual bool 			IsUserRequestingExit() const;
+	virtual bool 			IsUserRequestingExit();
 
 protected:
 	bool			m_requestExit;

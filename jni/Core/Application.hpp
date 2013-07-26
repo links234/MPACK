@@ -19,10 +19,12 @@ namespace Game
 	enum
 	{
 		EVENT_NOTHING,
+		EVENT_MAINMENU_CONTINUE,
 		EVENT_MAINMENU_NEWGAME,
 		EVENT_MAINMENU_HIGHSCORE,
 		EVENT_MAINMENU_CREDITS,
 		EVENT_MAINMENU_EXIT,
+		EVENT_PLAYGAME_PAUSE,
 		EVENT_PLAYGAME_EXIT
 	};
 
@@ -54,6 +56,7 @@ namespace Game
 
 	private:
         GameState 		*m_pGameState;
+        GameState		*m_pSavedGameState;
         Core::Texture2D *m_pCursorTex;
     };
 }

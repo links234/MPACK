@@ -11,28 +11,28 @@
 
 namespace Core
 {
-	AndroidTimeService::AndroidTimeService()
+	AndroidTimer::AndroidTimer()
 		: m_lastTime(0)
     {
     }
 
-	AndroidTimeService::~AndroidTimeService()
+	AndroidTimer::~AndroidTimer()
 	{
 	}
 
-    void AndroidTimeService::Start()
+    void AndroidTimer::Start()
     {
         timespec lTimeVal;
         clock_gettime(CLOCK_MONOTONIC, &lTimeVal);
         m_lastTime = lTimeVal.tv_sec + (lTimeVal.tv_nsec * 1.0e-9);
     }
 
-    float AndroidTimeService::Time() const
+    double AndroidTimer::Time() const
     {
     	timespec lTimeVal;
 		clock_gettime(CLOCK_MONOTONIC, &lTimeVal);
 		double currTime = lTimeVal.tv_sec + (lTimeVal.tv_nsec * 1.0e-9);
-        return (float)(currTime-m_lastTime);
+        return currTime-m_lastTime;
     }
 }
 

@@ -37,6 +37,11 @@ void Joystick::SetMaxDistance(GLfloat maxDist)
 	m_maxDistance=maxDist;
 }
 
+GLfloat Joystick::GetMaxDistance() const
+{
+	return m_maxDistance;
+}
+
 void Joystick::Update()
 {
 	if(m_pFinger)
@@ -66,6 +71,18 @@ void Joystick::Render()
 	}
 	m_outerSprite.Render();
 	m_innerSprite.Render();
+}
+
+void Joystick::Pause()
+{
+	Global::pContext->pInputService->UnLink_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
+	Global::pContext->pInputService->UnLink_FUP(Param2PtrCallbackStruct(UP_callback,this));
+}
+
+void Joystick::Continue()
+{
+	Global::pContext->pInputService->Link_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
+	Global::pContext->pInputService->Link_FUP(Param2PtrCallbackStruct(UP_callback,this));
 }
 
 Joystick::~Joystick()

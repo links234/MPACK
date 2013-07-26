@@ -15,13 +15,14 @@ namespace Game
 	enum
 	{
 		GUIMENU_NOTHING,
+		GUIMENU_BUTTON_CONTINUE,
 		GUIMENU_BUTTON_NEWGAME,
 		GUIMENU_BUTTON_HIGHSCORE,
 		GUIMENU_BUTTON_CREDITS,
 		GUIMENU_BUTTON_EXIT
 	};
 
-	MainMenu::MainMenu()
+	MainMenu::MainMenu(bool isGamePaused)
 	{
 		m_pButtonTexture=new Texture2D();
 		m_pButtonTexture->Load("@Sprites/GUI_Button.tga",Bilinear);
@@ -41,6 +42,10 @@ namespace Game
 		m_pMenuGUI=new GUIMenu;
 		m_pMenuGUI->m_sprite=m_pButtonSprite;
 
+		if(isGamePaused)
+		{
+			m_pMenuGUI->AddButton("Continue",GUIMENU_BUTTON_CONTINUE);
+		}
 		m_pMenuGUI->AddButton("New Game",GUIMENU_BUTTON_NEWGAME);
 		m_pMenuGUI->AddButton("Highscore",GUIMENU_BUTTON_HIGHSCORE);
 		m_pMenuGUI->AddButton("Credits",GUIMENU_BUTTON_CREDITS);
@@ -55,6 +60,9 @@ namespace Game
 		int action=m_pMenuGUI->Update(lTimeStep);
 		switch(action)
 		{
+			case GUIMENU_BUTTON_CONTINUE:
+				return EVENT_MAINMENU_CONTINUE;
+			break;
 			case GUIMENU_BUTTON_NEWGAME:
 				return EVENT_MAINMENU_NEWGAME;
 			break;
@@ -76,8 +84,14 @@ namespace Game
 	{
 		m_pBackgroundSprite->Render();
 		m_pMenuGUI->Render();
+	}
 
-		Debug::Print(Global::pFont,"%lf %lf",Global::pContext->pInputService->m_currMouse->Pos.x,Global::pContext->pInputService->m_currMouse->Pos.y);
+	void MainMenu::Pause()
+	{
+	}
+
+	void MainMenu::Continue()
+	{
 	}
 
 	MainMenu::~MainMenu()

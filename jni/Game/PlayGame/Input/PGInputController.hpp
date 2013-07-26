@@ -15,7 +15,10 @@ public:
 
 	virtual Math::Vector2f 	GetMovementDirection() const = 0;
 	virtual Math::Vector2f 	GetShootingDirection() const = 0;
-	virtual bool 			IsUserRequestingExit() const = 0;
+	virtual bool 			IsUserRequestingExit() = 0;
+
+	virtual void Pause() = 0;
+	virtual void Continue() = 0;
 
 	void SetMaxAcceleration(const GLfloat &maxAcceleration);
 

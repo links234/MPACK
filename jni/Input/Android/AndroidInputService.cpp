@@ -144,6 +144,42 @@ namespace Core
 	{
 		m_callbackFunc_KEYBACK.push_back(link);
 	}
+
+	void AndroidInputService::UnLink_FUP(const Param2PtrCallbackStruct &link)
+	{
+		for(vector<Param2PtrCallbackStruct>::iterator it=m_callbackFunc_FUP.begin();it!=m_callbackFunc_FUP.end();++it)
+		{
+			if(*it==link)
+			{
+				m_callbackFunc_FUP.erase(it);
+				return;
+			}
+		}
+	}
+
+	void AndroidInputService::UnLink_FDOWN(const Param2PtrCallbackStruct &link)
+	{
+		for(vector<Param2PtrCallbackStruct>::iterator it=m_callbackFunc_FDOWN.begin();it!=m_callbackFunc_FDOWN.end();++it)
+		{
+			if(*it==link)
+			{
+				m_callbackFunc_FDOWN.erase(it);
+				return;
+			}
+		}
+	}
+
+	void AndroidInputService::UnLink_KEYBACK(const Param1PtrCallbackStruct &link)
+	{
+		for(vector<Param1PtrCallbackStruct>::iterator it=m_callbackFunc_KEYBACK.begin();it!=m_callbackFunc_KEYBACK.end();++it)
+		{
+			if(*it==link)
+			{
+				m_callbackFunc_KEYBACK.erase(it);
+				return;
+			}
+		}
+	}
 }
 
 #endif

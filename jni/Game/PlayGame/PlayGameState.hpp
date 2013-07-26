@@ -24,6 +24,9 @@ namespace Game
 		int Update();
 		void Render();
 
+		void Pause();
+		void Continue();
+
 		~PlayGame();
 
 	private:

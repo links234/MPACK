@@ -45,20 +45,11 @@ namespace Core
 
     void GraphicsService::Update(GLfloat delta)
     {
-        Object::UpdateAll(delta);
-        ParticleEmitter::UpdateAll(delta);
-        Particle::UpdateAll(delta);
-        Camera2D::UpdateAll(delta);
     }
 
     Status GraphicsService::Render()
     {
     	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    	SpriteBatcher::EnableCamera();
-    	Object::RenderAll();
-    	Particle::RenderAll();
-    	SpriteBatcher::DisableCamera();
 
 		SpriteBatcher::FlushAll();
 		return STATUS_OK;
