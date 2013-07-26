@@ -2,6 +2,8 @@
 
 Enemy::Enemy()
 {
+	m_objectType=Object::t_Enemy;
+
 	vector<Vector2f> vertices;
 	vertices.push_back(Vector2f(0.0f,30.0f));
 	vertices.push_back(Vector2f(30.0f,30.0f));

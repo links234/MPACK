@@ -12,6 +12,16 @@ using namespace std;
 class Object
 {
 public:
+	enum Type
+	{
+		t_Object,
+		t_Enemy,
+		t_PhysicalObject,
+		t_Player,
+		t_Projectile,
+		t_SpriteObject
+	};
+
 	Object();
 	virtual ~Object();
 
@@ -24,6 +34,8 @@ public:
 	static void RenderAll();
 
 	bool m_debugInCollision;
+
+	Type m_objectType;
 
 protected:
 	static vector<Object*> s_objects;

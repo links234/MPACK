@@ -19,9 +19,13 @@ PGAndroidInput::PGAndroidInput()
 	m_joystickOuterTex->Load("@Sprites/joystick_outer.png");
 
 	//Joystick setup
-	m_joystick=new Joystick;
-	m_joystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
-	m_joystick->SetMaxDistance(100.0f);
+	m_movementJoystick=new Joystick;
+	m_movementJoystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
+	m_movementJoystick->SetMaxDistance(100.0f);
+
+	m_aimJoystick=new Joystick(Vector2f(Render::GetScreenWidth(),Render::GetScreenHeight()),Vector2f(-1.0f,-1.0f));
+	m_aimJoystick->SetTextures(m_joystickInnerTex,m_joystickOuterTex);
+	m_aimJoystick->SetMaxDistance(100.0f);
 
 	//Setup input surface
 	m_fingers[0]=m_fingers[1]=NULL;
@@ -34,12 +38,14 @@ PGAndroidInput::~PGAndroidInput()
 	delete m_joystickInnerTex;
 	delete m_joystickOuterTex;
 
-	delete m_joystick;
+	delete m_movementJoystick;
+	delete m_aimJoystick;
 }
 
 void PGAndroidInput::Update(GLfloat delta)
 {
-	m_joystick->Update();
+	m_movementJoystick->Update();
+	m_aimJoystick->Update();
 
 	if(m_fingers[1])
 	{
@@ -66,19 +72,20 @@ void PGAndroidInput::Update(GLfloat delta)
 
 void PGAndroidInput::Render()
 {
-	m_joystick->Render();
+	m_movementJoystick->Render();
+	m_aimJoystick->Render();
 }
 
 Vector2f PGAndroidInput::GetMovementDirection() const
 {
-	float acceleration=m_joystick->m_dir.Length()/m_joystick->GetMaxDistance();
+	float acceleration=m_movementJoystick->m_dir.Length()/m_movementJoystick->GetMaxDistance();
 	acceleration*=m_maxAcceleration;
-	return (m_joystick->m_dir.Normalized()*acceleration).Rotated(Global::pActiveCamera->GetDirection().Angle());
+	return (m_movementJoystick->m_dir.Normalized()*acceleration).Rotated(Global::pActiveCamera->GetDirection().Angle());
 }
 
 Vector2f PGAndroidInput::GetShootingDirection() const
 {
-	return Vector2f();
+	return m_aimJoystick->m_dir.Normalized();
 }
 
 bool PGAndroidInput::IsUserRequestingExit()
@@ -90,7 +97,8 @@ bool PGAndroidInput::IsUserRequestingExit()
 
 void PGAndroidInput::Pause()
 {
-	m_joystick->Pause();
+	m_movementJoystick->Pause();
+	m_aimJoystick->Pause();
 	Global::pContext->pInputService->UnLink_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
 	Global::pContext->pInputService->UnLink_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
 	Global::pContext->pInputService->UnLink_FUP(Param2PtrCallbackStruct(UP_callback,this));
@@ -98,7 +106,8 @@ void PGAndroidInput::Pause()
 
 void PGAndroidInput::Continue()
 {
-	m_joystick->Continue();
+	m_movementJoystick->Continue();
+	m_aimJoystick->Continue();
 	Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
 	Global::pContext->pInputService->Link_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
 	Global::pContext->pInputService->Link_FUP(Param2PtrCallbackStruct(UP_callback,this));

@@ -35,7 +35,8 @@ private:
 
 	Texture2D	*m_joystickInnerTex;
 	Texture2D	*m_joystickOuterTex;
-	Joystick 	*m_joystick;
+	Joystick 	*m_movementJoystick;
+	Joystick	*m_aimJoystick;
 
 	Finger		*m_fingers[2];
 	Vector2f	m_firstScalePosition[2];

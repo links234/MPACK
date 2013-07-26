@@ -1,17 +1,14 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#ifndef PROJECTILE_HPP
+#define PROJECTILE_HPP
 
 #include "PhysicalObject.hpp"
 #include "SpriteObject.hpp"
 
-using namespace Math;
-using namespace Core;
-
-class Player : public SpriteObject, public PhysicalObject
+class Projectile : public PhysicalObject, public SpriteObject
 {
 public:
-	Player();
-	virtual ~Player();
+	Projectile();
+	virtual ~Projectile();
 
 	virtual bool Update(GLfloat delta);
 	virtual void Render();
@@ -19,8 +16,6 @@ public:
 	virtual Vector2f GetCameraPosition() const;
 
 	virtual void SetSprite(Sprite *pSprite);
-
-	void Shoot(Vector2f direction);
 };
 
 #endif

@@ -7,7 +7,7 @@
 vector<Object*> Object::s_objects;
 
 Object::Object()
-	: m_debugInCollision(true)
+	: m_debugInCollision(true), m_objectType(Object::t_Object)
 {
 	s_objects.push_back(this);
 }

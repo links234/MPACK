@@ -12,7 +12,7 @@ using namespace Core;
 class Joystick
 {
 public:
-	Joystick(Vector2f point=Vector2f(0.0f,Render::GetScreenHeight()), GLfloat radius=250.0f);
+	Joystick(Vector2f point=Vector2f(0.0f,Render::GetScreenHeight()), Vector2f renderDirection=Vector2f(1.0f,-1.0f), GLfloat radius=250.0f);
 
 	void SetTextures(Texture2D *innerTex, Texture2D *outerTex);
 
@@ -34,7 +34,7 @@ private:
 	static void UP_callback(void *param1, void *param2);
 
 	Finger 		*m_pFinger;
-	Vector2f 	m_firstPos,m_currentPos,m_actionCircleCenter;
+	Vector2f 	m_firstPos,m_currentPos,m_actionCircleCenter,m_renderDirection;
 	GLfloat 	m_maxDistance,m_actionCircleRadius;
 
 	Sprite 		m_innerSprite,m_outerSprite;

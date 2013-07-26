@@ -2,6 +2,7 @@
 
 Player::Player()
 {
+	m_objectType=Object::t_Player;
 }
 
 Player::~Player()
@@ -32,4 +33,9 @@ void Player::SetSprite(Sprite *pSprite)
 	m_sprite=pSprite;
 	PPoly *poly=(PPoly*)(m_shape);
 	poly->SetAsBox(m_sprite->GetWidth()*0.5f,m_sprite->GetHeight()*0.5f);
+}
+
+void Player::Shoot(Vector2f direction)
+{
+
 }

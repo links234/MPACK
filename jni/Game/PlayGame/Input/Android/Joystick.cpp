@@ -7,10 +7,11 @@
 #include "Context.hpp"
 #include "Render.hpp"
 
-Joystick::Joystick(Vector2f point, GLfloat radius)
+Joystick::Joystick(Vector2f point, Vector2f renderDirection, GLfloat radius)
 	: m_pFinger(NULL)
 {
 	m_actionCircleCenter=point;
+	m_renderDirection=renderDirection;
 	m_actionCircleRadius=radius;
 
 	Global::pContext->pInputService->Link_FDOWN(Param2PtrCallbackStruct(DOWN_callback,this));
@@ -67,7 +68,7 @@ void Joystick::Render()
 	else
 	{
 		GLfloat dist=m_actionCircleRadius*0.25f;
-		m_outerSprite.m_position=m_innerSprite.m_position=m_actionCircleCenter+Vector2f(dist,-dist);
+		m_outerSprite.m_position=m_innerSprite.m_position=m_actionCircleCenter+m_renderDirection*dist;
 	}
 	m_outerSprite.Render();
 	m_innerSprite.Render();
