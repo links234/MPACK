@@ -33,8 +33,6 @@
 *
 ***************************************************************************/
 
-#include "Platform.hpp"
-
 #ifdef WINDOWS_PLATFORM
 
 #ifndef __glee_h_

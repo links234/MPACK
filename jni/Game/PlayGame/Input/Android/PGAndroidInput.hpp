@@ -1,5 +1,3 @@
-#include "Platform.hpp"
-
 #ifdef ANDROID_PLATFORM
 
 #ifndef PGANDROIDINPUT_HPP

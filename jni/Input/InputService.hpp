@@ -1,8 +1,6 @@
 #ifndef INPUTSERVICE_HPP
 #define INPUTSERVICE_HPP
 
-#include "Platform.hpp"
-
 #include "Types.hpp"
 #include "Android/AndroidInputService.hpp"
 #include "Windows/WindowsInputService.hpp"

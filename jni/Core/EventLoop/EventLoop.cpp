@@ -1,7 +1,5 @@
 #include "EventLoop.hpp"
 
-#include "Platform.hpp"
-
 #include "AndroidEventLoop.hpp"
 #include "WindowsEventLoop.hpp"
 

@@ -1,5 +1,3 @@
-#include "Platform.hpp"
-
 #ifdef WINDOWS_PLATFORM
 
 #ifndef WINDOWSEVENTLOOP_HPP

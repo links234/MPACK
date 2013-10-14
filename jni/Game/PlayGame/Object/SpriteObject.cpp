@@ -2,7 +2,6 @@
 
 SpriteObject::SpriteObject()
 {
-	m_objectType=Object::t_SpriteObject;
 }
 
 SpriteObject::~SpriteObject()

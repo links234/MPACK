@@ -4,7 +4,6 @@
 
 PhysicalObject::PhysicalObject()
 {
-	m_objectType=Object::t_PhysicalObject;
 	m_userData=this;
 }
 

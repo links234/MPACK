@@ -1,6 +1,5 @@
 #include "GameState.hpp"
 
-#include "Platform.hpp"
 #include "Context.hpp"
 #include "InputService.hpp"
 #include "Particles.hpp"

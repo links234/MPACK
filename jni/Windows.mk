@@ -32,7 +32,7 @@ OBJ_FOLDERS = $(patsubst $(SDIR)%, $(ODIR)%, $(shell /usr/bin/find $(SDIR) -type
 #Only change stuff below this line  if you're aware of what you're doing
 OBJS = $(patsubst %,$(ODIR)%,$(_OBJS))
 
-CFLAGS := -O0 -g
+CFLAGS := -O0 -g -DWINDOWS_PLATFORM
 
 #$(info Includes:)
 #$(info $(INC))

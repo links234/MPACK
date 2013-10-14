@@ -1,6 +1,5 @@
 #include "PGInputController.hpp"
 
-#include "Platform.hpp"
 #include "PGAndroidInput.hpp"
 #include "PGWindowsInput.hpp"
 

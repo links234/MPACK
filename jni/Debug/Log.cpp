@@ -1,7 +1,5 @@
 #include "Log.hpp"
 
-#include "Platform.hpp"
-
 #include <stdarg.h>
 #include <cstdio>
 

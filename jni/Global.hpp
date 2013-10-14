@@ -1,7 +1,6 @@
 #ifndef GLOBAL_HPP
 #define GLOBAL_HPP
 
-#include "Platform.hpp"
 #include "Types.hpp"
 
 #define HUD_LAYER		500.0f

@@ -1,8 +1,6 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
-#include "Platform.hpp"
-
 #ifdef ANDROID_PLATFORM
 	#include <android_native_app_glue.h>
 	#include <EGL/egl.h>

@@ -1,4 +1,3 @@
-#include "Platform.hpp"
 #include "Types.hpp"
 #include "Log.hpp"
 #include "Context.hpp"

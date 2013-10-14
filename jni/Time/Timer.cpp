@@ -1,7 +1,5 @@
 #include "Timer.hpp"
 
-#include "Platform.hpp"
-
 #include "Types.hpp"
 #include "WindowsTimer.hpp"
 #include "AndroidTimer.hpp"

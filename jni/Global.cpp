@@ -1,6 +1,5 @@
 #include "Global.hpp"
 
-#include "Platform.hpp"
 #include "Context.hpp"
 
 namespace Global

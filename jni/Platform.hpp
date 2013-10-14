@@ -1,7 +1,0 @@
-#ifndef PLATFORM_HPP
-#define PLATFORM_HPP
-
-#define ANDROID_PLATFORM
-//#define WINDOWS_PLATFORM
-
-#endif

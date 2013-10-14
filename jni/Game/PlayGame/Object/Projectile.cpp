@@ -2,7 +2,6 @@
 
 Projectile::Projectile()
 {
-	m_objectType=Object::t_Projectile;
 }
 
 Projectile::~Projectile()

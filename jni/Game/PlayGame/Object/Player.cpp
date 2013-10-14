@@ -2,7 +2,6 @@
 
 Player::Player()
 {
-	m_objectType=Object::t_Player;
 }
 
 Player::~Player()

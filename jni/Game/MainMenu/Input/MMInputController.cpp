@@ -1,6 +1,5 @@
 #include "MMInputController.hpp"
 
-#include "Platform.hpp"
 #include "MMAndroidInput.hpp"
 #include "MMWindowsInput.hpp"
 
