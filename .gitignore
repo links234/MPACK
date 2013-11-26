@@ -1,9 +1,17 @@
 #Windows distro files
 game.exe
+
+#Linux distro files
+game
+
+#Generic desktop distro
 log.html
 
 #Windows binary folders
 obj_win/
+
+#Linux binary folders
+obj_linux/
 
 #Android NDK/SDK binary folders
 bin/
