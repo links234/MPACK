@@ -9,18 +9,33 @@
 	#include <SLES/OpenSLES.h>
 	#include <SLES/OpenSLES_Android.h>
 	#include <SLES/OpenSLES_AndroidConfiguration.h>
-#elif defined(WINDOWS_PLATFORM)
+#elif	defined(WINDOWS_PLATFORM)
 	#include <windows.h>
-	#include <map>
-	#include <vector>
 	#include "GLee.h"
 	#include <GL/gl.h>
 	#include <GL/glu.h>
+#elif	defined(LINUX_PLATFORM)
+	#define GLX_GLXEXT_LEGACY
+	#include "GLee.h"
+	#include <GL/glx.h>
+	#include <GL/gl.h>
+	#include <GL/glu.h>
+	#include "glxext.h"
+	#include <cstdarg>
+	#include <cstdio>
+#endif
+
+#ifdef LINUX_PLATFORM
+	#include <stdint.h>
+#else
+	#define		intptr_t	int
 #endif
 
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <map>
+#include <vector>
 
 #include "Maths.hpp"
 #include "../Debug/Debug.hpp"
@@ -45,11 +60,11 @@ typedef unsigned char		BYTE;
 namespace Core
 {
 	typedef int		int32_t;
-    typedef int32_t 	Status;
+    typedef int32_t	 	ReturnValue;
 
-    const Status STATUS_OK   = 0;
-    const Status STATUS_KO   = -1;
-    const Status STATUS_EXIT = -2;
+    const ReturnValue RETURN_VALUE_OK   = 0;
+    const ReturnValue RETURN_VALUE_KO   = -1;
+    const ReturnValue RETURN_VALUE_EXIT = -2;
 
     typedef void (*Param0CallbackFunc)();
     typedef void (*Param1PtrCallbackFunc)(void*);

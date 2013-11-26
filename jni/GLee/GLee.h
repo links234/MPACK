@@ -33,7 +33,7 @@
 *
 ***************************************************************************/
 
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
 #ifndef __glee_h_
 #define __glee_h_

@@ -2,6 +2,7 @@
 
 #include "AndroidEventLoop.hpp"
 #include "WindowsEventLoop.hpp"
+#include "LinuxEventLoop.hpp"
 
 namespace Core
 {
@@ -21,6 +22,8 @@ namespace Core
 		pEventLoop=(EventLoop*)new AndroidEventLoop(data);
 #elif	defined(WINDOWS_PLATFORM)
 		pEventLoop=(EventLoop*)new WindowsEventLoop(data);
+#elif	defined(LINUX_PLATFORM)
+		pEventLoop=(EventLoop*)new LinuxEventLoop(data);
 #endif
 		return pEventLoop;
 	}

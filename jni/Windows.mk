@@ -1,4 +1,4 @@
-#Location and name of your application (i.e. in the bin/ folder, named game.exe
+#Location and name of your application 
 OUT = game.exe
 
 #Compiler (i.e. g++ for C++, or gcc for C)
@@ -19,7 +19,7 @@ INC =  $(LOCAL_C_INCLUDES) -I/usr/i586-mingw32msvc/include/ -I/usr/i586-mingw32m
 
 #Path to libs (again, standard setup for MinGW on Windows)
 #begin each directory location with -L and each flag with -l
-LIBS = -Llib -L/usr/i586-mingw32msvc/lib/ -L/usr/i586-mingw32msvc/libpng/lib -lpng -lmingw32 -lglee -lopengl32 -lglu32 -mwindows -lm -lole32 -lwinmm -lolepro32 -luuid -lz
+LIBS = -Llib/Windows -L/usr/i586-mingw32msvc/lib/ -L/usr/i586-mingw32msvc/libpng/lib -lpng -lmingw32 -lglee -lopengl32 -lglu32 -mwindows -lm -lole32 -lwinmm -lolepro32 -luuid -lz
 
 SRC = $(shell find $(SDIR) -name '*.cpp')
 SRC += $(shell find $(SDIR) -name '*.c')

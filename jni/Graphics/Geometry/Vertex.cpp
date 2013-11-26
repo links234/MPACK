@@ -8,8 +8,6 @@
 
 #include "Vertex.hpp"
 
-#include "Platform.hpp"
-
 #include <sstream>
 
 using std::ostringstream;
@@ -17,11 +15,14 @@ using std::ostringstream;
 AbstractProgramType* Sprite_Program;
 
 #ifdef ANDROID_PLATFORM
-#define		VERTEXSHADER_SPRITE		"@Shaders/Android/Sprite.vert"
-#define		FRAGMENTSHADER_SPRITE	"@Shaders/Android/Sprite.frag"
+#define		VERTEXSHADER_SPRITE		"@Shaders/OpenGLES2/Sprite.vert"
+#define		FRAGMENTSHADER_SPRITE	"@Shaders/OpenGLES2/Sprite.frag"
 #elif	defined(WINDOWS_PLATFORM)
-#define		VERTEXSHADER_SPRITE		"@Shaders/Windows/Sprite.vert"
-#define		FRAGMENTSHADER_SPRITE	"@Shaders/Windows/Sprite.frag"
+#define		VERTEXSHADER_SPRITE		"@Shaders/OpenGL2/Sprite.vert"
+#define		FRAGMENTSHADER_SPRITE	"@Shaders/OpenGL2/Sprite.frag"
+#elif	defined(LINUX_PLATFORM)
+#define		VERTEXSHADER_SPRITE		"@Shaders/OpenGL2/Sprite.vert"
+#define		FRAGMENTSHADER_SPRITE	"@Shaders/OpenGL2/Sprite.frag"
 #endif
 
 bool InitVertexPrograms()

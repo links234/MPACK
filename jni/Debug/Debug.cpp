@@ -21,7 +21,7 @@ namespace Debug
 	void Print(TextureMappedFont *font, const char *message, ...)
 	{
 		char buffer[DEBUGMESSAGEBUFFER_SIZE];
-		memset(buffer,NULL,DEBUGMESSAGEBUFFER_SIZE);
+		memset(buffer,0,DEBUGMESSAGEBUFFER_SIZE);
 
 		va_list args;
 		va_start(args,message);

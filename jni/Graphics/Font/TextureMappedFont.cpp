@@ -166,7 +166,7 @@ void TextureMappedFont::SetCharSpacing(GLfloat charSpacing)
 bool TextureMappedFont::Load(const string& textureName)
 {
 	TargaImage fontImage;
-	if(fontImage.Load(textureName.c_str())==STATUS_KO)
+	if(fontImage.Load(textureName.c_str())==RETURN_VALUE_KO)
 	{
 		LOGE("Texture Mapped Font: Could not load the font texture: %s",textureName.c_str());
 		return false;

@@ -1,4 +1,4 @@
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
 #ifndef FILELOGGER_H
 #define FILELOGGER_H

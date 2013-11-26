@@ -26,16 +26,15 @@ namespace Core
 		Unload();
 	}
 
-	Status TargaImage::Load(const string& filename)
+	ReturnValue TargaImage::Load(const string& filename)
 	{
-		LOGD("BLA!!! 11111");
 		Resource *resource=LoadResource(filename.c_str());
-LOGD("BLA!!!");
-		if (resource->Open()!=STATUS_OK)
+
+		if (resource->Open()!=RETURN_VALUE_OK)
 		{
 			LOGE("Could not open the targa image file for reading");
 			delete resource;
-			return STATUS_KO;
+			return RETURN_VALUE_KO;
 		}
 
 		unsigned char* pointer=(unsigned char*)resource->Bufferize();
@@ -47,7 +46,7 @@ LOGD("BLA!!!");
 		{
 			LOGE("This is not a supported image type");
 			delete resource;
-			return STATUS_KO;
+			return RETURN_VALUE_KO;
 		}
 
 		m_width = m_header.width;
@@ -60,7 +59,7 @@ LOGD("BLA!!!");
 		{
 			LOGE("Color depth not supported: %d",m_bytesPerPixel);
 			delete resource;
-			return STATUS_KO;
+			return RETURN_VALUE_KO;
 		}
 
 		if(m_bytesPerPixel==3)
@@ -100,9 +99,9 @@ LOGD("BLA!!!");
 		delete resource;
 		if(result)
 		{
-			return STATUS_OK;
+			return RETURN_VALUE_OK;
 		}
-		return STATUS_KO;
+		return RETURN_VALUE_KO;
 	}
 
 	void TargaImage::Unload()

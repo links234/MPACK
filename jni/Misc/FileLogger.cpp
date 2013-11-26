@@ -1,7 +1,8 @@
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
 #include "FileLogger.hpp"
 
+#include <cstring>
 #include <cstdarg>
 #include <cstdio>
 #include <ctime>

@@ -4,6 +4,7 @@
 #include "Types.hpp"
 #include "Android/AndroidInputService.hpp"
 #include "Windows/WindowsInputService.hpp"
+#include "Linux/LinuxInputService.hpp"
 
 namespace Core
 {
@@ -25,6 +26,8 @@ namespace Core
 	typedef	 AndroidInputService	InputService;
 #elif	defined(WINDOWS_PLATFORM)
 	typedef	 WindowsInputService	InputService;
+#elif	defined(LINUX_PLATFORM)
+	typedef LinuxInputService		InputService;
 #endif
 }
 

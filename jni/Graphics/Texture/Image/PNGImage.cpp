@@ -16,7 +16,7 @@ namespace Core
 		Unload();
 	}
 
-    Status PNGImage::Load(const string& filename)
+    ReturnValue PNGImage::Load(const string& filename)
     {
     	LOGI("PNGImage::Load Loading texture %s", filename.c_str());
 
@@ -30,20 +30,20 @@ namespace Core
         bool transparency;
 
         // Opens and checks image signature (first 8 bytes).
-        if (pResource->Open() != STATUS_OK)
+        if (pResource->Open() != RETURN_VALUE_OK)
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	//goto ERROR_LABEL;
         }
         LOGD("PNGImage::Load Checking signature.");
-        if (pResource->Read(header, sizeof(header)) != STATUS_OK)
+        if (pResource->Read(header, sizeof(header)) != RETURN_VALUE_OK)
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
         if (png_sig_cmp(header, 0, 8) != 0)
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
 
@@ -52,13 +52,13 @@ namespace Core
         pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
         if (!pngPtr)
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
         infoPtr = png_create_info_struct(pngPtr);
         if (!infoPtr)
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
 
@@ -68,7 +68,7 @@ namespace Core
         // code will come back here and jump
         if (setjmp(png_jmpbuf(pngPtr)))
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
 
@@ -78,7 +78,7 @@ namespace Core
         // Retrieves PNG info and updates PNG struct accordingly.
         png_int_32 depth, colorType;
         png_uint_32 width, height;
-        png_get_IHDR(pngPtr, infoPtr, &width, &height, &depth, &colorType, NULL, NULL, NULL);
+        png_get_IHDR(pngPtr, infoPtr, &width, &height, (int*)&depth, (int*)&colorType, NULL, NULL, NULL);
         m_width = width; m_height = height;
 
         // Creates a full alpha channel if transparency is encoded as
@@ -88,7 +88,7 @@ namespace Core
         {
             png_set_tRNS_to_alpha(pngPtr);
             transparency = true;
-            return STATUS_KO;
+            return RETURN_VALUE_KO;
                     	//goto ERROR_LABEL;
         }
         // Expands PNG with less than 8bits per channel to 8bits.
@@ -132,14 +132,14 @@ namespace Core
         rowSize = png_get_rowbytes(pngPtr, infoPtr);
         if (rowSize <= 0)
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
         // Ceates the image buffer that will be sent to OpenGL.
         m_imageBuffer = new png_byte[rowSize * height];
         if (!m_imageBuffer)
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
         // Pointers to each row of the image buffer. Row order is
@@ -148,7 +148,7 @@ namespace Core
         rowPtrs = new png_bytep[height];
         if (!rowPtrs)
         {
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
         for (int32_t i = 0; i < height; ++i)
@@ -162,7 +162,7 @@ namespace Core
         pResource->Close();
         png_destroy_read_struct(&pngPtr, &infoPtr, NULL);
         delete[] rowPtrs;
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
 
 //ERROR_LABEL:
     	LOGE("Error while reading PNG file");
@@ -181,7 +181,7 @@ namespace Core
             png_infop* infoPtrP = infoPtr != NULL ? &infoPtr: NULL;
             png_destroy_read_struct(&pngPtr, infoPtrP, NULL);
         }
-        return STATUS_KO;
+        return RETURN_VALUE_KO;
     }
 
     void PNGImage::Unload()
@@ -215,7 +215,7 @@ namespace Core
 	void PNGImage::callback_read(png_structp pStruct, png_bytep pData, png_size_t pSize)
 	{
 		Resource* lResource = ((Resource*) png_get_io_ptr(pStruct));
-		if (lResource->Read(pData, pSize) != STATUS_OK)
+		if (lResource->Read(pData, pSize) != RETURN_VALUE_OK)
 		{
 			lResource->Close();
 		}

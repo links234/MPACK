@@ -1,6 +1,5 @@
 #include "TimeService.hpp"
 
-#include "Platform.hpp"
 #include "Types.hpp"
 #include "AndroidTimeService.hpp"
 #include "WindowsTimeService.hpp"

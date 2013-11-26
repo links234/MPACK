@@ -21,7 +21,7 @@ namespace Core
         {
         	LOGD("Successfully opened SD file");
         }
-        return mInputStream ? STATUS_OK : STATUS_KO;
+        return mInputStream ? RETURN_VALUE_OK : RETURN_VALUE_KO;
     }
 
     void SDInputFile::Close()
@@ -40,7 +40,7 @@ namespace Core
     Status SDInputFile::Read(void* pBuffer, size_t pCount)
     {
         mInputStream.read((char*)pBuffer, pCount);
-        return (!mInputStream.fail()) ? STATUS_OK : STATUS_KO;
+        return (!mInputStream.fail()) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
     }
 
     int SDInputFile::GetLength()

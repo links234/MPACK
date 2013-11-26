@@ -28,15 +28,15 @@ namespace Core
         return mResource->GetPath();
     }
 
-    Status Sound::Load()
+    ReturnValue Sound::Load()
     {
         //LOGI("Loading sound %s", mResource.GetPath());
         Status lRes;
 
         // Opens sound file.
-        if (mResource->Open() != STATUS_OK)
+        if (mResource->Open() != RETURN_VALUE_OK)
         {
-            return STATUS_KO;
+            return RETURN_VALUE_KO;
         }
 
         // Reads sound file.
@@ -47,14 +47,14 @@ namespace Core
         lRes = mResource->Read(mBuffer, mLength);
         mResource->Close();
 
-        if (lRes != STATUS_OK)
+        if (lRes != RETURN_VALUE_OK)
         {
             LOGE("Error while reading PCM sound.");
-            return STATUS_KO;
+            return RETURN_VALUE_KO;
         }
         else
         {
-            return STATUS_OK;
+            return RETURN_VALUE_OK;
         }
     }
 
@@ -63,7 +63,7 @@ namespace Core
         delete[] mBuffer;
         mBuffer = NULL; mLength = 0;
 
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
     }
 
 

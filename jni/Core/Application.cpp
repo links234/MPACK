@@ -25,27 +25,27 @@ namespace Game
 		LOGI("Application::~Application");
     }
 
-	Core::Status Application::onActivate()
+	Core::ReturnValue Application::onActivate()
     {
 		LOGI("Application::onActivate");
         // Starts services.
-		if (Global::pContext->pGraphicsService->Start() != Core::STATUS_OK)
+		if (Global::pContext->pGraphicsService->Start() != Core::RETURN_VALUE_OK)
 		{
 			LOGE("Application::onActivate failed to start graphics service");
-			return Core::STATUS_KO;
+			return Core::RETURN_VALUE_KO;
 		}
-		if (Global::pContext->pSoundService->Start() != Core::STATUS_OK)
+		if (Global::pContext->pSoundService->Start() != Core::RETURN_VALUE_OK)
 		{
 			LOGE("Application::onActivate failed to start sound service");
-			return Core::STATUS_KO;
+			return Core::RETURN_VALUE_KO;
 		}
-
+		LOGI("FINE!!");
 		Global::pContext->pSoundService->PlayBGMPlaylist("@Sounds/playlist.txt");
-
+		LOGI("FINE2!!");
 		Global::pContext->pInputService->Reset();
-
+		LOGI("FINE3!!");
 		Global::pContext->pTimeService->Reset();
-
+		LOGI("FINE4!!");
 		m_pCursorTex = new Texture2D();
 		m_pCursorTex->Load("@Sprites/Cursor.png",Bilinear);
 
@@ -55,7 +55,7 @@ namespace Game
 #endif
 
 		m_pGameState = new MainMenu;
-		return Core::STATUS_OK;
+		return Core::RETURN_VALUE_OK;
     }
 
     void Application::onDeactivate()
@@ -72,7 +72,7 @@ namespace Game
     	delete m_pCursorTex;
     }
 
-    Core::Status Application::onStep()
+    Core::ReturnValue Application::onStep()
     {
     	// Update clock
     	Global::pContext->pTimeService->Update();
@@ -123,7 +123,7 @@ namespace Game
 
     		break;
     		case EVENT_MAINMENU_EXIT:
-    			return STATUS_KO;
+    			return RETURN_VALUE_KO;
     		break;
     		case EVENT_PLAYGAME_PAUSE:
     			m_pGameState->Pause();
@@ -146,10 +146,10 @@ namespace Game
 #endif
 
     	// Render current scene and swap buffers
-		if (Global::pContext->pGraphicsService->Render() != Core::STATUS_OK) {
-			return Core::STATUS_KO;
+		if (Global::pContext->pGraphicsService->Render() != Core::RETURN_VALUE_OK) {
+			return Core::RETURN_VALUE_KO;
 		}
-		return Core::STATUS_OK;
+		return Core::RETURN_VALUE_OK;
     }
 
     void Application::onStart()

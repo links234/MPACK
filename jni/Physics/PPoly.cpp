@@ -1,5 +1,9 @@
 #include "PPoly.hpp"
 
+#ifndef NULL
+#define NULL	0
+#endif
+
 namespace Core
 {
 	PPoly::PPoly()

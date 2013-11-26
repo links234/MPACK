@@ -54,7 +54,7 @@ namespace Core
 			image=new PNGImage;
 		}
 
-		if(image->Load(pPath)==STATUS_KO)
+		if(image->Load(pPath)==RETURN_VALUE_KO)
 		{
 			LOGE("LoadImage: Failed to load");
 			delete image;

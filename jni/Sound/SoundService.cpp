@@ -90,7 +90,7 @@ namespace Core
         LOGE("Error while starting SoundService");
         Stop();
 #endif
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
     }
 
     void SoundService::Stop()
@@ -205,12 +205,12 @@ namespace Core
 			if (lRes != SL_RESULT_SUCCESS) goto ERROR;
         }
 
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
 
     ERROR:
         LOGE("Error while starting sound players");
 #endif
-        return STATUS_KO;
+        return RETURN_VALUE_KO;
     }
 
     Status SoundService::StartBGMPlayer()
@@ -274,12 +274,12 @@ namespace Core
 				SL_IID_BUFFERQUEUE, &mBGMPlayerQueue);
 		if (lRes != SL_RESULT_SUCCESS) goto ERROR;
 
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
 
     ERROR:
         LOGE("Error while starting bgm players");
 #endif
-        return STATUS_KO;
+        return RETURN_VALUE_KO;
     }
 
     Status SoundService::PlayBGMPlaylist(const char* pPath, bool forced)
@@ -333,11 +333,11 @@ namespace Core
 
     	}
 
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
 
     ERROR:
 #endif
-        return STATUS_KO;
+        return RETURN_VALUE_KO;
     }
 
     

@@ -31,7 +31,7 @@ void ProgramType_Vertex3fPos4fColor::SendVertexBuffer()
 void ProgramType_Vertex3fPos4fColor::SendVertexBuffer(GLfloat *VA)
 {
 	glVertexAttribPointer((GLint)0,3,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*7,VA);
-	glVertexAttribPointer((GLint)1,4,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*7,(GLvoid*)((GLuint)(VA)+(GLuint)(sizeof(GLfloat))*3));
+	glVertexAttribPointer((GLint)1,4,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*7,(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat))*3));
 }
 void ProgramType_Vertex3fPos4fColor::EnableVertexAttributes()
 {
@@ -81,9 +81,9 @@ void ProgramType_Sprite::SendVertexBuffer()
 void ProgramType_Sprite::SendVertexBuffer(GLfloat *VA)
 {
 	glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),VA);
-	glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((GLuint)(VA)+(GLuint)(sizeof(GLfloat)*2)));
-	glVertexAttribPointer((GLint)2,4,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((GLuint)(VA)+(GLuint)(sizeof(GLfloat)*4)));
-	glVertexAttribPointer((GLint)3,1,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((GLuint)(VA)+(GLuint)(sizeof(GLfloat)*8)));
+	glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*2)));
+	glVertexAttribPointer((GLint)2,4,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*4)));
+	glVertexAttribPointer((GLint)3,1,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*8)));
 }
 void ProgramType_Sprite::EnableVertexAttributes()
 {

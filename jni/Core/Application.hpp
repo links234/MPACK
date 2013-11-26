@@ -35,9 +35,9 @@ namespace Game
     	~Application();
 
 	protected:
-        Core::Status onActivate();
+        Core::ReturnValue onActivate();
         void onDeactivate();
-        Core::Status onStep();
+        Core::ReturnValue onStep();
 
         void onStart();
         void onResume();

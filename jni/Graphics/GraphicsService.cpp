@@ -29,7 +29,7 @@ namespace Core
 
 		LoadResources();
 
-    	return STATUS_OK;
+    	return RETURN_VALUE_OK;
     }
 
     void GraphicsService::Stop()
@@ -52,7 +52,7 @@ namespace Core
     	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		SpriteBatcher::FlushAll();
-		return STATUS_OK;
+		return RETURN_VALUE_OK;
     }
 
     Status GraphicsService::LoadResources()
@@ -62,7 +62,7 @@ namespace Core
 
     	InitVertexPrograms();
 
-    	return STATUS_OK;
+    	return RETURN_VALUE_OK;
     }
 
     Status GraphicsService::UnloadResources()
@@ -71,6 +71,6 @@ namespace Core
 
     	DeleteVertexPrograms();
 
-    	return STATUS_OK;
+    	return RETURN_VALUE_OK;
     }
 }

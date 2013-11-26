@@ -34,7 +34,7 @@ namespace Core
     	{
     		return (Resource*)(new SDInputFile(pPath+1));
     	}
-#elif	defined(WINDOWS_PLATFORM)
+#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	char pathBuffer[PATH_BUFFER_SIZE];
     	if(pPath[0]=='@')
 		{

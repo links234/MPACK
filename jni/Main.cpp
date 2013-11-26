@@ -12,8 +12,6 @@
 #include "Global.hpp"
 #include "Debug/Debug.hpp"
 
-#include <fstream>
-
 #ifdef ANDROID_PLATFORM
 void android_main(android_app* pApplication)
 #elif 	defined(WINDOWS_PLATFORM)
@@ -21,6 +19,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR cmdLine,
                    int cmdShow)
+#elif	defined(LINUX_PLATFORM)
+int main()
 #endif
 {
 	Core::Log::Initialize();
@@ -42,8 +42,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     Global::pContext = &lContext;
 
+
+
 //Event loop parameter setup
-#ifdef ANDROID_PLATFORM
+#if defined(ANDROID_PLATFORM) || defined(LINUX_PLATFORM)
     void *data=NULL;
 #elif	defined(WINDOWS_PLATFORM)
     void *data=(void*)(&hInstance);
@@ -55,7 +57,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
     Core::Log::Destroy();
 
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     return result;
 #endif
 }

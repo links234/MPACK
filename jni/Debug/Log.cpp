@@ -9,13 +9,12 @@
 #include <android/log.h>
 #elif	defined(WINDOWS_PLATFORM)
 #include <windows.h>
-#include <cstdio>
 #endif
 
 #define LOG_TAG 		"MPACK"
 #define	 BUFFERSIZE 	65536
 
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 FileLogger *pFileLogger;
 #endif
 
@@ -23,14 +22,14 @@ namespace Core
 {
 	void Log::Initialize()
 	{
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		pFileLogger=new FileLogger("log.html");
 #endif
 	}
 
 	void Log::Destroy()
 	{
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		delete pFileLogger;
 #endif
 	}
@@ -46,7 +45,7 @@ namespace Core
 #ifdef ANDROID_PLATFORM
 		__android_log_print(ANDROID_LOG_INFO, LOG_TAG, buffer);
 		__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
-#elif	defined(WINDOWS_PLATFORM)
+#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Info: %s\n", buffer);
 		pFileLogger->Print(FileLogger::Succes,"%s",buffer);
 #endif
@@ -63,7 +62,7 @@ namespace Core
 #ifdef ANDROID_PLATFORM
 		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, buffer);
 		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "\n");
-#elif	defined(WINDOWS_PLATFORM)
+#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Error: %s\n", buffer);
 		pFileLogger->Print(FileLogger::CriticalFailure,"%s",buffer);
 #endif
@@ -80,7 +79,7 @@ namespace Core
 #ifdef ANDROID_PLATFORM
 		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, buffer);
 		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
-#elif	defined(WINDOWS_PLATFORM)
+#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Info: %s\n", buffer);
 		pFileLogger->Print(FileLogger::Warning,"%s",buffer);
 #endif
@@ -97,7 +96,7 @@ namespace Core
 #ifdef ANDROID_PLATFORM
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, buffer);
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
-#elif	defined(WINDOWS_PLATFORM)
+#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Info: %s\n", buffer);
 		pFileLogger->Print(FileLogger::Information,"%s",buffer);
 #endif
