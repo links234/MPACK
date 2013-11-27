@@ -20,8 +20,8 @@ namespace Core
 
         const char* GetPath();
 
-        Status Load();
-        Status Unload();
+        ReturnValue Load();
+        ReturnValue Unload();
 
         uint8_t* GetPCMData();
         off_t GetPCMLength();

@@ -17,7 +17,7 @@ namespace Core
     {
     public:
     	WindowsEventLoop(void *data);
-        Status Run(ActivityHandler* pActivityHandler);
+        ReturnValue Run(ActivityHandler* pActivityHandler);
 
         void* GetWindowHandle() const;
 
@@ -25,7 +25,7 @@ namespace Core
         static LRESULT CALLBACK StaticWndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
         LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-        Status InitializeDisplay();
+        ReturnValue InitializeDisplay();
         void DestroyDisplay();
 
         void SetupPixelFormat();

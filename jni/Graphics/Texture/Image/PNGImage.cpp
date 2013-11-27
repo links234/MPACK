@@ -52,16 +52,18 @@ namespace Core
         pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
         if (!pngPtr)
         {
+        	LOGE("PNGImage::Load failed to create read structure!");
         	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
         infoPtr = png_create_info_struct(pngPtr);
+        LOGD("PNGImage::Load check 0");
         if (!infoPtr)
         {
         	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
-
+        LOGD("PNGImage::Load check 1");
         // Prepares reading operation by setting-up a read callback.
         png_set_read_fn(pngPtr, pResource, callback_read);
         // Set-up error management. If an error occurs while reading,
@@ -71,6 +73,7 @@ namespace Core
         	return RETURN_VALUE_KO;
         	        	//goto ERROR_LABEL;
         }
+        LOGD("PNGImage::Load check 2");
 
         // Ignores first 8 bytes already read and processes header.
         png_set_sig_bytes(pngPtr, 8);
@@ -91,6 +94,7 @@ namespace Core
             return RETURN_VALUE_KO;
                     	//goto ERROR_LABEL;
         }
+        LOGD("PNGImage::Load check 3");
         // Expands PNG with less than 8bits per channel to 8bits.
         if (depth < 8)
         {

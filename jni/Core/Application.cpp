@@ -39,13 +39,13 @@ namespace Game
 			LOGE("Application::onActivate failed to start sound service");
 			return Core::RETURN_VALUE_KO;
 		}
-		LOGI("FINE!!");
+
 		Global::pContext->pSoundService->PlayBGMPlaylist("@Sounds/playlist.txt");
-		LOGI("FINE2!!");
+
 		Global::pContext->pInputService->Reset();
-		LOGI("FINE3!!");
+
 		Global::pContext->pTimeService->Reset();
-		LOGI("FINE4!!");
+
 		m_pCursorTex = new Texture2D();
 		m_pCursorTex->Load("@Sprites/Cursor.png",Bilinear);
 

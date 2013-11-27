@@ -39,7 +39,7 @@ namespace Core
 #endif
     }
 
-    Status SoundService::Start()
+    ReturnValue SoundService::Start()
     {
         LOGI("Starting SoundService.");
 #ifdef ANDROID_PLATFORM
@@ -73,18 +73,18 @@ namespace Core
         lRes = (*mOutputMixObj)->Realize(mOutputMixObj, SL_BOOLEAN_FALSE);
 
         // Set-up sound player.
-        if (StartSoundPlayers() != STATUS_OK)
+        if (StartSoundPlayers() != RETURN_VALUE_OK)
         {
         	goto ERROR;
         }
 
-        if (StartBGMPlayer() != STATUS_OK)
+        if (StartBGMPlayer() != RETURN_VALUE_OK)
         {
 			goto ERROR;
 		}
 
 
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
 
     ERROR:
         LOGE("Error while starting SoundService");
@@ -137,7 +137,7 @@ namespace Core
 #endif
     }
 
-    Status SoundService::StartSoundPlayers()
+    ReturnValue SoundService::StartSoundPlayers()
     {
     	LOGSS("Starting sound players.");
 #ifdef ANDROID_PLATFORM
@@ -213,7 +213,7 @@ namespace Core
         return RETURN_VALUE_KO;
     }
 
-    Status SoundService::StartBGMPlayer()
+    ReturnValue SoundService::StartBGMPlayer()
     {
     	LOGSS("Starting bgm player.");
 #ifdef ANDROID_PLATFORM
@@ -282,7 +282,7 @@ namespace Core
         return RETURN_VALUE_KO;
     }
 
-    Status SoundService::PlayBGMPlaylist(const char* pPath, bool forced)
+    ReturnValue SoundService::PlayBGMPlaylist(const char* pPath, bool forced)
     {
 #ifdef ANDROID_PLATFORM
     	SLresult lRes;

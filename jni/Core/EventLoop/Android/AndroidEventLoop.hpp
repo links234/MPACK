@@ -17,7 +17,7 @@ namespace Core
     {
     public:
         AndroidEventLoop(void *data);
-        Status Run(ActivityHandler* pActivityHandler);
+        ReturnValue Run(ActivityHandler* pActivityHandler);
 
         void* GetWindowHandle() const;
 
@@ -29,7 +29,7 @@ namespace Core
         int32_t ProcessInputEvent(AInputEvent* pEvent);
         void ProcessSensorEvent();
 
-        Status InitializeDisplay();
+        ReturnValue InitializeDisplay();
         void DestroyDisplay();
 
     private:

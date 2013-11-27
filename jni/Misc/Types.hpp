@@ -27,7 +27,7 @@
 
 #ifdef LINUX_PLATFORM
 	#include <stdint.h>
-#else
+#elif	defined(ANDROID_PLATFORM)
 	#define		intptr_t	int
 #endif
 

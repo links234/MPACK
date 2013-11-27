@@ -10,15 +10,15 @@ namespace Core
     public:
         GraphicsService();
 
-        Status Start();
+        ReturnValue Start();
         void Stop();
 
         void Update(GLfloat delta);
-        Status Render();
+        ReturnValue Render();
 
 	protected:
-		Status LoadResources();
-		Status UnloadResources();
+        ReturnValue LoadResources();
+        ReturnValue UnloadResources();
     };
 }
 #endif

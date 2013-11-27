@@ -13,7 +13,7 @@ namespace Core
 		Image();
 		virtual ~Image();
 
-		virtual Status Load(const string& filename) = 0;
+		virtual ReturnValue Load(const string& filename) = 0;
 		virtual void Unload() = 0;
 
 		GLushort GetWidth() const;

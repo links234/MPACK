@@ -9,7 +9,7 @@ namespace Core
     	LOGD("SDInputFile constructor");
     }
 
-    Status SDInputFile::Open()
+    ReturnValue SDInputFile::Open()
     {
     	LOGD("SDInputFile Opening |%s| ",mPath);
         mInputStream.open(mPath, std::ios::in | std::ios::binary);
@@ -37,7 +37,7 @@ namespace Core
     	}
 	}
 
-    Status SDInputFile::Read(void* pBuffer, size_t pCount)
+    ReturnValue SDInputFile::Read(void* pBuffer, size_t pCount)
     {
         mInputStream.read((char*)pBuffer, pCount);
         return (!mInputStream.fail()) ? RETURN_VALUE_OK : RETURN_VALUE_KO;

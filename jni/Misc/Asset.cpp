@@ -16,14 +16,14 @@ namespace Core
 	{
     }
 
-    Status Asset::Open()
+	ReturnValue Asset::Open()
     {
         mAsset = AAssetManager_open(Global::pAAssetManager, mPath, AASSET_MODE_UNKNOWN);
         if(mAsset == NULL)
         {
         	LOGE("Failed to open asset: %s",mPath);
         }
-        return (mAsset != NULL) ? STATUS_OK : STATUS_KO;
+        return (mAsset != NULL) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
     }
 
     void Asset::Close()
@@ -41,10 +41,10 @@ namespace Core
         }
     }
 
-    Status Asset::Read(void* pBuffer, size_t pCount)
+    ReturnValue Asset::Read(void* pBuffer, size_t pCount)
     {
         int32_t lReadCount = AAsset_read(mAsset, pBuffer, pCount);
-        return (lReadCount == pCount) ? STATUS_OK : STATUS_KO;
+        return (lReadCount == pCount) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
     }
 
     int Asset::GetLength()

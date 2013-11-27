@@ -20,7 +20,7 @@ namespace Core
     	LOGI("Creating GraphicsService.");
     }
 
-    Status GraphicsService::Start()
+    ReturnValue GraphicsService::Start()
     {
     	Render::Init();
 		Render::SetOrthoMode();
@@ -47,7 +47,7 @@ namespace Core
     {
     }
 
-    Status GraphicsService::Render()
+    ReturnValue GraphicsService::Render()
     {
     	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -55,7 +55,7 @@ namespace Core
 		return RETURN_VALUE_OK;
     }
 
-    Status GraphicsService::LoadResources()
+    ReturnValue GraphicsService::LoadResources()
     {
 		Global::pFont=new TextureMappedFont;
 		Global::pFont->Load("@Fonts/Font.tga");
@@ -65,7 +65,7 @@ namespace Core
     	return RETURN_VALUE_OK;
     }
 
-    Status GraphicsService::UnloadResources()
+    ReturnValue GraphicsService::UnloadResources()
     {
     	delete Global::pFont;
 

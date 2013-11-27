@@ -31,7 +31,7 @@ namespace Core
     ReturnValue Sound::Load()
     {
         //LOGI("Loading sound %s", mResource.GetPath());
-        Status lRes;
+        ReturnValue lRes;
 
         // Opens sound file.
         if (mResource->Open() != RETURN_VALUE_OK)
@@ -58,7 +58,7 @@ namespace Core
         }
     }
 
-    Status Sound::Unload()
+    ReturnValue Sound::Unload()
     {
         delete[] mBuffer;
         mBuffer = NULL; mLength = 0;

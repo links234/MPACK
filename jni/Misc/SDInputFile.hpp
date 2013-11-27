@@ -13,9 +13,9 @@ namespace Core
     public:
         SDInputFile(const char* pPath);
 
-        virtual Status Open();
+        virtual ReturnValue Open();
         virtual void Close();
-        virtual Status Read(void* pBuffer, size_t pCount);
+        virtual ReturnValue Read(void* pBuffer, size_t pCount);
 
         virtual int GetLength();
         virtual const void* Bufferize();

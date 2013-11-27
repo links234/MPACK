@@ -3,6 +3,7 @@
 #include "Types.hpp"
 #include "AndroidTimeService.hpp"
 #include "WindowsTimeService.hpp"
+#include "LinuxTimeService.hpp"
 
 namespace Core
 {
@@ -21,6 +22,8 @@ namespace Core
 		pTimeService = (TimeService*) new AndroidTimeService();
 #elif	defined(WINDOWS_PLATFORM)
 		pTimeService = (TimeService*) new WindowsTimeService();
+#elif	defined(LINUX_PLATFORM)
+		pTimeService = (TimeService*) new LinuxTimeService();
 #endif
 		return pTimeService;
 	}

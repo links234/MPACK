@@ -3,7 +3,7 @@ OUT = game
 
 #Compiler (i.e. g++ for C++, or gcc for C)
 CXX = g++
-CC = g++
+CC  = g++
 
 #Directory for includes (headers, etc.)
 IDIR = jni
@@ -19,7 +19,7 @@ LOCAL_C_INCLUDES = $(patsubst %, -I%, $(shell /usr/bin/find $(SRC_DIR) -type d))
 INC =  $(LOCAL_C_INCLUDES) -I/usr/local/libpng/include
 
 #Begin each directory location with -L and each flag with -l
-LIBS = -lpng -lm -lX11 -lXau -lXdmcp -lXext -lGL -lz 
+LIBS = -lpng15 -lm -lX11 -lXau -lXdmcp -lXext -lGL -lz 
 
 CC_SRC = $(shell find $(SRC_DIR) -name '*.c')
 CXX_SRC = $(shell find $(SRC_DIR) -name '*.cpp')
@@ -37,9 +37,6 @@ OBJS += $(patsubst %,$(OBJ_DIR)%,$(CXX_OBJS))
 CFLAGS := -O0 -g -DLINUX_PLATFORM
 CXXFLAGS := -O0 -g -DLINUX_PLATFORM
 
-$(info Includes:)
-$(info $(INC))
-
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(OBJ_FOLDERS)
 	$(CC) -c $(INC) -o $@ $< $(CFLAGS) 
@@ -49,7 +46,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) -c $(INC) -o $@ $< $(CXXFLAGS) 
 
 $(OUT): $(OBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 clean:
 	rm -f $(OBJS) $(OUT)

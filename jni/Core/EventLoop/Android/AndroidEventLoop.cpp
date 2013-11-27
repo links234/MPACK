@@ -20,7 +20,7 @@ namespace Core
         Global::pAndroidApp->onInputEvent = callback_input;
     }
 
-    Status AndroidEventLoop::Run(ActivityHandler* pActivityHandler)
+    ReturnValue AndroidEventLoop::Run(ActivityHandler* pActivityHandler)
     {
         int32_t lResult;
         int32_t lEvents;
@@ -47,14 +47,14 @@ namespace Core
                 if (Global::pAndroidApp->destroyRequested)
                 {
                 	LOGI("Exiting event loop");
-                    return STATUS_OK;
+                    return RETURN_VALUE_OK;
                 }
             }
 
             // Steps the application.
             if ((mEnabled) && (!mQuit))
             {
-                if (m_pActivityHandler->onStep() != STATUS_OK)
+                if (m_pActivityHandler->onStep() != RETURN_VALUE_OK)
                 {
                     mQuit = true;
                     ANativeActivity_finish(Global::pAndroidApp->activity);
@@ -67,7 +67,7 @@ namespace Core
 				}
             }
         }
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
     }
 
     void* AndroidEventLoop::GetWindowHandle() const
@@ -81,14 +81,14 @@ namespace Core
         if ((!mEnabled) && (Global::pAndroidApp->window != NULL))
         {
             mQuit = false; mEnabled = true;
-            if ( InitializeDisplay() != STATUS_OK )
+            if ( InitializeDisplay() != RETURN_VALUE_OK )
             {
             	mQuit = true;
 				Deactivate();
 				ANativeActivity_finish(Global::pAndroidApp->activity);
 				return;
             }
-            if (m_pActivityHandler->onActivate() != STATUS_OK)
+            if (m_pActivityHandler->onActivate() != RETURN_VALUE_OK)
             {
                 mQuit = true;
                 Deactivate();
@@ -194,7 +194,7 @@ namespace Core
 		return lEventLoop.ProcessInputEvent(pEvent);
 	}
 
-	Status AndroidEventLoop::InitializeDisplay()
+	ReturnValue AndroidEventLoop::InitializeDisplay()
 	{
 		int mWidth, mHeight;
 
@@ -276,12 +276,12 @@ namespace Core
 
 		Render::SetScreenSize(mWidth,mHeight);
 
-		return STATUS_OK;
+		return RETURN_VALUE_OK;
 
 	ERROR:
 		LOGE("Error while starting GraphicsService");
 		DestroyDisplay();
-		return STATUS_KO;
+		return RETURN_VALUE_KO;
 	}
 
 	void AndroidEventLoop::DestroyDisplay()

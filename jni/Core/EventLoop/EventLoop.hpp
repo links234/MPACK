@@ -16,7 +16,7 @@ namespace Core
     	EventLoop();
     	virtual ~EventLoop();
 
-        virtual Status Run(ActivityHandler *pActivityHandler)=0;
+        virtual ReturnValue Run(ActivityHandler *pActivityHandler)=0;
 
         virtual void* GetWindowHandle() const = 0;
 

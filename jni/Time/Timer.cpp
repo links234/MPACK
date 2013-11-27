@@ -3,6 +3,7 @@
 #include "Types.hpp"
 #include "WindowsTimer.hpp"
 #include "AndroidTimer.hpp"
+#include "LinuxTimer.hpp"
 
 namespace Core
 {
@@ -21,6 +22,8 @@ namespace Core
     pTimer = (Timer*) new AndroidTimer();
 #elif	defined(WINDOWS_PLATFORM)
     pTimer = (Timer*) new WindowsTimer();
+#elif	defined(LINUX_PLATFORM)
+    pTimer = (Timer*) new LinuxTimer();
 #endif
     	return pTimer;
     }

@@ -23,10 +23,10 @@ namespace Core
         SoundService();
         ~SoundService();
 
-        Status Start();
+        ReturnValue Start();
         void Stop();
 
-        Status PlayBGMPlaylist(const char* pPath, bool forced = false); //uses new playlist for bgm. Chandg occurs after finishing current track if not forced
+        ReturnValue PlayBGMPlaylist(const char* pPath, bool forced = false); //uses new playlist for bgm. Chandg occurs after finishing current track if not forced
         
 
         void RegisterSound(const char* pPath);
@@ -44,8 +44,8 @@ namespace Core
         void ResumeAll();
 
     private:
-        Status StartSoundPlayers();
-        Status StartBGMPlayer();
+        ReturnValue StartSoundPlayers();
+        ReturnValue StartBGMPlayer();
 
     private:
 #ifdef ANDROID_PLATFORM

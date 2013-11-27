@@ -10,9 +10,9 @@ namespace Core
     public:
         virtual ~ActivityHandler() {};
 
-        virtual Status onActivate() = 0;
+        virtual ReturnValue onActivate() = 0;
         virtual void onDeactivate() = 0;
-        virtual Status onStep() = 0;
+        virtual ReturnValue onStep() = 0;
 
         virtual void onStart() {};
         virtual void onResume() {};

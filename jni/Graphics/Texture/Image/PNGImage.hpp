@@ -14,7 +14,7 @@ namespace Core
     	PNGImage();
 		virtual ~PNGImage();
 
-		Status Load(const string& filename);
+		ReturnValue Load(const string& filename);
 		void Unload();
 
 		const BYTE* GetImageData() const;
