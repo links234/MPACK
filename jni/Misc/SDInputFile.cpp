@@ -79,14 +79,15 @@ namespace Core
         	LOGI("Already bufferized");
         	return mBuffer;
         }
-        mBuffer = new char[lSize];
+        mBuffer = new char[lSize+1];
 
         int pos = mInputStream.tellg();
         mInputStream.seekg(0);
-
         mInputStream.read(mBuffer, lSize);
-
         mInputStream.seekg(pos);
+
+        mBuffer[lSize]=NULL;
+
         if (!mInputStream.fail())
         {
             return mBuffer;
