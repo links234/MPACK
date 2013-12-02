@@ -1,7 +1,7 @@
 #include "MMInputController.hpp"
 
 #include "MMAndroidInput.hpp"
-#include "MMWindowsInput.hpp"
+#include "MMDesktopInput.hpp"
 
 MMInputController::MMInputController()
 {
@@ -26,8 +26,8 @@ MMInputController* MMInputController::Initialize()
 	MMInputController *pMMInputController=NULL;
 #ifdef 	ANDROID_PLATFORM
 	pMMInputController=new MMAndroidInput();
-#elif	defined(WINDOWS_PLATFORM)
-	pMMInputController=new MMWindowsInput();
+#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	pMMInputController=new MMDesktopInput();
 #endif
 	return pMMInputController;
 }

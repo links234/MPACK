@@ -47,7 +47,7 @@ namespace Core
 		__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
 #elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Info: %s\n", buffer);
-		pFileLogger->Print(FileLogger::Succes,"%s",buffer);
+		pFileLogger->Print(FileLogger::Succes,std::string(buffer));
 #endif
     }
 

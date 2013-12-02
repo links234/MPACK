@@ -1,21 +1,21 @@
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
-#include "MMWindowsInput.hpp"
+#include "MMDesktopInput.hpp"
 
 #include "Global.hpp"
 #include "Context.hpp"
 #include "InputService.hpp"
 
-MMWindowsInput::MMWindowsInput()
+MMDesktopInput::MMDesktopInput()
 	: m_pFinger(NULL)
 {
 }
 
-MMWindowsInput::~MMWindowsInput()
+MMDesktopInput::~MMDesktopInput()
 {
 }
 
-void MMWindowsInput::Update(GLfloat delta)
+void MMDesktopInput::Update(GLfloat delta)
 {
 	if(m_pFinger)
 	{

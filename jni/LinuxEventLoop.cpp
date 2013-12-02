@@ -29,7 +29,7 @@ namespace Core
 
     	InitializeDisplay();
     	m_pActivityHandler->onActivate();
-    	while(1);
+
         // Global step loop.
         while(m_isRunning)
 		{
@@ -217,11 +217,16 @@ namespace Core
 				break;
 			case ConfigureNotify:
 			{
-				m_width = event.xconfigure.width;
-				m_height = event.xconfigure.height;
-				m_pActivityHandler->onDeactivate();
-				Render::SetScreenSize(m_width,m_height);
-				m_pActivityHandler->onActivate();
+				int width = event.xconfigure.width;
+				int height = event.xconfigure.height;
+				if(width!=m_width || height!=m_height)
+				{
+					m_width=width;
+					m_height=height;
+					m_pActivityHandler->onDeactivate();
+					Render::SetScreenSize(m_width,m_height);
+					m_pActivityHandler->onActivate();
+				}
 			}
 			break;
 			case KeyPress:

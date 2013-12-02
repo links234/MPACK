@@ -8,6 +8,7 @@
 #include <ctime>
 
 #define BUFFER_SIZE		65536
+#define TBUFFER_SIZE	64
 #define BASESIZE		3
 
 FileLogger::FileLogger(std::string fileName)
@@ -60,32 +61,60 @@ void FileLogger::Print(MessageType messageType, std::string message)
 		return;
 	}
 
-	Print(messageType,"%s",message.c_str());
-}
-
-void FileLogger::Print(MessageType messageType, const char *message, ...)
-{
 	time_t t;
 	time(&t);
 	tm *t_tm;
 	t_tm=localtime(&t);
 
+	char tbuffer[TBUFFER_SIZE];
+	memset(tbuffer,NULL,TBUFFER_SIZE);
+	strftime(tbuffer,TBUFFER_SIZE,"%A %d/%m/%y at %X",t_tm);
+
+	char buffer[BUFFER_SIZE];
+	memset(buffer,NULL,BUFFER_SIZE);
+
+	m_hLog=fopen(m_sFileName.c_str(),"at");
+	if(!m_hLog)
+	{
+		Disable();
+	}
+	if(m_bDatePrinting)
+	{
+		fprintf(m_hLog,"<pre>\n<font color=%s size=\"%d\" face=\"%s\"><b>%s:<b>\n</font>",GetColor(messageType),m_iBaseSize+GetSize(messageType)+1,GetFace(messageType),tbuffer);
+		fprintf(m_hLog,"<font color=%s size=\"%d\" face=\"%s\">%s</font>\n</pre>\n",GetColor(messageType),m_iBaseSize+GetSize(messageType),GetFace(messageType),message.c_str());
+	}
+	else
+	{
+		fprintf(m_hLog,"<font color=%s size=\"%d\" face=\"%s\">%s</font>\n",GetColor(messageType),m_iBaseSize+GetSize(messageType),GetFace(messageType),message.c_str());
+	}
+	fclose(m_hLog);
+}
+
+void FileLogger::Print(MessageType messageType, const char *message, ...)
+{
 	if(!m_bIsActive)
 	{
 		return;
 	}
 
-	char tbuffer[BUFFER_SIZE];
-	memset(tbuffer,NULL,BUFFER_SIZE);
-	strftime(tbuffer,BUFFER_SIZE,"%A %d/%m/%y at %X",t_tm);
+	time_t t;
+	time(&t);
+	tm *t_tm;
+	t_tm=localtime(&t);
+
+	char tbuffer[TBUFFER_SIZE];
+	memset(tbuffer,NULL,TBUFFER_SIZE);
+	strftime(tbuffer,TBUFFER_SIZE,"%A %d/%m/%y at %X",t_tm);
 
 	char buffer[BUFFER_SIZE];
 	memset(buffer,NULL,BUFFER_SIZE);
 
 	va_list args;
 	va_start(args,message);
-	vsprintf (buffer,message,args);
+	vsprintf(buffer,message,args);
 	va_end(args);
+
+
 
 	m_hLog=fopen(m_sFileName.c_str(),"at");
 	if(!m_hLog)
