@@ -19,7 +19,7 @@ LOCAL_C_INCLUDES = $(patsubst %, -I%, $(shell /usr/bin/find $(SRC_DIR) -type d))
 INC =  $(LOCAL_C_INCLUDES) -I/usr/local/libpng/include
 
 #Begin each directory location with -L and each flag with -l
-LIBS = -lpng15 -lm -lX11 -lXau -lXdmcp -lXext -lGL -lz 
+LIBS = -lpng -lm -lX11 -lXau -lXdmcp -lXext -lGL -lz 
 
 CC_SRC = $(shell find $(SRC_DIR) -name '*.c')
 CXX_SRC = $(shell find $(SRC_DIR) -name '*.cpp')
