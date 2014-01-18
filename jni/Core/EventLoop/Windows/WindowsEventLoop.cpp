@@ -18,7 +18,7 @@ namespace Core
     {
     }
 
-    Status WindowsEventLoop::Run(ActivityHandler* pActivityHandler)
+    ReturnValue WindowsEventLoop::Run(ActivityHandler* pActivityHandler)
     {
     	m_pActivityHandler = pActivityHandler;
     	m_isRunning=true;
@@ -30,7 +30,7 @@ namespace Core
         while(m_isRunning)
 		{
 			ProcessEvents();
-			if(m_pActivityHandler->onStep() != STATUS_OK)
+			if(m_pActivityHandler->onStep() != RETURN_VALUE_OK)
 			{
 				m_isRunning=false;
 			}
@@ -39,7 +39,7 @@ namespace Core
 
         m_pActivityHandler->onDeactivate();
         DestroyDisplay();
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
     }
 
     void* WindowsEventLoop::GetWindowHandle() const
@@ -47,7 +47,7 @@ namespace Core
     	return (void*)(&m_hwnd);
     }
 
-    Status WindowsEventLoop::InitializeDisplay()
+    ReturnValue WindowsEventLoop::InitializeDisplay()
     {
     	int width=800;
     	int height=600;
@@ -82,7 +82,7 @@ namespace Core
 
         if (!RegisterClassEx(&m_windowClass))
         {
-            return STATUS_KO;
+            return RETURN_VALUE_KO;
         }
 
         if (m_isFullscreen)
@@ -137,7 +137,7 @@ namespace Core
         {
             LOGE("WINDOW NOT CREATED!");
             LOGE("Code %d",  GetLastError());
-        	return STATUS_KO;
+        	return RETURN_VALUE_KO;
         }
         LOGI("Window created");
         m_hdc = GetDC(m_hwnd);
@@ -146,7 +146,7 @@ namespace Core
 
         ShowWindow(m_hwnd, SW_SHOW);
         UpdateWindow(m_hwnd);
-        return STATUS_OK;
+        return RETURN_VALUE_OK;
     }
 
     void WindowsEventLoop::DestroyDisplay()
