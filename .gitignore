@@ -23,13 +23,13 @@ gen/
 local.properties
 
 #Eclipse project files
-.project
-.classpath
-.cproject
+#.project
+#.classpath
+#.cproject
 
 #Eclipse project folders
-.externalToolBuilders/
-.settings/
+#.externalToolBuilders/
+#.settings/
 
 #Files
 lint.xml

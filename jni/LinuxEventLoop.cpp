@@ -1,6 +1,3 @@
-
-
-
 #ifdef LINUX_PLATFORM
 
 #include "LinuxEventLoop.hpp"
