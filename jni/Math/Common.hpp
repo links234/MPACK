@@ -33,7 +33,7 @@ namespace Math
 		static T Sqrt(const T);
 		static T InvSqrt(const T);
 
-		static bool Equal(T, const T);
+		static bool Equal(const T, const T);
 
 		static T DegToRad(const T);
 		static T RadToDeg(const T);
@@ -42,6 +42,7 @@ namespace Math
 		static T Max(const T, const T);
 		static T Clamp(const T, const T, const T);
 		static T Sign(const T);
+		static T Abs(const T);
 
 		static T Mod(const T, const T);
 	};
@@ -57,10 +58,9 @@ namespace Math
 	template<> inline float	Misc<float>::InvSqrt(const float v)		{ return 1.0f / sqrtf(v);	}
 	template<> inline double	Misc<double>::InvSqrt(const double v)	{ return 1.0 / sqrt(v);	}
 
-	template<class T> inline bool Misc<T>::Equal(T a, const T b)
+	template<class T> inline bool Misc<T>::Equal(const T a, const T b)
 	{
-		a = b-a;
-		return Misc<T>::c_Epsilon < a && a < Misc<T>::c_Epsilon;
+		return Misc<T>::Abs(a-b) < Misc<T>::c_Epsilon;
 	}
 
 	template<class T> inline T Misc<T>::DegToRad(const T deg)
@@ -115,6 +115,15 @@ namespace Math
 			return static_cast<T>(-1);
 		}
 		return static_cast<T>(1);
+	}
+
+	template<class T> inline T Misc<T>::Abs(const T a)
+	{
+		if(a<0)
+		{
+			return -a;
+		}
+		return a;
 	}
 
 	template<> inline float	Misc<float>::Mod(const float a, const float b)			{ return (float)fmod((double)(a),(double)(b));		}
