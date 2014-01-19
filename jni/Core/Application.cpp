@@ -5,7 +5,8 @@
 #include "TimeService.hpp"
 #include "Context.hpp"
 #include "Global.hpp"
-#include "Cursor.hpp"
+#include "CursorDrawer.hpp"
+#include "EventLoop.hpp"
 
 #include "MainMenuState.hpp"
 #include "PlayGameState.hpp"
@@ -49,9 +50,11 @@ namespace Game
 		m_pCursorTex = new Texture2D();
 		m_pCursorTex->Load("@Sprites/Cursor.png",Bilinear);
 
-#ifdef WINDOWS_PLATFORM
-		Cursor::GetInstance()->SetIcon(m_pCursorTex);
-		Cursor::GetInstance()->EnableAutohide();
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+		Global::pEventLoop->HideCursor();
+
+		CursorDrawer::GetInstance()->SetIcon(m_pCursorTex);
+		CursorDrawer::GetInstance()->EnableAutohide();
 #endif
 
 		m_pGameState = new MainMenu;
@@ -63,6 +66,8 @@ namespace Game
     	LOGI("Application::onDeactivate");
     	Global::pContext->pGraphicsService->Stop();
     	Global::pContext->pSoundService->Stop();
+
+    	Global::pEventLoop->ShowCursor();
 
     	if(m_pGameState != NULL)
     	{

@@ -43,6 +43,38 @@ namespace Core
         return RETURN_VALUE_OK;
     }
 
+    void LinuxEventLoop::ShowCursor()
+	{
+		Display* mainDisplay = XOpenDisplay(NULL);
+
+		XUndefineCursor(mainDisplay, m_XWindow);
+
+		XCloseDisplay(mainDisplay);
+	}
+
+    void LinuxEventLoop::HideCursor()
+    {
+    	Display* mainDisplay = XOpenDisplay(NULL);
+
+		Pixmap blank;
+		XColor dummy;
+		char data[1] = {0};
+
+		/* make a blank cursor */
+		blank = XCreateBitmapFromData (mainDisplay, m_XWindow, data, 1, 1);
+		Cursor m_cursor = XCreatePixmapCursor(mainDisplay, blank, blank, &dummy, &dummy, 0, 0);
+		XFreePixmap (mainDisplay, blank);
+
+		XDefineCursor(mainDisplay, m_XWindow, m_cursor);
+
+		XCloseDisplay(mainDisplay);
+    }
+
+    void* LinuxEventLoop::GetWindowHandle() const
+	{
+		return (void *)(&m_XWindow);
+	}
+
     ReturnValue LinuxEventLoop::InitializeDisplay()
     {
     	int width=800;
@@ -254,11 +286,6 @@ namespace Core
     void LinuxEventLoop::SwapBuffers()
     {
     	glXSwapBuffers(m_display, m_XWindow);
-    }
-
-    void* LinuxEventLoop::GetWindowHandle() const
-    {
-    	return (void *)(&m_XWindow);
     }
 }
 

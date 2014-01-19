@@ -1,7 +1,7 @@
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
-#ifndef CURSOR_HPP
-#define CURSOR_HPP
+#ifndef CURSORDRAWER_HPP
+#define CURSORDRAWER_HPP
 
 #include "Types.hpp"
 
@@ -12,7 +12,7 @@ namespace Core
 	class Timer;
 }
 
-class Cursor
+class CursorDrawer
 {
 public:
 	void Update();
@@ -26,11 +26,11 @@ public:
 	void EnableAutohide();
 	void DisableAutohide();
 
-	static Cursor* GetInstance();
+	static CursorDrawer* GetInstance();
 
 private:
-	Cursor();
-	~Cursor();
+	CursorDrawer();
+	~CursorDrawer();
 
 	void InitBuffers();
 
@@ -40,7 +40,7 @@ private:
 	bool				m_autohide;
 	Core::Timer			*m_pTimer;
 
-	static Cursor s_instance;
+	static CursorDrawer s_instance;
 	
 };
 

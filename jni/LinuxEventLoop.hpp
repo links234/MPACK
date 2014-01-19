@@ -27,6 +27,9 @@ namespace Core
 		LinuxEventLoop(void *data);
 		ReturnValue Run(ActivityHandler* pActivityHandler);
 
+		void ShowCursor();
+		void HideCursor();
+
 		void* GetWindowHandle() const;
 
 	protected:

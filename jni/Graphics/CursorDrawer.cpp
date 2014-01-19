@@ -1,20 +1,20 @@
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
-#include "Cursor.hpp"
+#include "CursorDrawer.hpp"
 #include "Texture2D.hpp"
 #include "Sprite.hpp"
-#include "WindowsTimer.hpp"
+#include "Timer.hpp"
 #include "Global.hpp"
 #include "Context.hpp"
 #include "InputService.hpp"
 
 using namespace Core;
 
-Cursor Cursor::s_instance;
+CursorDrawer CursorDrawer::s_instance;
 
 #define		CURSOR_LAYER	10000.0f
 
-Cursor::Cursor()
+CursorDrawer::CursorDrawer()
 	: m_hide(false), m_autohide(true), m_autohideTime(5.0f)
 {
 	m_pTimer=Timer::Create();
@@ -26,54 +26,54 @@ Cursor::Cursor()
 	m_pSprite->SetLayer(CURSOR_LAYER);
 }
 
-Cursor::~Cursor()
+CursorDrawer::~CursorDrawer()
 {
 	delete m_pSprite;
 	delete m_pTimer;
 }
 
-void Cursor::SetIcon(Texture2D *icon)
+void CursorDrawer::SetIcon(Texture2D *icon)
 {
 	m_pSprite->SetTexture(icon);
 }
 
-void Cursor::SetIconWidth(GLfloat width)
+void CursorDrawer::SetIconWidth(GLfloat width)
 {
 	m_pSprite->SetWidth(width);
 }
 
-void Cursor::SetIconHeight(GLfloat height)
+void CursorDrawer::SetIconHeight(GLfloat height)
 {
 	m_pSprite->SetHeight(height);
 }
 
-void Cursor::SetIconSize(GLfloat width, GLfloat height)
+void CursorDrawer::SetIconSize(GLfloat width, GLfloat height)
 {
 	m_pSprite->SetSize(width,height);
 }
 
-void Cursor::Hide()
+void CursorDrawer::Hide()
 {
 	m_hide=true;
 }
 
-void Cursor::Show()
+void CursorDrawer::Show()
 {
 	m_hide=false;
 }
 
-void Cursor::EnableAutohide()
+void CursorDrawer::EnableAutohide()
 {
 	m_autohide=true;
 	m_pTimer->Start();
 }
 
-void Cursor::DisableAutohide()
+void CursorDrawer::DisableAutohide()
 {
 	m_autohide=false;
 }
 
-void Cursor::Update()
+void CursorDrawer::Update()
 {
 	if(m_autohide)
 	{
@@ -87,7 +87,7 @@ void Cursor::Update()
 	}
 }
 
-void Cursor::Render()
+void CursorDrawer::Render()
 {
 	if(m_pTimer->Time()<=m_autohideTime)
 	{
@@ -101,7 +101,7 @@ void Cursor::Render()
 	}
 }
 
-Cursor* Cursor::GetInstance()
+CursorDrawer* CursorDrawer::GetInstance()
 {
 	return &s_instance;
 }

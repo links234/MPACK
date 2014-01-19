@@ -42,6 +42,16 @@ namespace Core
         return RETURN_VALUE_OK;
     }
 
+    void WindowsEventLoop::ShowCursor()
+    {
+    	ShowCursor(true);
+    }
+
+    void WindowsEventLoop::HideCursor()
+    {
+    	ShowCursor(false);
+    }
+
     void* WindowsEventLoop::GetWindowHandle() const
     {
     	return (void*)(&m_hwnd);
@@ -141,8 +151,6 @@ namespace Core
         }
         LOGI("Window created");
         m_hdc = GetDC(m_hwnd);
-
-    	ShowCursor(false);
 
         ShowWindow(m_hwnd, SW_SHOW);
         UpdateWindow(m_hwnd);

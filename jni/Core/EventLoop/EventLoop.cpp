@@ -15,6 +15,14 @@ namespace Core
 	{
 	}
 
+	void EventLoop::ShowCursor()
+	{
+	}
+
+	void EventLoop::HideCursor()
+	{
+	}
+
 	EventLoop* EventLoop::Initialize(void *data)
 	{
 		EventLoop *pEventLoop=NULL;
