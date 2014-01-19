@@ -168,19 +168,19 @@ namespace Math
 
 	template<class T> inline bool	Vector3<T>::operator!= (const Vector3<T> &v)const
 	{
-		if(Misc<T>::Equal(x,v.x))
+		if(!Misc<T>::Equal(x,v.x))
 		{
-			return false;
+			return true;
 		}
-		if(Misc<T>::Equal(y,v.y))
+		if(!Misc<T>::Equal(y,v.y))
 		{
-			return false;
+			return true;
 		}
-		if(Misc<T>::Equal(z,v.z))
+		if(!Misc<T>::Equal(z,v.z))
 		{
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	template<class T> inline bool	Vector3<T>::operator== (const Vector3<T> &v)const

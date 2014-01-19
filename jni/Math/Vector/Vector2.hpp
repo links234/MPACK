@@ -200,15 +200,15 @@ namespace Math
 
 	template<class T> inline bool Vector2<T>::operator!= (const Vector2<T> &v)const
 	{
-		if(Misc<T>::Equal(x,v.x))
+		if(!Misc<T>::Equal(x,v.x))
 		{
-			return false;
+			return true;
 		}
-		if(Misc<T>::Equal(y,v.y))
+		if(!Misc<T>::Equal(y,v.y))
 		{
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	template<class T> inline bool Vector2<T>::operator==(const Vector2<T> &v) const

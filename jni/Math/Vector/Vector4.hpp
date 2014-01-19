@@ -155,23 +155,23 @@ namespace Math
 
 	template<class T> inline bool Vector4<T>::operator!= (const Vector4<T> &v)const
 	{
-		if(Misc<T>::Equal(x,v.x))
+		if(!Misc<T>::Equal(x,v.x))
 		{
-			return false;
+			return true;
 		}
-		if(Misc<T>::Equal(y,v.y))
+		if(!Misc<T>::Equal(y,v.y))
 		{
-			return false;
+			return true;
 		}
-		if(Misc<T>::Equal(z,v.z))
+		if(!Misc<T>::Equal(z,v.z))
 		{
-			return false;
+			return true;
 		}
-		if(Misc<T>::Equal(w,v.w))
+		if(!Misc<T>::Equal(w,v.w))
 		{
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	template<class T> inline bool Vector4<T>::operator==(const Vector4<T> &v) const
