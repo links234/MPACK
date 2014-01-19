@@ -44,12 +44,12 @@ namespace Core
 
     void WindowsEventLoop::ShowCursor()
     {
-    	ShowCursor(true);
+    	::ShowCursor(true);
     }
 
     void WindowsEventLoop::HideCursor()
     {
-    	ShowCursor(false);
+    	::ShowCursor(false);
     }
 
     void* WindowsEventLoop::GetWindowHandle() const
