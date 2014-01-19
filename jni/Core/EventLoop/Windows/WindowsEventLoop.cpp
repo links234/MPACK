@@ -119,7 +119,6 @@ namespace Core
         {
             dwExStyle = WS_EX_APPWINDOW;
             dwStyle = WS_POPUP;
-            ShowCursor(false);
         }
         else
         {
@@ -162,7 +161,6 @@ namespace Core
     	if (m_isFullscreen)
 		{
 			ChangeDisplaySettings(NULL, 0);
-			ShowCursor(true);
 		}
     }
 
