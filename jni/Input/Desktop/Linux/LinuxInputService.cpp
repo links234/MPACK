@@ -58,7 +58,8 @@ namespace Core
 				m_currMouse->Pos.y = winY;
 
 				m_currMouse->Button.Left = (mask & Button1Mask) ? true : false;
-				m_currMouse->Button.Right = (mask & Button2Mask) ? true : false;
+				m_currMouse->Button.Middle = (mask & Button2Mask) ? true : false;
+				m_currMouse->Button.Right = (mask & Button3Mask) ? true : false;
 			}
 
 			XCloseDisplay(dpy);
