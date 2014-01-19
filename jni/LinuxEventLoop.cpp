@@ -228,9 +228,7 @@ namespace Core
 			break;
 			case KeyPress:
 			{
-				if (XLookupKeysym(&event.xkey,0) == XK_Escape) {
-					m_isRunning = false;
-				}
+
 			}
 			break;
 			case KeyRelease:
