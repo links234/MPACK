@@ -77,19 +77,17 @@ void CursorDrawer::Update()
 {
 	if(m_autohide)
 	{
-		if(m_pTimer->Time()>m_autohideTime)
+		LOGI("%lf",m_pTimer->Time());
+		if((*Global::pContext->pInputService->m_currMouse)!=(*Global::pContext->pInputService->m_lastMouse))
 		{
-			if((*Global::pContext->pInputService->m_currMouse)!=(*Global::pContext->pInputService->m_lastMouse))
-			{
-				m_pTimer->Start();
-			}
+			m_pTimer->Start();
 		}
 	}
 }
 
 void CursorDrawer::Render()
 {
-	if(m_pTimer->Time()<=m_autohideTime)
+	if(m_pTimer->Time()<=m_autohideTime || m_autohide==false)
 	{
 		if(!m_hide)
 		{
