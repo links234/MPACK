@@ -54,6 +54,7 @@ namespace Game
 		Global::pEventLoop->HideCursor();
 
 		CursorDrawer::GetInstance()->SetIcon(m_pCursorTex);
+		CursorDrawer::GetInstance()->Show();
 		CursorDrawer::GetInstance()->EnableAutohide();
 #endif
 
@@ -146,8 +147,9 @@ namespace Game
     	// Render current game state
     	m_pGameState->Render();
 
-#ifdef WINDOWS_PLATFORM
-    	Cursor::GetInstance()->Render();
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+    	CursorDrawer::GetInstance()->Update();
+    	CursorDrawer::GetInstance()->Render();
 #endif
 
     	// Render current scene and swap buffers
