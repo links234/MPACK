@@ -5,8 +5,6 @@
 
 #include "Timer.hpp"
 
-#include <ctime>
-
 namespace Core
 {
     class LinuxTimer : public Timer
@@ -19,7 +17,7 @@ namespace Core
     	virtual double Time() const;
 
     private:
-    	clock_t	m_currClock;
+    	unsigned int	m_currClock;
     };
 }
 

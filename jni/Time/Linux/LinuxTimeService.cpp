@@ -4,6 +4,7 @@
 
 #include "Log.hpp"
 
+#include <sys/time.h>
 #include <ctime>
 
 namespace Core
@@ -30,7 +31,12 @@ namespace Core
 
     double LinuxTimeService::Now()
     {
-        return (double)(clock())/(double)(CLOCKS_PER_SEC);
+    	struct timeval t;
+		gettimeofday(&t, NULL);
+
+		unsigned long secs = t.tv_sec * 1000;
+		secs += (t.tv_usec / 1000);
+		return double(secs) / 1000.0;
     }
 
     float LinuxTimeService::Elapsed()

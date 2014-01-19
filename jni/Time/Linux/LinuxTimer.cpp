@@ -2,8 +2,22 @@
 
 #include "LinuxTimer.hpp"
 
+#include <sys/time.h>
+
+#define NULL 0
+
 namespace Core
 {
+	unsigned int GetTicksCount()
+    {
+    	struct timeval t;
+		gettimeofday(&t, NULL);
+
+		unsigned long secs = t.tv_sec * 1000;
+		secs += (t.tv_usec / 1000);
+		return secs;
+    }
+
 	LinuxTimer::LinuxTimer()
 		: m_currClock(0)
 	{
@@ -15,12 +29,12 @@ namespace Core
 
 	void LinuxTimer::Start()
 	{
-		m_currClock=clock();
+		m_currClock=GetTicksCount();
 	}
 
 	double LinuxTimer::Time() const
 	{
-		return (double)(clock()-m_currClock)/(double)(CLOCKS_PER_SEC);
+		return (double)(GetTicksCount()-m_currClock)/1000.0;
 	}
 }
 
