@@ -260,7 +260,7 @@ namespace Core
 
     void* LinuxEventLoop::GetWindowHandle() const
     {
-    	return NULL;
+    	return (void *)(&m_XWindow);
     }
 }
 
