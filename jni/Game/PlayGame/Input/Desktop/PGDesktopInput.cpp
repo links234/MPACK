@@ -1,6 +1,6 @@
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
-#include "PGWindowsInput.hpp"
+#include "PGDesktopInput.hpp"
 
 #include "Global.hpp"
 #include "Context.hpp"
@@ -10,21 +10,23 @@
 
 using namespace Math;
 
-PGWindowsInput::PGWindowsInput()
+PGDesktopInput::PGDesktopInput()
 {
 }
 
-PGWindowsInput::~PGWindowsInput()
+PGDesktopInput::~PGDesktopInput()
 {
 }
 
-void PGWindowsInput::Update(GLfloat delta)
+void PGDesktopInput::Update(GLfloat delta)
 {
 	m_requestExit=false;
+#ifdef WINDOWS_PLATFORM
 	if(Global::pContext->pInputService->KeyPressed(VK_ESCAPE))
 	{
 		m_requestExit=true;
 	}
+#endif
 
 	m_movementDirection=Vector2f();
 	if(Global::pContext->pInputService->KeyPressed('A'))
@@ -48,29 +50,29 @@ void PGWindowsInput::Update(GLfloat delta)
 	m_movementDirection.Rotate(Global::pActiveCamera->GetDirection().Angle());
 }
 
-void PGWindowsInput::Render()
+void PGDesktopInput::Render()
 {
 }
 
-void PGWindowsInput::Pause()
+void PGDesktopInput::Pause()
 {
 }
 
-void PGWindowsInput::Continue()
+void PGDesktopInput::Continue()
 {
 }
 
-Vector2f PGWindowsInput::GetMovementDirection() const
+Vector2f PGDesktopInput::GetMovementDirection() const
 {
 	return m_movementDirection;
 }
 
-Vector2f PGWindowsInput::GetShootingDirection() const
+Vector2f PGDesktopInput::GetShootingDirection() const
 {
 	return Vector2f();
 }
 
-bool PGWindowsInput::IsUserRequestingExit()
+bool PGDesktopInput::IsUserRequestingExit()
 {
 	return m_requestExit;
 }

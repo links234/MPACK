@@ -1,4 +1,4 @@
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
 #ifndef PGWINDOWSINPUT_HPP
 #define PGWINDOWSINPUT_HPP
@@ -7,11 +7,11 @@
 
 #include "Maths.hpp"
 
-class PGWindowsInput : public PGInputController
+class PGDesktopInput : public PGInputController
 {
 public:
-	PGWindowsInput();
-	virtual ~PGWindowsInput();
+	PGDesktopInput();
+	virtual ~PGDesktopInput();
 
 	virtual void Update(GLfloat delta);
 	virtual void Render();
