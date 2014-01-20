@@ -34,6 +34,9 @@ namespace Core
         LOGI("Starting event loop");
         while (true)
         {
+        	Global::pContext->pTimeService->Update();
+        	Global::pContext->pInputService->Update();
+
             // Event processing loop.
             while ((lResult = ALooper_pollAll(mEnabled ? 0 : -1, NULL, &lEvents, (void**) &lSource)) >= 0)
             {

@@ -235,6 +235,9 @@ namespace Core
 
     void LinuxEventLoop::ProcessEvents()
     {
+    	Global::pContext->pTimeService->Update();
+    	Global::pContext->pInputService->Update();
+
     	XEvent event;
 
 		while (XPending(m_display) > 0)
@@ -260,12 +263,12 @@ namespace Core
 			break;
 			case KeyPress:
 			{
-
+				m_keyboard->handleKeyDown(m_keyboard->translateKey(XLookupKeysym(&event.xkey,0)));
 			}
 			break;
 			case KeyRelease:
 			{
-
+				m_keyboard->handleKeyUp(m_keyboard->translateKey(XLookupKeysym(&event.xkey,0)));
 			}
 			break;
 

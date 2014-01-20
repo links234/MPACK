@@ -196,6 +196,9 @@ namespace Core
 
     void WindowsEventLoop::ProcessEvents()
     {
+    	Global::pContext->pTimeService->Update();
+    	Global::pContext->pInputService->Update();
+
         MSG msg;
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {

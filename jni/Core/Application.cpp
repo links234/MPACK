@@ -81,10 +81,9 @@ namespace Game
     Core::ReturnValue Application::onStep()
     {
     	// Update clock
-    	Global::pContext->pTimeService->Update();
     	const GLfloat &delta = Global::pContext->pTimeService->Elapsed();
 
-    	Global::pContext->pInputService->Update();
+
 
     	// Debug messages here
 		static GLfloat time=0.0f;
