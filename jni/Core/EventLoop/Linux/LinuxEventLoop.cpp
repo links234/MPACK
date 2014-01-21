@@ -264,12 +264,12 @@ namespace Core
 			break;
 			case KeyPress:
 			{
-				Global::pContext->pInputService->m_keyboard->HandleKeyDown(Global::pContext->pInputService->m_keyboard->TranslateCode(XLookupKeysym(&event.xkey,0)));
+				Global::pContext->pInputService->GetKeyboard()->HandleKeyDown(Global::pContext->pInputService->GetKeyboard()->TranslateCode(XLookupKeysym(&event.xkey,0)));
 			}
 			break;
 			case KeyRelease:
 			{
-				Global::pContext->pInputService->m_keyboard->HandleKeyUp(Global::pContext->pInputService->m_keyboard->TranslateCode(XLookupKeysym(&event.xkey,0)));
+				Global::pContext->pInputService->GetKeyboard()->HandleKeyUp(Global::pContext->pInputService->GetKeyboard()->TranslateCode(XLookupKeysym(&event.xkey,0)));
 			}
 			break;
 

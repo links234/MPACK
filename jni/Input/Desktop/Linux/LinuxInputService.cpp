@@ -19,7 +19,7 @@ namespace Core
 	LinuxInputService::LinuxInputService()
 		: m_currMouse(&m_mouseBuffer1), m_lastMouse(&m_mouseBuffer2)
 	{
-		m_keyboard = new LinuxKeyboardInterface;
+		m_pKeyboard = new LinuxKeyboardInterface;
 		Reset();
 	}
 
@@ -29,7 +29,7 @@ namespace Core
 
 	void LinuxInputService::Update()
 	{
-		m_keyboard->Update();
+		m_pKeyboard->Update();
 
 		std::swap(m_currMouse,m_lastMouse);
 
@@ -81,7 +81,12 @@ namespace Core
 		m_lastMouse->Button.Left=false;
 		m_lastMouse->Button.Right=false;
 		m_lastMouse->Button.Middle=false;
-		m_keyboard->Reset();
+		m_pKeyboard->Reset();
+	}
+
+	KeyboardInterface* LinuxInputService::GetKeyboard() const
+	{
+		return m_pKeyboard;
 	}
 }
 

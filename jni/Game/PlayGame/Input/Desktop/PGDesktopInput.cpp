@@ -22,27 +22,25 @@ PGDesktopInput::~PGDesktopInput()
 void PGDesktopInput::Update(GLfloat delta)
 {
 	m_requestExit=false;
-#ifdef WINDOWS_PLATFORM
-	if(Global::pContext->pInputService->m_keyboard->KeyPressed(KC_ESCAPE))
+	if(Global::pContext->pInputService->GetKeyboard()->KeyPressed(KC_ESCAPE))
 	{
 		m_requestExit=true;
 	}
-#endif
 
 	m_movementDirection=Vector2f();
-	if(Global::pContext->pInputService->m_keyboard->KeyPressed(KC_A))
+	if(Global::pContext->pInputService->GetKeyboard()->KeyPressed(KC_A))
 	{
 		m_movementDirection+=Vector2f(-1.0f,0.0f);
 	}
-	if(Global::pContext->pInputService->m_keyboard->KeyPressed(KC_D))
+	if(Global::pContext->pInputService->GetKeyboard()->KeyPressed(KC_D))
 	{
 		m_movementDirection+=Vector2f(1.0f,0.0f);
 	}
-	if(Global::pContext->pInputService->m_keyboard->KeyPressed(KC_W))
+	if(Global::pContext->pInputService->GetKeyboard()->KeyPressed(KC_W))
 	{
 		m_movementDirection+=Vector2f(0.0f,-1.0f);
 	}
-	if(Global::pContext->pInputService->m_keyboard->KeyPressed(KC_S))
+	if(Global::pContext->pInputService->GetKeyboard()->KeyPressed(KC_S))
 	{
 		m_movementDirection+=Vector2f(0.0f,1.0f);
 	}

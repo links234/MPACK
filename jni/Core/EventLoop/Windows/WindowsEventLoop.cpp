@@ -30,14 +30,11 @@ namespace Core
         // Global step loop.
         while(m_isRunning)
 		{
-        	LOGD("CHECK 1");
 			ProcessEvents();
-			LOGD("CHECK 2");
 			if(m_pActivityHandler->onStep() != RETURN_VALUE_OK)
 			{
 				m_isRunning=false;
 			}
-			LOGD("CHECK 3");
 			SwapBuffers();
 		}
 
@@ -200,10 +197,8 @@ namespace Core
 
     void WindowsEventLoop::ProcessEvents()
     {
-    	LOGD("CHECK_PE_1");
     	Global::pContext->pTimeService->Update();
     	Global::pContext->pInputService->Update();
-    	LOGD("CHECK_PE_2");
         MSG msg;
         while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
@@ -272,10 +267,10 @@ namespace Core
     		}
     		break;
     		case WM_KEYDOWN:
-    			Global::pContext->pInputService->m_keyboard->HandleKeyDown(Global::pContext->pInputService->m_keyboard->TranslateCode(wParam));
+    			Global::pContext->pInputService->GetKeyboard()->HandleKeyDown(Global::pContext->pInputService->GetKeyboard()->TranslateCode(wParam));
     		break;
     		case WM_KEYUP:
-    			Global::pContext->pInputService->m_keyboard->HandleKeyUp(Global::pContext->pInputService->m_keyboard->TranslateCode(wParam));
+    			Global::pContext->pInputService->GetKeyboard()->HandleKeyUp(Global::pContext->pInputService->GetKeyboard()->TranslateCode(wParam));
     		break;
     		case WM_MOUSEWHEEL:
     			zDelta = GET_WHEEL_DELTA_WPARAM(wParam);

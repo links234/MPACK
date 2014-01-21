@@ -15,7 +15,7 @@ namespace Core
 	WindowsInputService::WindowsInputService()
 		: m_currMouse(&m_mouseBuffer1), m_lastMouse(&m_mouseBuffer2)
 	{
-		m_keyboard = new WindowsKeyboardInterface;
+		m_pKeyboard = new WindowsKeyboardInterface;
 		Reset();
 	}
 
@@ -25,9 +25,7 @@ namespace Core
 
 	void WindowsInputService::Update()
 	{
-		LOGD("CHECK WIS_1");
-		m_keyboard->Update();
-		LOGD("CHECK WIS_2");
+		m_pKeyboard->Update();
 
 		std::swap(m_currMouse,m_lastMouse);
 		POINT p;
@@ -68,7 +66,12 @@ namespace Core
 		m_lastMouse->Button.Left=false;
 		m_lastMouse->Button.Right=false;
 		m_lastMouse->Button.Middle=false;
-		m_keyboard->Reset();
+		m_pKeyboard->Reset();
+	}
+
+	KeyboardInterface* WindowsInputService::GetKeyboard() const
+	{
+		return m_pKeyboard;
 	}
 }
 

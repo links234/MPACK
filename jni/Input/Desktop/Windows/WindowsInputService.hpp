@@ -18,13 +18,15 @@ namespace Core
 		void Update();
 		void Reset();
 
-		KeyboardInterface	*m_keyboard;
+		KeyboardInterface* GetKeyboard() const;
 
 		MouseInterface 		*m_currMouse;
 		MouseInterface 		*m_lastMouse;
 	private:
 		MouseInterface 		m_mouseBuffer1;
 		MouseInterface 		m_mouseBuffer2;
+
+		KeyboardInterface	*m_pKeyboard;
 	};
 }
 
