@@ -59,7 +59,6 @@ namespace Game
 #endif
 
 		m_pGameState = new MainMenu;
-		LOGI("APP::onActivate()");
 		return Core::RETURN_VALUE_OK;
     }
 
@@ -90,17 +89,17 @@ namespace Game
 		static GLfloat time=0.0f;
 		time+=delta;
 		Debug::Print(Global::pFont,"Elapsed time: %f",time);
-		LOGD("CHECK 4");
+
     	// Update per-frame debug
     	Debug::InitFrame();
-    	LOGD("CHECK 5");
+
     	// Updates services
     	if(!m_pSavedGameState)
     	{
     		Global::pContext->pPhysicsService->Update(delta);
     	}
     	Global::pContext->pGraphicsService->Update(delta);
-    	LOGD("CHECK 6");
+
     	// Event dispatcher
     	int action=m_pGameState->Update();
     	switch(action)
@@ -143,22 +142,20 @@ namespace Game
 				m_pGameState->Update();
 			break;
     	}
-    	LOGD("CHECK 7");
 
     	// Render current game state
     	m_pGameState->Render();
-    	LOGD("CHECK 8");
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	CursorDrawer::GetInstance()->Update();
     	CursorDrawer::GetInstance()->Render();
 #endif
-    	LOGD("CHECK 9");
+
     	// Render current scene and swap buffers
 		if (Global::pContext->pGraphicsService->Render() != Core::RETURN_VALUE_OK) {
 			return Core::RETURN_VALUE_KO;
 		}
-		LOGD("CHECK 10");
+
 		return Core::RETURN_VALUE_OK;
     }
 
