@@ -77,7 +77,6 @@ void CursorDrawer::Update()
 {
 	if(m_autohide)
 	{
-		LOGI("%lf",m_pTimer->Time());
 		if((*Global::pContext->pInputService->m_currMouse)!=(*Global::pContext->pInputService->m_lastMouse))
 		{
 			m_pTimer->Start();

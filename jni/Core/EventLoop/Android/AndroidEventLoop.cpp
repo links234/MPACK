@@ -5,6 +5,7 @@
 #include "ActivityHandler.hpp"
 #include "Context.hpp"
 #include "InputService.hpp"
+#include "TimeService.hpp"
 #include "Global.hpp"
 #include "Render.hpp"
 #include "Log.hpp"

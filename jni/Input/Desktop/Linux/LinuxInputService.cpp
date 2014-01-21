@@ -9,6 +9,7 @@
 #include <algorithm>
 #include "Global.hpp"
 #include "LinuxEventLoop.hpp"
+#include "LinuxKeyboardInterface.hpp"
 
 using namespace std;
 using namespace Math;
@@ -16,8 +17,9 @@ using namespace Math;
 namespace Core
 {
 	LinuxInputService::LinuxInputService()
-		: m_currKeyboard(m_keyboardBuffer1), m_lastKeyboard(m_keyboardBuffer2), m_currMouse(&m_mouseBuffer1), m_lastMouse(&m_mouseBuffer2)
+		: m_currMouse(&m_mouseBuffer1), m_lastMouse(&m_mouseBuffer2)
 	{
+		m_keyboard = new LinuxKeyboardInterface;
 		Reset();
 	}
 
@@ -27,8 +29,9 @@ namespace Core
 
 	void LinuxInputService::Update()
 	{
-		std::swap(m_currMouse,m_lastMouse);
+		m_keyboard->Update();
 
+		std::swap(m_currMouse,m_lastMouse);
 
 		Window *m_window=NULL;
 		if(Global::pEventLoop)
@@ -78,23 +81,7 @@ namespace Core
 		m_lastMouse->Button.Left=false;
 		m_lastMouse->Button.Right=false;
 		m_lastMouse->Button.Middle=false;
-		Update();
-		Update();
-	}
-
-	bool LinuxInputService::KeyDown(int key)
-	{
-		return (m_currKeyboard[key]&0xF0) && !(m_lastKeyboard[key]&0xF0);
-	}
-
-	bool LinuxInputService::KeyUp(int key)
-	{
-		return !(m_currKeyboard[key]&0xF0) && (m_lastKeyboard[key]&0xF0);
-	}
-
-	bool LinuxInputService::KeyPressed(int key)
-	{
-		return (m_currKeyboard[key]&0xF0)!=0;
+		m_keyboard->Reset();
 	}
 }
 

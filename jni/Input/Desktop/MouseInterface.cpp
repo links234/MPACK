@@ -1,10 +1,10 @@
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
-#include "Mouse.hpp"
+#include "MouseInterface.hpp"
 
 namespace Core
 {
-	bool Mouse::Buttons::operator!= (const Mouse::Buttons &other)
+	bool MouseInterface::Buttons::operator!= (const MouseInterface::Buttons &other)
 	{
 		if(Left!=other.Left)
 		{
@@ -21,7 +21,7 @@ namespace Core
 		return false;
 	}
 
-	bool Mouse::Buttons::operator== (const Mouse::Buttons &other)
+	bool MouseInterface::Buttons::operator== (const MouseInterface::Buttons &other)
 	{
 		if(Left!=other.Left)
 		{
@@ -39,7 +39,7 @@ namespace Core
 	}
 
 
-	bool Mouse::operator!= (const Mouse &other)
+	bool MouseInterface::operator!= (const MouseInterface &other)
 	{
 		if(Pos!=other.Pos)
 		{
@@ -56,7 +56,7 @@ namespace Core
 		return false;
 	}
 
-	bool Mouse::operator== (const Mouse &other)
+	bool MouseInterface::operator== (const MouseInterface &other)
 	{
 		if(Pos!=other.Pos)
 		{

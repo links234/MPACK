@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "Global.hpp"
 #include "WindowsEventLoop.hpp"
+#include "WindowsKeyboardInterface.hpp"
 
 using namespace std;
 using namespace Math;
@@ -12,8 +13,9 @@ using namespace Math;
 namespace Core
 {
 	WindowsInputService::WindowsInputService()
-		: m_currKeyboard(m_keyboardBuffer1), m_lastKeyboard(m_keyboardBuffer2), m_currMouse(&m_mouseBuffer1), m_lastMouse(&m_mouseBuffer2)
+		: m_currMouse(&m_mouseBuffer1), m_lastMouse(&m_mouseBuffer2)
 	{
+		m_keyboard = new WindowsKeyboardInterface;
 		Reset();
 	}
 
@@ -23,8 +25,10 @@ namespace Core
 
 	void WindowsInputService::Update()
 	{
-		std::swap(m_currKeyboard,m_lastKeyboard);
-		GetKeyboardState(m_currKeyboard);
+		LOGD("CHECK WIS_1");
+		m_keyboard->Update();
+		LOGD("CHECK WIS_2");
+
 		std::swap(m_currMouse,m_lastMouse);
 		POINT p;
 		GetCursorPos(&p);
@@ -64,23 +68,7 @@ namespace Core
 		m_lastMouse->Button.Left=false;
 		m_lastMouse->Button.Right=false;
 		m_lastMouse->Button.Middle=false;
-		Update();
-		Update();
-	}
-
-	bool WindowsInputService::KeyDown(int key)
-	{
-		return (m_currKeyboard[key]&0xF0) && !(m_lastKeyboard[key]&0xF0);
-	}
-
-	bool WindowsInputService::KeyUp(int key)
-	{
-		return !(m_currKeyboard[key]&0xF0) && (m_lastKeyboard[key]&0xF0);
-	}
-
-	bool WindowsInputService::KeyPressed(int key)
-	{
-		return (m_currKeyboard[key]&0xF0)!=0;
+		m_keyboard->Reset();
 	}
 }
 

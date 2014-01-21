@@ -1,14 +1,14 @@
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
-#ifndef MOUSE_HPP
-#define MOUSE_HPP
+#ifndef MOUSEINTERFACE_HPP
+#define MOUSEINTERFACE_HPP
 
 #include "Types.hpp"
 #include "Maths.hpp"
 
 namespace Core
 {
-	class Mouse
+	class MouseInterface
 	{
 	public:
 		class Buttons
@@ -24,8 +24,8 @@ namespace Core
 		Math::Vector2f	Pos;
 		GLuint			Wheel;
 
-		bool operator!= (const Mouse &other);
-		bool operator== (const Mouse &other);
+		bool operator!= (const MouseInterface &other);
+		bool operator== (const MouseInterface &other);
 	};
 }
 

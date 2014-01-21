@@ -30,20 +30,20 @@ namespace Game
 		m_pBackgroundTexture=new Texture2D();
 		m_pBackgroundTexture->Load("@Backgrounds/background.tga",Bilinear);
 
-		LOGI("CHECKPOINT 1");
+		LOGD("CHECKPOINT 1");
 
 		m_pButtonSprite=new Sprite();
 		m_pButtonSprite->SetTexture(m_pButtonTexture);
-		LOGI("CHECKPOINT 2");
+		LOGD("CHECKPOINT 2");
 		m_pBackgroundSprite=new Sprite();
 		m_pBackgroundSprite->SetTexture(m_pBackgroundTexture);
 		m_pBackgroundSprite->SetSize(Render::GetScreenWidth(),Render::GetScreenHeight());
 		m_pBackgroundSprite->m_position=Vector2f(Render::GetScreenWidth()*0.5f,Render::GetScreenHeight()*0.5f);
 		m_pBackgroundSprite->SetShading(SpriteVertex::NONE);
-		LOGI("CHECKPOINT 3");
+		LOGD("CHECKPOINT 3");
 		m_pMenuGUI=new GUIMenu;
 		m_pMenuGUI->m_sprite=m_pButtonSprite;
-		LOGI("CHECKPOINT 4");
+		LOGD("CHECKPOINT 4");
 		if(isGamePaused)
 		{
 			m_pMenuGUI->AddButton("Continue",GUIMENU_BUTTON_CONTINUE);
@@ -53,7 +53,7 @@ namespace Game
 		m_pMenuGUI->AddButton("Credits",GUIMENU_BUTTON_CREDITS);
 		m_pMenuGUI->AddButton("Exit",GUIMENU_BUTTON_EXIT);
 		m_pMenuGUI->BuildLayout();
-		LOGI("CHECKPOINT 5");
+		LOGD("CHECKPOINT 5");
 	}
 
 	int MainMenu::Update()

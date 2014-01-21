@@ -5,6 +5,7 @@
 #include "ActivityHandler.hpp"
 #include "Context.hpp"
 #include "InputService.hpp"
+#include "TimeService.hpp"
 #include "Global.hpp"
 #include "Render.hpp"
 #include "Log.hpp"
@@ -206,7 +207,7 @@ namespace Core
 			Atom wmDelete = XInternAtom(m_display, "WM_DELETE_WINDOW", True);
 			XSetWMProtocols(m_display, m_XWindow, &wmDelete, 1);
 
-			XSetStandardProperties(m_display, m_XWindow, title.c_str(), None, NULL, NULL, 0, NULL);
+			XSetStandardProperties(m_display, m_XWindow, title.c_str(), None, 0, NULL, 0, NULL);
 			XMapRaised(m_display, m_XWindow);
 		}
 
@@ -263,12 +264,12 @@ namespace Core
 			break;
 			case KeyPress:
 			{
-				m_keyboard->handleKeyDown(m_keyboard->translateKey(XLookupKeysym(&event.xkey,0)));
+				Global::pContext->pInputService->m_keyboard->HandleKeyDown(Global::pContext->pInputService->m_keyboard->TranslateCode(XLookupKeysym(&event.xkey,0)));
 			}
 			break;
 			case KeyRelease:
 			{
-				m_keyboard->handleKeyUp(m_keyboard->translateKey(XLookupKeysym(&event.xkey,0)));
+				Global::pContext->pInputService->m_keyboard->HandleKeyUp(Global::pContext->pInputService->m_keyboard->TranslateCode(XLookupKeysym(&event.xkey,0)));
 			}
 			break;
 
