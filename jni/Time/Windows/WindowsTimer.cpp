@@ -2,8 +2,17 @@
 
 #include "WindowsTimer.hpp"
 
+#include <windows.h>
+
 namespace Core
 {
+	unsigned int GetTicksCount()
+    {
+		SYSTEMTIME time;
+		GetSystemTime(&time);
+		return (time.wSecond * 1000) + time.wMilliseconds;
+    }
+
 	WindowsTimer::WindowsTimer()
 		: m_currClock(0)
 	{
@@ -15,12 +24,12 @@ namespace Core
 
 	void WindowsTimer::Start()
 	{
-		m_currClock=clock();
+		m_currClock=GetTicksCount();
 	}
 
 	double WindowsTimer::Time() const
 	{
-		return (double)(clock()-m_currClock)/(double)(CLOCKS_PER_SEC);
+		return (double)(GetTicksCount()-m_currClock)/1000.0;
 	}
 }
 
