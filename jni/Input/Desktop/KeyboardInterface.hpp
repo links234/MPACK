@@ -33,9 +33,9 @@ namespace Core
 
 		void Reset();
 
-		bool KeyDown(const KeyCode &key);
-		bool KeyUp(const KeyCode &key);
-		bool KeyPressed(const KeyCode &key);
+		bool KeyDown(const KeyCode &key) const;
+		bool KeyUp(const KeyCode &key) const;
+		bool KeyPressed(const KeyCode &key) const;
 
 		void HandleKeyDown(const KeyCode &key);
 		void HandleKeyUp(const KeyCode &key);

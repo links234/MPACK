@@ -3,29 +3,40 @@
 #ifndef MOUSEINTERFACE_HPP
 #define MOUSEINTERFACE_HPP
 
-#include "Types.hpp"
-#include "Maths.hpp"
+#include "MouseState.hpp"
 
 namespace Core
 {
+	enum MouseButton
+	{
+		MBC_LEFT,
+		MBC_MIDDLE,
+		MBC_RIGHT
+	};
+
 	class MouseInterface
 	{
 	public:
-		class Buttons
-		{
-		public:
-			bool Left,Right,Middle;
+		MouseInterface();
+		virtual ~MouseInterface();
 
-			bool operator!= (const Buttons &other);
-			bool operator== (const Buttons &other);
-		};
+		virtual void Update() = 0;
 
-		Buttons			Button;
-		Math::Vector2f	Pos;
-		GLuint			Wheel;
+		void Reset();
 
-		bool operator!= (const MouseInterface &other);
-		bool operator== (const MouseInterface &other);
+		bool ButtonDown(const MouseButton &button) const;
+		bool ButtonUp(const MouseButton &button) const;
+		bool ButtonPressed(const MouseButton &button) const;
+
+		Math::Vector2f GetPosition() const;
+
+		bool Moved() const;
+
+	protected:
+		MouseState 	*m_pCurrState;
+		MouseState 	*m_pLastState;
+		MouseState 	m_stateBuffer1;
+		MouseState 	m_stateBuffer2;
 	};
 }
 

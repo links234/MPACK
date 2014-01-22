@@ -2,76 +2,77 @@
 
 #include "MouseInterface.hpp"
 
+#include <cstring>
+
 namespace Core
 {
-	bool MouseInterface::Buttons::operator!= (const MouseInterface::Buttons &other)
+	MouseInterface::MouseInterface()
+		: m_pCurrState(&m_stateBuffer1), m_pLastState(&m_stateBuffer2)
 	{
-		if(Left!=other.Left)
+	}
+
+	MouseInterface::~MouseInterface()
+	{
+	}
+
+	void MouseInterface::Reset()
+	{
+		memset(&m_stateBuffer1,0,sizeof(m_stateBuffer1));
+		memset(&m_stateBuffer2,0,sizeof(m_stateBuffer2));
+	}
+
+	bool MouseInterface::ButtonDown(const MouseButton &button) const
+	{
+		switch(button)
 		{
-			return true;
-		}
-		if(Middle!=other.Middle)
-		{
-			return true;
-		}
-		if(Right!=other.Right)
-		{
-			return true;
+			case MBC_LEFT:
+				return !m_pLastState->Button.Left && m_pCurrState->Button.Left;
+			case MBC_MIDDLE:
+				return !m_pLastState->Button.Middle && m_pCurrState->Button.Middle;
+			case MBC_RIGHT:
+				return !m_pLastState->Button.Right && m_pCurrState->Button.Right;
 		}
 		return false;
 	}
 
-	bool MouseInterface::Buttons::operator== (const MouseInterface::Buttons &other)
+	bool MouseInterface::ButtonUp(const MouseButton &button) const
 	{
-		if(Left!=other.Left)
+		switch(button)
 		{
-			return false;
-		}
-		if(Middle!=other.Middle)
-		{
-			return false;
-		}
-		if(Right!=other.Right)
-		{
-			return false;
-		}
-		return true;
-	}
-
-
-	bool MouseInterface::operator!= (const MouseInterface &other)
-	{
-		if(Pos!=other.Pos)
-		{
-			return true;
-		}
-		if(Wheel!=other.Wheel)
-		{
-			return true;
-		}
-		if(Button!=other.Button)
-		{
-			return true;
+			case MBC_LEFT:
+				return m_pLastState->Button.Left && !m_pCurrState->Button.Left;
+			case MBC_MIDDLE:
+				return m_pLastState->Button.Middle && !m_pCurrState->Button.Middle;
+			case MBC_RIGHT:
+				return m_pLastState->Button.Right && !m_pCurrState->Button.Right;
 		}
 		return false;
 	}
 
-	bool MouseInterface::operator== (const MouseInterface &other)
+	bool MouseInterface::ButtonPressed(const MouseButton &button) const
 	{
-		if(Pos!=other.Pos)
+		switch(button)
 		{
-			return false;
+			case MBC_LEFT:
+				return m_pLastState->Button.Left && m_pCurrState->Button.Left;
+			case MBC_MIDDLE:
+				return m_pLastState->Button.Middle && m_pCurrState->Button.Middle;
+			case MBC_RIGHT:
+				return m_pLastState->Button.Right && m_pCurrState->Button.Right;
 		}
-		if(Wheel!=other.Wheel)
-		{
-			return false;
-		}
-		if(Button!=other.Button)
-		{
-			return false;
-		}
-		return true;
+		return false;
+	}
+
+	Math::Vector2f MouseInterface::GetPosition() const
+	{
+		return m_pCurrState->Pos;
+	}
+
+	bool MouseInterface::Moved() const
+	{
+		return m_pCurrState->Pos!=m_pLastState->Pos;
 	}
 }
 
 #endif
+

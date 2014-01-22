@@ -19,17 +19,17 @@ namespace Core
 		memset(m_state2,0,sizeof(m_state2));
 	}
 
-	bool KeyboardInterface::KeyDown(const KeyCode &key)
+	bool KeyboardInterface::KeyDown(const KeyCode &key) const
 	{
 		return (!m_lastState[key] && m_currState[key]);
 	}
 
-	bool KeyboardInterface::KeyUp(const KeyCode &key)
+	bool KeyboardInterface::KeyUp(const KeyCode &key) const
 	{
 		return (m_lastState[key] && !m_currState[key]);
 	}
 
-	bool KeyboardInterface::KeyPressed(const KeyCode &key)
+	bool KeyboardInterface::KeyPressed(const KeyCode &key) const
 	{
 		return (m_lastState[key] && m_currState[key]);
 	}
