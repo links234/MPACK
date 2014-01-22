@@ -19,32 +19,29 @@ void MMDesktopInput::Update(GLfloat delta)
 {
 	if(m_pFinger)
 	{
-		m_pFinger->m_pos=Global::pContext->pInputService->m_currMouse->Pos;
+		m_pFinger->m_pos=Global::pContext->pInputService->GetMouse()->GetPosition();
 	}
 
-	if(Global::pContext->pInputService->m_currMouse->Button.Left!=Global::pContext->pInputService->m_lastMouse->Button.Left)
+	if(Global::pContext->pInputService->GetMouse()->ButtonDown(MBC_LEFT))
 	{
-		if(Global::pContext->pInputService->m_currMouse->Button.Left)
-		{
 			m_pFinger=new Finger();
 			m_pFinger->m_flag=Finger::FREE;
-			m_pFinger->m_pos=Global::pContext->pInputService->m_currMouse->Pos;
+			m_pFinger->m_pos=Global::pContext->pInputService->GetMouse()->GetPosition();
 
 			for(vector<Param2PtrCallbackStruct>::iterator it=m_callbackFunc_FDOWN.begin();it!=m_callbackFunc_FDOWN.end();++it)
 			{
 				it->function(it->param1,m_pFinger);
 			}
-		}
-		else
+	}
+	else if(Global::pContext->pInputService->GetMouse()->ButtonUp(MBC_LEFT))
+	{
+		for(vector<Param2PtrCallbackStruct>::iterator it=m_callbackFunc_FUP.begin();it!=m_callbackFunc_FUP.end();++it)
 		{
-			for(vector<Param2PtrCallbackStruct>::iterator it=m_callbackFunc_FUP.begin();it!=m_callbackFunc_FUP.end();++it)
-			{
-				it->function(it->param1,m_pFinger);
-			}
-
-			delete m_pFinger;
-			m_pFinger=NULL;
+			it->function(it->param1,m_pFinger);
 		}
+
+		delete m_pFinger;
+		m_pFinger=NULL;
 	}
 }
 

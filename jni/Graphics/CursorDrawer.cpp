@@ -77,7 +77,7 @@ void CursorDrawer::Update()
 {
 	if(m_autohide)
 	{
-		if((*Global::pContext->pInputService->m_currMouse)!=(*Global::pContext->pInputService->m_lastMouse))
+		if(Global::pContext->pInputService->GetMouse()->Moved())
 		{
 			m_pTimer->Start();
 		}
@@ -86,16 +86,20 @@ void CursorDrawer::Update()
 
 void CursorDrawer::Render()
 {
-	if(m_pTimer->Time()<=m_autohideTime || m_autohide==false)
+	if(m_hide)
 	{
-		if(!m_hide)
-		{
-			m_pSprite->m_position=Global::pContext->pInputService->m_currMouse->Pos;
-			m_pSprite->m_position.x+=m_pSprite->GetWidth()*0.5;
-			m_pSprite->m_position.y+=m_pSprite->GetHeight()*0.5;
-			m_pSprite->Render();
-		}
+		return;
 	}
+
+	if(m_pTimer->Time()>m_autohideTime && m_autohide)
+	{
+		return;
+	}
+
+	m_pSprite->m_position=Global::pContext->pInputService->GetMouse()->GetPosition();
+	m_pSprite->m_position.x+=m_pSprite->GetWidth()*0.5;
+	m_pSprite->m_position.y+=m_pSprite->GetHeight()*0.5;
+	m_pSprite->Render();
 }
 
 CursorDrawer* CursorDrawer::GetInstance()
