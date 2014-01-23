@@ -1,8 +1,8 @@
-This Framework is intended to be a cross-platform starting point for 2D games running on Android and Windows. Everything is written in C++ and some Bash for building scripts.
+This Framework is intended to be a cross-platform starting point for 2D games running on Windows, Linux and Android. Everything is written in C++ and some Bash for building scripts.
 
 Cross-platform features:
 
-	- Custom bash scripts transparent to source tree (folders are only used for better)
+	- Custom bash scripts transparent to source tree (folders are only used for better) - moved to makefiles, script are now obsolete
 	- Math library
 		- 2D, 3D and 4D vectors
 		- 3x3 matrices
@@ -95,4 +95,12 @@ Android specific features:
 		- Playlists
 		- WAV loading and playback
 		- Basic SFX
+
+Windows and Linux features:
+
+	- Window creation
+	- Debug
+		- File logger in html format
+	- Keyboard input
+	- Mouse input
 
