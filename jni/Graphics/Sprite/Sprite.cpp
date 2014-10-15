@@ -9,7 +9,8 @@
 #include "Sprite.hpp"
 
 Sprite::Sprite()
-	: m_position(0,0), m_angle(0), m_width(0), m_height(0), m_texture(NULL), m_spriteShadingType(SpriteVertex::ALPHA_TEST), m_layer(0)
+	: m_position(0,0), m_angle(0), m_width(0), m_height(0), m_texture(NULL), m_spriteShadingType(SpriteVertex::ALPHA_TEST),
+	  m_layer(0), m_useCamera(false)
 {
 	m_color[0]=m_color[1]=m_color[2]=m_color[3]=Math::Vector4f(1.0f,1.0f,1.0f,1.0f);
 }

@@ -12,6 +12,8 @@
 #include "Camera2D.hpp"
 #include "Sprite.hpp"
 #include "AnimatedSprite.hpp"
+#include "ShaderTypes.hpp"
+#include "PostEffect.hpp"
 
 namespace Core
 {
@@ -29,12 +31,16 @@ namespace Core
 
 		LoadResources();
 
+		PostEffect::Init(Render::GetScreenWidth(),Render::GetScreenHeight());
+
     	return RETURN_VALUE_OK;
     }
 
     void GraphicsService::Stop()
     {
     	LOGI("GraphicsService::Stop");
+
+    	PostEffect::Shutdown();
 
     	UnloadResources();
 
@@ -49,9 +55,19 @@ namespace Core
 
     ReturnValue GraphicsService::Render()
     {
-    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    	PostEffect::Begin();
 
+		Render::SetOrthoMode();
+		Render::EnableOrthoMode();
+		Render::EnableAlphaBlend();
+
+    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		SpriteBatcher::FlushAll();
+
+		PostEffect::End();
+
+		LOGD("OK!");
+
 		return RETURN_VALUE_OK;
     }
 
@@ -60,7 +76,7 @@ namespace Core
 		Global::pFont=new TextureMappedFont;
 		Global::pFont->Load("@Fonts/Font.tga");
 
-    	InitVertexPrograms();
+    	LoadShaders();
 
     	return RETURN_VALUE_OK;
     }
@@ -69,7 +85,7 @@ namespace Core
     {
     	delete Global::pFont;
 
-    	DeleteVertexPrograms();
+    	DeleteShaders();
 
     	return RETURN_VALUE_OK;
     }

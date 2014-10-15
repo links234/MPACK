@@ -9,10 +9,8 @@
 #ifndef VERTEX_HPP
 #define VERTEX_HPP
 
-#include "ShaderTypes.hpp"
 #include "Maths.hpp"
-
-extern AbstractProgramType* Sprite_Program;
+#include "Types.hpp"
 
 class SpriteVertex
 {
@@ -23,8 +21,5 @@ public:
 
 	enum SpriteShadingMode{NONE, ALPHA_TEST, ALPHA_BLEND, NOTEXTURE};
 };
-
-bool InitVertexPrograms();
-void DeleteVertexPrograms();
 
 #endif

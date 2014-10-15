@@ -9,6 +9,7 @@
 #include "IndexArray.hpp"
 
 IndexArray::IndexArray()
+	: m_primitiveType(0)
 {
 }
 

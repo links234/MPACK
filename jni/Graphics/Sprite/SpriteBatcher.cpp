@@ -24,7 +24,7 @@ map<GLfloat, SpriteBatcher*> 	SpriteBatcher::s_spriteBatcherLayer;
 bool							SpriteBatcher::s_useCamera=false;
 
 SpriteBatcher::SpriteBatcher()
-	: m_currentIndexBatchSize(0), m_lastTexture(NULL)
+	: m_currentIndexBatchSize(0), m_lastTexture(NULL), m_lastType(IndexData::NONE)
 {
 }
 
@@ -194,11 +194,11 @@ void SpriteBatcher::Flush()
 	VertexBufferObject::UnbindCurrentBuffer();
 	IndexBufferObject::UnbindCurrentBuffer();
 
-	Sprite_Program->BindShader();
-	Sprite_Program->UpdateUniforms();
+	Sprite_Shader->BindShader();
+	Sprite_Shader->UpdateUniforms();
 
-	Sprite_Program->EnableVertexAttributes();
-	Sprite_Program->SendVertexBuffer((GLfloat*)(&m_vertexData[0]));
+	Sprite_Shader->EnableVertexAttributes();
+	Sprite_Shader->SendVertexBuffer((GLfloat*)(&m_vertexData[0]));
 
 	//LOGD("Sprite::Batcher batches = %d vertex size = %d",m_batches.size(),m_vertexData.size());
 
@@ -213,12 +213,12 @@ void SpriteBatcher::Flush()
 		}
 
 		glDrawElements(GetGLType(it->m_type),it->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]);
-		Debug::AssertGL("ERROR!");
+		Debug::AssertGL("ERROR: SpriteBatcher::Flush() : glDrawElements");
 
 		firstIndex+=it->m_indexSize;
 	}
 
-	Sprite_Program->DisableVertexAttributes();
+	Sprite_Shader->DisableVertexAttributes();
 
 	m_batches.clear();
 	m_vertexData.clear();

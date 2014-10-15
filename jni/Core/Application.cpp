@@ -5,7 +5,6 @@
 #include "TimeService.hpp"
 #include "Context.hpp"
 #include "Global.hpp"
-#include "CursorDrawer.hpp"
 #include "EventLoop.hpp"
 
 #include "MainMenuState.hpp"
@@ -19,6 +18,7 @@ namespace Game
 		LOGI("Application::Aplication");
 		m_pGameState = NULL;
 		m_pSavedGameState = NULL;
+		m_pCursorTex = NULL;
     }
 
 	Application::~Application()
@@ -35,6 +35,9 @@ namespace Game
 			LOGE("Application::onActivate failed to start graphics service");
 			return Core::RETURN_VALUE_KO;
 		}
+		PostEffect::ClearFX();
+		PostEffect::PushFX(PostEffect::FXAAI);
+
 		if (Global::pContext->pSoundService->Start() != Core::RETURN_VALUE_OK)
 		{
 			LOGE("Application::onActivate failed to start sound service");
@@ -86,11 +89,9 @@ namespace Game
 
 
     	// Debug messages here
-		static GLfloat time=0.0f;
-		time+=delta;
-		Debug::Print(Global::pFont,"Elapsed time: %f",time);
+		Debug::Print(Global::pFont,"Frame time: %f (%f FPS)",delta,1.0f/delta);
 
-    	// Update per-frame debug
+    	// Update per-frame debug messages
     	Debug::InitFrame();
 
     	// Updates services

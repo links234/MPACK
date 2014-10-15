@@ -4,6 +4,8 @@
 
 #include "WindowsEventLoop.hpp"
 
+#include "Global.hpp"
+
 namespace Core
 {
 	WindowsMouseInterface::WindowsMouseInterface()

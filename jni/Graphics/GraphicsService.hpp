@@ -2,6 +2,8 @@
 #define GRAPHICSSERVICE_HPP
 
 #include "Types.hpp"
+#include "CursorDrawer.hpp"
+#include "PostEffect.hpp"
 
 namespace Core
 {

@@ -42,6 +42,7 @@ void Render::SetOrthoMode(GLfloat left, GLfloat right, GLfloat bottom, GLfloat t
 {
 	if(s_orthoLeft!=left || s_orthoRight!=right || s_orthoTop!=top || s_orthoBottom!=bottom)
 	{
+		LOGD("PRINT %f %f %f %f",left,right,top,bottom);
 		s_orthoLeft=left;
 		s_orthoRight=right;
 		s_orthoTop=top;
@@ -54,14 +55,15 @@ void Render::EnableOrthoMode()
 {
 	if(s_needUpdateOrtho)
 	{
-		s_needUpdateOrtho=false;
 		Matrix4f::SetOrtho(s_orthoModeMatrix, s_orthoLeft, s_orthoRight, s_orthoBottom, s_orthoTop, -1.0f, 1.0f);
 	}
-	if(!s_orthoModeEnabled)
+
+	if(!s_orthoModeEnabled || s_needUpdateOrtho)
 	{
 		ShaderUniform::projectionMatrix=s_orthoModeMatrix;
 		glDisable(GL_DEPTH_TEST);
 		s_orthoModeEnabled=true;
+		s_needUpdateOrtho=false;
 	}
 }
 
@@ -92,8 +94,6 @@ void Render::SetScreenSize(GLint width, GLint height)
 	s_needUpdateOrtho=true;
 	s_screenWidth=(GLfloat)(width);
 	s_screenHeight=(GLfloat)(height);
-
-	LOGD("SetScreenSize: %f %f",s_screenWidth,s_screenHeight);
 
 	glViewport(0,0,(GLint)(width),(GLint)(height));
 }

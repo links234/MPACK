@@ -86,7 +86,7 @@ namespace Core
         mInputStream.read(mBuffer, lSize);
         mInputStream.seekg(pos);
 
-        mBuffer[lSize]=NULL;
+        mBuffer[lSize]=0;
 
         if (!mInputStream.fail())
         {

@@ -17,7 +17,8 @@ namespace Core
 	GLuint	textureBinded[MAX_TEXTURES];
 
 	Texture2D::Texture2D()
-		: m_texId(NULL), m_sWrapMode(GL_REPEAT), m_tWrapMode(GL_REPEAT), m_filteringType(Trilinear)
+		: m_texId(0), m_sWrapMode(GL_REPEAT), m_tWrapMode(GL_REPEAT), m_filteringType(Trilinear),
+		  m_needUpdate(true), m_width(0), m_height(0)
 	{
 	}
 

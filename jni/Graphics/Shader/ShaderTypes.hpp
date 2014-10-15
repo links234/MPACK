@@ -5,12 +5,12 @@
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-class AbstractProgramType: public GLSLProgram
+class AbstractShaderType: public GLSLProgram
 {
 public:
-	AbstractProgramType(const char* vertexShader, const char* fragmentShader, const char* header=NULL): GLSLProgram(vertexShader, fragmentShader, header){};
+	AbstractShaderType(const char* vertexShader, const char* fragmentShader, const char* header=NULL): GLSLProgram(vertexShader, fragmentShader, header){};
 
-	virtual ~AbstractProgramType(){};
+	virtual ~AbstractShaderType(){};
 
 	virtual void BindAttributeLocations() = 0;
 	virtual void UpdateUniforms() = 0;
@@ -22,11 +22,31 @@ public:
 	virtual void DisableVertexAttributes() = 0;
 };
 
-class ProgramType_Vertex3fPos4fColor: public AbstractProgramType
+extern AbstractShaderType* Sprite_Shader;
+extern AbstractShaderType* FXAAII_Shader;
+extern AbstractShaderType* FXAAI_Shader;
+
+class ShaderType_Tex0Pass: public AbstractShaderType
 {
 public:
-	ProgramType_Vertex3fPos4fColor(const char* vertexShader, const char* fragmentShader, const char* header=NULL);
-	~ProgramType_Vertex3fPos4fColor();
+	ShaderType_Tex0Pass(const char* vertexShader, const char* fragmentShader, const char* header=NULL);
+	~ShaderType_Tex0Pass();
+
+	void BindAttributeLocations();
+	void UpdateUniforms();
+	void UpdateFrameUniforms();
+	void InitUniforms();
+	void SendVertexBuffer();
+	void SendVertexBuffer(GLfloat *VAO);
+	void EnableVertexAttributes();
+	void DisableVertexAttributes();
+};
+
+class ShaderType_Sprite: public AbstractShaderType
+{
+public:
+	ShaderType_Sprite(const char* vertexShader, const char* fragmentShader, const char* header=NULL);
+	~ShaderType_Sprite();
 
 	void BindAttributeLocations();
 	void UpdateUniforms();
@@ -38,37 +58,8 @@ public:
 	void DisableVertexAttributes();
 };
 
-class ProgramType_Sprite: public AbstractProgramType
-{
-public:
-	ProgramType_Sprite(const char* vertexShader, const char* fragmentShader, const char* header=NULL);
-	~ProgramType_Sprite();
-
-	void BindAttributeLocations();
-	void UpdateUniforms();
-	void UpdateFrameUniforms();
-	void InitUniforms();
-	void SendVertexBuffer();
-	void SendVertexBuffer(GLfloat *VA);
-	void EnableVertexAttributes();
-	void DisableVertexAttributes();
-};
-
-class ProgramType_Basic2: public AbstractProgramType
-{
-public:
-	ProgramType_Basic2(const char* vertexShader, const char* fragmentShader, const char* header=NULL);
-	~ProgramType_Basic2();
-
-	void BindAttributeLocations();
-	void UpdateUniforms();
-	void UpdateFrameUniforms();
-	void InitUniforms();
-	void SendVertexBuffer();
-	void SendVertexBuffer(GLfloat *VA);
-	void EnableVertexAttributes();
-	void DisableVertexAttributes();
-};
+bool LoadShaders();
+void DeleteShaders();
 
 #endif
 

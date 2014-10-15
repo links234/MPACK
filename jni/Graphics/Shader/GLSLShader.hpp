@@ -34,6 +34,7 @@ public:
     };
 
     GLSLProgram(const char* vertexShader, const char* fragmentShader, const char* header=NULL)
+    	: m_programID(0)
     {
     	if(header==NULL)
     	{

@@ -13,7 +13,7 @@ namespace Core
 {
     SoundService::SoundService()
 #ifdef ANDROID_PLATFORM
-       : mEngineObj(NULL), mEngine(NULL),
+       : mApplication(NULL), mEngineObj(NULL), mEngine(NULL),
         mOutputMixObj(NULL),
         mBGMPlayerObj(NULL), mBGMPlayer(NULL),
         mPlayerObj(), mPlayer(), mPlayerQueue(),

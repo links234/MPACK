@@ -43,7 +43,7 @@ namespace Core
 		va_end(lVarArgs);
 		
 #ifdef ANDROID_PLATFORM
-		__android_log_print(ANDROID_LOG_INFO, LOG_TAG, buffer);
+		__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "%s", buffer);
 		__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
 #elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Info: %s\n", buffer);
@@ -60,7 +60,7 @@ namespace Core
 		va_end(lVarArgs);
 		
 #ifdef ANDROID_PLATFORM
-		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, buffer);
+		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "%s", buffer);
 		__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "\n");
 #elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Error: %s\n", buffer);
@@ -77,7 +77,7 @@ namespace Core
 		va_end(lVarArgs);
 		
 #ifdef ANDROID_PLATFORM
-		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, buffer);
+		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "%s", buffer);
 		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
 #elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Info: %s\n", buffer);
@@ -94,7 +94,7 @@ namespace Core
 		va_end(lVarArgs);
 		
 #ifdef ANDROID_PLATFORM
-		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, buffer);
+		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", buffer);
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
 #elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		printf("Info: %s\n", buffer);
