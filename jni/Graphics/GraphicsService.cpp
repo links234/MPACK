@@ -66,8 +66,6 @@ namespace Core
 
 		PostEffect::End();
 
-		LOGD("OK!");
-
 		return RETURN_VALUE_OK;
     }
 

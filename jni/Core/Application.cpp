@@ -36,7 +36,7 @@ namespace Game
 			return Core::RETURN_VALUE_KO;
 		}
 		PostEffect::ClearFX();
-		//PostEffect::PushFX(PostEffect::FXAAI);
+		PostEffect::PushFX(PostEffect::FXAAI);
 
 		if (Global::pContext->pSoundService->Start() != Core::RETURN_VALUE_OK)
 		{

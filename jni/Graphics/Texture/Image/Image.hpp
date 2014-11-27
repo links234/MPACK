@@ -33,6 +33,8 @@ namespace Core
 		GLushort m_height;
 		GLushort m_format;
 		GLushort m_bytesPerPixel;
+
+
 	};
 
 	Image* LoadImage(const char *pPath);

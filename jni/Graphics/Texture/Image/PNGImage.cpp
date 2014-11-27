@@ -79,9 +79,9 @@ namespace Core
         png_set_sig_bytes(pngPtr, 8);
         png_read_info(pngPtr, infoPtr);
         // Retrieves PNG info and updates PNG struct accordingly.
-        png_int_32 depth, colorType;
+        int depth, colorType;
         png_uint_32 width, height;
-        png_get_IHDR(pngPtr, infoPtr, &width, &height, (int*)&depth, (int*)&colorType, NULL, NULL, NULL);
+        png_get_IHDR(pngPtr, infoPtr, &width, &height, &depth, &colorType, NULL, NULL, NULL);
         m_width = width; m_height = height;
 
         // Creates a full alpha channel if transparency is encoded as
@@ -106,23 +106,30 @@ namespace Core
             png_set_strip_16(pngPtr);
         }
         // Indicates that image needs conversion to RGBA if needed.
+
         switch (colorType)
         {
 			case PNG_COLOR_TYPE_PALETTE:
 				png_set_palette_to_rgb(pngPtr);
 				m_format = transparency ? GL_RGBA : GL_RGB;
+				LOGD("GL_RGBA/GL_RGB from palette");
 				break;
 			case PNG_COLOR_TYPE_RGB:
 				m_format = transparency ? GL_RGBA : GL_RGB;
+				LOGD("%d = %d",colorType,PNG_COLOR_TYPE_RGB);
+				LOGD("GL_RGBA/GL_RGB");
 				break;
 			case PNG_COLOR_TYPE_RGBA:
+				LOGD("GL_RGBA");
 				m_format = GL_RGBA;
 				break;
 			case PNG_COLOR_TYPE_GRAY:
+				LOGD("GL_LUMINANCE_ALPHA/GL_LUMINANCE");
 				png_set_expand_gray_1_2_4_to_8(pngPtr);
 				m_format = transparency ? GL_LUMINANCE_ALPHA:GL_LUMINANCE;
 				break;
 			case PNG_COLOR_TYPE_GA:
+				LOGD("GL_LUMINANCE_ALPHA");
 				png_set_expand_gray_1_2_4_to_8(pngPtr);
 				m_format = GL_LUMINANCE_ALPHA;
 				break;

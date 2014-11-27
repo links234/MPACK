@@ -99,6 +99,7 @@ void CursorDrawer::Render()
 	m_pSprite->m_position=Global::pContext->pInputService->GetMouse()->GetPosition();
 	m_pSprite->m_position.x+=m_pSprite->GetWidth()*0.5;
 	m_pSprite->m_position.y+=m_pSprite->GetHeight()*0.5;
+	LOGD("CD::R OK");
 	m_pSprite->Render();
 }
 
