@@ -79,15 +79,15 @@ void GUIMenu::Render()
 			else
 			{
 				GLfloat factor;
-				if(pos.x<mid.xmin)
+				if(pos.x<mid.m_xmin)
 				{
-					factor=mid.xmin-pos.x;
+					factor=mid.m_xmin-pos.x;
 				}
 				else
 				{
-					factor=pos.x-mid.xmax;
+					factor=pos.x-mid.m_xmax;
 				}
-				factor/=mid.xmin;
+				factor/=mid.m_xmin;
 
 				Vector3f lrColor(173.0f/255.0f,113.0f/255.0f,52.0f/255.0f);
 				Vector3f midColor(1.0f,1.0f,1.0f);
@@ -157,10 +157,10 @@ void GUIMenu::DOWNEvent(void *pointer1, void *pointer2)
 		AABB2Df A;
 		GLfloat width=pGUI->m_sprite->GetWidth()*0.5f;
 		GLfloat height=pGUI->m_sprite->GetHeight()*0.5f;
-		A.xmin=pos.x-width;
-		A.xmax=pos.x+width;
-		A.ymin=pos.y-height;
-		A.ymax=pos.y+height;
+		A.m_xmin=pos.x-width;
+		A.m_xmax=pos.x+width;
+		A.m_ymin=pos.y-height;
+		A.m_ymax=pos.y+height;
 		if(A.Contain(pFinger->m_pos))
 		{
 			(*it)->m_pFinger=pFinger;

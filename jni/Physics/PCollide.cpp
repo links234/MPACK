@@ -173,8 +173,8 @@ namespace Core
 			}
 
 			o2.AddPoint(obj1.GetPosition().Dot(edge));
-			o2.xmax += c.GetRadius();
-			o2.xmin -= c.GetRadius();
+			o2.m_xmax += c.GetRadius();
+			o2.m_xmin -= c.GetRadius();
 
 			if(!o1.Intersect(o2))
 			{
@@ -207,8 +207,8 @@ namespace Core
 
 
 			o2.AddPoint(obj1.GetPosition().Dot(edge));
-			o2.xmax += c.GetRadius();
-			o2.xmin -= c.GetRadius();
+			o2.m_xmax += c.GetRadius();
+			o2.m_xmin -= c.GetRadius();
 
 			if(!o1.Intersect(o2))
 			{

@@ -30,10 +30,10 @@ namespace Core
 		p_aabb->AddPoint(PVec2(m_radius, m_radius));
 
 
-		p_aabb->xmin += p_translate.x;
-		p_aabb->xmax += p_translate.x;
+		p_aabb->m_xmin += p_translate.x;
+		p_aabb->m_xmax += p_translate.x;
 
-		p_aabb->ymin += p_translate.y;
-		p_aabb->ymax += p_translate.y;
+		p_aabb->m_ymin += p_translate.y;
+		p_aabb->m_ymax += p_translate.y;
 	}
 }

@@ -205,7 +205,7 @@ bool TextureMappedFont::Load(const string& textureName)
 				}
 			}
 
-			if(cell.xmin>cellWidth)
+			if(cell.m_xmin>cellWidth)
 			{
 				m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
 				m_cellSpacing[i][j].right=0.0f;
@@ -214,10 +214,10 @@ bool TextureMappedFont::Load(const string& textureName)
 			}
 			else
 			{
-				m_cellSpacing[i][j].left=(GLfloat)(cell.xmin)*OneOverCellWidth;
-				m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.xmax)*OneOverCellWidth;
-				m_cellSpacing[i][j].top=(GLfloat)(cell.ymin)*OneOverCellWidth;
-				m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.ymax)*OneOverCellWidth;
+				m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellWidth;
+				m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellWidth;
+				m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellWidth;
+				m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellWidth;
 			}
 		}
 	}

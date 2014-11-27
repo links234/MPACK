@@ -11,10 +11,10 @@ AnimatedSprite::~AnimatedSprite()
 void AnimatedSprite::Render()
 {
 	const AABB2Df &frame=m_frames[m_currentFrame];
-	const GLfloat &Um=frame.xmin;
-	const GLfloat &UM=frame.xmax;
-	const GLfloat &Vm=frame.ymin;
-	const GLfloat &VM=frame.ymax;
+	const GLfloat &Um=frame.m_xmin;
+	const GLfloat &UM=frame.m_xmax;
+	const GLfloat &Vm=frame.m_ymin;
+	const GLfloat &VM=frame.m_ymax;
 
 	Math::Vector2f v[4];
 	v[0].x=-m_width;v[0].y=-m_height;
@@ -58,10 +58,10 @@ void AnimatedSprite::BuildFrameGrid(int rows, int cols)
 		u=0.0f;
 		for(int j=0;j<cols;++j,u+=uLength,++index)
 		{
-			m_frames[index].xmin=u;
-			m_frames[index].xmax=u+uLength;
-			m_frames[index].ymin=v-vLength;
-			m_frames[index].ymax=v;
+			m_frames[index].m_xmin=u;
+			m_frames[index].m_xmax=u+uLength;
+			m_frames[index].m_ymin=v-vLength;
+			m_frames[index].m_ymax=v;
 		}
 	}
 }
