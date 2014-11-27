@@ -35,51 +35,8 @@ namespace Math
 		T			m_rotation;
 		T			m_scale;
 	};
-
-	template<class T> inline void TransformState2<T>::Transform(Vector2<T> &vec2) const
-	{
-		vec2.Rotate(m_rotation);
-		vec2*=m_scale;
-		vec2+=m_translation;
-	}
-
-	template<class T> inline Vector2<T> TransformState2<T>::Transformed(Vector2<T> vec2) const
-	{
-		vec2.Rotate(m_rotation);
-		vec2*=m_scale;
-		vec2+=m_translation;
-		return vec2;
-	}
-
-	template<class T> inline void TransformState2<T>::SetTranslation(const Vector2<T> &translation)
-	{
-		m_translation=translation;
-	}
-
-	template<class T> inline Vector2<T> TransformState2<T>::GetTranslation() const
-	{
-		return m_translation;
-	}
-
-	template<class T> inline void TransformState2<T>::SetRotation(const T &rotation)
-	{
-		m_rotation=rotation;
-	}
-
-	template<class T> inline T TransformState2<T>::GetRotation() const
-	{
-		return m_rotation;
-	}
-
-	template<class T> inline void TransformState2<T>::SetScale(const T &scale)
-	{
-		m_scale=scale;
-	}
-
-	template<class T> inline T TransformState2<T>::GetScale() const
-	{
-		return m_rotation;
-	}
 }
+
+#include "TransformState2Implementation.hpp"
 
 #endif

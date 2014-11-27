@@ -1,22 +1,22 @@
-#version 130
-
-#extension GL_EXT_gpu_shader4 : enable
-
 uniform sampler2D texture0;
 
-float rt_w = 800.0f;
-float rt_h = 600.0f;
+float rt_w = 1920.0f;
+float rt_h = 1080.0f;
+float inv_w_size = 1.0f/rt_w;
+float inv_h_size = 1.0f/rt_h;
+vec2 inv_screen_size = vec2(inv_w_size,inv_h_size);
+
 float FXAA_SPAN_MAX = 8.0;
 float FXAA_REDUCE_MUL = 1.0/8.0;
 
-in vec4 texCoord0;
+varying vec4 texCoord0;
 
-out vec4 outColor;
+vec4 outColor;
 
 #define FxaaInt2 ivec2
 #define FxaaFloat2 vec2
-#define FxaaTexLod0(t, p) texture2DLod(t, p, 0.0)
-#define FxaaTexOff(t, p, o, r) texture2DLodOffset(t, p, 0.0, o)
+#define FxaaTexLod0(t, p) texture2D(t, p)
+#define FxaaTexOff(t, p, o) texture2D(t, p + o * inv_screen_size)
 
 vec3 FxaaPixelShader(
   			vec4 posPos,
@@ -27,9 +27,9 @@ vec3 FxaaPixelShader(
     	#define FXAA_REDUCE_MIN   (1.0/128.0)
 /*---------------------------------------------------------*/
     	vec3 rgbNW = FxaaTexLod0(tex, posPos.zw).xyz;
-    	vec3 rgbNE = FxaaTexOff(tex, posPos.zw, FxaaInt2(1,0), rcpFrame.xy).xyz;
-    	vec3 rgbSW = FxaaTexOff(tex, posPos.zw, FxaaInt2(0,1), rcpFrame.xy).xyz;
-    	vec3 rgbSE = FxaaTexOff(tex, posPos.zw, FxaaInt2(1,1), rcpFrame.xy).xyz;
+    	vec3 rgbNE = FxaaTexOff(tex, posPos.zw, vec2(1.0f,0.0f)).xyz;
+    	vec3 rgbSW = FxaaTexOff(tex, posPos.zw, vec2(0.0f,1.0f)).xyz;
+    	vec3 rgbSE = FxaaTexOff(tex, posPos.zw, vec2(1.0f,1.0f)).xyz;
     	vec3 rgbM  = FxaaTexLod0(tex, posPos.xy).xyz;
 /*---------------------------------------------------------*/
     	vec3 luma = vec3(0.299, 0.587, 0.114);
@@ -75,5 +75,6 @@ vec4 PostFX(sampler2D tex, vec2 uv)
 void main()
 {
 	vec2 uv=texCoord0.st;
-  	outColor = PostFX(texture0, uv);
+  	outColor = texture2D(texture0, uv);
+  	gl_FragColor=outColor;
 }

@@ -12,10 +12,12 @@ namespace Core
 		if(m_colorTex)
 		{
 			delete m_colorTex;
+			m_colorTex = NULL;
 		}
 		if(m_depthTex)
 		{
 			delete m_depthTex;
+			m_depthTex = NULL;
 		}
 	}
 	void RenderTexture::Init(GLuint width, GLuint height)

@@ -90,7 +90,7 @@ void ShaderType_Tex0Pass::SendVertexBuffer()
 void ShaderType_Tex0Pass::SendVertexBuffer(GLfloat *VAO)
 {
 	glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,VAO);
-	glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,(GLvoid*)((GLuint)VAO+(GLuint)sizeof(GLfloat)*2));
+	glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,(GLvoid*)((intptr_t)VAO+(intptr_t)sizeof(GLfloat)*2));
 }
 void ShaderType_Tex0Pass::EnableVertexAttributes()
 {
@@ -132,16 +132,22 @@ AbstractShaderType* FXAAI_Shader;
 
 bool LoadShaders()
 {
+	LOGD("OK HERE!!!!! LOADSHADERS 1");
 	Sprite_Shader = (AbstractShaderType*)(new ShaderType_Sprite(VERTEXSHADER_SPRITE,FRAGMENTSHADER_SPRITE));
+	LOGD("OK HERE!!!!! LOADSHADERS 1.2");
 	if(!Sprite_Shader->Initialize())
 	{
 		return false;
 	}
+	LOGD("OK HERE!!!!! LOADSHADERS 2");
 	Sprite_Shader->BindAttributeLocations();
+	LOGD("OK HERE!!!!! LOADSHADERS 3");
 	if(!Sprite_Shader->LinkProgram())
 	{
 		return false;
 	}
+
+	LOGD("OK HERE!!!!! LOADSHADERS");
 
 	FXAAII_Shader = (AbstractShaderType*)(new ShaderType_Tex0Pass(VERTEXSHADER_FXAAII,FRAGMENTSHADER_FXAAII));
 	if(!FXAAII_Shader->Initialize())

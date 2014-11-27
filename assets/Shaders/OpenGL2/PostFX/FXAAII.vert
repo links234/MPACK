@@ -1,16 +1,14 @@
-#version 130
-
 uniform mat4 projection_matrix;
 
 float FXAA_SUBPIX_SHIFT = 1.0/4.0;
 
-float rt_w = 800.0f;
-float rt_h = 600.0f;
+float rt_w = 1920.0f;
+float rt_h = 1080.0f;
 
-in vec2 a_Vertex;
-in vec2 a_TexCoord0;
+attribute vec2 a_Vertex;
+attribute vec2 a_TexCoord0;
 
-out vec4 texCoord0;
+varying vec4 texCoord0;
 
 void main(void) 
 {

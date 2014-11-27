@@ -25,12 +25,12 @@ namespace Math
 {
 	typedef TransformState2<float>		TransformState2f;
 
-	typedef Vector2<float> 			Vector2f;
-	typedef Vector3<float> 			Vector3f;
-	typedef Vector4<float> 			Vector4f;
+	typedef Vector2<float> 				Vector2f;
+	typedef Vector3<float> 				Vector3f;
+	typedef Vector4<float> 				Vector4f;
 
-	typedef Matrix3<float> 			Matrix3f;
-	typedef Matrix4<float> 			Matrix4f;
+	typedef Matrix3<float> 				Matrix3f;
+	typedef Matrix4<float> 				Matrix4f;
 
 	typedef Plane<float>				Planef;
 
@@ -38,7 +38,7 @@ namespace Math
 	typedef AABB2D<float> 				AABB2Df;
 
 
-	typedef TransformState2<double>	TransformState2d;
+	typedef TransformState2<double>		TransformState2d;
 
 	typedef Vector2<double> 			Vector2d;
 	typedef Vector3<double> 			Vector3d;
@@ -50,7 +50,7 @@ namespace Math
 	typedef Plane<double>				Planed;
 
 	typedef AABB1D<double>				AABB1Dd;
-	typedef AABB2D<double> 			AABB2Dd;
+	typedef AABB2D<double> 				AABB2Dd;
 }
 
 #endif

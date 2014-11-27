@@ -16,7 +16,7 @@ namespace Math
 	template <class T> class Misc
 	{
 	public:
-		const static T     	c_Pi,
+		const static T     		c_Pi,
 						    	c_TwoPi,
 						    	c_HalfPi,
 						    	c_InvPi,
@@ -47,15 +47,15 @@ namespace Math
 		static T Mod(const T, const T);
 	};
 
-	template<> inline float	Misc<float>::Sin(const float v)			{ return sinf(v);			}
+	template<> inline float		Misc<float>::Sin(const float v)			{ return sinf(v);			}
 	template<> inline double	Misc<double>::Sin(const double v)		{ return sin(v);			}
-	template<> inline float	Misc<float>::Cos(const float v)			{ return cosf(v);			}
+	template<> inline float		Misc<float>::Cos(const float v)			{ return cosf(v);			}
 	template<> inline double	Misc<double>::Cos(const double v)		{ return cos(v);			}
-	template<> inline float	Misc<float>::Tan(const float v)			{ return tanf(v);			}
+	template<> inline float		Misc<float>::Tan(const float v)			{ return tanf(v);			}
 	template<> inline double	Misc<double>::Tan(const double v)		{ return tan(v);			}
-	template<> inline float	Misc<float>::Sqrt(const float v)			{ return sqrtf(v);			}
+	template<> inline float		Misc<float>::Sqrt(const float v)		{ return sqrtf(v);			}
 	template<> inline double	Misc<double>::Sqrt(const double v)		{ return sqrt(v);			}
-	template<> inline float	Misc<float>::InvSqrt(const float v)		{ return 1.0f / sqrtf(v);	}
+	template<> inline float		Misc<float>::InvSqrt(const float v)		{ return 1.0f / sqrtf(v);	}
 	template<> inline double	Misc<double>::InvSqrt(const double v)	{ return 1.0 / sqrt(v);	}
 
 	template<class T> inline bool Misc<T>::Equal(const T a, const T b)

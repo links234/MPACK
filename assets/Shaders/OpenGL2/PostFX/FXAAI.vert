@@ -1,11 +1,11 @@
-#version 130
+#version 120
 
 uniform mat4 projection_matrix;
 
-in vec2 a_Vertex;
-in vec2 a_TexCoord0;
+attribute vec2 a_Vertex;
+attribute vec2 a_TexCoord0;
 
-out vec2 texCoord0;
+varying vec2 texCoord0;
 
 void main(void) 
 {

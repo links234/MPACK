@@ -1,10 +1,12 @@
-#version 130
-#extension GL_EXT_gpu_shader4 : enable
+float rt_w = 1920.0f;
+float rt_h = 1080.0f;
+float inv_w_size = 1.0f/rt_w;
+float inv_h_size = 1.0f/rt_h;
+vec2 inv_screen_size = vec2(inv_w_size,inv_h_size);
 
 #define FXAA_EDGE_THRESHOLD      (1.0/8.0)
 #define FXAA_EDGE_THRESHOLD_MIN  (1.0/24.0)
 #define FXAA_SEARCH_STEPS        32
-#define FXAA_SEARCH_ACCELERATION 1
 #define FXAA_SEARCH_THRESHOLD    (1.0/4.0)
 #define FXAA_SUBPIX              1
 #define FXAA_SUBPIX_FASTER       0
@@ -15,13 +17,9 @@
 #define FxaaBool2Float(a) mix(0.0, 1.0, (a))
 #define FxaaPow3(x, y) pow(x, y)
 #define FxaaSel3(f, t, b) mix((f), (t), (b))
-#define FxaaTexLod0(t, p) textureLod(t, p, 0.0)
-#define FxaaTexOff(t, p, o, r) textureLodOffset(t, p, 0.0, o)
+#define FxaaTexLod0(t, p) texture2D(t, p)
+#define FxaaTexOff(t, p, o) texture2D(t, p + o*inv_screen_size)
 #define FxaaTovec3(a) vec3((a), (a), (a))
-
-vec4 FxaaTexGrad(sampler2D tex, vec2 pos, vec2 grad) {
-      return textureGrad(tex, pos.xy, grad, grad);
-}
 
 float FxaaLuma(vec3 rgb) 
 {
@@ -38,11 +36,11 @@ vec3 FxaaPixelShader(
 			sampler2D tex,
 			vec2 rcpFrame) 
 {
-    	vec3 rgbN = FxaaTexOff(tex, pos.xy, ivec2( 0,-1), rcpFrame).xyz;
-    	vec3 rgbW = FxaaTexOff(tex, pos.xy, ivec2(-1, 0), rcpFrame).xyz;
-    	vec3 rgbM = FxaaTexOff(tex, pos.xy, ivec2( 0, 0), rcpFrame).xyz;
-    	vec3 rgbE = FxaaTexOff(tex, pos.xy, ivec2( 1, 0), rcpFrame).xyz;
-    	vec3 rgbS = FxaaTexOff(tex, pos.xy, ivec2( 0, 1), rcpFrame).xyz;
+    	vec3 rgbN = FxaaTexOff(tex, pos.xy, vec2( 0.0f,-1.0f)).xyz;
+    	vec3 rgbW = FxaaTexOff(tex, pos.xy, vec2(-1.0f, 0.0f)).xyz;
+    	vec3 rgbM = FxaaTexOff(tex, pos.xy, vec2( 0.0f, 0.0f)).xyz;
+    	vec3 rgbE = FxaaTexOff(tex, pos.xy, vec2( 1.0f, 0.0f)).xyz;
+    	vec3 rgbS = FxaaTexOff(tex, pos.xy, vec2( 0.0f, 1.0f)).xyz;
     	float lumaN = FxaaLuma(rgbN);
     	float lumaW = FxaaLuma(rgbW);
     	float lumaM = FxaaLuma(rgbM);
@@ -75,10 +73,10 @@ vec3 FxaaPixelShader(
 	float blendL = rangeL / range; 
 #endif 
 
-	vec3 rgbNW = FxaaTexOff(tex, pos.xy, ivec2(-1,-1), rcpFrame).xyz;
-	vec3 rgbNE = FxaaTexOff(tex, pos.xy, ivec2( 1,-1), rcpFrame).xyz;
-	vec3 rgbSW = FxaaTexOff(tex, pos.xy, ivec2(-1, 1), rcpFrame).xyz;
-	vec3 rgbSE = FxaaTexOff(tex, pos.xy, ivec2( 1, 1), rcpFrame).xyz;
+	vec3 rgbNW = FxaaTexOff(tex, pos.xy, vec2(-1.0f,-1.0f)).xyz;
+	vec3 rgbNE = FxaaTexOff(tex, pos.xy, vec2( 1.0f,-1.0f)).xyz;
+	vec3 rgbSW = FxaaTexOff(tex, pos.xy, vec2(-1.0f, 1.0f)).xyz;
+	vec3 rgbSE = FxaaTexOff(tex, pos.xy, vec2( 1.0f, 1.0f)).xyz;
 #if (FXAA_SUBPIX_FASTER == 0) && (FXAA_SUBPIX > 0)
 	rgbL += (rgbNW + rgbNE + rgbSW + rgbSE);
 	rgbL *= vec3(1.0/9.0);
@@ -123,34 +121,15 @@ vec3 FxaaPixelShader(
 	float lumaEndP = lumaN;
 	bool doneN = false;
 	bool doneP = false;
-#if FXAA_SEARCH_ACCELERATION == 1
+
 	posN += offNP * vec2(-1.0, -1.0);
 	posP += offNP * vec2( 1.0,  1.0);
-#endif
-#if FXAA_SEARCH_ACCELERATION == 2
-	posN += offNP * vec2(-1.5, -1.5);
-	posP += offNP * vec2( 1.5,  1.5);
-	offNP *= vec2(2.0, 2.0);
-#endif
-#if FXAA_SEARCH_ACCELERATION == 3
-	posN += offNP * vec2(-2.0, -2.0);
-	posP += offNP * vec2( 2.0,  2.0);
-	offNP *= vec2(3.0, 3.0);
-#endif
-#if FXAA_SEARCH_ACCELERATION == 4
-	posN += offNP * vec2(-2.5, -2.5);
-	posP += offNP * vec2( 2.5,  2.5);
-	offNP *= vec2(4.0, 4.0);
-#endif
+
 	for(int i = 0; i < FXAA_SEARCH_STEPS; i++) 
 	{
-#if FXAA_SEARCH_ACCELERATION == 1
 		if(!doneN) lumaEndN = FxaaLuma(FxaaTexLod0(tex, posN.xy).xyz);
 		if(!doneP) lumaEndP = FxaaLuma(FxaaTexLod0(tex, posP.xy).xyz);
-#else
-		if(!doneN) lumaEndN = FxaaLuma(FxaaTexGrad(tex, posN.xy, offNP).xyz);
-		if(!doneP) lumaEndP = FxaaLuma(FxaaTexGrad(tex, posP.xy, offNP).xyz);
-#endif
+
 		doneN = doneN || (abs(lumaEndN - lumaN) >= gradientN);
 		doneP = doneP || (abs(lumaEndP - lumaN) >= gradientN);
 		if(doneN && doneP) break;
@@ -181,15 +160,19 @@ vec3 FxaaPixelShader(
 
 uniform sampler2D texture0;
 
-float rt_w = 800.0f;
-float rt_h = 600.0f;
+varying vec2 texCoord0;
 
-in vec2 texCoord0;
-
-out vec4 outColor;
+vec4 outColor;
 
 void main()
 {
 	vec2 rcpFrame = vec2(1.0/rt_w, 1.0/rt_h);
-	outColor=vec4(FxaaPixelShader(texCoord0,texture0,rcpFrame),1.0);
+	outColor=texture2D(texture0,texCoord0);
+	if(texCoord0.x<0.0)
+	{
+		outColor=vec4(FxaaPixelShader(texCoord0,texture0,rcpFrame),1.0);
+	}
+	float c=(outColor.r+outColor.g+outColor.b)/3.0f;
+	outColor=vec4(c,c,0.0f,1.0f);
+	gl_FragColor=outColor;
 }

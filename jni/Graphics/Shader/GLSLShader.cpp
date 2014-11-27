@@ -8,4 +8,11 @@
 
 #include "GLSLShader.hpp"
 
+using std::string;
+using std::ifstream;
+using std::map;
+using std::vector;
+
+using namespace Core;
+
 GLSLProgram* GLSLProgram::lastBindedShader=NULL;

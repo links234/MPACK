@@ -114,10 +114,12 @@ void PostEffect::Shutdown()
 	if(s_renderTexture1)
 	{
 		delete s_renderTexture1;
+		s_renderTexture1=NULL;
 	}
 	if(s_renderTexture2)
 	{
 		delete s_renderTexture2;
+		s_renderTexture2=NULL;
 	}
 	glDeleteBuffers(1,&s_screenVertexBuffer);
 	glDeleteBuffers(1,&s_screenIndexBuffer);
@@ -126,7 +128,6 @@ void PostEffect::Begin()
 {
 	if(s_FXCount != -1)
 	{
-		LOGD("PostEffect::Begin");
 		s_renderTexture1->Bind();
 	}
 }
@@ -134,7 +135,6 @@ void PostEffect::End()
 {
 	if(s_FXCount != -1)
 	{
-		LOGD("PostEffect::End");
 		s_renderTexture1->Unbind();
 		ApplyFX();
 	}

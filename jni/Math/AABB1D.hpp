@@ -17,68 +17,16 @@ namespace Math
 		AABB1D<T>();
 		AABB1D<T>(T xmin, T xmax);
 
-		bool Intersect(const AABB1D<T> &r) const;
-		bool Contain(const T &p) const;
+		bool Intersect(const AABB1D<T> &other) const;
+		bool Contain(const T &point) const;
 
 		void Clear();
-		void AddPoint(const T &p);
+		void AddPoint(const T &point);
 
-		T xmin,xmax;
+		T m_xmin, m_xmax;
 	};
-	
-	template<class T> inline AABB1D<T>::AABB1D()
-		: xmin(static_cast<T>(0)), xmax(static_cast<T>(0))
-	{
-	}
-
-	template<class T> inline AABB1D<T>::AABB1D(T xmin, T xmax)
-		: xmin(xmin), xmax(xmax)
-	{
-	}
-
-	template<class T> inline bool AABB1D<T>::Intersect(const AABB1D<T> &r) const
-	{
-		if(xmax<r.xmin)
-		{
-			return false;
-		}
-		if(r.xmax<xmin)
-		{
-			return false;
-		}
-		return true;
-	}
-
-	template<class T> inline bool AABB1D<T>::Contain(const T &p) const
-	{
-		if(xmax<p)
-		{
-			return false;
-		}
-		if(p<xmin)
-		{
-			return false;
-		}
-		return true;
-	}
-
-	template<class T> inline void AABB1D<T>::Clear()
-	{
-		xmin=Misc<T>::c_Max;
-		xmax=Misc<T>::c_Min;
-	}
-
-	template<class T> inline void AABB1D<T>::AddPoint(const T &p)
-	{
-		if(p<xmin)
-		{
-			xmin=p;
-		}
-		if(p>xmax)
-		{
-			xmax=p;
-		}
-	}
 }
+
+#include "AABB1DImplementation.hpp"
 
 #endif

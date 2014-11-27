@@ -12,7 +12,7 @@
 #endif
 
 #define LOG_TAG 		"MPACK"
-#define	 BUFFERSIZE 	65536
+#define	BUFFERSIZE 		64*1024
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 FileLogger *pFileLogger;
@@ -80,7 +80,7 @@ namespace Core
 		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "%s", buffer);
 		__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
 #elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-		printf("Info: %s\n", buffer);
+		printf("Warning: %s\n", buffer);
 		pFileLogger->Print(FileLogger::Warning,"%s",buffer);
 #endif
     }
@@ -97,7 +97,7 @@ namespace Core
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", buffer);
 		__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
 #elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-		printf("Info: %s\n", buffer);
+		printf("Debug: %s\n", buffer);
 		pFileLogger->Print(FileLogger::Information,"%s",buffer);
 #endif
     }

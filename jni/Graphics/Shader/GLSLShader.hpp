@@ -17,12 +17,7 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::ifstream;
-using std::map;
-using std::vector;
-
-using namespace Core;
+using namespace std;
 
 class GLSLProgram
 {
@@ -40,12 +35,12 @@ public:
     	{
     		m_header="";
     	}
-    	Resource *vertexShaderResourcePointer=LoadResource(vertexShader);
+    	Core::Resource *vertexShaderResourcePointer=Core::LoadResource(vertexShader);
     	vertexShaderResourcePointer->Open();
     	m_vertexShader.source=string((const char*)(vertexShaderResourcePointer->Bufferize()));
     	delete vertexShaderResourcePointer;
 
-    	Resource *fragmentShaderResourcePointer=LoadResource(fragmentShader);
+    	Core::Resource *fragmentShaderResourcePointer=Core::LoadResource(fragmentShader);
 		fragmentShaderResourcePointer->Open();
 		m_fragmentShader.source=string((const char*)(fragmentShaderResourcePointer->Bufferize()));
 		delete fragmentShaderResourcePointer;
@@ -72,7 +67,6 @@ public:
 
         if (m_vertexShader.source.empty() || m_fragmentShader.source.empty())
         {
-        	LOGE("Shader sources empty!");
             return false;
         }
 
@@ -202,7 +196,6 @@ private:
             OutputShaderLog(shader.id);
             return false;
         }
-
         return true;
     }
 
