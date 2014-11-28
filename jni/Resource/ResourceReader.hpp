@@ -13,6 +13,8 @@ namespace Core
 
 		char Char();
 
+		bool EndOfFile();
+
 		static const int DefaultBufferSize;
 	private:
 		void NextChunk();
@@ -21,6 +23,8 @@ namespace Core
 
 		int m_bufferIndex;
 		int m_bufferSize;
+		int m_bytesLeft;
+		int m_bytesLeftInBuffer;
 		char *m_buffer;
 	};
 }
