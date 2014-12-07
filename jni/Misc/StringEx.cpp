@@ -127,6 +127,31 @@ namespace Core
 				return ch-'A'+'a';
 			}
 		}
+
+		bool IsLowercase(const char &ch)
+		{
+			return 'a'<=ch && ch<='z';
+		}
+
+		bool IsUppercase(const char &ch)
+		{
+			return 'A'<=ch && ch<='Z';
+		}
+
+		bool IsNumeric(const char &ch)
+		{
+			return '0'<=ch && ch<='9';
+		}
+
+		bool IsAlphaNumeric(const char &ch)
+		{
+			return ('0'<=ch && ch<='9') || ('a'<=ch && ch<='z') || ('A'<=ch && ch<='Z');
+		}
+
+		bool IsWhiteSpace(const char &ch)
+		{
+			return ch==' ' || ch=='\t' || ch=='\n';
+		}
 	}
 }
 
