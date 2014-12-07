@@ -1,6 +1,6 @@
 #include "Image.hpp"
 
-#include "Misc.hpp"
+#include "StringEx.hpp"
 #include "TargaImage.hpp"
 #include "PNGImage.hpp"
 
@@ -40,8 +40,8 @@ namespace Core
 		LOGD("LoadImage: pPath = %s",pPath);
 
 		string ext;
-		Misc::PathExtension(pPath,ext);
-		Misc::StringUpper(ext);
+		Core::StringEx::GetExtension(pPath,ext);
+		Core::StringEx::Upper(ext);
 		Image *image=NULL;
 		if(ext=="TGA")
 		{
