@@ -1,52 +1,16 @@
 #include "MPACK.hpp"
 #include "Application.hpp"
 
-#ifdef ANDROID_PLATFORM
-void android_main(android_app* pApplication)
-#elif 	defined(WINDOWS_PLATFORM)
-int WINAPI WinMain(HINSTANCE hInstance,
-                   HINSTANCE hPrevInstance,
-                   LPSTR cmdLine,
-                   int cmdShow)
-#elif	defined(LINUX_PLATFORM)
-int main()
-#endif
+int result = 0;
+Game::Application application;
+
+MPACK_MAIN
 {
-	Core::Log::Initialize();
+	MPACK_INITIALIZE;
 
-	//Debug::WaitToConnect(5);
+    MPACK_RUN(&application, result);
 
-#ifdef ANDROID_PLATFORM
-	Global::pAndroidApp=pApplication;
-	Global::pAAssetManager=pApplication->activity->assetManager;
-#endif
+    MPACK_SHUTDOWN;
 
-	Core::Random::Init();
-    Core::TimeService *pTimeService = Core::TimeService::Initialize();
-    Core::GraphicsService lGraphicsService;
-    Core::SoundService lSoundService;
-    Core::InputService lInputService;
-    Core::PhysicsService lPhysicsService;
-    Core::Context lContext={&lGraphicsService, &lInputService, &lSoundService, pTimeService, &lPhysicsService};
-
-    Global::pContext = &lContext;
-
-
-
-//Event loop parameter setup
-#if defined(ANDROID_PLATFORM) || defined(LINUX_PLATFORM)
-    void *data=NULL;
-#elif	defined(WINDOWS_PLATFORM)
-    void *data=(void*)(&hInstance);
-#endif
-
-    Global::pEventLoop=Core::EventLoop::Initialize(data);
-    Game::Application lApplication;
-    int result = Global::pEventLoop->Run(&lApplication);
-
-    Core::Log::Destroy();
-
-#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-    return result;
-#endif
+    MPACK_RETURN(result);
 }
