@@ -1,7 +1,7 @@
 #ifndef GUIMENUBUTTON_HPP
 #define GUIMENUBUTTON_HPP
 
-#include "Maths.hpp"
+#include "Math.hpp"
 #include "InputService.hpp"
 
 #include <string>

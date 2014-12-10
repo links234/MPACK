@@ -2,7 +2,7 @@
 #define OBJECT_HPP
 
 #include "Types.hpp"
-#include "Maths.hpp"
+#include "Math.hpp"
 
 #include <vector>
 

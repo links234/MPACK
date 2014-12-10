@@ -4,7 +4,7 @@
 #include "Global.hpp"
 
 GUIMenu::GUIMenu()
-	: action(0)
+	: action(0), m_sprite(NULL)
 {
 	m_pMMInputController=MMInputController::Initialize();
 

@@ -2,7 +2,7 @@
 #define PGINPUTCONTROLLER_HPP
 
 #include "Types.hpp"
-#include "Maths.hpp"
+#include "Math.hpp"
 
 class PGInputController
 {

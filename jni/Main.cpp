@@ -1,17 +1,5 @@
-#include "Types.hpp"
-#include "Log.hpp"
-#include "Context.hpp"
+#include "MPACK.hpp"
 #include "Application.hpp"
-#include "EventLoop.hpp"
-#include "Graphics/GraphicsService.hpp"
-#include "InputService.hpp"
-#include "Sound/SoundService.hpp"
-
-#include "Time/TimeService.hpp"
-#include "Physics/Physics.hpp"
-#include "Misc/Random.hpp"
-#include "Global.hpp"
-#include "Debug/Debug.hpp"
 
 #ifdef ANDROID_PLATFORM
 void android_main(android_app* pApplication)

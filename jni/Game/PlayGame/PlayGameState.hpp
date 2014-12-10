@@ -1,13 +1,10 @@
 #ifndef PLAYGAME_HPP
 #define PLAYGAME_HPP
 
+#include "MPACK.hpp"
+
 #include "GameState.hpp"
 #include "PGInputController.hpp"
-#include "Texture2D.hpp"
-#include "Sprite.hpp"
-#include "AnimatedSprite.hpp"
-#include "TiledBackground.hpp"
-#include "Particles.hpp"
 
 #include "Player.hpp"
 #include "Enemy.hpp"
