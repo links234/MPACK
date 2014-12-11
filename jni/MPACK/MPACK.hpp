@@ -38,7 +38,7 @@
 #endif
 
 #define MPACK_FILLGLOBALCONTEXT	\
-	Core::TimeService *MPACK_pTimeService = Core::TimeService::Initialize(); \
+	MPACK::Time::TimeService *MPACK_pTimeService = MPACK::Time::TimeService::Initialize(); \
     Core::GraphicsService MPACK_lGraphicsService; \
     Core::SoundService MPACK_lSoundService; \
     Core::InputService MPACK_lInputService; \

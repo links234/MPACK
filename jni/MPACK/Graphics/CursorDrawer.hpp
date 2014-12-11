@@ -9,7 +9,13 @@ class Sprite;
 namespace Core
 {
 	class Texture2D;
-	class Timer;
+}
+namespace MPACK
+{
+	namespace Time
+	{
+		class Timer;
+	}
 }
 
 class CursorDrawer
@@ -38,10 +44,9 @@ private:
 	GLfloat				m_autohideTime;
 	bool				m_hide;
 	bool				m_autohide;
-	Core::Timer			*m_pTimer;
+	MPACK::Time::Timer	*m_pTimer;
 
 	static CursorDrawer s_instance;
-	
 };
 
 #endif

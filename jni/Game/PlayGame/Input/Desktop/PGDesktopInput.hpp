@@ -5,7 +5,7 @@
 
 #include "PGInputController.hpp"
 
-#include "Maths.hpp"
+#include "Math.hpp"
 
 class PGDesktopInput : public PGInputController
 {

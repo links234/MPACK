@@ -6,35 +6,38 @@
 
 #define NULL 0
 
-namespace Core
+namespace MPACK
 {
-	unsigned int GetTicksCount()
-    {
-    	struct timeval t;
-		gettimeofday(&t, NULL);
-
-		unsigned long secs = t.tv_sec * 1000;
-		secs += (t.tv_usec / 1000);
-		return secs;
-    }
-
-	LinuxTimer::LinuxTimer()
-		: m_currClock(0)
+	namespace Time
 	{
-	}
+		unsigned int GetTicksCount()
+		{
+			struct timeval t;
+			gettimeofday(&t, NULL);
 
-	LinuxTimer::~LinuxTimer()
-	{
-	}
+			unsigned long secs = t.tv_sec * 1000;
+			secs += (t.tv_usec / 1000);
+			return secs;
+		}
 
-	void LinuxTimer::Start()
-	{
-		m_currClock=GetTicksCount();
-	}
+		LinuxTimer::LinuxTimer()
+			: m_currClock(0)
+		{
+		}
 
-	double LinuxTimer::Time() const
-	{
-		return (double)(GetTicksCount()-m_currClock)/1000.0;
+		LinuxTimer::~LinuxTimer()
+		{
+		}
+
+		void LinuxTimer::Start()
+		{
+			m_currClock=GetTicksCount();
+		}
+
+		double LinuxTimer::Time() const
+		{
+			return (double)(GetTicksCount()-m_currClock)/1000.0;
+		}
 	}
 }
 

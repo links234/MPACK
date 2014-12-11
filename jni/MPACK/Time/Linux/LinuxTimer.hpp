@@ -5,20 +5,23 @@
 
 #include "Timer.hpp"
 
-namespace Core
+namespace MPACK
 {
-    class LinuxTimer : public Timer
-    {
-    public:
-    	LinuxTimer();
-    	virtual ~LinuxTimer();
+	namespace Time
+	{
+		class LinuxTimer : public Timer
+		{
+		public:
+			LinuxTimer();
+			virtual ~LinuxTimer();
 
-    	virtual void Start();
-    	virtual double Time() const;
+			virtual void Start();
+			virtual double Time() const;
 
-    private:
-    	unsigned int	m_currClock;
-    };
+		private:
+			unsigned int	m_currClock;
+		};
+	}
 }
 
 #endif

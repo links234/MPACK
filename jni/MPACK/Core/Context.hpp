@@ -8,8 +8,15 @@ namespace Core
 {
 	class GraphicsService;
 	class SoundService;
-    class TimeService;
     class PhysicsService;
+}
+
+namespace MPACK
+{
+	namespace Time
+	{
+		class TimeService;
+	}
 }
 
 namespace Core
@@ -17,11 +24,11 @@ namespace Core
     class Context
     {
     public:
-    	GraphicsService* 	pGraphicsService;
-    	InputService*		pInputService;
-    	SoundService*		pSoundService;
-        TimeService* 		pTimeService;
-        PhysicsService* 	pPhysicsService;
+    	GraphicsService* 			pGraphicsService;
+    	InputService*				pInputService;
+    	SoundService*				pSoundService;
+        MPACK::Time::TimeService* 	pTimeService;
+        PhysicsService* 			pPhysicsService;
     };
 }
 #endif

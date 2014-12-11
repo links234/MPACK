@@ -1,18 +1,21 @@
 #ifndef MPACK_TIMER_HPP
 #define MPACK_TIMER_HPP
 
-namespace Core
+namespace MPACK
 {
-    class Timer
-    {
-    public:
-    	Timer();
-    	virtual ~Timer();
+	namespace Time
+	{
+		class Timer
+		{
+		public:
+			Timer();
+			virtual ~Timer();
 
-    	virtual void Start() = 0;
-    	virtual double Time() const = 0;
+			virtual void Start() = 0;
+			virtual double Time() const = 0;
 
-    	static Timer* Create();
-    };
+			static Timer* Create();
+		};
+	}
 }
 #endif

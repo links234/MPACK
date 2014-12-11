@@ -5,20 +5,23 @@
 
 #include "Timer.hpp"
 
-namespace Core
+namespace MPACK
 {
-    class WindowsTimer : public Timer
-    {
-    public:
-    	WindowsTimer();
-    	virtual ~WindowsTimer();
+	namespace Time
+	{
+		class WindowsTimer : public Timer
+		{
+		public:
+			WindowsTimer();
+			virtual ~WindowsTimer();
 
-    	virtual void Start();
-    	virtual double Time() const;
+			virtual void Start();
+			virtual double Time() const;
 
-    private:
-    	unsigned int m_currClock;
-    };
+		private:
+			unsigned int m_currClock;
+		};
+	}
 }
 
 #endif

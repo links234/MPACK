@@ -15,7 +15,6 @@ namespace Game
 {
 	Application::Application()
     {
-		LOGI("Application::Aplication");
 		m_pGameState = NULL;
 		m_pSavedGameState = NULL;
 		m_pCursorTex = NULL;

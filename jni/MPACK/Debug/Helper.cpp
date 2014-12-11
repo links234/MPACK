@@ -1,5 +1,8 @@
 #include "Helper.hpp"
+
+#include "Debug.hpp"
 #include "Log.hpp"
+
 #include <unistd.h>
 
 namespace Debug

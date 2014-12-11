@@ -8,7 +8,7 @@ MPACK_MAIN
 {
 	MPACK_INITIALIZE;
 
-    MPACK_RUN(&application, result);
+	MPACK_RUN(&application, result);
 
     MPACK_SHUTDOWN;
 

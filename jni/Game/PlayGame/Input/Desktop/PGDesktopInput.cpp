@@ -6,7 +6,7 @@
 #include "Context.hpp"
 #include "InputService.hpp"
 #include "Camera2D.hpp"
-#include "Maths.hpp"
+#include "Math.hpp"
 
 using namespace Core;
 using namespace Math;

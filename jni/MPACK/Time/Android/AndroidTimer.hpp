@@ -5,21 +5,25 @@
 
 #include "Timer.hpp"
 
-namespace Core
+namespace MPACK
 {
-    class AndroidTimer : public Timer
-    {
-    public:
-    	AndroidTimer();
-    	virtual ~AndroidTimer();
+	namespace Time
+	{
+		class AndroidTimer : public Timer
+		{
+		public:
+			AndroidTimer();
+			virtual ~AndroidTimer();
 
-        virtual void Start();
-        virtual double Time() const;
+			virtual void Start();
+			virtual double Time() const;
 
-    private:
-        double m_lastTime;
-    };
+		private:
+			double m_lastTime;
+		};
+	}
 }
+
 #endif
 
 #endif

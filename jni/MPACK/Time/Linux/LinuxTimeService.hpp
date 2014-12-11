@@ -5,24 +5,28 @@
 
 #include "TimeService.hpp"
 
-namespace Core
+namespace MPACK
 {
-    class LinuxTimeService : public TimeService
-    {
-    public:
-        LinuxTimeService();
+	namespace Time
+	{
+		class LinuxTimeService : public TimeService
+		{
+		public:
+			LinuxTimeService();
 
-        void Reset();
-        void Update();
+			void Reset();
+			void Update();
 
-        double Now();
-        float 	Elapsed();
+			double Now();
+			float 	Elapsed();
 
-    private:
-        float mElapsed;
-        double mLastTime;
-    };
+		private:
+			float mElapsed;
+			double mLastTime;
+		};
+	}
 }
+
 #endif
 
 #endif

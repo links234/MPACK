@@ -4,32 +4,35 @@
 
 #include <windows.h>
 
-namespace Core
+namespace MPACK
 {
-	unsigned int GetTicksCount()
-    {
-		SYSTEMTIME time;
-		GetSystemTime(&time);
-		return (time.wSecond * 1000) + time.wMilliseconds;
-    }
-
-	WindowsTimer::WindowsTimer()
-		: m_currClock(0)
+	namespace Time
 	{
-	}
+		unsigned int GetTicksCount()
+		{
+			SYSTEMTIME time;
+			GetSystemTime(&time);
+			return (time.wSecond * 1000) + time.wMilliseconds;
+		}
 
-	WindowsTimer::~WindowsTimer()
-	{
-	}
+		WindowsTimer::WindowsTimer()
+			: m_currClock(0)
+		{
+		}
 
-	void WindowsTimer::Start()
-	{
-		m_currClock=GetTicksCount();
-	}
+		WindowsTimer::~WindowsTimer()
+		{
+		}
 
-	double WindowsTimer::Time() const
-	{
-		return (double)(GetTicksCount()-m_currClock)/1000.0;
+		void WindowsTimer::Start()
+		{
+			m_currClock=GetTicksCount();
+		}
+
+		double WindowsTimer::Time() const
+		{
+			return (double)(GetTicksCount()-m_currClock)/1000.0;
+		}
 	}
 }
 

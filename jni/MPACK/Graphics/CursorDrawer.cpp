@@ -17,7 +17,7 @@ CursorDrawer CursorDrawer::s_instance;
 CursorDrawer::CursorDrawer()
 	: m_hide(false), m_autohide(true), m_autohideTime(5.0f)
 {
-	m_pTimer=Timer::Create();
+	m_pTimer=MPACK::Time::Timer::Create();
 	m_pTimer->Start();
 
 	m_pSprite=new Sprite();

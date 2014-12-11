@@ -5,26 +5,29 @@
 #include "WindowsTimeService.hpp"
 #include "LinuxTimeService.hpp"
 
-namespace Core
+namespace MPACK
 {
-	TimeService::TimeService()
+	namespace Time
 	{
-	}
+		TimeService::TimeService()
+		{
+		}
 
-	TimeService::~TimeService()
-	{
-	}
+		TimeService::~TimeService()
+		{
+		}
 
-	TimeService* TimeService::Initialize()
-	{
-		TimeService *pTimeService = NULL;
+		TimeService* TimeService::Initialize()
+		{
+			TimeService *pTimeService = NULL;
 #ifdef ANDROID_PLATFORM
-		pTimeService = (TimeService*) new AndroidTimeService();
+			pTimeService = (TimeService*) new AndroidTimeService();
 #elif	defined(WINDOWS_PLATFORM)
-		pTimeService = (TimeService*) new WindowsTimeService();
+			pTimeService = (TimeService*) new WindowsTimeService();
 #elif	defined(LINUX_PLATFORM)
-		pTimeService = (TimeService*) new LinuxTimeService();
+			pTimeService = (TimeService*) new LinuxTimeService();
 #endif
-		return pTimeService;
+			return pTimeService;
+		}
 	}
 }
