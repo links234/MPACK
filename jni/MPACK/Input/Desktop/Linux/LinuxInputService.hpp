@@ -7,24 +7,27 @@
 #include "MouseInterface.hpp"
 #include "KeyboardInterface.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class LinuxInputService
+	namespace Input
 	{
-	public:
-		LinuxInputService();
-		~LinuxInputService();
+		class LinuxInputService
+		{
+		public:
+			LinuxInputService();
+			~LinuxInputService();
 
-		void Update();
-		void Reset();
+			void Update();
+			void Reset();
 
-		MouseInterface*		GetMouse()		const;
-		KeyboardInterface*	GetKeyboard() 	const;
+			MouseInterface*		GetMouse()		const;
+			KeyboardInterface*	GetKeyboard() 	const;
 
-	private:
-		MouseInterface		*m_pMouse;
-		KeyboardInterface	*m_pKeyboard;
-	};
+		private:
+			MouseInterface		*m_pMouse;
+			KeyboardInterface	*m_pKeyboard;
+		};
+	}
 }
 
 #endif

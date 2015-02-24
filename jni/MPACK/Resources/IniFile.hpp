@@ -3,17 +3,20 @@
 
 #include <string>
 
-namespace Core
+namespace MPACK
 {
-	class IniFile
+	namespace Core
 	{
-	public:
-		IniFile();
-		~IniFile();
+		class IniFile
+		{
+		public:
+			IniFile();
+			~IniFile();
 
-	private:
+		private:
 
-	};
+		};
+	}
 }
 
 #endif

@@ -6,27 +6,30 @@
 #include "Types.hpp"
 #include "Math.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class MouseState
+	namespace Input
 	{
-	public:
-		class Buttons
+		class MouseState
 		{
 		public:
-			bool Left,Right,Middle;
+			class Buttons
+			{
+			public:
+				bool Left,Right,Middle;
 
-			bool operator!= (const Buttons &other) const;
-			bool operator== (const Buttons &other) const;
+				bool operator!= (const Buttons &other) const;
+				bool operator== (const Buttons &other) const;
+			};
+
+			Buttons			Button;
+			Math::Vector2f	Pos;
+			GLuint			Wheel;
+
+			bool operator!= (const MouseState &other) const;
+			bool operator== (const MouseState &other) const;
 		};
-
-		Buttons			Button;
-		Math::Vector2f	Pos;
-		GLuint			Wheel;
-
-		bool operator!= (const MouseState &other) const;
-		bool operator== (const MouseState &other) const;
-	};
+	}
 }
 
 #endif

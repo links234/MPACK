@@ -17,54 +17,60 @@
 #include <string>
 #include <vector>
 
-class GLSLProgram
+namespace MPACK
 {
-public:
-    struct GLSLShader
-    {
-        unsigned int id;
-        std::string source;
-    };
+	namespace Graphics
+	{
+		class GLSLProgram
+		{
+		public:
+			struct GLSLShader
+			{
+				unsigned int id;
+				std::string source;
+			};
 
-    GLSLProgram(const char* vertexShader, const char* fragmentShader, const char* header=NULL);
+			GLSLProgram(const char* vertexShader, const char* fragmentShader, const char* header=NULL);
 
-    virtual ~GLSLProgram();
-	
-    bool Initialize();
-	bool LinkProgram();
+			virtual ~GLSLProgram();
 
-	void Unload();
+			bool Initialize();
+			bool LinkProgram();
 
-    GLuint GetUniformLocation(const std::string& name);
-    GLuint GetAttribLocation(const std::string& name);
+			void Unload();
 
-    void SendUniform(const std::string& name, const int id);
-    void SendUniform4x4(const std::string& name, const float* matrix, bool transpose=false);
-    void SendUniform3x3(const std::string& name, const float* matrix, bool transpose=false);
-    void SendUniform(const std::string& name, const float red, const float green,
-                     const float blue, const float alpha);
-    void SendUniform(const std::string& name, const float x, const float y,
-                     const float z);
-    void SendUniform(const std::string& name, const float scalar);
+			GLuint GetUniformLocation(const std::string& name);
+			GLuint GetAttribLocation(const std::string& name);
 
-    void BindAttrib(unsigned int index, const std::string& attribName);
+			void SendUniform(const std::string& name, const int id);
+			void SendUniform4x4(const std::string& name, const float* matrix, bool transpose=false);
+			void SendUniform3x3(const std::string& name, const float* matrix, bool transpose=false);
+			void SendUniform(const std::string& name, const float red, const float green,
+							 const float blue, const float alpha);
+			void SendUniform(const std::string& name, const float x, const float y,
+							 const float z);
+			void SendUniform(const std::string& name, const float scalar);
 
-    void BindShader();
+			void BindAttrib(unsigned int index, const std::string& attribName);
 
-private:
-	static GLSLProgram* lastBindedShader;
+			void BindShader();
 
-    bool CompileShader(const GLSLShader& shader);
-    void OutputShaderLog(unsigned int shaderID);
-	void OutputProgramLog();
+		private:
+			static GLSLProgram* lastBindedShader;
 
-    GLSLShader m_vertexShader;
-    GLSLShader m_fragmentShader;
-    unsigned int m_programID;
-    std::string m_header;
+			bool CompileShader(const GLSLShader& shader);
+			void OutputShaderLog(unsigned int shaderID);
+			void OutputProgramLog();
 
-    std::map<std::string, GLuint> m_uniformMap;
-    std::map<std::string, GLuint> m_attribMap;
-};
+			GLSLShader m_vertexShader;
+			GLSLShader m_fragmentShader;
+			unsigned int m_programID;
+			std::string m_header;
+
+			std::map<std::string, GLuint> m_uniformMap;
+			std::map<std::string, GLuint> m_attribMap;
+		};
+	}
+}
 
 #endif

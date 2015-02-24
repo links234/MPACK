@@ -5,39 +5,42 @@
 #include "WindowsMouseInterface.hpp"
 #include "WindowsKeyboardInterface.hpp"
 
-namespace Core
+namespace MPACK
 {
-	WindowsInputService::WindowsInputService()
+	namespace Input
 	{
-		m_pMouse = new WindowsMouseInterface;
-		m_pKeyboard = new WindowsKeyboardInterface;
-		Reset();
-	}
+		WindowsInputService::WindowsInputService()
+		{
+			m_pMouse = new WindowsMouseInterface;
+			m_pKeyboard = new WindowsKeyboardInterface;
+			Reset();
+		}
 
-	WindowsInputService::~WindowsInputService()
-	{
-	}
+		WindowsInputService::~WindowsInputService()
+		{
+		}
 
-	void WindowsInputService::Update()
-	{
-		m_pMouse->Update();
-		m_pKeyboard->Update();
-	}
+		void WindowsInputService::Update()
+		{
+			m_pMouse->Update();
+			m_pKeyboard->Update();
+		}
 
-	void WindowsInputService::Reset()
-	{
-		m_pMouse->Reset();
-		m_pKeyboard->Reset();
-	}
+		void WindowsInputService::Reset()
+		{
+			m_pMouse->Reset();
+			m_pKeyboard->Reset();
+		}
 
-	MouseInterface* WindowsInputService::GetMouse() const
-	{
-		return m_pMouse;
-	}
+		MouseInterface* WindowsInputService::GetMouse() const
+		{
+			return m_pMouse;
+		}
 
-	KeyboardInterface* WindowsInputService::GetKeyboard() const
-	{
-		return m_pKeyboard;
+		KeyboardInterface* WindowsInputService::GetKeyboard() const
+		{
+			return m_pKeyboard;
+		}
 	}
 }
 

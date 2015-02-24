@@ -1,12 +1,15 @@
 #include "PShape.hpp"
 
-namespace Core
+namespace MPACK
 {
-	PShape::PShape()
+	namespace Physics
 	{
-	}
+		PShape::PShape()
+		{
+		}
 
-	PShape::~PShape()
-	{
+		PShape::~PShape()
+		{
+		}
 	}
 }

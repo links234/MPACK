@@ -13,26 +13,32 @@
 
 #include "Types.hpp"
 
-class MeshData;
-
-class IndexArray
+namespace MPACK
 {
-public:
-	IndexArray();
-	~IndexArray();
+	namespace Graphics
+	{
+		class MeshData;
 
-	GLuint*	GetPointer();
+		class IndexArray
+		{
+		public:
+			IndexArray();
+			~IndexArray();
 
-	GLuint	GetSize();
+			GLuint*	GetPointer();
+
+			GLuint	GetSize();
 	
-	GLenum	GetPrimitiveType();
+			GLenum	GetPrimitiveType();
 
-	void	SetPrimitiveType(GLuint primitiveType);
-	void	AddIndex(GLuint index);
-	void	Clear();
-protected:
-	std::vector<GLuint> m_data;
-	GLenum				m_primitiveType;
-};
+			void	SetPrimitiveType(GLuint primitiveType);
+			void	AddIndex(GLuint index);
+			void	Clear();
+		protected:
+			std::vector<GLuint> m_data;
+			GLenum				m_primitiveType;
+		};
+	}
+}
 
 #endif

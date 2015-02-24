@@ -19,70 +19,82 @@
 #include <vector>
 #include <map>
 
-class SpriteBatcher;
+using namespace MPACK::Core;
+using namespace MPACK::Math;
 
-using namespace Core;
-using namespace Math;
-
-namespace IndexData
+namespace MPACK
 {
-	enum Type
+	namespace Graphics
 	{
-		NONE,
-		POINTS,
-		LINES,
-		TRIANGLES
-	};
+		class SpriteBatcher;
+	}
 }
 
-class SpriteBatch
+namespace MPACK
 {
-private:
-	SpriteBatch(GLushort indexSize=0, Texture2D *texture=NULL, IndexData::Type type=IndexData::NONE);
+	namespace Graphics
+	{
+		namespace IndexData
+		{
+			enum Type
+			{
+				NONE,
+				POINTS,
+				LINES,
+				TRIANGLES
+			};
+		}
 
-	GLushort		m_indexSize;
-	IndexData::Type	m_type;
-	Texture2D		*m_texture;
+		class SpriteBatch
+		{
+		private:
+			SpriteBatch(GLushort indexSize=0, Texture2D *texture=NULL, IndexData::Type type=IndexData::NONE);
 
-	friend class SpriteBatcher;
-};
+			GLushort		m_indexSize;
+			IndexData::Type	m_type;
+			Texture2D		*m_texture;
 
-class SpriteBatcher
-{
-public:
-	static void SendDebugPolygon(Vector2f *posPointer,GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
-	static void SendDebugCircle(GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
+			friend class SpriteBatcher;
+		};
 
-	static void SendQuad(SpriteVertex *vertexPointer, GLuint vertexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
-	static void Send(SpriteVertex *vertexPointer, GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
-	static void FlushAll();
+		class SpriteBatcher
+		{
+		public:
+			static void SendDebugPolygon(Vector2f *posPointer,GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
+			static void SendDebugCircle(GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
 
-	static void EnableCamera();
-	static void DisableCamera();
+			static void SendQuad(SpriteVertex *vertexPointer, GLuint vertexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
+			static void Send(SpriteVertex *vertexPointer, GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
+			static void FlushAll();
 
-private:
-	SpriteBatcher();
-	~SpriteBatcher(){}
+			static void EnableCamera();
+			static void DisableCamera();
 
-	void SendQuad(SpriteVertex *vertexPointer, GLuint vertexCount, Texture2D *texture, IndexData::Type type);
-	void Send(SpriteVertex *vertexPointer, GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type);
-	void Flush();
+		private:
+			SpriteBatcher();
+			~SpriteBatcher(){}
 
-	void CompleteBatch();
-	void PushMergeBatch(Texture2D *texture, IndexData::Type type);
-	void PushVertexData(SpriteVertex *vertexPointer, GLint vertexCount);
+			void SendQuad(SpriteVertex *vertexPointer, GLuint vertexCount, Texture2D *texture, IndexData::Type type);
+			void Send(SpriteVertex *vertexPointer, GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type);
+			void Flush();
 
-	GLenum GetGLType(const GLint type);
+			void CompleteBatch();
+			void PushMergeBatch(Texture2D *texture, IndexData::Type type);
+			void PushVertexData(SpriteVertex *vertexPointer, GLint vertexCount);
 
-	GLushort				m_currentIndexBatchSize;
-	vector<SpriteVertex> 	m_vertexData;
-	vector<GLushort> 		m_indexData;
-	vector<SpriteBatch>		m_batches;
-	Texture2D				*m_lastTexture;
-	IndexData::Type			m_lastType;
+			GLenum GetGLType(const GLint type);
 
-	static map<GLfloat, SpriteBatcher*> s_spriteBatcherLayer;
-	static bool						 s_useCamera;
-};
+			GLushort				m_currentIndexBatchSize;
+			vector<SpriteVertex> 	m_vertexData;
+			vector<GLushort> 		m_indexData;
+			vector<SpriteBatch>		m_batches;
+			Texture2D				*m_lastTexture;
+			IndexData::Type			m_lastType;
+
+			static map<GLfloat, SpriteBatcher*> s_spriteBatcherLayer;
+			static bool						 s_useCamera;
+		};
+	}
+}
 
 #endif

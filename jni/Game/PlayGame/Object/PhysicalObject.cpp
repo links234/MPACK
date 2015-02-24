@@ -2,6 +2,9 @@
 
 #include "SpriteBatcher.hpp"
 
+using namespace MPACK;
+using namespace MPACK::Physics;
+
 PhysicalObject::PhysicalObject()
 {
 	m_userData=this;

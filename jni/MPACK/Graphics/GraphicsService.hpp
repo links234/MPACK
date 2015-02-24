@@ -5,22 +5,26 @@
 #include "CursorDrawer.hpp"
 #include "PostEffect.hpp"
 
-namespace Core
+namespace MPACK
 {
-    class GraphicsService
-    {
-    public:
-        GraphicsService();
+	namespace Graphics
+	{
+		class GraphicsService
+		{
+		public:
+			GraphicsService();
 
-        ReturnValue Start();
-        void Stop();
+			ReturnValue Start();
+			void Stop();
 
-        void Update(GLfloat delta);
-        ReturnValue Render();
+			void Update(GLfloat delta);
+			ReturnValue Render();
 
-	protected:
-        ReturnValue LoadResources();
-        ReturnValue UnloadResources();
-    };
+		protected:
+			ReturnValue LoadResources();
+			ReturnValue UnloadResources();
+		};
+	}
 }
+
 #endif

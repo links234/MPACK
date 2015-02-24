@@ -1,5 +1,7 @@
 #include "Projectile.hpp"
 
+using namespace MPACK;
+
 Projectile::Projectile()
 {
 }

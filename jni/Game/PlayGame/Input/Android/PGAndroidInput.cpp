@@ -1,9 +1,8 @@
 #ifdef ANDROID_PLATFORM
 
-#include "PGAndroidInput.hpp"
+#include "MPACK.hpp"
 
-#include "Context.hpp"
-#include "Camera2D.hpp"
+#include "PGAndroidInput.hpp"
 
 PGAndroidInput::PGAndroidInput()
 {

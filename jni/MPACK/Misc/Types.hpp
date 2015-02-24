@@ -43,12 +43,12 @@
 typedef unsigned int	 	GLenum;
 typedef unsigned char	 	GLboolean;
 typedef unsigned int	 	GLbitfield;
-typedef signed char	 	GLbyte;
+typedef signed char	 		GLbyte;
 typedef short			 	GLshort;
-typedef int			 	GLint;
-typedef int			 	GLsizei;
+typedef int			 		GLint;
+typedef int			 		GLsizei;
 typedef unsigned char	 	GLubyte;
-typedef unsigned short 	GLushort;
+typedef unsigned short 		GLushort;
 typedef unsigned int		GLuint;
 typedef float				GLfloat;
 typedef float				GLclampf;
@@ -57,57 +57,61 @@ typedef double				GLclampd;
 typedef void				GLvoid;
 typedef unsigned char		BYTE;
 
-namespace Core
+namespace MPACK
 {
-	typedef int		int32_t;
-    typedef int32_t	 	ReturnValue;
-
-    const ReturnValue RETURN_VALUE_OK   = 0;
-    const ReturnValue RETURN_VALUE_KO   = -1;
-    const ReturnValue RETURN_VALUE_EXIT = -2;
-
-    typedef void (*Param0CallbackFunc)();
-    typedef void (*Param1PtrCallbackFunc)(void*);
-    typedef void (*Param2PtrCallbackFunc)(void*, void*);
-
-    struct Param1PtrCallbackStruct
+	namespace Core
 	{
-		Param1PtrCallbackStruct(Param1PtrCallbackFunc function, void *param1)
-			:	function(function), param1(param1)
+		typedef int		int32_t;
+		typedef int32_t	 	ReturnValue;
+
+		const ReturnValue RETURN_VALUE_OK   = 0;
+		const ReturnValue RETURN_VALUE_KO   = -1;
+		const ReturnValue RETURN_VALUE_EXIT = -2;
+
+		typedef void (*Param0CallbackFunc)();
+		typedef void (*Param1PtrCallbackFunc)(void*);
+		typedef void (*Param2PtrCallbackFunc)(void*, void*);
+
+		struct Param1PtrCallbackStruct
 		{
-		}
+			Param1PtrCallbackStruct(Param1PtrCallbackFunc function, void *param1)
+				:	function(function), param1(param1)
+			{
+			}
 
-		Param1PtrCallbackFunc function;
-		void *param1;
+			Param1PtrCallbackFunc function;
+			void *param1;
 
-		bool operator== (const Param1PtrCallbackStruct &other)
+			bool operator== (const Param1PtrCallbackStruct &other)
+			{
+				if(function!=other.function)
+					return false;
+				if(param1!=other.param1)
+					return false;
+				return true;
+			}
+		};
+
+		struct Param2PtrCallbackStruct
 		{
-			if(function!=other.function)
-				return false;
-			if(param1!=other.param1)
-				return false;
-			return true;
-		}
-	};
+			Param2PtrCallbackStruct(Param2PtrCallbackFunc function, void *param1)
+				:	function(function), param1(param1)
+			{
+			}
 
-    struct Param2PtrCallbackStruct
-    {
-    	Param2PtrCallbackStruct(Param2PtrCallbackFunc function, void *param1)
-    		:	function(function), param1(param1)
-    	{
-    	}
+			Param2PtrCallbackFunc function;
+			void *param1;
 
-    	Param2PtrCallbackFunc function;
-    	void *param1;
-
-    	bool operator== (const Param2PtrCallbackStruct &other)
-		{
-    		if(function!=other.function)
-    		    return false;
-    		if(param1!=other.param1)
-    		    return false;
-    		return true;
-		}
-    };
+			bool operator== (const Param2PtrCallbackStruct &other)
+			{
+				if(function!=other.function)
+					return false;
+				if(param1!=other.param1)
+					return false;
+				return true;
+			}
+		};
+	}
 }
+
 #endif

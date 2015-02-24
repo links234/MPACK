@@ -3,36 +3,42 @@
 
 #include "Sprite.hpp"
 
-class TiledBackground: public Sprite
+namespace MPACK
 {
-public:
-	TiledBackground();
-	virtual ~TiledBackground();
+	namespace Graphics
+	{
+		class TiledBackground: public Sprite
+		{
+		public:
+			TiledBackground();
+			virtual ~TiledBackground();
 
-	virtual void Render();
+			virtual void Render();
 
-	void EnableCamera();
-	void DisableCamera();
+			void EnableCamera();
+			void DisableCamera();
 
-	bool IsCameraEnabled() const;
+			bool IsCameraEnabled() const;
 
-	void SetDepth(const GLfloat depth);
-	GLfloat GetDepth() const;
+			void SetDepth(const GLfloat depth);
+			GLfloat GetDepth() const;
 
-	void SetUVScale(const GLfloat uScale, const GLfloat vScale);
+			void SetUVScale(const GLfloat uScale, const GLfloat vScale);
 
-	void SetUScale(const GLfloat uScale);
-	GLfloat GetUScale() const;
+			void SetUScale(const GLfloat uScale);
+			GLfloat GetUScale() const;
 
-	void SetVScale(const GLfloat vScale);
-	GLfloat GetVScale() const;
+			void SetVScale(const GLfloat vScale);
+			GLfloat GetVScale() const;
 
-protected:
-	GLfloat m_depth;
-	GLfloat	m_uScale;
-	GLfloat m_vScale;
+		protected:
+			GLfloat m_depth;
+			GLfloat	m_uScale;
+			GLfloat m_vScale;
 
-	bool m_isCameraEnabled;
-};
+			bool m_isCameraEnabled;
+		};
+	}
+}
 
 #endif

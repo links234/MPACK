@@ -5,16 +5,19 @@
 
 #include "MouseInterface.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class LinuxMouseInterface : public MouseInterface
+	namespace Input
 	{
-	public:
-		LinuxMouseInterface();
-		~LinuxMouseInterface();
+		class LinuxMouseInterface : public MouseInterface
+		{
+		public:
+			LinuxMouseInterface();
+			~LinuxMouseInterface();
 
-		void Update();
-	};
+			void Update();
+		};
+	}
 }
 
 #endif

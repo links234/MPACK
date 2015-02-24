@@ -5,27 +5,36 @@
 
 #define HUD_LAYER		500.0f
 
-class Camera2D;
-class TextureMappedFont;
-namespace Core
+namespace MPACK
 {
-	class Context;
-	class EventLoop;
-};
+	namespace Core
+	{
+		class Context;
+		class EventLoop;
+	}
+	namespace Graphics
+	{
+		class Camera2D;
+		class TextureMappedFont;
+	}
+}
 
-namespace Global
+namespace MPACK
 {
-#ifdef ANDROID_PLATFORM
-	extern android_app 				*pAndroidApp;
-	extern AAssetManager 			*pAAssetManager;
-#endif
+	namespace Global
+	{
+	#ifdef ANDROID_PLATFORM
+		extern android_app 					*pAndroidApp;
+		extern AAssetManager 				*pAAssetManager;
+	#endif
 
-	extern Core::Context			*pContext;
-	extern Core::EventLoop			*pEventLoop;
+		extern Core::Context				*pContext;
+		extern Core::EventLoop				*pEventLoop;
 
-	extern TextureMappedFont		*pFont;
+		extern Graphics::TextureMappedFont	*pFont;
 
-	extern Camera2D					*pActiveCamera;
+		extern Graphics::Camera2D			*pActiveCamera;
+	}
 }
 
 #endif

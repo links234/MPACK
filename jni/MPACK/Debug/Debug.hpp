@@ -21,24 +21,33 @@
 	#define LOGI(...)
 	#define LOGD(...)
 #else
-	#define LOGE(...) Core::Log::Error(__VA_ARGS__)
-	#define LOGW(...) Core::Log::Warn(__VA_ARGS__)
-	#define LOGI(...) Core::Log::Info(__VA_ARGS__)
-	#define LOGD(...) Core::Log::Debug(__VA_ARGS__)
+	#define LOGE(...) MPACK::Core::Log::Error(__VA_ARGS__)
+	#define LOGW(...) MPACK::Core::Log::Warn(__VA_ARGS__)
+	#define LOGI(...) MPACK::Core::Log::Info(__VA_ARGS__)
+	#define LOGD(...) MPACK::Core::Log::Debug(__VA_ARGS__)
 #endif
 
-class TextureMappedFont;
-
-namespace Debug
+namespace MPACK
 {
-	extern int		printLines;
-	extern int		circlePoints;
-	extern float	printFontSize;
-	extern float	layer;
+	namespace Graphics
+	{
+		class TextureMappedFont;
+	}
+}
 
-	void InitFrame();
-	void Print(TextureMappedFont *font, const char *message, ...);
-	void AssertGL(const char *pMessage);
+namespace MPACK
+{
+	namespace Debug
+	{
+		extern int		printLines;
+		extern int		circlePoints;
+		extern float	printFontSize;
+		extern float	layer;
+
+		void InitFrame();
+		void Print(Graphics::TextureMappedFont *font, const char *message, ...);
+		void AssertGL(const char *pMessage);
+	}
 }
 
 #endif

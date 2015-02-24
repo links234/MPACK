@@ -1,11 +1,10 @@
 #ifndef GUIMENU_HPP
 #define GUIMENU_HPP
 
+#include "MPACK.hpp"
+
 #include "MMInputController.hpp"
 #include "GUIMenuButton.hpp"
-#include "Sprite.hpp"
-#include "Global.hpp"
-#include "Types.hpp"
 
 #include <vector>
 
@@ -26,7 +25,7 @@ public:
 	static void DOWNEvent(void *pointer1, void *pointer2);
 	static void UPEvent(void *pointer1, void *pointer2);
 
-	Sprite *m_sprite;
+	MPACK::Graphics::Sprite *m_sprite;
 private:
 	vector<GUIMenuButton*> m_button;
 

@@ -5,49 +5,52 @@
 
 #include "Types.hpp"
 
-namespace Core
+namespace MPACK
 {
-	enum KeyCode
+	namespace Input
 	{
-		KC_INVALID,
-		KC_UP,
-		KC_DOWN,
-		KC_LEFT,
-		KC_RIGHT,
-		KC_SPACE,
-		KC_ESCAPE,
-		KC_W,
-		KC_A,
-		KC_S,
-		KC_D,
-		KC_MAX_KEYS
-	};
+		enum KeyCode
+		{
+			KC_INVALID,
+			KC_UP,
+			KC_DOWN,
+			KC_LEFT,
+			KC_RIGHT,
+			KC_SPACE,
+			KC_ESCAPE,
+			KC_W,
+			KC_A,
+			KC_S,
+			KC_D,
+			KC_MAX_KEYS
+		};
 
-	class KeyboardInterface
-	{
-	public:
-		KeyboardInterface();
-		virtual ~KeyboardInterface();
+		class KeyboardInterface
+		{
+		public:
+			KeyboardInterface();
+			virtual ~KeyboardInterface();
 
-		virtual void Update() = 0;
+			virtual void Update() = 0;
 
-		void Reset();
+			void Reset();
 
-		bool KeyDown(const KeyCode &key) const;
-		bool KeyUp(const KeyCode &key) const;
-		bool KeyPressed(const KeyCode &key) const;
+			bool KeyDown(const KeyCode &key) const;
+			bool KeyUp(const KeyCode &key) const;
+			bool KeyPressed(const KeyCode &key) const;
 
-		void HandleKeyDown(const KeyCode &key);
-		void HandleKeyUp(const KeyCode &key);
+			void HandleKeyDown(const KeyCode &key);
+			void HandleKeyUp(const KeyCode &key);
 
-		virtual KeyCode TranslateCode(const int &code) = 0;
+			virtual KeyCode TranslateCode(const int &code) = 0;
 
-	protected:
-		BYTE		m_state1[KC_MAX_KEYS];
-		BYTE		m_state2[KC_MAX_KEYS];
-		BYTE		*m_currState;
-		BYTE		*m_lastState;
-	};
+		protected:
+			BYTE		m_state1[KC_MAX_KEYS];
+			BYTE		m_state2[KC_MAX_KEYS];
+			BYTE		*m_currState;
+			BYTE		*m_lastState;
+		};
+	}
 }
 
 #endif

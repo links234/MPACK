@@ -1,15 +1,15 @@
 #ifndef OBJECT_HPP
 #define OBJECT_HPP
 
-#include "Types.hpp"
-#include "Math.hpp"
+#include "MPACK.hpp"
 
 #include <vector>
 
-using namespace Math;
+using namespace MPACK::Math;
+using namespace MPACK::Graphics;
 using namespace std;
 
-class Object
+class Object : public CameraObject
 {
 public:
 	Object();
@@ -17,8 +17,6 @@ public:
 
 	virtual bool Update(GLfloat delta) = 0;
 	virtual void Render() = 0;
-
-	virtual Vector2f GetCameraPosition() const = 0;
 
 	static void UpdateAll(GLfloat delta);
 	static void RenderAll();

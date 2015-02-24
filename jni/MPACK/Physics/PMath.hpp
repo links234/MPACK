@@ -6,12 +6,14 @@
 #include "AABB2D.hpp"
 #include "Math.hpp"
 
-namespace Core
+namespace MPACK
 {
-
-	typedef Math::Vector2<float> 	PVec2;
-	typedef Math::AABB2D<float> 		PAABB;
-	typedef Math::AABB1D<float> 		PSegm;
+	namespace Physics
+	{
+		typedef Math::Vector2<float> 	PVec2;
+		typedef Math::AABB2D<float> 		PAABB;
+		typedef Math::AABB1D<float> 		PSegm;
+	}
 }
 
 #endif

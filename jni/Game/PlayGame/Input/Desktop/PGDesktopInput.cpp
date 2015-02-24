@@ -8,8 +8,9 @@
 #include "Camera2D.hpp"
 #include "Math.hpp"
 
-using namespace Core;
-using namespace Math;
+using namespace MPACK;
+using namespace MPACK::Input;
+using namespace MPACK::Math;
 
 PGDesktopInput::PGDesktopInput()
 {

@@ -5,18 +5,21 @@
 
 #include "KeyboardInterface.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class LinuxKeyboardInterface : public KeyboardInterface
+	namespace Input
 	{
-	public:
-		LinuxKeyboardInterface();
-		~LinuxKeyboardInterface();
+		class LinuxKeyboardInterface : public KeyboardInterface
+		{
+		public:
+			LinuxKeyboardInterface();
+			~LinuxKeyboardInterface();
 
-		void Update();
+			void Update();
 
-		KeyCode TranslateCode(const int &code);
-	};
+			KeyCode TranslateCode(const int &code);
+		};
+	}
 }
 
 #endif

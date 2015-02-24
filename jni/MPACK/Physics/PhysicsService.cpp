@@ -2,50 +2,53 @@
 
 #include "Global.hpp"
 
-namespace Core
+namespace MPACK
 {
-	PhysicsService::PhysicsService(): m_objectList()
+	namespace Physics
 	{
-		callback = NULL;
-	};
-
-	void PhysicsService::AddObject(PObject* pObject)
-	{
-		m_objectList.push_back(pObject);
-		list<PObject*>::iterator it = m_objectList.end();
-		--it;
-		(*it)->m_iterator = it;
-	}
-
-	void PhysicsService::RemoveObject(PObject* pObject)
-	{
-		m_objectList.erase(pObject->m_iterator);
-	}
-
-	void PhysicsService::Update(float delta)
-	{
-		//update state
-		for(list<PObject*>::iterator it = m_objectList.begin(); it != m_objectList.end(); it++)
+		PhysicsService::PhysicsService(): m_objectList()
 		{
-			(*it)->Advance(delta);
+			callback = NULL;
+		};
+
+		void PhysicsService::AddObject(PObject* pObject)
+		{
+			m_objectList.push_back(pObject);
+			list<PObject*>::iterator it = m_objectList.end();
+			--it;
+			(*it)->m_iterator = it;
 		}
 
-
-		//detect collisions
-		for(list<PObject*>::iterator first = m_objectList.begin(); first != m_objectList.end(); first++)
+		void PhysicsService::RemoveObject(PObject* pObject)
 		{
-			list<PObject*>::iterator second = first;
-			for(second++; second != m_objectList.end(); second++)
+			m_objectList.erase(pObject->m_iterator);
+		}
+
+		void PhysicsService::Update(float delta)
+		{
+			//update state
+			for(list<PObject*>::iterator it = m_objectList.begin(); it != m_objectList.end(); it++)
 			{
-				if(PCollide::CollideObjects(*(*first), *(*second)))
+				(*it)->Advance(delta);
+			}
+
+
+			//detect collisions
+			for(list<PObject*>::iterator first = m_objectList.begin(); first != m_objectList.end(); first++)
+			{
+				list<PObject*>::iterator second = first;
+				for(second++; second != m_objectList.end(); second++)
 				{
-					if(callback != NULL)
+					if(PCollide::CollideObjects(*(*first), *(*second)))
 					{
-						callback((void*)(*first), (void*)(*second));
+						if(callback != NULL)
+						{
+							callback((void*)(*first), (void*)(*second));
+						}
 					}
 				}
 			}
-		}
 
+		}
 	}
 }

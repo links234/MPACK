@@ -1,11 +1,12 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include "MPACK.hpp"
+
+using namespace MPACK::Math;
+
 #include "PhysicalObject.hpp"
 #include "SpriteObject.hpp"
-
-using namespace Math;
-using namespace Core;
 
 class Player : public SpriteObject, public PhysicalObject
 {
@@ -16,11 +17,11 @@ public:
 	virtual bool Update(GLfloat delta);
 	virtual void Render();
 
-	virtual Vector2f GetCameraPosition() const;
+	virtual MPACK::Math::Vector2f GetCameraPosition() const;
 
-	virtual void SetSprite(Sprite *pSprite);
+	virtual void SetSprite(MPACK::Graphics::Sprite *pSprite);
 
-	void Shoot(Vector2f direction);
+	void Shoot(MPACK::Math::Vector2f direction);
 };
 
 #endif

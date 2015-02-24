@@ -1,9 +1,12 @@
 #ifndef MPACK_HELPER_HPP
 #define MPACK_HELPER_HPP
 
-namespace Debug
+namespace MPACK
 {
-	void WaitToConnect(int wait_time);
+	namespace Debug
+	{
+		void WaitToConnect(int wait_time);
+	}
 }
 
 #endif

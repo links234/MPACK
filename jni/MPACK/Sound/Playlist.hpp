@@ -6,48 +6,56 @@
 #include <vector>
 #include <list>
 
-namespace Core
+namespace MPACK
 {
-	class Context;
-	class Sound;
-}
-
-namespace Core
-{
-	enum PlayMode
+	namespace Core
 	{
-		FORWARD,
-		BACKWARD,
-		SHUFFLE
-	};
+		class Context;
+	}
 
-    class Playlist
-    {
-    public:
-    	Playlist(const char* pPath);
-    	~Playlist();
+	namespace Sound
+	{
+		class Sound;
+	}
 
-    	void Load(const char* pPath, bool forced); //"forced" ensures immediate change. Should be false if a sound from the plist is playing
+	namespace Sound
+	{
+		enum PlayMode
+		{
+			FORWARD,
+			BACKWARD,
+			SHUFFLE
+		};
 
-        Sound* GetSound();
+		class Playlist
+		{
+		public:
+			Playlist(const char* pPath);
+			~Playlist();
 
-        bool Next();
+			void Load(const char* pPath, bool forced); //"forced" ensures immediate change. Should be false if a sound from the plist is playing
 
-        void setPlayMode(PlayMode p);
+			Sound* GetSound();
 
-        void Print();
-    private:
+			bool Next();
 
-        char mCFile[40], mNFile[40]; // current file name, new file name
-        std::list<std::vector<char> > mList;
-        std::list<std::vector<char> >::iterator mCurTrackIt;
-        PlayMode mPlayMode;
-        bool mLoop;
+			void setPlayMode(PlayMode p);
 
-        Sound* mSound;
+			void Print();
+		private:
 
-        void useNewPlist();
-        void updateSound();
-    };
+			char mCFile[40], mNFile[40]; // current file name, new file name
+			std::list<std::vector<char> > mList;
+			std::list<std::vector<char> >::iterator mCurTrackIt;
+			PlayMode mPlayMode;
+			bool mLoop;
+
+			Sound* mSound;
+
+			void useNewPlist();
+			void updateSound();
+		};
+	}
 }
+
 #endif

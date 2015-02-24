@@ -5,31 +5,33 @@
 
 #include "PShape.hpp"
 
-
-namespace Core
+namespace MPACK
 {
-	class PShape;
-
-	class PCircle : public PShape
+	namespace Physics
 	{
-	public:
-		PCircle();
-		PCircle(const PCircle& p_circle);
-		PCircle(const float p_radius);
+		class PShape;
 
-		void ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const;
+		class PCircle : public PShape
+		{
+		public:
+			PCircle();
+			PCircle(const PCircle& p_circle);
+			PCircle(const float p_radius);
 
-		float GetRadius() const;
+			void ComputeAABB(PAABB* p_aabb, PVec2 p_translate, float p_angle) const;
 
-		void SetRadius(float p_radius);
+			float GetRadius() const;
 
-	private:
-		float m_radius;
-	};
+			void SetRadius(float p_radius);
 
-	inline float PCircle::GetRadius() const { return m_radius; }
+		private:
+			float m_radius;
+		};
 
-	inline void PCircle::SetRadius(float p_radius) { m_radius = p_radius; }
+		inline float PCircle::GetRadius() const { return m_radius; }
+
+		inline void PCircle::SetRadius(float p_radius) { m_radius = p_radius; }
+	}
 }
 
 #endif

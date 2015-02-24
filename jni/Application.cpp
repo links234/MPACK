@@ -11,6 +11,9 @@
 #include "PlayGameState.hpp"
 #include "Log.hpp"
 
+using namespace MPACK;
+using namespace MPACK::Graphics;
+
 namespace Game
 {
 	Application::Application()
@@ -25,7 +28,7 @@ namespace Game
 		LOGI("Application::~Application");
     }
 
-	Core::ReturnValue Application::onActivate()
+	MPACK::Core::ReturnValue Application::onActivate()
     {
 		LOGI("Application::onActivate");
         // Starts services.
@@ -67,10 +70,10 @@ namespace Game
     void Application::onDeactivate()
     {
     	LOGI("Application::onDeactivate");
-    	Global::pContext->pGraphicsService->Stop();
-    	Global::pContext->pSoundService->Stop();
+    	MPACK::Global::pContext->pGraphicsService->Stop();
+    	MPACK::Global::pContext->pSoundService->Stop();
 
-    	Global::pEventLoop->ShowCursor();
+    	MPACK::Global::pEventLoop->ShowCursor();
 
     	if(m_pGameState != NULL)
     	{

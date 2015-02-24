@@ -1,12 +1,13 @@
 #ifndef PHYSICALOBJECT_HPP
 #define PHYSICALOBJECT_HPP
 
+#include "MPACK.hpp"
+
 #include "Object.hpp"
-#include "PObject.hpp"
 
-using namespace Core;
+using namespace MPACK::Core;
 
-class PhysicalObject : virtual public Object, virtual public PObject
+class PhysicalObject : virtual public Object, virtual public MPACK::Physics::PObject
 {
 public:
 	PhysicalObject();

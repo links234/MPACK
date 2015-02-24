@@ -21,36 +21,39 @@
 #include "AABB1D.hpp"
 #include "AABB2D.hpp"
 
-namespace Math
+namespace MPACK
 {
-	typedef TransformState2<float>		TransformState2f;
+	namespace Math
+	{
+		typedef TransformState2<float>		TransformState2f;
 
-	typedef Vector2<float> 				Vector2f;
-	typedef Vector3<float> 				Vector3f;
-	typedef Vector4<float> 				Vector4f;
+		typedef Vector2<float> 				Vector2f;
+		typedef Vector3<float> 				Vector3f;
+		typedef Vector4<float> 				Vector4f;
 
-	typedef Matrix3<float> 				Matrix3f;
-	typedef Matrix4<float> 				Matrix4f;
+		typedef Matrix3<float> 				Matrix3f;
+		typedef Matrix4<float> 				Matrix4f;
 
-	typedef Plane<float>				Planef;
+		typedef Plane<float>				Planef;
 
-	typedef AABB1D<float>				AABB1Df;
-	typedef AABB2D<float> 				AABB2Df;
+		typedef AABB1D<float>				AABB1Df;
+		typedef AABB2D<float> 				AABB2Df;
 
 
-	typedef TransformState2<double>		TransformState2d;
+		typedef TransformState2<double>		TransformState2d;
 
-	typedef Vector2<double> 			Vector2d;
-	typedef Vector3<double> 			Vector3d;
-	typedef Vector4<double> 			Vector4d;
+		typedef Vector2<double> 			Vector2d;
+		typedef Vector3<double> 			Vector3d;
+		typedef Vector4<double> 			Vector4d;
 
-	typedef Matrix3<double> 			Matrix3d;
-	typedef Matrix4<double> 			Matrix4d;
+		typedef Matrix3<double> 			Matrix3d;
+		typedef Matrix4<double> 			Matrix4d;
 
-	typedef Plane<double>				Planed;
+		typedef Plane<double>				Planed;
 
-	typedef AABB1D<double>				AABB1Dd;
-	typedef AABB2D<double> 				AABB2Dd;
+		typedef AABB1D<double>				AABB1Dd;
+		typedef AABB2D<double> 				AABB2Dd;
+	}
 }
 
 #endif

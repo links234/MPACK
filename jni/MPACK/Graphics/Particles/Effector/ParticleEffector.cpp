@@ -1,10 +1,15 @@
 #include "ParticleEffector.hpp"
 
-ParticleEffector::ParticleEffector()
+namespace MPACK
 {
-}
+	namespace Graphics
+	{
+		ParticleEffector::ParticleEffector()
+		{
+		}
 
-ParticleEffector::~ParticleEffector()
-{
+		ParticleEffector::~ParticleEffector()
+		{
+		}
+	}
 }
-

@@ -4,35 +4,38 @@
 #include "WindowsEventLoop.hpp"
 #include "LinuxEventLoop.hpp"
 
-namespace Core
+namespace MPACK
 {
-	EventLoop::EventLoop()
-		: m_pActivityHandler(NULL)
+	namespace Core
 	{
-	}
+		EventLoop::EventLoop()
+			: m_pActivityHandler(NULL)
+		{
+		}
 
-	EventLoop::~EventLoop()
-	{
-	}
+		EventLoop::~EventLoop()
+		{
+		}
 
-	void EventLoop::ShowCursor()
-	{
-	}
+		void EventLoop::ShowCursor()
+		{
+		}
 
-	void EventLoop::HideCursor()
-	{
-	}
+		void EventLoop::HideCursor()
+		{
+		}
 
-	EventLoop* EventLoop::Initialize(void *data)
-	{
-		EventLoop *pEventLoop=NULL;
-#ifdef ANDROID_PLATFORM
-		pEventLoop=(EventLoop*)new AndroidEventLoop(data);
-#elif	defined(WINDOWS_PLATFORM)
-		pEventLoop=(EventLoop*)new WindowsEventLoop(data);
-#elif	defined(LINUX_PLATFORM)
-		pEventLoop=(EventLoop*)new LinuxEventLoop(data);
-#endif
-		return pEventLoop;
+		EventLoop* EventLoop::Initialize(void *data)
+		{
+			EventLoop *pEventLoop=NULL;
+	#ifdef ANDROID_PLATFORM
+			pEventLoop=(EventLoop*)new AndroidEventLoop(data);
+	#elif	defined(WINDOWS_PLATFORM)
+			pEventLoop=(EventLoop*)new WindowsEventLoop(data);
+	#elif	defined(LINUX_PLATFORM)
+			pEventLoop=(EventLoop*)new LinuxEventLoop(data);
+	#endif
+			return pEventLoop;
+		}
 	}
 }

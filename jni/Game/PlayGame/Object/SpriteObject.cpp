@@ -1,5 +1,7 @@
 #include "SpriteObject.hpp"
 
+using namespace MPACK;
+
 SpriteObject::SpriteObject()
 {
 }

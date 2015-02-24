@@ -1,5 +1,8 @@
 #include "Player.hpp"
 
+using namespace MPACK;
+using namespace MPACK::Physics;
+
 Player::Player()
 {
 }

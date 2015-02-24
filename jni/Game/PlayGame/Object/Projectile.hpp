@@ -1,6 +1,8 @@
 #ifndef PROJECTILE_HPP
 #define PROJECTILE_HPP
 
+#include "MPACK.hpp"
+
 #include "PhysicalObject.hpp"
 #include "SpriteObject.hpp"
 
@@ -13,9 +15,9 @@ public:
 	virtual bool Update(GLfloat delta);
 	virtual void Render();
 
-	virtual Vector2f GetCameraPosition() const;
+	virtual MPACK::Math::Vector2f GetCameraPosition() const;
 
-	virtual void SetSprite(Sprite *pSprite);
+	virtual void SetSprite(MPACK::Graphics::Sprite *pSprite);
 };
 
 #endif

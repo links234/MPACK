@@ -1,7 +1,8 @@
 #include "GUIMenu.hpp"
 
-#include "Render.hpp"
-#include "Global.hpp"
+using namespace MPACK;
+using namespace MPACK::Core;
+using namespace MPACK::Graphics;
 
 GUIMenu::GUIMenu()
 	: action(0), m_sprite(NULL)
@@ -145,7 +146,7 @@ void GUIMenu::BuildLayout()
 void GUIMenu::DOWNEvent(void *pointer1, void *pointer2)
 {
 	GUIMenu *pGUI=(GUIMenu*)(pointer1);
-	Finger *pFinger=(Finger*)(pointer2);
+	MPACK::Input::Finger *pFinger=(MPACK::Input::Finger*)(pointer2);
 	for(vector<GUIMenuButton*>::iterator it=pGUI->m_button.begin();it!=pGUI->m_button.end();++it)
 	{
 		if((*it)->m_pFinger)
@@ -177,7 +178,7 @@ void GUIMenu::UPEvent(void *pointer1, void *pointer2)
 	GLfloat rightThreshold=Render::GetScreenWidth()*(1.0f-ACTION_THRESHOLD);
 
 	GUIMenu *pGUI=(GUIMenu*)(pointer1);
-	Finger *pFinger=(Finger*)(pointer2);
+	MPACK::Input::Finger *pFinger=(MPACK::Input::Finger*)(pointer2);
 	for(vector<GUIMenuButton*>::iterator it=pGUI->m_button.begin();it!=pGUI->m_button.end();++it)
 	{
 		if((*it)->m_pFinger==pFinger)

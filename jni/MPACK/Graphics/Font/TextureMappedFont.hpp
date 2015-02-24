@@ -21,44 +21,50 @@
 using std::vector;
 using std::string;
 
-struct CellSpacing
+namespace MPACK
 {
-	GLfloat top,bottom,left,right;
-};
+	namespace Graphics
+	{
+		struct CellSpacing
+		{
+			GLfloat top,bottom,left,right;
+		};
 
-enum Align
-{
-	ALIGN_LEFT_TOP,
-	ALIGN_CENTER
-};
+		enum Align
+		{
+			ALIGN_LEFT_TOP,
+			ALIGN_CENTER
+		};
 
-class TextureMappedFont
-{
-public:
-    TextureMappedFont();
+		class TextureMappedFont
+		{
+		public:
+			TextureMappedFont();
 
-	void SetFontSize(GLfloat fontSize);
-	void SetCharSpacing(GLfloat charSpacing=0.0f);
-	void SetMonospaced(bool monospaced=true);
-    void SendString(const std::string& str, GLfloat x, GLfloat y, Align alignType=ALIGN_LEFT_TOP, vector<Math::Vector4f> *colorPattern=NULL);
+			void SetFontSize(GLfloat fontSize);
+			void SetCharSpacing(GLfloat charSpacing=0.0f);
+			void SetMonospaced(bool monospaced=true);
+			void SendString(const std::string& str, GLfloat x, GLfloat y, Align alignType=ALIGN_LEFT_TOP, vector<Math::Vector4f> *colorPattern=NULL);
 
-    bool 		Load(const string& textureName);
+			bool 		Load(const string& textureName);
 
-	Texture2D* 	GetTexturePointer();
+			Texture2D* 	GetTexturePointer();
 
-	GLfloat 	GetFontSize() const;
-	GLfloat 	GetTextWidth(const std::string &str);
+			GLfloat 	GetFontSize() const;
+			GLfloat 	GetTextWidth(const std::string &str);
 
-	GLfloat 		m_layer;
+			GLfloat 		m_layer;
 
-private:
-    Texture2D		m_texture;
+		private:
+			Texture2D		m_texture;
 
-	GLfloat			m_fontSize;
-	GLfloat			m_charSpacing;
-	bool			m_monospaced;
+			GLfloat			m_fontSize;
+			GLfloat			m_charSpacing;
+			bool			m_monospaced;
 
-	CellSpacing		m_cellSpacing[16][16];
-};
+			CellSpacing		m_cellSpacing[16][16];
+		};
+	}
+}
 
 #endif

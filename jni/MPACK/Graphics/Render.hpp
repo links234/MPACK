@@ -15,31 +15,38 @@
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
 
-class Render
+namespace MPACK
 {
-public:
-	static void Init();
-	static void Uninit();
-	static void SetOrthoMode(GLfloat left=0.0f, GLfloat right=s_screenWidth, GLfloat bottom=0.0f, GLfloat top=s_screenHeight);
-	static void EnableOrthoMode();
-	static void DisableOrthoMode();
-	static void EnableAlphaBlend();
-	static void DisableAlphaBlend();
-	static void SetScreenSize(GLint width, GLint height);
+	namespace Graphics
+	{
+		class Render
+		{
+		public:
+			static void Init();
+			static void Uninit();
+			static void SetOrthoMode(GLfloat left=0.0f, GLfloat right=s_screenWidth, GLfloat bottom=0.0f, GLfloat top=s_screenHeight);
+			static void EnableOrthoMode();
+			static void DisableOrthoMode();
+			static void EnableAlphaBlend();
+			static void DisableAlphaBlend();
+			static void SetScreenSize(GLint width, GLint height);
 
-	static bool IsOrthoModeEnabled();
+			static bool IsOrthoModeEnabled();
 
-	static GLint GetScreenWidth();
-	static GLint GetScreenHeight();
+			static GLint GetScreenWidth();
+			static GLint GetScreenHeight();
 
-private:
-	Render();
+		private:
+			Render();
 
-	static bool	s_orthoModeEnabled;
-	static bool	s_needUpdateOrtho;
-	static GLfloat	s_screenWidth;
-    static GLfloat	s_screenHeight;
-	static GLfloat	s_orthoLeft,s_orthoRight,s_orthoTop,s_orthoBottom;
-	static Matrix4f	s_orthoModeMatrix;
-};
+			static bool	s_orthoModeEnabled;
+			static bool	s_needUpdateOrtho;
+			static GLfloat	s_screenWidth;
+			static GLfloat	s_screenHeight;
+			static GLfloat	s_orthoLeft,s_orthoRight,s_orthoTop,s_orthoBottom;
+			static Matrix4f	s_orthoModeMatrix;
+		};
+	}
+}
+
 #endif

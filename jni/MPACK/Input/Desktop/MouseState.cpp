@@ -2,75 +2,78 @@
 
 #include "MouseState.hpp"
 
-namespace Core
+namespace MPACK
 {
-	bool MouseState::Buttons::operator!= (const MouseState::Buttons &other) const
+	namespace Input
 	{
-		if(Left!=other.Left)
+		bool MouseState::Buttons::operator!= (const MouseState::Buttons &other) const
 		{
-			return true;
+			if(Left!=other.Left)
+			{
+				return true;
+			}
+			if(Middle!=other.Middle)
+			{
+				return true;
+			}
+			if(Right!=other.Right)
+			{
+				return true;
+			}
+			return false;
 		}
-		if(Middle!=other.Middle)
-		{
-			return true;
-		}
-		if(Right!=other.Right)
-		{
-			return true;
-		}
-		return false;
-	}
 
-	bool MouseState::Buttons::operator== (const MouseState::Buttons &other) const
-	{
-		if(Left!=other.Left)
+		bool MouseState::Buttons::operator== (const MouseState::Buttons &other) const
 		{
-			return false;
-		}
-		if(Middle!=other.Middle)
-		{
-			return false;
-		}
-		if(Right!=other.Right)
-		{
-			return false;
-		}
-		return true;
-	}
-
-
-	bool MouseState::operator!= (const MouseState &other) const
-	{
-		if(Pos!=other.Pos)
-		{
+			if(Left!=other.Left)
+			{
+				return false;
+			}
+			if(Middle!=other.Middle)
+			{
+				return false;
+			}
+			if(Right!=other.Right)
+			{
+				return false;
+			}
 			return true;
 		}
-		if(Wheel!=other.Wheel)
-		{
-			return true;
-		}
-		if(Button!=other.Button)
-		{
-			return true;
-		}
-		return false;
-	}
 
-	bool MouseState::operator== (const MouseState &other) const
-	{
-		if(Pos!=other.Pos)
+
+		bool MouseState::operator!= (const MouseState &other) const
 		{
+			if(Pos!=other.Pos)
+			{
+				return true;
+			}
+			if(Wheel!=other.Wheel)
+			{
+				return true;
+			}
+			if(Button!=other.Button)
+			{
+				return true;
+			}
 			return false;
 		}
-		if(Wheel!=other.Wheel)
+
+		bool MouseState::operator== (const MouseState &other) const
 		{
-			return false;
+			if(Pos!=other.Pos)
+			{
+				return false;
+			}
+			if(Wheel!=other.Wheel)
+			{
+				return false;
+			}
+			if(Button!=other.Button)
+			{
+				return false;
+			}
+			return true;
 		}
-		if(Button!=other.Button)
-		{
-			return false;
-		}
-		return true;
 	}
 }
 

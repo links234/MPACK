@@ -3,16 +3,19 @@
 
 #include "Types.hpp"
 
-class Animation 
+namespace MPACK
 {
-public:
-	Animation(GLuint startFrame, GLuint endFrame, GLfloat framesPerSecond=8.0f, bool loop=true, bool backward=false);
+	class Animation
+	{
+	public:
+		Animation(GLuint startFrame, GLuint endFrame, GLfloat framesPerSecond=8.0f, bool loop=true, bool backward=false);
 
-    GLint startFrame;
-    GLint endFrame;
-	GLfloat framesPerSecond;
-    bool loop;
-	bool backward;
-};
+		GLint startFrame;
+		GLint endFrame;
+		GLfloat framesPerSecond;
+		bool loop;
+		bool backward;
+	};
+}
 
 #endif

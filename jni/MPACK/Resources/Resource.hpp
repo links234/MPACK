@@ -3,26 +3,30 @@
 
 #include "Types.hpp"
 
-namespace Core
+namespace MPACK
 {
-    class Resource
-    {
-    public:
-        Resource(const char* pPath);
-        virtual ~Resource();
+	namespace Core
+	{
+		class Resource
+		{
+		public:
+			Resource(const char* pPath);
+			virtual ~Resource();
 
-        const char* GetPath();
+			const char* GetPath();
 
-        virtual ReturnValue Open() = 0;
-        virtual void Close() = 0;
-        virtual ReturnValue Read(void* pBuffer, size_t pCount) = 0;
+			virtual ReturnValue Open() = 0;
+			virtual void Close() = 0;
+			virtual ReturnValue Read(void* pBuffer, size_t pCount) = 0;
 
-        virtual int GetLength() = 0;
-        virtual const void* Bufferize() = 0;
-    protected:
-        char* 	mPath;
-    };
+			virtual int GetLength() = 0;
+			virtual const void* Bufferize() = 0;
+		protected:
+			char* 	mPath;
+		};
 
-    Resource* LoadResource(const char* pPath);
+		Resource* LoadResource(const char* pPath);
+	}
 }
+
 #endif

@@ -8,20 +8,26 @@
 #include <vector>
 
 using namespace std;
-using namespace Math;
+using namespace MPACK::Math;
 
-class AnimatedSprite : public Sprite, public AnimationPlayer
+namespace MPACK
 {
-public:
-	AnimatedSprite();
-	virtual ~AnimatedSprite();
+	namespace Graphics
+	{
+		class AnimatedSprite : public Sprite, public AnimationPlayer
+		{
+		public:
+			AnimatedSprite();
+			virtual ~AnimatedSprite();
 
-	void Render();
+			void Render();
 
-	void BuildFrameGrid(int rows, int cols);
+			void BuildFrameGrid(int rows, int cols);
 
-protected:
-	vector<AABB2Df> m_frames;
-};
+		protected:
+			vector<AABB2Df> m_frames;
+		};
+	}
+}
 
 #endif

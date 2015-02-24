@@ -5,18 +5,21 @@
 
 #include "KeyboardInterface.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class WindowsKeyboardInterface : public KeyboardInterface
+	namespace Input
 	{
-	public:
-		WindowsKeyboardInterface();
-		~WindowsKeyboardInterface();
+		class WindowsKeyboardInterface : public KeyboardInterface
+		{
+		public:
+			WindowsKeyboardInterface();
+			~WindowsKeyboardInterface();
 
-		void Update();
+			void Update();
 
-		KeyCode TranslateCode(const int &code);
-	};
+			KeyCode TranslateCode(const int &code);
+		};
+	}
 }
 
 #endif

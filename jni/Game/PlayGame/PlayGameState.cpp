@@ -11,6 +11,10 @@
 #include "Particles.hpp"
 #include "Camera2D.hpp"
 
+using namespace MPACK;
+using namespace MPACK::Physics;
+using namespace MPACK::Graphics;
+
 namespace Game
 {
 	PlayGame::PlayGame()

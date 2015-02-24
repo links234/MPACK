@@ -1,8 +1,7 @@
 #ifndef PGINPUTCONTROLLER_HPP
 #define PGINPUTCONTROLLER_HPP
 
-#include "Types.hpp"
-#include "Math.hpp"
+#include "MPACK.hpp"
 
 class PGInputController
 {
@@ -13,8 +12,8 @@ public:
 	virtual void Update(GLfloat delta) = 0;
 	virtual void Render() = 0;
 
-	virtual Math::Vector2f 	GetMovementDirection() const = 0;
-	virtual Math::Vector2f 	GetShootingDirection() const = 0;
+	virtual MPACK::Math::Vector2f 	GetMovementDirection() const = 0;
+	virtual MPACK::Math::Vector2f 	GetShootingDirection() const = 0;
 	virtual bool 			IsUserRequestingExit() = 0;
 
 	virtual void Pause() = 0;

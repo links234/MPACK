@@ -3,30 +3,36 @@
 
 #include "Types.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class ActivityHandler;
+	namespace Core
+	{
+		class ActivityHandler;
+	}
 }
 
-namespace Core
+namespace MPACK
 {
-    class EventLoop
-    {
-    public:
-    	EventLoop();
-    	virtual ~EventLoop();
+	namespace Core
+	{
+		class EventLoop
+		{
+		public:
+			EventLoop();
+			virtual ~EventLoop();
 
-        virtual ReturnValue Run(ActivityHandler *pActivityHandler)=0;
+			virtual ReturnValue Run(ActivityHandler *pActivityHandler)=0;
 
-        virtual void ShowCursor();
-        virtual void HideCursor();
+			virtual void ShowCursor();
+			virtual void HideCursor();
 
-        virtual void* GetWindowHandle() const = 0;
+			virtual void* GetWindowHandle() const = 0;
 
-        static EventLoop* Initialize(void *data);
+			static EventLoop* Initialize(void *data);
 
-    protected:
-        ActivityHandler *m_pActivityHandler;
-    };
+		protected:
+			ActivityHandler *m_pActivityHandler;
+		};
+	}
 }
 #endif

@@ -3,22 +3,25 @@
 
 #include "Texture2D.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class RenderTexture
+	namespace Graphics
 	{
-	public:
-		RenderTexture();
-		~RenderTexture();
+		class RenderTexture
+		{
+		public:
+			RenderTexture();
+			~RenderTexture();
 
-		void Init(GLuint width, GLuint height);
-		void Bind();
-		void Unbind();
+			void Init(GLuint width, GLuint height);
+			void Bind();
+			void Unbind();
 
-		GLuint		m_fboId;
-		Texture2D	*m_colorTex;
-		Texture2D	*m_depthTex;
-	};
+			GLuint		m_fboId;
+			Texture2D	*m_colorTex;
+			Texture2D	*m_depthTex;
+		};
+	}
 }
 
 #endif

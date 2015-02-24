@@ -8,11 +8,17 @@
 
 #include "ShaderUniform.hpp"
 
-namespace ShaderUniform
+namespace MPACK
 {
-	Matrix4f			modelviewprojectionMatrix;
-	Matrix4f			modelviewMatrix;
-	Matrix4f			viewMatrix;
-	Matrix4f			projectionMatrix;
-	GLfloat				pointSize;
+	namespace Graphics
+	{
+		namespace ShaderUniform
+		{
+			Matrix4f			modelviewprojectionMatrix;
+			Matrix4f			modelviewMatrix;
+			Matrix4f			viewMatrix;
+			Matrix4f			projectionMatrix;
+			GLfloat				pointSize;
+		}
+	}
 }

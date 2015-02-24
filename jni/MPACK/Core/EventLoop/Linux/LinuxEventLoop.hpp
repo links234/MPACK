@@ -14,50 +14,56 @@
 #include <string>
 #include <iostream>
 
-namespace Core
+namespace MPACK
 {
-	class ActivityHandler;
+	namespace Core
+	{
+		class ActivityHandler;
+	}
 }
 
-namespace Core
+namespace MPACK
 {
-	class LinuxEventLoop : public EventLoop
+	namespace Core
 	{
-	public:
-		LinuxEventLoop(void *data);
-		ReturnValue Run(ActivityHandler* pActivityHandler);
+		class LinuxEventLoop : public EventLoop
+		{
+		public:
+			LinuxEventLoop(void *data);
+			ReturnValue Run(ActivityHandler* pActivityHandler);
 
-		void ShowCursor();
-		void HideCursor();
+			void ShowCursor();
+			void HideCursor();
 
-		void* GetWindowHandle() const;
+			void* GetWindowHandle() const;
 
-	protected:
+		protected:
 
-		Status InitializeDisplay();
-		void DestroyDisplay();
+			Status InitializeDisplay();
+			void DestroyDisplay();
 
-		void SetupPixelFormat();
+			void SetupPixelFormat();
 
-		void ProcessEvents();
-		void SwapBuffers();
+			void ProcessEvents();
+			void SwapBuffers();
 
-		Display* m_display;
-		Window m_XWindow;
-		GLXContext m_glContext;
-		XF86VidModeModeInfo m_XF86DeskMode;
-		XSetWindowAttributes m_XSetAttr;
-		int m_screenID;
+			Display* m_display;
+			Window m_XWindow;
+			GLXContext m_glContext;
+			XF86VidModeModeInfo m_XF86DeskMode;
+			XSetWindowAttributes m_XSetAttr;
+			int m_screenID;
 
-		unsigned int m_width;
-		unsigned int m_height;
-		unsigned int m_bpp;
+			unsigned int m_width;
+			unsigned int m_height;
+			unsigned int m_bpp;
 
-		bool	m_isRunning;
-		bool	m_isFullscreen;
-		bool	m_enabled;
-		bool 	m_GL3Supported;
-	};
+			bool	m_isRunning;
+			bool	m_isFullscreen;
+			bool	m_enabled;
+			bool 	m_GL3Supported;
+		};
+	}
 }
 
 #endif

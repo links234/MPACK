@@ -19,44 +19,48 @@
 
 using namespace std;
 
-class Uncopyable;
-
-namespace Core
+namespace MPACK
 {
-	class Image;
+	class Uncopyable;
 
-	enum FilteringType{Point,Bilinear,Trilinear};
-
-	class Texture2D : public Uncopyable
+	namespace Graphics
 	{
-	public:
-		Texture2D();
-		~Texture2D();
+		class Image;
 
-		bool Load(string path, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
-		bool Load(const Image* image, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
+		enum FilteringType{Point,Bilinear,Trilinear};
 
-		void Build(GLuint width, GLuint height, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
-		void Bind(GLenum TEXTURE);
+		class Texture2D : public Uncopyable
+		{
+		public:
+			Texture2D();
+			~Texture2D();
 
-		void SetFilteringType(FilteringType filtering);
-		void SetWrapMode(GLenum s_mode,GLenum t_mode);
+			bool Load(string path, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
+			bool Load(const Image* image, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
 
-		GLuint GetWidth() const;
-		GLuint GetHeight() const;
+			void Build(GLuint width, GLuint height, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
+			void Bind(GLenum TEXTURE);
 
-		GLuint			m_texId;
+			void SetFilteringType(FilteringType filtering);
+			void SetWrapMode(GLenum s_mode,GLenum t_mode);
 
-	private:
-		void Init();
+			GLuint GetWidth() const;
+			GLuint GetHeight() const;
+
+			GLuint			m_texId;
+
+		private:
+			void Init();
+
+			GLenum			m_sWrapMode;
+			GLenum			m_tWrapMode;
+			bool			m_needUpdate;
+			GLuint			m_width,m_height;
+			FilteringType	m_filteringType;
+		};
 	
-		GLenum			m_sWrapMode;
-		GLenum			m_tWrapMode;
-		bool			m_needUpdate;
-		GLuint			m_width,m_height;
-		FilteringType	m_filteringType;
-	};
-
-	void BindTextureSlot(GLenum TEXTURE);
+		void BindTextureSlot(GLenum TEXTURE);
+	}
 }
+
 #endif

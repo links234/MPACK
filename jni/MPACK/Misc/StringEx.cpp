@@ -2,156 +2,158 @@
 
 using namespace std;
 
-namespace Core
+namespace MPACK
 {
-	namespace StringEx
+	namespace Core
 	{
-		const char* GetExtension(const char* pStr)
+		namespace StringEx
 		{
-			const char* last=NULL;
-			while(pStr)
+			const char* GetExtension(const char* pStr)
 			{
-				++pStr;
-				if(*pStr=='.')
+				const char* last=NULL;
+				while(pStr)
+				{
+					++pStr;
+					if(*pStr=='.')
+					{
+						last=pStr;
+					}
+				}
+				if(!last)
 				{
 					last=pStr;
 				}
-			}
-			if(!last)
-			{
-				last=pStr;
-			}
-			else
-			{
-				++last;
-			}
-			return last;
-		}
-
-		void GetExtension(string path, string &ext)
-		{
-			int i;
-			ext="";
-			for(i=path.size()-1;i>=0;--i)
-			{
-				if(path[i]=='.')
+				else
 				{
-					break;
+					++last;
+				}
+				return last;
+			}
+
+			void GetExtension(string path, string &ext)
+			{
+				int i;
+				ext="";
+				for(i=path.size()-1;i>=0;--i)
+				{
+					if(path[i]=='.')
+					{
+						break;
+					}
+				}
+				if(i>=0)
+				{
+					++i;
+					for(;i<path.size();++i)
+					{
+						ext=ext+path[i];
+					}
 				}
 			}
-			if(i>=0)
+
+			void Upper(string &str)
 			{
-				++i;
-				for(;i<path.size();++i)
+				for(int i=0;i<str.size();++i)
 				{
-					ext=ext+path[i];
+					if('a'<=str[i] && str[i]<='z')
+					{
+						str[i]+='A'-'a';
+					}
 				}
 			}
-		}
 
-		void Upper(string &str)
-		{
-			for(int i=0;i<str.size();++i)
+			void Lower(string &str)
 			{
-				if('a'<=str[i] && str[i]<='z')
+				for(int i=0;i<str.size();++i)
 				{
-					str[i]+='A'-'a';
+					if('A'<=str[i] && str[i]<='Z')
+					{
+						str[i]+='a'-'A';
+					}
 				}
 			}
-		}
 
-		void Lower(string &str)
-		{
-			for(int i=0;i<str.size();++i)
+			std::string ToUpper(std::string str)
 			{
-				if('A'<=str[i] && str[i]<='Z')
+				for(int i=0;i<str.size();++i)
 				{
-					str[i]+='a'-'A';
+					if('a'<=str[i] && str[i]<='z')
+					{
+						str[i]=str[i]-'a'+'A';
+					}
+				}
+				return str;
+			}
+
+			std::string ToLower(std::string str)
+			{
+				for(int i=0;i<str.size();++i)
+				{
+					if('A'<=str[i] && str[i]<='Z')
+					{
+						str[i]=str[i]-'A'+'a';
+					}
+				}
+				return str;
+			}
+
+			void Upper(char &ch)
+			{
+				if('a'<=ch && ch<='z')
+				{
+					ch=ch-'a'+'A';
 				}
 			}
-		}
 
-		std::string ToUpper(std::string str)
-		{
-			for(int i=0;i<str.size();++i)
+			void Lower(char &ch)
 			{
-				if('a'<=str[i] && str[i]<='z')
+				if('A'<=ch && ch<='Z')
 				{
-					str[i]=str[i]-'a'+'A';
+					ch=ch-'A'+'a';
 				}
 			}
-			return str;
-		}
 
-		std::string ToLower(std::string str)
-		{
-			for(int i=0;i<str.size();++i)
+			char ToUpper(const char &ch)
 			{
-				if('A'<=str[i] && str[i]<='Z')
+				if('a'<=ch && ch<='z')
 				{
-					str[i]=str[i]-'A'+'a';
+					return ch-'a'+'A';
+				}
+				return ch;
+			}
+
+			char ToLower(const char &ch)
+			{
+				if('A'<=ch && ch<='Z')
+				{
+					return ch-'A'+'a';
 				}
 			}
-			return str;
-		}
 
-		void Upper(char &ch)
-		{
-			if('a'<=ch && ch<='z')
+			bool IsLowercase(const char &ch)
 			{
-				ch=ch-'a'+'A';
+				return 'a'<=ch && ch<='z';
 			}
-		}
 
-		void Lower(char &ch)
-		{
-			if('A'<=ch && ch<='Z')
+			bool IsUppercase(const char &ch)
 			{
-				ch=ch-'A'+'a';
+				return 'A'<=ch && ch<='Z';
 			}
-		}
 
-		char ToUpper(const char &ch)
-		{
-			if('a'<=ch && ch<='z')
+			bool IsNumeric(const char &ch)
 			{
-				return ch-'a'+'A';
+				return '0'<=ch && ch<='9';
 			}
-			return ch;
-		}
 
-		char ToLower(const char &ch)
-		{
-			if('A'<=ch && ch<='Z')
+			bool IsAlphaNumeric(const char &ch)
 			{
-				return ch-'A'+'a';
+				return ('0'<=ch && ch<='9') || ('a'<=ch && ch<='z') || ('A'<=ch && ch<='Z');
 			}
-		}
 
-		bool IsLowercase(const char &ch)
-		{
-			return 'a'<=ch && ch<='z';
-		}
-
-		bool IsUppercase(const char &ch)
-		{
-			return 'A'<=ch && ch<='Z';
-		}
-
-		bool IsNumeric(const char &ch)
-		{
-			return '0'<=ch && ch<='9';
-		}
-
-		bool IsAlphaNumeric(const char &ch)
-		{
-			return ('0'<=ch && ch<='9') || ('a'<=ch && ch<='z') || ('A'<=ch && ch<='Z');
-		}
-
-		bool IsWhiteSpace(const char &ch)
-		{
-			return ch==' ' || ch=='\t' || ch=='\n';
+			bool IsWhiteSpace(const char &ch)
+			{
+				return ch==' ' || ch=='\t' || ch=='\n';
+			}
 		}
 	}
 }
-

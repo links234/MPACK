@@ -15,68 +15,72 @@
 
 using namespace std;
 
-namespace Core
+namespace MPACK
 {
-    class SoundService
-    {
-    public:
-        SoundService();
-        ~SoundService();
+	namespace Sound
+	{
+		class SoundService
+		{
+		public:
+			SoundService();
+			~SoundService();
 
-        ReturnValue Start();
-        void Stop();
+			Core::ReturnValue Start();
+			void Stop();
 
-        ReturnValue PlayBGMPlaylist(const char* pPath, bool forced = false); //uses new playlist for bgm. Chandg occurs after finishing current track if not forced
-        
+			Core::ReturnValue PlayBGMPlaylist(const char* pPath, bool forced = false); //uses new playlist for bgm. Chandg occurs after finishing current track if not forced
 
-        void RegisterSound(const char* pPath);
-        void UnregisterSound(const char* pPath);
-        void PlaySFX(const char* pPath, bool load = false);
-        
-        void StopBGM();
-        
-        void PauseBGM();
-        void PauseSFX();
-        void PauseAll();
 
-        void ResumeBGM();
-        void ResumeSFX();
-        void ResumeAll();
+			void RegisterSound(const char* pPath);
+			void UnregisterSound(const char* pPath);
+			void PlaySFX(const char* pPath, bool load = false);
 
-    private:
-        ReturnValue StartSoundPlayers();
-        ReturnValue StartBGMPlayer();
+			void StopBGM();
 
-    private:
-#ifdef ANDROID_PLATFORM
-        android_app* mApplication;
+			void PauseBGM();
+			void PauseSFX();
+			void PauseAll();
 
-        // OpenSL ES engine.
-        SLObjectItf mEngineObj; SLEngineItf mEngine;
-        // Audio output.
-        SLObjectItf mOutputMixObj;
+			void ResumeBGM();
+			void ResumeSFX();
+			void ResumeAll();
 
-        // Background music player.
-        SLObjectItf mBGMPlayerObj; SLPlayItf mBGMPlayer;
-        SLBufferQueueItf mBGMPlayerQueue;
+		private:
+			Core::ReturnValue StartSoundPlayers();
+			Core::ReturnValue StartBGMPlayer();
 
-        //TODO: Struct with all player interfaces
-        // Sound player.
-        SLObjectItf mPlayerObj[MAX_SOUNDS]; SLPlayItf mPlayer[MAX_SOUNDS];
-        SLBufferQueueItf mPlayerQueue[MAX_SOUNDS];
-        Sound* tempSounds[MAX_SOUNDS];
-        // Sounds.
-        //Sound* mSounds[32]; int32_t mSoundCount;
-        map<string, Sound*> mSounds;
+		private:
+	#ifdef ANDROID_PLATFORM
+			android_app* mApplication;
 
-        Playlist *mPlaylist;
+			// OpenSL ES engine.
+			SLObjectItf mEngineObj; SLEngineItf mEngine;
+			// Audio output.
+			SLObjectItf mOutputMixObj;
 
-        void SetBGMState(SLuint32 state);
-        void SetSFXState(SLuint32 state);
+			// Background music player.
+			SLObjectItf mBGMPlayerObj; SLPlayItf mBGMPlayer;
+			SLBufferQueueItf mBGMPlayerQueue;
 
-        static void bqBGMPlayerCallback(SLBufferQueueItf bq, void *context);
-        static void bqSFXPlayerCallback(SLBufferQueueItf bq, void *context);
-#endif
-    };
+			//TODO: Struct with all player interfaces
+			// Sound player.
+			SLObjectItf mPlayerObj[MAX_SOUNDS]; SLPlayItf mPlayer[MAX_SOUNDS];
+			SLBufferQueueItf mPlayerQueue[MAX_SOUNDS];
+			Sound* tempSounds[MAX_SOUNDS];
+			// Sounds.
+			//Sound* mSounds[32]; int32_t mSoundCount;
+			map<string, Sound*> mSounds;
+
+			Playlist *mPlaylist;
+
+			void SetBGMState(SLuint32 state);
+			void SetSFXState(SLuint32 state);
+
+			static void bqBGMPlayerCallback(SLBufferQueueItf bq, void *context);
+			static void bqSFXPlayerCallback(SLBufferQueueItf bq, void *context);
+	#endif
+		};
+	}
 }
+
 #endif

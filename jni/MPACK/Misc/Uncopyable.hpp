@@ -9,15 +9,18 @@
 #ifndef MPACK_UNCOPYABLE_H
 #define MPACK_UNCOPYABLE_H
 
-class Uncopyable
+namespace MPACK
 {
-protected:
-	Uncopyable () {}
-	~Uncopyable () {}
+	class Uncopyable
+	{
+	protected:
+		Uncopyable () {}
+		~Uncopyable () {}
 
-private:
-	Uncopyable (const Uncopyable&);
-	Uncopyable& operator=(const Uncopyable &);
-};
+	private:
+		Uncopyable (const Uncopyable&);
+		Uncopyable& operator=(const Uncopyable &);
+	};
+}
 
 #endif

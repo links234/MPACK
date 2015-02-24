@@ -5,16 +5,19 @@
 
 #include "MouseInterface.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class WindowsMouseInterface : public MouseInterface
+	namespace Input
 	{
-	public:
-		WindowsMouseInterface();
-		~WindowsMouseInterface();
+		class WindowsMouseInterface : public MouseInterface
+		{
+		public:
+			WindowsMouseInterface();
+			~WindowsMouseInterface();
 
-		void Update();
-	};
+			void Update();
+		};
+	}
 }
 
 #endif

@@ -5,16 +5,22 @@
 #include "Math.hpp"
 #include "ParticleEffector.hpp"
 
-class ParticleEffectorColor : public ParticleEffector
+namespace MPACK
 {
-public:
-	ParticleEffectorColor();
-	ParticleEffectorColor(const Vector4f &colorStart, const Vector4f &colorEnd);
-	virtual ~ParticleEffectorColor();
+	namespace Graphics
+	{
+		class ParticleEffectorColor : public ParticleEffector
+		{
+		public:
+			ParticleEffectorColor();
+			ParticleEffectorColor(const Vector4f &colorStart, const Vector4f &colorEnd);
+			virtual ~ParticleEffectorColor();
 
-	void UpdateParticle(Particle* particle, const GLfloat &delta);
+			void UpdateParticle(Particle* particle, const GLfloat &delta);
 
-	Vector4f m_colorStart,m_colorEnd;
-};
+			Vector4f m_colorStart,m_colorEnd;
+		};
+	}
+}
 
 #endif

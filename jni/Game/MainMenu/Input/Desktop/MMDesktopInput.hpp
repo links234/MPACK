@@ -5,10 +5,7 @@
 
 #include "MMInputController.hpp"
 
-namespace Core
-{
-	class Finger;
-}
+#include "MPACK.hpp"
 
 class MMDesktopInput : public MMInputController
 {
@@ -19,7 +16,7 @@ public:
 	virtual void Update(GLfloat delta);
 
 private:
-	Finger	*m_pFinger;
+	MPACK::Input::Finger	*m_pFinger;
 };
 
 #endif

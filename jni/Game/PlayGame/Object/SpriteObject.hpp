@@ -1,8 +1,9 @@
 #ifndef SPRITEOBJECT_HPP
 #define SPRITEOBJECT_HPP
 
+#include "MPACK.hpp"
+
 #include "Object.hpp"
-#include "Sprite.hpp"
 
 class SpriteObject : virtual public Object
 {
@@ -15,10 +16,10 @@ public:
 
 	virtual Vector2f GetCameraPosition() const;
 
-	virtual void SetSprite(Sprite *pSprite);
+	virtual void SetSprite(MPACK::Graphics::Sprite *pSprite);
 
 protected:
-	Sprite	*m_sprite;
+	MPACK::Graphics::Sprite	*m_sprite;
 };
 
 #endif

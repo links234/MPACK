@@ -9,26 +9,29 @@
 
 using namespace std;
 
-namespace Core
+namespace MPACK
 {
-	class PShape;
-	class PObject;
-
-	class PhysicsService
+	namespace Physics
 	{
-	public:
-		PhysicsService();
+		class PShape;
+		class PObject;
 
-		void AddObject(PObject* pObject);
-		void RemoveObject(PObject* pObject);
+		class PhysicsService
+		{
+		public:
+			PhysicsService();
 
-		void Update(float delta);
+			void AddObject(PObject* pObject);
+			void RemoveObject(PObject* pObject);
 
-		Param2PtrCallbackFunc callback;
+			void Update(float delta);
 
-	private:
-		list<PObject*> m_objectList;
-	};
+			Core::Param2PtrCallbackFunc callback;
+
+		private:
+			list<PObject*> m_objectList;
+		};
+	}
 }
 
 #endif

@@ -16,27 +16,33 @@
 
 //class Texture2D;
 
-using namespace Math;
+using namespace MPACK::Math;
 
-class VertexArray
+namespace MPACK
 {
-public:
-	VertexArray();
-	~VertexArray();
+	namespace Graphics
+	{
+		class VertexArray
+		{
+		public:
+			VertexArray();
+			~VertexArray();
 
-	void	UpdateVertexFormat();
-	void	UpdateArrays();
-//	void	MapTexCoordForAtlas(GLuint texCoord, Texture2D *texture);
+			void	UpdateVertexFormat();
+			void	UpdateArrays();
+		//	void	MapTexCoordForAtlas(GLuint texCoord, Texture2D *texture);
+
+			GLuint	GetVertexFormat();
+
+			std::vector<Vector3f>	m_position;
+			std::vector<Vector4f>	m_color;
+			std::vector<Vector2f>	m_texCoord[8];
+			std::vector<Vector3f>	m_normal;
+			std::vector<Vector3f>	m_tangent;
+		protected:
+			GLuint					m_vertexFormat;
+		};
+	}
+}
 	
-	GLuint	GetVertexFormat();
-
-	std::vector<Vector3f>	m_position;
-	std::vector<Vector4f>	m_color;
-	std::vector<Vector2f>	m_texCoord[8];
-	std::vector<Vector3f>	m_normal;
-	std::vector<Vector3f>	m_tangent;
-protected:
-	GLuint					m_vertexFormat;
-};
-
 #endif

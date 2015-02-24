@@ -6,6 +6,10 @@
 #include "Context.hpp"
 #include "InputService.hpp"
 
+using namespace std;
+using namespace MPACK;
+using namespace MPACK::Core;
+
 MMDesktopInput::MMDesktopInput()
 	: m_pFinger(NULL)
 {
@@ -22,10 +26,10 @@ void MMDesktopInput::Update(GLfloat delta)
 		m_pFinger->m_pos=Global::pContext->pInputService->GetMouse()->GetPosition();
 	}
 
-	if(Global::pContext->pInputService->GetMouse()->ButtonDown(MBC_LEFT))
+	if(Global::pContext->pInputService->GetMouse()->ButtonDown(MPACK::Input::MBC_LEFT))
 	{
-			m_pFinger=new Finger();
-			m_pFinger->m_flag=Finger::FREE;
+			m_pFinger=new MPACK::Input::Finger();
+			m_pFinger->m_flag=MPACK::Input::Finger::FREE;
 			m_pFinger->m_pos=Global::pContext->pInputService->GetMouse()->GetPosition();
 
 			for(vector<Param2PtrCallbackStruct>::iterator it=m_callbackFunc_FDOWN.begin();it!=m_callbackFunc_FDOWN.end();++it)
@@ -33,7 +37,7 @@ void MMDesktopInput::Update(GLfloat delta)
 				it->function(it->param1,m_pFinger);
 			}
 	}
-	else if(Global::pContext->pInputService->GetMouse()->ButtonUp(MBC_LEFT))
+	else if(Global::pContext->pInputService->GetMouse()->ButtonUp(MPACK::Input::MBC_LEFT))
 	{
 		for(vector<Param2PtrCallbackStruct>::iterator it=m_callbackFunc_FUP.begin();it!=m_callbackFunc_FUP.end();++it)
 		{

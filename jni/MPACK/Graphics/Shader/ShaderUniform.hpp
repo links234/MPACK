@@ -12,15 +12,21 @@
 #include "Types.hpp"
 #include "Math.hpp"
 
-using namespace Math;
+using namespace MPACK::Math;
 
-namespace ShaderUniform
+namespace MPACK
 {
-	extern Matrix4f				modelviewprojectionMatrix;
-	extern Matrix4f				modelviewMatrix;
-	extern Matrix4f				viewMatrix;
-	extern Matrix4f				projectionMatrix;
-	extern GLfloat				pointSize;
+	namespace Graphics
+	{
+		namespace ShaderUniform
+		{
+			extern Matrix4f				modelviewprojectionMatrix;
+			extern Matrix4f				modelviewMatrix;
+			extern Matrix4f				viewMatrix;
+			extern Matrix4f				projectionMatrix;
+			extern GLfloat				pointSize;
+		}
+	}
 }
 
 #endif

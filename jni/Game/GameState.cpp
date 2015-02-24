@@ -1,9 +1,6 @@
 #include "GameState.hpp"
 
-#include "Context.hpp"
-#include "InputService.hpp"
-#include "Particles.hpp"
-#include "Global.hpp"
+#include "MPACK.hpp"
 
 namespace Game
 {

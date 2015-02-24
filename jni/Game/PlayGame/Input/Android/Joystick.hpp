@@ -1,13 +1,11 @@
 #ifndef JOYSTICK_HPP
 #define JOYSTICK_HPP
 
-#include "Maths.hpp"
-#include "Sprite.hpp"
-#include "InputService.hpp"
-#include "Render.hpp"
+#include "MPACK.hpp"
 
-using namespace Math;
-using namespace Core;
+using namespace MPACK::Math;
+using namespace MPACK::Core;
+using namespace MPACK::Graphics;
 
 class Joystick
 {

@@ -6,49 +6,55 @@
 #include "Types.hpp"
 #include "EventLoop.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class ActivityHandler;
+	namespace Core
+	{
+		class ActivityHandler;
+	}
 }
 
-namespace Core
+namespace MPACK
 {
-    class WindowsEventLoop : public EventLoop
-    {
-    public:
-    	WindowsEventLoop(void *data);
-        ReturnValue Run(ActivityHandler* pActivityHandler);
+	namespace Core
+	{
+		class WindowsEventLoop : public EventLoop
+		{
+		public:
+			WindowsEventLoop(void *data);
+			ReturnValue Run(ActivityHandler* pActivityHandler);
 
-        void ShowCursor();
-        void HideCursor();
+			void ShowCursor();
+			void HideCursor();
 
-        void* GetWindowHandle() const;
+			void* GetWindowHandle() const;
 
-    protected:
-        static LRESULT CALLBACK StaticWndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
-        LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		protected:
+			static LRESULT CALLBACK StaticWndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
+			LRESULT CALLBACK WndProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-        ReturnValue InitializeDisplay();
-        void DestroyDisplay();
+			ReturnValue InitializeDisplay();
+			void DestroyDisplay();
 
-        void SetupPixelFormat();
+			void SetupPixelFormat();
 
-        void ProcessEvents();
-        void SwapBuffers();
+			void ProcessEvents();
+			void SwapBuffers();
 
-        bool	m_isRunning;
-		bool	m_isFullscreen;
-		bool	m_enabled;
+			bool	m_isRunning;
+			bool	m_isFullscreen;
+			bool	m_enabled;
 
-		HWND		m_hwnd;
-		HGLRC		m_hglrc;
-		HDC			m_hdc;
-		RECT		m_windowRect;
-		HINSTANCE	*m_pHInstance;
-		WNDCLASSEX	m_windowClass;
-		GLuint		m_width;
-		GLuint		m_height;
-    };
+			HWND		m_hwnd;
+			HGLRC		m_hglrc;
+			HDC			m_hdc;
+			RECT		m_windowRect;
+			HINSTANCE	*m_pHInstance;
+			WNDCLASSEX	m_windowClass;
+			GLuint		m_width;
+			GLuint		m_height;
+		};
+	}
 }
 #endif
 

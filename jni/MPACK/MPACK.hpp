@@ -39,17 +39,17 @@
 
 #define MPACK_FILLGLOBALCONTEXT	\
 	MPACK::Time::TimeService *MPACK_pTimeService = MPACK::Time::TimeService::Initialize(); \
-    Core::GraphicsService MPACK_lGraphicsService; \
-    Core::SoundService MPACK_lSoundService; \
-    Core::InputService MPACK_lInputService; \
-    Core::PhysicsService MPACK_lPhysicsService; \
-    Core::Context MPACK_lContext={&MPACK_lGraphicsService, &MPACK_lInputService, &MPACK_lSoundService, MPACK_pTimeService, &MPACK_lPhysicsService}; \
-    Global::pContext = &MPACK_lContext
+    MPACK::Graphics::GraphicsService 	MPACK_lGraphicsService; \
+    MPACK::Sound::SoundService 			MPACK_lSoundService; \
+    MPACK::Input::InputService 			MPACK_lInputService; \
+    MPACK::Physics::PhysicsService 		MPACK_lPhysicsService; \
+    MPACK::Core::Context MPACK_lContext={&MPACK_lGraphicsService, &MPACK_lInputService, &MPACK_lSoundService, MPACK_pTimeService, &MPACK_lPhysicsService}; \
+    MPACK::Global::pContext = &MPACK_lContext
 
 #ifdef ANDROID_PLATFORM
 	#define MPACK_FILLGLOBAL \
-		Global::pAndroidApp=MPACK_pApplication;	\
-		Global::pAAssetManager=MPACK_pApplication->activity->assetManager; \
+		MPACK::Global::pAndroidApp=MPACK_pApplication;	\
+		MPACK::Global::pAAssetManager=MPACK_pApplication->activity->assetManager; \
 		MPACK_FILLGLOBALCONTEXT
 #else
 	#define MPACK_FILLGLOBAL \
@@ -64,15 +64,14 @@
 
 #define MPACK_RUN(pApp,result) \
 	MPACK_INIT_EVENTLOOP_DATA; \
-	Global::pEventLoop=Core::EventLoop::Initialize(MPACK_eventLoopData); \
-    result = Global::pEventLoop->Run(pApp)
+	MPACK::Global::pEventLoop=MPACK::Core::EventLoop::Initialize(MPACK_eventLoopData); \
+    result = MPACK::Global::pEventLoop->Run(pApp)
 
 #define MPACK_INITIALIZE \
-		Core::Log::Initialize(); \
-		Core::Random::Init(); \
+		MPACK::Core::Log::Initialize(); \
+		MPACK::Core::Random::Init(); \
 		MPACK_FILLGLOBAL
 
 #define MPACK_SHUTDOWN \
-		Core::Log::Destroy()
-
+		MPACK::Core::Log::Destroy()
 #endif

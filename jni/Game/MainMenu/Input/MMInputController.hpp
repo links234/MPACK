@@ -1,12 +1,9 @@
 #ifndef MMINPUTCONTROLLER_HPP
 #define MMINPUTCONTROLLER_HPP
 
-#include "Types.hpp"
+#include "MPACK.hpp"
 
 #include <vector>
-
-using namespace Core;
-using namespace std;
 
 class MMInputController
 {
@@ -16,14 +13,14 @@ public:
 
 	virtual void Update(GLfloat delta) = 0;
 
-	void Link_FUP(const Param2PtrCallbackStruct &link);
-	void Link_FDOWN(const Param2PtrCallbackStruct &link);
+	void Link_FUP(const MPACK::Core::Param2PtrCallbackStruct &link);
+	void Link_FDOWN(const MPACK::Core::Param2PtrCallbackStruct &link);
 
 	static MMInputController* Initialize();
 
 protected:
-	vector<Param2PtrCallbackStruct> m_callbackFunc_FUP;
-	vector<Param2PtrCallbackStruct> m_callbackFunc_FDOWN;
+	std::vector<MPACK::Core::Param2PtrCallbackStruct> m_callbackFunc_FUP;
+	std::vector<MPACK::Core::Param2PtrCallbackStruct> m_callbackFunc_FDOWN;
 };
 
 #endif

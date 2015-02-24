@@ -5,39 +5,42 @@
 #include "LinuxMouseInterface.hpp"
 #include "LinuxKeyboardInterface.hpp"
 
-namespace Core
+namespace MPACK
 {
-	LinuxInputService::LinuxInputService()
+	namespace Input
 	{
-		m_pMouse = new LinuxMouseInterface;
-		m_pKeyboard = new LinuxKeyboardInterface;
-		Reset();
-	}
+		LinuxInputService::LinuxInputService()
+		{
+			m_pMouse = new LinuxMouseInterface;
+			m_pKeyboard = new LinuxKeyboardInterface;
+			Reset();
+		}
 
-	LinuxInputService::~LinuxInputService()
-	{
-	}
+		LinuxInputService::~LinuxInputService()
+		{
+		}
 
-	void LinuxInputService::Update()
-	{
-		m_pMouse->Update();
-		m_pKeyboard->Update();
-	}
+		void LinuxInputService::Update()
+		{
+			m_pMouse->Update();
+			m_pKeyboard->Update();
+		}
 
-	void LinuxInputService::Reset()
-	{
-		m_pMouse->Reset();
-		m_pKeyboard->Reset();
-	}
+		void LinuxInputService::Reset()
+		{
+			m_pMouse->Reset();
+			m_pKeyboard->Reset();
+		}
 
-	MouseInterface* LinuxInputService::GetMouse() const
-	{
-		return m_pMouse;
-	}
+		MouseInterface* LinuxInputService::GetMouse() const
+		{
+			return m_pMouse;
+		}
 
-	KeyboardInterface* LinuxInputService::GetKeyboard() const
-	{
-		return m_pKeyboard;
+		KeyboardInterface* LinuxInputService::GetKeyboard() const
+		{
+			return m_pKeyboard;
+		}
 	}
 }
 

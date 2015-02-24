@@ -3,9 +3,9 @@
 #ifndef PGWINDOWSINPUT_HPP
 #define PGWINDOWSINPUT_HPP
 
-#include "PGInputController.hpp"
+#include "MPACK.hpp"
 
-#include "Math.hpp"
+#include "PGInputController.hpp"
 
 class PGDesktopInput : public PGInputController
 {
@@ -19,14 +19,14 @@ public:
 	virtual void Pause();
 	virtual void Continue();
 
-	virtual Math::Vector2f 	GetMovementDirection() const;
-	virtual Math::Vector2f 	GetShootingDirection() const;
+	virtual MPACK::Math::Vector2f 	GetMovementDirection() const;
+	virtual MPACK::Math::Vector2f 	GetShootingDirection() const;
 	virtual bool 			IsUserRequestingExit();
 
 protected:
 	bool			m_requestExit;
 
-	Math::Vector2f	m_movementDirection;
+	MPACK::Math::Vector2f	m_movementDirection;
 };
 
 #endif

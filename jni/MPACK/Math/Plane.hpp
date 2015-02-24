@@ -9,13 +9,16 @@
 #ifndef MPACK_PLANE_HPP
 #define MPACK_PLANE_HPP
 
-namespace Math
+namespace MPACK
 {
-	template<class T> class Plane
+	namespace Math
 	{
-	public:
-		T a, b, c, d;
-	};
+		template<class T> class Plane
+		{
+		public:
+			T a, b, c, d;
+		};
+	}
 }
 
 #endif

@@ -4,11 +4,18 @@
 #include "Types.hpp"
 #include "ActivityHandler.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class Context;
-	class Texture2D;
+	namespace Core
+	{
+		class Context;
+	}
+	namespace Graphics
+	{
+		class Texture2D;
+	}
 }
+
 namespace Game
 {
 	class GameState;
@@ -28,16 +35,16 @@ namespace Game
 		EVENT_PLAYGAME_EXIT
 	};
 
-    class Application : public Core::ActivityHandler
+    class Application : public MPACK::Core::ActivityHandler
     {
     public:
     	Application();
     	~Application();
 
 	protected:
-        Core::ReturnValue onActivate();
+        MPACK::Core::ReturnValue onActivate();
         void onDeactivate();
-        Core::ReturnValue onStep();
+        MPACK::Core::ReturnValue onStep();
 
         void onStart();
         void onResume();
@@ -57,7 +64,7 @@ namespace Game
 	private:
         GameState 		*m_pGameState;
         GameState		*m_pSavedGameState;
-        Core::Texture2D *m_pCursorTex;
+        MPACK::Graphics::Texture2D *m_pCursorTex;
     };
 }
 #endif

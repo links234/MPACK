@@ -9,7 +9,7 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 
-using namespace Core;
+using namespace MPACK::Core;
 
 namespace Game
 {
@@ -29,24 +29,24 @@ namespace Game
 	private:
 		static void Physics_callback(void *param1, void *param2);
 
-		PGInputController	*m_pPGInputController;
+		PGInputController		*m_pPGInputController;
 
-		Texture2D		*m_backgroundTexture;
-		TiledBackground	*m_background;
+		MPACK::Graphics::Texture2D			*m_backgroundTexture;
+		MPACK::Graphics::TiledBackground	*m_background;
 
-		Texture2D 		*m_playerTexture;
-		Sprite			*m_playerSprite;
-		Player			*m_playerObject;
+		MPACK::Graphics::Texture2D 			*m_playerTexture;
+		MPACK::Graphics::Sprite				*m_playerSprite;
+		Player								*m_playerObject;
 
-		Texture2D 		*m_enemyTexture;
-		Sprite			*m_enemySprite;
-		Enemy			*m_enemyObject;
+		MPACK::Graphics::Texture2D 		*m_enemyTexture;
+		MPACK::Graphics::Sprite			*m_enemySprite;
+		Enemy							*m_enemyObject;
 
-		Texture2D				*m_particleTex;
-		ParticleEmitterCircle 	*m_pEmitter;
+		MPACK::Graphics::Texture2D				*m_particleTex;
+		MPACK::Graphics::ParticleEmitterCircle 	*m_pEmitter;
 
-		Texture2D		*m_testTexture;
-		AnimatedSprite	*m_testSprite;
+		MPACK::Graphics::Texture2D		*m_testTexture;
+		MPACK::Graphics::AnimatedSprite	*m_testSprite;
 	};
 }
 

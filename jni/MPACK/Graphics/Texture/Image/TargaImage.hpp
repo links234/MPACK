@@ -20,68 +20,71 @@ using std::vector;
 using std::string;
 using std::istream;
 
-namespace Core
+namespace MPACK
 {
-	enum IMAGE_ORIENTATIONS
+	namespace Graphics
 	{
-		BOTTOM_LEFT = 0x00,
-		BOTTOM_RIGHT = 0x10,
-		TOP_LEFT = 0x20,
-		TOP_RIGHT = 0x30
-	};
+		enum IMAGE_ORIENTATIONS
+		{
+			BOTTOM_LEFT = 0x00,
+			BOTTOM_RIGHT = 0x10,
+			TOP_LEFT = 0x20,
+			TOP_RIGHT = 0x30
+		};
 
-	struct TargaHeader
-	{
-		unsigned char idLength;
-		unsigned char colorMapType;
-		unsigned char imageTypeCode;
-		unsigned char colorMapSpec[5];
-		unsigned short xOrigin;
-		unsigned short yOrigin;
-		unsigned short width;
-		unsigned short height;
-		unsigned char bpp;
-		unsigned char imageDesc;
-	};
+		struct TargaHeader
+		{
+			unsigned char idLength;
+			unsigned char colorMapType;
+			unsigned char imageTypeCode;
+			unsigned char colorMapSpec[5];
+			unsigned short xOrigin;
+			unsigned short yOrigin;
+			unsigned short width;
+			unsigned short height;
+			unsigned char bpp;
+			unsigned char imageDesc;
+		};
 
-	enum TargaFileTypes
-	{
-		TFT_NO_DATA = 0,
-		TFT_INDEXED = 1,
-		TFT_RGB = 2,
-		TFT_GRAYSCALE = 3,
-		TFT_RLE_INDEXED = 9,
-		TFT_RLE_RGB = 10,
-		TFT_RLE_GRAYSCALE = 11
-	};
+		enum TargaFileTypes
+		{
+			TFT_NO_DATA = 0,
+			TFT_INDEXED = 1,
+			TFT_RGB = 2,
+			TFT_GRAYSCALE = 3,
+			TFT_RLE_INDEXED = 9,
+			TFT_RLE_RGB = 10,
+			TFT_RLE_GRAYSCALE = 11
+		};
 
-	class TargaImage : public Image
-	{
-	public:
-		TargaImage();
-		virtual ~TargaImage();
+		class TargaImage : public Image
+		{
+		public:
+			TargaImage();
+			virtual ~TargaImage();
 
-		ReturnValue Load(const string& filename);
-		void Unload();
+			Core::ReturnValue Load(const string& filename);
+			void Unload();
 
-		const BYTE* GetImageData() const;
-		const BYTE* GetPixel(GLushort x, GLushort y) const;
+			const BYTE* GetImageData() const;
+			const BYTE* GetPixel(GLushort x, GLushort y) const;
 
-		void FlipVertical();
-		void FlipHorizontal();
+			void FlipVertical();
+			void FlipHorizontal();
 
-	private:
-		TargaHeader m_header;
+		private:
+			TargaHeader m_header;
 
-		vector<unsigned char> m_imageData;
+			vector<unsigned char> m_imageData;
 
-		bool LoadUncompressedTarga(unsigned char* pointer);
-		bool LoadCompressedTarga(unsigned char* pointer);
+			bool LoadUncompressedTarga(unsigned char* pointer);
+			bool LoadCompressedTarga(unsigned char* pointer);
 
-		bool IsImageTypeSupported(const TargaHeader& header);
-		bool IsCompressedTarga(const TargaHeader& header);
-		bool IsUncompressedTarga(const TargaHeader& header);
-	};
+			bool IsImageTypeSupported(const TargaHeader& header);
+			bool IsCompressedTarga(const TargaHeader& header);
+			bool IsUncompressedTarga(const TargaHeader& header);
+		};
+	}
 }
 
 #endif 

@@ -1,15 +1,18 @@
 #ifndef MPACK_RANDOM_HPP
 #define MPACK_RANDOM_HPP
 
-namespace Core
+namespace MPACK
 {
-	namespace Random
+	namespace Core
 	{
-		void Init();
+		namespace Random
+		{
+			void Init();
 
-		int Int(int low, int high);
+			int Int(int low, int high);
 
-		double Double(double minv, double maxv);
+			double Double(double minv, double maxv);
+		}
 	}
 }
 

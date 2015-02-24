@@ -3,6 +3,9 @@
 #include "MMAndroidInput.hpp"
 #include "MMDesktopInput.hpp"
 
+using namespace MPACK;
+using namespace MPACK::Core;
+
 MMInputController::MMInputController()
 {
 }

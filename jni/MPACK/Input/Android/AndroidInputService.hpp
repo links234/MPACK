@@ -7,46 +7,50 @@
 
 #include <vector>
 
-namespace Core
+namespace MPACK
 {
-	struct Finger;
-
-	class AndroidInputService
+	namespace Input
 	{
-	public:
-		AndroidInputService();
-		~AndroidInputService();
+		struct Finger;
 
-		void Update();
-		void Reset();
+		class AndroidInputService
+		{
+		public:
+			AndroidInputService();
+			~AndroidInputService();
 
-		void ClearLinks();
+			void Update();
+			void Reset();
 
-		void Link_FUP(const Param2PtrCallbackStruct &link);
-		void Link_FDOWN(const Param2PtrCallbackStruct &link);
-		void Link_KEYBACK(const Param1PtrCallbackStruct &link);
+			void ClearLinks();
 
-		void UnLink_FUP(const Param2PtrCallbackStruct &link);
-		void UnLink_FDOWN(const Param2PtrCallbackStruct &link);
-		void UnLink_KEYBACK(const Param1PtrCallbackStruct &link);
+			void Link_FUP(const Param2PtrCallbackStruct &link);
+			void Link_FDOWN(const Param2PtrCallbackStruct &link);
+			void Link_KEYBACK(const Param1PtrCallbackStruct &link);
 
-		std::vector<Finger*> m_finger;
+			void UnLink_FUP(const Param2PtrCallbackStruct &link);
+			void UnLink_FDOWN(const Param2PtrCallbackStruct &link);
+			void UnLink_KEYBACK(const Param1PtrCallbackStruct &link);
 
-	public:
-		bool onTouchEvent(AInputEvent* pEvent);
-		bool onKeyBack();
+			std::vector<Finger*> m_finger;
 
-	private:
-		void UpdateFinger(GLuint id, Math::Vector2f pos);
-		void AddFinger(GLuint id, Math::Vector2f pos);
-		void DeleteFinger(GLuint id);
+		public:
+			bool onTouchEvent(AInputEvent* pEvent);
+			bool onKeyBack();
 
-		std::vector<Param2PtrCallbackStruct> m_callbackFunc_FUP;
-		std::vector<Param2PtrCallbackStruct> m_callbackFunc_FDOWN;
+		private:
+			void UpdateFinger(GLuint id, Math::Vector2f pos);
+			void AddFinger(GLuint id, Math::Vector2f pos);
+			void DeleteFinger(GLuint id);
 
-		std::vector<Param1PtrCallbackStruct> m_callbackFunc_KEYBACK;
-	};
+			std::vector<Param2PtrCallbackStruct> m_callbackFunc_FUP;
+			std::vector<Param2PtrCallbackStruct> m_callbackFunc_FDOWN;
+
+			std::vector<Param1PtrCallbackStruct> m_callbackFunc_KEYBACK;
+		};
+	}
 }
+
 #endif
 
 #endif

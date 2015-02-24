@@ -5,22 +5,24 @@
 
 #include <unistd.h>
 
-namespace Debug
+namespace MPACK
 {
-	void WaitToConnect(int wait_time)
+	namespace Debug
 	{
-		LOGI("Waiting for debugger to connect ...");
-
-		int wait = 1;
-		while (wait < wait_time)
+		void WaitToConnect(int wait_time)
 		{
-			wait++;
-			usleep(1000000);
+			LOGI("Waiting for debugger to connect ...");
 
-			LOGI(" ... second %d ... out of %d", wait, wait_time);
+			int wait = 1;
+			while (wait < wait_time)
+			{
+				wait++;
+				usleep(1000000);
+
+				LOGI(" ... second %d ... out of %d", wait, wait_time);
+			}
+
+			LOGI("Done waiting");
 		}
-
-		LOGI("Done waiting");
 	}
 }
-

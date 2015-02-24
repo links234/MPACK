@@ -6,29 +6,32 @@
 #include "Windows/WindowsInputService.hpp"
 #include "Linux/LinuxInputService.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class Finger
+	namespace Input
 	{
-	public:
-		enum Flag
+		class Finger
 		{
-			FREE,
-			LOCKED
+		public:
+			enum Flag
+			{
+				FREE,
+				LOCKED
+			};
+
+			GLuint 			m_id;
+			Flag 			m_flag;
+			Math::Vector2f 	m_pos;
 		};
 
-		GLuint 			m_id;
-		Flag 			m_flag;
-		Math::Vector2f 	m_pos;
-	};
-
-#ifdef ANDROID_PLATFORM
-	typedef	 AndroidInputService	InputService;
-#elif	defined(WINDOWS_PLATFORM)
-	typedef	 WindowsInputService	InputService;
-#elif	defined(LINUX_PLATFORM)
-	typedef LinuxInputService		InputService;
-#endif
+	#ifdef ANDROID_PLATFORM
+		typedef	 AndroidInputService	InputService;
+	#elif	defined(WINDOWS_PLATFORM)
+		typedef	 WindowsInputService	InputService;
+	#elif	defined(LINUX_PLATFORM)
+		typedef LinuxInputService		InputService;
+	#endif
+	}
 }
 
 #endif

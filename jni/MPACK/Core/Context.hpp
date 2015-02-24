@@ -4,31 +4,42 @@
 #include "Types.hpp"
 #include "InputService.hpp"
 
-namespace Core
-{
-	class GraphicsService;
-	class SoundService;
-    class PhysicsService;
-}
-
 namespace MPACK
 {
+	namespace Graphics
+	{
+		class GraphicsService;
+	}
+
+	namespace Physics
+	{
+		class PhysicsService;
+	}
+
+	namespace Sound
+	{
+		class SoundService;
+	}
+
 	namespace Time
 	{
 		class TimeService;
 	}
 }
 
-namespace Core
+namespace MPACK
 {
-    class Context
-    {
-    public:
-    	GraphicsService* 			pGraphicsService;
-    	InputService*				pInputService;
-    	SoundService*				pSoundService;
-        MPACK::Time::TimeService* 	pTimeService;
-        PhysicsService* 			pPhysicsService;
-    };
+	namespace Core
+	{
+		class Context
+		{
+		public:
+			Graphics::GraphicsService* 		pGraphicsService;
+			Input::InputService*			pInputService;
+			Sound::SoundService*			pSoundService;
+			Time::TimeService* 				pTimeService;
+			Physics::PhysicsService* 		pPhysicsService;
+		};
+	}
 }
 #endif

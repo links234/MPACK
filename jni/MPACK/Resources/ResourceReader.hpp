@@ -3,30 +3,33 @@
 
 #include "Resource.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class ResourceReader
+	namespace Core
 	{
-	public:
-		ResourceReader(Resource *resource, int bufferSize=DefaultBufferSize);
-		~ResourceReader();
+		class ResourceReader
+		{
+		public:
+			ResourceReader(Resource *resource, int bufferSize=DefaultBufferSize);
+			~ResourceReader();
 
-		char Char();
+			char Char();
 
-		bool EndOfFile();
+			bool EndOfFile();
 
-		static const int DefaultBufferSize;
-	private:
-		void NextChunk();
+			static const int DefaultBufferSize;
+		private:
+			void NextChunk();
 
-		Resource *m_resource;
+			Resource *m_resource;
 
-		int m_bufferIndex;
-		int m_bufferSize;
-		int m_bytesLeft;
-		int m_bytesLeftInBuffer;
-		char *m_buffer;
-	};
+			int m_bufferIndex;
+			int m_bufferSize;
+			int m_bytesLeft;
+			int m_bytesLeftInBuffer;
+			char *m_buffer;
+		};
+	}
 }
 
 #endif

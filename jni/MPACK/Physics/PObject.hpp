@@ -12,96 +12,99 @@
 
 using namespace std;
 
-namespace Core
+namespace MPACK
 {
-	class PShape;
-	class PPoly;
-	class PCircle;
-
-	class PObject
+	namespace Physics
 	{
-	public:
-		PObject(const PShape* pShape=NULL);
-		virtual ~PObject();
+		class PShape;
+		class PPoly;
+		class PCircle;
 
-		void 	SetPosition(const PVec2& position);
-		const 	PVec2& GetPosition() const;
+		class PObject
+		{
+		public:
+			PObject(const PShape* pShape=NULL);
+			virtual ~PObject();
 
-		void 	SetLinearVelocity(const PVec2& linearVelocity);
-		const 	PVec2& GetLinearVelocity() const;
+			void 	SetPosition(const PVec2& position);
+			const 	PVec2& GetPosition() const;
 
-		void 	SetLinearAcceleration(const PVec2& linearAcceleration);
-		const 	PVec2& GetLinearAcceleration() const;
+			void 	SetLinearVelocity(const PVec2& linearVelocity);
+			const 	PVec2& GetLinearVelocity() const;
 
-		void 	SetAngle(float angle);
-		float 	GetAngle() const;
+			void 	SetLinearAcceleration(const PVec2& linearAcceleration);
+			const 	PVec2& GetLinearAcceleration() const;
 
-		void 	SetAngularVelocity(float angularVelocity);
-		float 	GetAngularVelocity() const;
+			void 	SetAngle(float angle);
+			float 	GetAngle() const;
 
-		void 	SetUserData(void* userData);
-		void* 	GetUserData() const;
+			void 	SetAngularVelocity(float angularVelocity);
+			float 	GetAngularVelocity() const;
 
-		void 	SetMaxLinearVelocity(float maxLinearVelocity);
-		float 	GetMaxLinearVelocity() const;
+			void 	SetUserData(void* userData);
+			void* 	GetUserData() const;
 
-		void	SetFrictionThreshold(float frictionThreshold);
-		float	GetFrictionThreshold() const;
+			void 	SetMaxLinearVelocity(float maxLinearVelocity);
+			float 	GetMaxLinearVelocity() const;
 
-		void	SetFrictionDynamic(float frictionDynamic);
-		float	GetFrictionDynamic() const;
+			void	SetFrictionThreshold(float frictionThreshold);
+			float	GetFrictionThreshold() const;
 
-		const PAABB& 	GetAABB() const;
-		const PShape* 	GetShape() const;
-	protected:
+			void	SetFrictionDynamic(float frictionDynamic);
+			float	GetFrictionDynamic() const;
 
-		friend class PhysicsService;
+			const PAABB& 	GetAABB() const;
+			const PShape* 	GetShape() const;
+		protected:
 
-		void Advance(float delta);
+			friend class PhysicsService;
 
-		PVec2 m_position, m_linearVelocity, m_linearAcceleration;
-		float m_angle, m_angularVelocity;
+			void Advance(float delta);
 
-		float m_frictionThreshold,m_frictionDynamic;
-		float m_maxLinearVelocity;
+			PVec2 m_position, m_linearVelocity, m_linearAcceleration;
+			float m_angle, m_angularVelocity;
 
-		PShape* m_shape;
-		PAABB m_aabb;
-		void* m_userData;
+			float m_frictionThreshold,m_frictionDynamic;
+			float m_maxLinearVelocity;
 
-		list<PObject*>::iterator m_iterator;
-	};
+			PShape* m_shape;
+			PAABB m_aabb;
+			void* m_userData;
 
-	inline void 	PObject::SetPosition(const PVec2& position) { m_position = position; }
-	inline const 	PVec2& PObject::GetPosition() const { return m_position; }
+			list<PObject*>::iterator m_iterator;
+		};
 
-	inline void 	PObject::SetLinearVelocity(const PVec2& linearVelocity) { m_linearVelocity = linearVelocity; }
-	inline const 	PVec2& PObject::GetLinearVelocity() const { return m_linearVelocity; }
+		inline void 	PObject::SetPosition(const PVec2& position) { m_position = position; }
+		inline const 	PVec2& PObject::GetPosition() const { return m_position; }
 
-	inline void 	PObject::SetLinearAcceleration(const PVec2& linearAcceleration) { m_linearAcceleration = linearAcceleration; }
-	inline const	PVec2& PObject::GetLinearAcceleration() const { return m_linearAcceleration; }
+		inline void 	PObject::SetLinearVelocity(const PVec2& linearVelocity) { m_linearVelocity = linearVelocity; }
+		inline const 	PVec2& PObject::GetLinearVelocity() const { return m_linearVelocity; }
 
-	inline void 	PObject::SetAngle(float angle) { m_angle = angle; }
-	inline float 	PObject::GetAngle() const { return m_angle; }
+		inline void 	PObject::SetLinearAcceleration(const PVec2& linearAcceleration) { m_linearAcceleration = linearAcceleration; }
+		inline const	PVec2& PObject::GetLinearAcceleration() const { return m_linearAcceleration; }
 
-	inline void 	PObject::SetAngularVelocity(float angularVelocity) { m_angularVelocity = angularVelocity; }
-	inline float 	PObject::GetAngularVelocity() const { return m_angularVelocity; }
+		inline void 	PObject::SetAngle(float angle) { m_angle = angle; }
+		inline float 	PObject::GetAngle() const { return m_angle; }
 
-	inline void 	PObject::SetUserData(void* userData) { m_userData = userData; }
-	inline void* 	PObject::GetUserData() const { return m_userData; }
+		inline void 	PObject::SetAngularVelocity(float angularVelocity) { m_angularVelocity = angularVelocity; }
+		inline float 	PObject::GetAngularVelocity() const { return m_angularVelocity; }
 
-	inline void 	PObject::SetMaxLinearVelocity(float maxLinearVelocity) { m_maxLinearVelocity = maxLinearVelocity; }
-	inline float 	PObject::GetMaxLinearVelocity() const { return m_maxLinearVelocity; }
+		inline void 	PObject::SetUserData(void* userData) { m_userData = userData; }
+		inline void* 	PObject::GetUserData() const { return m_userData; }
 
-	inline void	PObject::SetFrictionThreshold(float frictionThreshold) { m_frictionThreshold = frictionThreshold; }
-	inline float	PObject::GetFrictionThreshold() const { return m_frictionThreshold; }
+		inline void 	PObject::SetMaxLinearVelocity(float maxLinearVelocity) { m_maxLinearVelocity = maxLinearVelocity; }
+		inline float 	PObject::GetMaxLinearVelocity() const { return m_maxLinearVelocity; }
 
-	inline void	PObject::SetFrictionDynamic(float frictionDynamic) { m_frictionDynamic = frictionDynamic; }
-	inline float	PObject::GetFrictionDynamic() const { return m_frictionDynamic; }
+		inline void		PObject::SetFrictionThreshold(float frictionThreshold) { m_frictionThreshold = frictionThreshold; }
+		inline float	PObject::GetFrictionThreshold() const { return m_frictionThreshold; }
+
+		inline void		PObject::SetFrictionDynamic(float frictionDynamic) { m_frictionDynamic = frictionDynamic; }
+		inline float	PObject::GetFrictionDynamic() const { return m_frictionDynamic; }
 
 
-	inline const PAABB& PObject::GetAABB() const { return m_aabb; }
-	inline const PShape* PObject::GetShape() const { return m_shape; }
+		inline const PAABB& PObject::GetAABB() const { return m_aabb; }
+		inline const PShape* PObject::GetShape() const { return m_shape; }
+	}
 }
 
 #endif

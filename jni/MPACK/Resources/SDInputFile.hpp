@@ -6,24 +6,28 @@
 
 #include <fstream>
 
-namespace Core
+namespace MPACK
 {
-    class SDInputFile : public Resource
-    {
-    public:
-        SDInputFile(const char* pPath);
+	namespace Core
+	{
+		class SDInputFile : public Resource
+		{
+		public:
+			SDInputFile(const char* pPath);
 
-        virtual ReturnValue Open();
-        virtual void Close();
-        virtual ReturnValue Read(void* pBuffer, size_t pCount);
+			virtual ReturnValue Open();
+			virtual void Close();
+			virtual ReturnValue Read(void* pBuffer, size_t pCount);
 
-        virtual int GetLength();
-        virtual const void* Bufferize();
+			virtual int GetLength();
+			virtual const void* Bufferize();
 
-        virtual ~SDInputFile();
-    protected:
-        std::ifstream mInputStream;
-        char* mBuffer;
-    };
+			virtual ~SDInputFile();
+		protected:
+			std::ifstream mInputStream;
+			char* mBuffer;
+		};
+	}
 }
+
 #endif

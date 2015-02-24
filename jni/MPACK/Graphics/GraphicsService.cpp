@@ -15,76 +15,79 @@
 #include "ShaderTypes.hpp"
 #include "PostEffect.hpp"
 
-namespace Core
+namespace MPACK
 {
-    GraphicsService::GraphicsService()
-    {
-    	LOGI("Creating GraphicsService.");
-    }
+	namespace Graphics
+	{
+		GraphicsService::GraphicsService()
+		{
+			LOGI("Creating GraphicsService.");
+		}
 
-    ReturnValue GraphicsService::Start()
-    {
-    	Render::Init();
-		Render::SetOrthoMode();
-		Render::EnableOrthoMode();
-		Render::EnableAlphaBlend();
+		ReturnValue GraphicsService::Start()
+		{
+			Render::Init();
+			Render::SetOrthoMode();
+			Render::EnableOrthoMode();
+			Render::EnableAlphaBlend();
 
-		LoadResources();
+			LoadResources();
 
-		PostEffect::Init(Render::GetScreenWidth(),Render::GetScreenHeight());
+			PostEffect::Init(Render::GetScreenWidth(),Render::GetScreenHeight());
 
-    	return RETURN_VALUE_OK;
-    }
+			return RETURN_VALUE_OK;
+		}
 
-    void GraphicsService::Stop()
-    {
-    	LOGI("GraphicsService::Stop");
+		void GraphicsService::Stop()
+		{
+			LOGI("GraphicsService::Stop");
 
-    	PostEffect::Shutdown();
+			PostEffect::Shutdown();
 
-    	UnloadResources();
+			UnloadResources();
 
-    	Render::DisableAlphaBlend();
-    	Render::DisableOrthoMode();
-    	Render::Uninit();
-    }
+			Render::DisableAlphaBlend();
+			Render::DisableOrthoMode();
+			Render::Uninit();
+		}
 
-    void GraphicsService::Update(GLfloat delta)
-    {
-    }
+		void GraphicsService::Update(GLfloat delta)
+		{
+		}
 
-    ReturnValue GraphicsService::Render()
-    {
-    	PostEffect::Begin();
+		ReturnValue GraphicsService::Render()
+		{
+			PostEffect::Begin();
 
-		Render::SetOrthoMode();
-		Render::EnableOrthoMode();
-		Render::EnableAlphaBlend();
+			Render::SetOrthoMode();
+			Render::EnableOrthoMode();
+			Render::EnableAlphaBlend();
 
-    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		SpriteBatcher::FlushAll();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			SpriteBatcher::FlushAll();
 
-		PostEffect::End();
+			PostEffect::End();
 
-		return RETURN_VALUE_OK;
-    }
+			return RETURN_VALUE_OK;
+		}
 
-    ReturnValue GraphicsService::LoadResources()
-    {
-		Global::pFont=new TextureMappedFont;
-		Global::pFont->Load("@Fonts/Font.tga");
+		ReturnValue GraphicsService::LoadResources()
+		{
+			Global::pFont=new TextureMappedFont;
+			Global::pFont->Load("@Fonts/Font.tga");
 
-    	LoadShaders();
+			LoadShaders();
 
-    	return RETURN_VALUE_OK;
-    }
+			return RETURN_VALUE_OK;
+		}
 
-    ReturnValue GraphicsService::UnloadResources()
-    {
-    	delete Global::pFont;
+		ReturnValue GraphicsService::UnloadResources()
+		{
+			delete Global::pFont;
 
-    	DeleteShaders();
+			DeleteShaders();
 
-    	return RETURN_VALUE_OK;
-    }
+			return RETURN_VALUE_OK;
+		}
+	}
 }

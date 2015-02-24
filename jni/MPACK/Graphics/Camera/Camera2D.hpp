@@ -1,58 +1,71 @@
 #ifndef MPACK_CAMERA2D_HPP
 #define MPACK_CAMERA2D_HPP
 
-#include "Object.hpp"
-#include "Math.hpp"
+#include "MPACK.hpp"
+
+using namespace std;
+using namespace MPACK::Math;
 
 #include <vector>
 
-using namespace std;
-using namespace Math;
-
-class Camera2D
+namespace MPACK
 {
-public:
-	Camera2D();
-	~Camera2D();
+	namespace Graphics
+	{
+		class CameraObject;
+	}
+}
 
-	void Update(GLfloat delta);
+namespace MPACK
+{
+	namespace Graphics
+	{
+		class Camera2D
+		{
+		public:
+			Camera2D();
+			~Camera2D();
 
-	void Transform(Vector2f &vertex) const;
-	void Link(Object *target=NULL);
+			void Update(GLfloat delta);
 
-	void SetIdealPosition(const Vector2f &idealPosition);
-	Vector2f GetIdealPosition() const;
+			void Transform(Vector2f &vertex) const;
+			void Link(CameraObject *target=NULL);
 
-	void SetPosition(const Vector2f &position);
-	Vector2f GetPosition() const;
+			void SetIdealPosition(const Vector2f &idealPosition);
+			Vector2f GetIdealPosition() const;
 
-	void EnableSpringSystem();
-	void DisableSpringSystem();
+			void SetPosition(const Vector2f &position);
+			Vector2f GetPosition() const;
 
-	void SetSpringConstant(const GLfloat &springConstant);
+			void EnableSpringSystem();
+			void DisableSpringSystem();
 
-	void 	SetScale(const GLfloat &scale);
-	GLfloat GetScale() const;
+			void SetSpringConstant(const GLfloat &springConstant);
 
-	void 		RotateDirection(const GLfloat &angle);
-	void 		SetDirection(const Vector2f &direction);
-	Vector2f 	GetDirection() const;
+			void 	SetScale(const GLfloat &scale);
+			GLfloat GetScale() const;
 
-	static void UpdateAll(GLfloat delta);
+			void 		RotateDirection(const GLfloat &angle);
+			void 		SetDirection(const Vector2f &direction);
+			Vector2f 	GetDirection() const;
 
-private:
-	Vector2f	m_position,m_velocity;
-	Vector2f 	m_idealPosition;
-	Object		*m_target;
+			static void UpdateAll(GLfloat delta);
 
-	GLfloat		m_springConstant,m_dampingConstant;
-	bool		m_useSpringSystem;
+		private:
+			Vector2f		m_position,m_velocity;
+			Vector2f 		m_idealPosition;
+			CameraObject	*m_target;
 
-	GLfloat 	m_scale;
+			GLfloat			m_springConstant,m_dampingConstant;
+			bool			m_useSpringSystem;
 
-	Vector2f	m_direction;
+			GLfloat 		m_scale;
 
-	static vector<Camera2D*> s_cameras;
-};
+			Vector2f		m_direction;
+
+			static vector<Camera2D*> s_cameras;
+		};
+	}
+}
 
 #endif

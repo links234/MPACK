@@ -1,5 +1,7 @@
 #include "Enemy.hpp"
 
+using namespace MPACK::Physics;
+
 Enemy::Enemy()
 {
 

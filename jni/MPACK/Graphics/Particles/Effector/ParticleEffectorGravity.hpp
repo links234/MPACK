@@ -5,16 +5,22 @@
 #include "Math.hpp"
 #include "ParticleEffector.hpp"
 
-class ParticleEffectorGravity : public ParticleEffector
+namespace MPACK
 {
-public:
-	ParticleEffectorGravity();
-	ParticleEffectorGravity(const Vector2f &gravity);
-	virtual ~ParticleEffectorGravity();
+	namespace Graphics
+	{
+		class ParticleEffectorGravity : public ParticleEffector
+		{
+		public:
+			ParticleEffectorGravity();
+			ParticleEffectorGravity(const Vector2f &gravity);
+			virtual ~ParticleEffectorGravity();
 	
-	void UpdateParticle(Particle* particle, const GLfloat &delta);
+			void UpdateParticle(Particle* particle, const GLfloat &delta);
 
-	Vector2f m_gravity;
-};
+			Vector2f m_gravity;
+		};
+	}
+}
 
 #endif 

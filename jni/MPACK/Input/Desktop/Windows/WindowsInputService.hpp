@@ -7,25 +7,28 @@
 #include "MouseInterface.hpp"
 #include "KeyboardInterface.hpp"
 
-namespace Core
+namespace MPACK
 {
-	class WindowsInputService
+	namespace Input
 	{
-	public:
-		WindowsInputService();
-		~WindowsInputService();
+		class WindowsInputService
+		{
+		public:
+			WindowsInputService();
+			~WindowsInputService();
 
-		void Update();
-		void Reset();
+			void Update();
+			void Reset();
 
-		MouseInterface*		GetMouse() const;
-		KeyboardInterface* 	GetKeyboard() const;
+			MouseInterface*		GetMouse() const;
+			KeyboardInterface* 	GetKeyboard() const;
 
-	private:
+		private:
 
-		MouseInterface		*m_pMouse;
-		KeyboardInterface	*m_pKeyboard;
-	};
+			MouseInterface		*m_pMouse;
+			KeyboardInterface	*m_pKeyboard;
+		};
+	}
 }
 
 #endif

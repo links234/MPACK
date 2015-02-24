@@ -11,15 +11,18 @@
 
 #include "Matrix4.hpp"
 
-namespace Math
+namespace MPACK
 {
-	template<class T> class Matrix3
+	namespace Math
 	{
-	public:
-		T m_matrix[3][3];
+		template<class T> class Matrix3
+		{
+		public:
+			T m_matrix[3][3];
 
-		static void CalculateNormalMatrix(Matrix3<T> &matrix, Matrix4<T> &modelviewMatrix);
-	};
+			static void CalculateNormalMatrix(Matrix3<T> &matrix, Matrix4<T> &modelviewMatrix);
+		};
+	}
 }
 
 #include "Matrix3Implementation.hpp"

@@ -10,53 +10,56 @@
 #include "Global.hpp"
 #include "LinuxEventLoop.hpp"
 
-namespace Core
+namespace MPACK
 {
-	LinuxMouseInterface::LinuxMouseInterface()
+	namespace Input
 	{
-	}
-
-	LinuxMouseInterface::~LinuxMouseInterface()
-	{
-	}
-
-	void LinuxMouseInterface::Update()
-	{
-		memcpy(m_pLastState,m_pCurrState,sizeof(m_stateBuffer1));
-
-		Window *m_window=NULL;
-		if(Global::pEventLoop)
+		LinuxMouseInterface::LinuxMouseInterface()
 		{
-			m_window=(Window*)(Global::pEventLoop->GetWindowHandle());
 		}
 
-		if(m_window)
+		LinuxMouseInterface::~LinuxMouseInterface()
 		{
-			Display *dpy;
-			Window root;
-			Window ret_root;
-			Window ret_child;
-			int root_x;
-			int root_y;
-			int winX;
-			int winY;
-			unsigned int mask;
+		}
 
-			dpy = XOpenDisplay(NULL);
-			root = XDefaultRootWindow(dpy);
+		void LinuxMouseInterface::Update()
+		{
+			memcpy(m_pLastState,m_pCurrState,sizeof(m_stateBuffer1));
 
-			if(XQueryPointer(dpy, *m_window, &ret_root, &ret_child, &root_x, &root_y,
-						 &winX, &winY, &mask))
+			Window *m_window=NULL;
+			if(Global::pEventLoop)
 			{
-				m_pCurrState->Pos.x = winX;
-				m_pCurrState->Pos.y = winY;
-
-				m_pCurrState->Button.Left = (mask & Button1Mask) ? true : false;
-				m_pCurrState->Button.Middle = (mask & Button2Mask) ? true : false;
-				m_pCurrState->Button.Right = (mask & Button3Mask) ? true : false;
+				m_window=(Window*)(Global::pEventLoop->GetWindowHandle());
 			}
 
-			XCloseDisplay(dpy);
+			if(m_window)
+			{
+				Display *dpy;
+				Window root;
+				Window ret_root;
+				Window ret_child;
+				int root_x;
+				int root_y;
+				int winX;
+				int winY;
+				unsigned int mask;
+
+				dpy = XOpenDisplay(NULL);
+				root = XDefaultRootWindow(dpy);
+
+				if(XQueryPointer(dpy, *m_window, &ret_root, &ret_child, &root_x, &root_y,
+							 &winX, &winY, &mask))
+				{
+					m_pCurrState->Pos.x = winX;
+					m_pCurrState->Pos.y = winY;
+
+					m_pCurrState->Button.Left = (mask & Button1Mask) ? true : false;
+					m_pCurrState->Button.Middle = (mask & Button2Mask) ? true : false;
+					m_pCurrState->Button.Right = (mask & Button3Mask) ? true : false;
+				}
+
+				XCloseDisplay(dpy);
+			}
 		}
 	}
 }

@@ -1,13 +1,13 @@
 #ifndef MAINMENU_HPP
 #define MAINMENU_HPP
 
+#include "MPACK.hpp"
+
+using namespace MPACK::Core;
+
 #include "GameState.hpp"
-#include "Texture2D.hpp"
 
 class GUIMenu;
-class Sprite;
-
-using namespace Core;
 
 namespace Game
 {
@@ -24,11 +24,11 @@ namespace Game
 
 		~MainMenu();
 	private:
-		GUIMenu 	*m_pMenuGUI;
-		Texture2D 	*m_pButtonTexture;
-		Texture2D	*m_pBackgroundTexture;
-		Sprite 		*m_pButtonSprite;
-		Sprite		*m_pBackgroundSprite;
+		GUIMenu 					*m_pMenuGUI;
+		MPACK::Graphics::Texture2D 	*m_pButtonTexture;
+		MPACK::Graphics::Texture2D	*m_pBackgroundTexture;
+		MPACK::Graphics::Sprite 	*m_pButtonSprite;
+		MPACK::Graphics::Sprite		*m_pBackgroundSprite;
 	};
 }
 
