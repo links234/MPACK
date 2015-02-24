@@ -3,6 +3,7 @@
 using namespace MPACK;
 
 SpriteObject::SpriteObject()
+	: m_sprite(NULL)
 {
 }
 

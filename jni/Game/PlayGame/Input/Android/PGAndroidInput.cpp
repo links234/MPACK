@@ -5,6 +5,7 @@
 #include "PGAndroidInput.hpp"
 
 PGAndroidInput::PGAndroidInput()
+	: m_firstScale(1.0f)
 {
 	m_requestExit = false;
 	Global::pContext->pInputService->Link_KEYBACK(Param1PtrCallbackStruct(onBackKey,this));
