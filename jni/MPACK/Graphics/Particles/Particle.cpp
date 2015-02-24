@@ -24,7 +24,8 @@ namespace MPACK
 
 		Particle::Particle()
 			: m_modifiers(NULL), m_width(20.0f), m_height(20.0f), m_rotation(0.0f),
-			  m_velocity(0.0f,0.0f), m_angularVelocity(0.0f), m_color(1.0f,1.0f,1.0f,1.0f)
+			  m_velocity(0.0f,0.0f), m_angularVelocity(0.0f), m_color(1.0f,1.0f,1.0f,1.0f),
+			  m_life(0.0f), m_maxLife(0.0f), m_texture(NULL)
 		{
 			m_particles.push_back(this);
 		}

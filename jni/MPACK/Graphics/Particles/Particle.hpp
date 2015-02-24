@@ -42,7 +42,7 @@ namespace MPACK
 			GLfloat						m_rotation,m_angularVelocity;
 			GLfloat						m_width,m_height;
 			GLfloat						m_life,m_maxLife;
-			Graphics::Texture2D			*m_texture;
+			Texture2D					*m_texture;
 			vector<ParticleEffector*>	*m_modifiers;
 		private:
 			static vector<Particle*>	m_particles;

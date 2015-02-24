@@ -12,6 +12,7 @@ namespace MPACK
 	namespace Graphics
 	{
 		PNGImage::PNGImage()
+			: m_imageBuffer(0.0f)
 		{
 		}
 

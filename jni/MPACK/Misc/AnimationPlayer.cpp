@@ -3,7 +3,7 @@
 namespace MPACK
 {
 	AnimationPlayer::AnimationPlayer()
-		: m_animation(0,0,1.0f)
+		: m_animation(0,0,1.0f), m_currentFrame(0), m_nextFrame(0), m_interpolation(0.0f)
 	{
 	}
 

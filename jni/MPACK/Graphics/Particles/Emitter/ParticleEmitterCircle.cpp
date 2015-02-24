@@ -7,8 +7,12 @@ namespace MPACK
 	namespace Graphics
 	{
 		ParticleEmitterCircle::ParticleEmitterCircle()
+			: m_spawnDelay(0.0f), m_currentDelay(0.0f),
+			  m_minVelocity(0.0f), m_maxVelocity(0.0f),
+			  m_minAngularVelocity(0.0f), m_maxAngularVelocity(0.0f),
+			  m_minParticleLife(0.0f), m_maxParticleLife(0.0f),
+			  m_texture(NULL)
 		{
-			m_currentDelay=0.0f;
 		}
 
 		ParticleEmitterCircle::~ParticleEmitterCircle()
