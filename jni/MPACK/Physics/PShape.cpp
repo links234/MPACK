@@ -5,7 +5,7 @@ namespace MPACK
 	namespace Physics
 	{
 		PShape::PShape()
-			: m_type(0)
+			: m_type(e_poly)
 		{
 		}
 

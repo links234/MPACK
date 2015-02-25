@@ -1,9 +1,15 @@
 #ifndef MPACK_SOUNDFILE_HPP
 #define MPACK_SOUNDFILE_HPP
 
-class SoundService;
-
 #include "Types.hpp"
+
+namespace MPACK
+{
+	namespace Sound
+	{
+		class SoundService;
+	}
+}
 
 namespace MPACK
 {

@@ -17,8 +17,6 @@
 
 #define MAX_TEXTURES 8
 
-using namespace std;
-
 namespace MPACK
 {
 	class Uncopyable;
@@ -35,7 +33,7 @@ namespace MPACK
 			Texture2D();
 			~Texture2D();
 
-			bool Load(string path, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
+			bool Load(std::string path, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
 			bool Load(const Image* image, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
 
 			void Build(GLuint width, GLuint height, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);

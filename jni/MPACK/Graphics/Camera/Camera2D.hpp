@@ -3,9 +3,6 @@
 
 #include "MPACK.hpp"
 
-using namespace std;
-using namespace MPACK::Math;
-
 #include <vector>
 
 namespace MPACK
@@ -28,14 +25,14 @@ namespace MPACK
 
 			void Update(GLfloat delta);
 
-			void Transform(Vector2f &vertex) const;
+			void Transform(Math::Vector2f &vertex) const;
 			void Link(CameraObject *target=NULL);
 
-			void SetIdealPosition(const Vector2f &idealPosition);
-			Vector2f GetIdealPosition() const;
+			void SetIdealPosition(const Math::Vector2f &idealPosition);
+			Math::Vector2f GetIdealPosition() const;
 
-			void SetPosition(const Vector2f &position);
-			Vector2f GetPosition() const;
+			void SetPosition(const Math::Vector2f &position);
+			Math::Vector2f GetPosition() const;
 
 			void EnableSpringSystem();
 			void DisableSpringSystem();
@@ -46,14 +43,14 @@ namespace MPACK
 			GLfloat GetScale() const;
 
 			void 		RotateDirection(const GLfloat &angle);
-			void 		SetDirection(const Vector2f &direction);
-			Vector2f 	GetDirection() const;
+			void 		SetDirection(const Math::Vector2f &direction);
+			Math::Vector2f 	GetDirection() const;
 
 			static void UpdateAll(GLfloat delta);
 
 		private:
-			Vector2f		m_position,m_velocity;
-			Vector2f 		m_idealPosition;
+			Math::Vector2f	m_position,m_velocity;
+			Math::Vector2f 	m_idealPosition;
 			CameraObject	*m_target;
 
 			GLfloat			m_springConstant,m_dampingConstant;
@@ -61,9 +58,9 @@ namespace MPACK
 
 			GLfloat 		m_scale;
 
-			Vector2f		m_direction;
+			Math::Vector2f	m_direction;
 
-			static vector<Camera2D*> s_cameras;
+			static std::vector<Camera2D*> s_cameras;
 		};
 	}
 }

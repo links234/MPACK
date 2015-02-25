@@ -7,12 +7,15 @@
 
 #include <algorithm>
 
+using namespace std;
+using namespace MPACK::Math;
+
 namespace MPACK
 {
 	namespace Graphics
 	{
 		vector<Particle*>	Particle::m_particles;
-		Sprite				Particle::m_spriteInterface;
+		Sprite					Particle::m_spriteInterface;
 
 		struct Particle_cmp
 		{

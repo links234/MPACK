@@ -2,6 +2,8 @@
 
 #include "Random.hpp"
 
+using namespace MPACK::Math;
+
 namespace MPACK
 {
 	namespace Graphics

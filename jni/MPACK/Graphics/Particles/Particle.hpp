@@ -8,10 +8,6 @@
 #include "Math.hpp"
 #include "Texture2D.hpp"
 
-using namespace MPACK::Math;
-
-using std::vector;
-using std::queue;
 namespace MPACK
 {
 	namespace Graphics
@@ -37,15 +33,15 @@ namespace MPACK
 			static void RenderAll();
 			static void Clear();
 
-			Vector2f					m_position,m_velocity;
-			Vector4f					m_color;
-			GLfloat						m_rotation,m_angularVelocity;
-			GLfloat						m_width,m_height;
-			GLfloat						m_life,m_maxLife;
-			Texture2D					*m_texture;
-			vector<ParticleEffector*>	*m_modifiers;
+			Math::Vector2f					m_position,m_velocity;
+			Math::Vector4f					m_color;
+			GLfloat							m_rotation,m_angularVelocity;
+			GLfloat							m_width,m_height;
+			GLfloat							m_life,m_maxLife;
+			Texture2D						*m_texture;
+			std::vector<ParticleEffector*>	*m_modifiers;
 		private:
-			static vector<Particle*>	m_particles;
+			static std::vector<Particle*>	m_particles;
 			static Sprite				m_spriteInterface;
 		};
 	}

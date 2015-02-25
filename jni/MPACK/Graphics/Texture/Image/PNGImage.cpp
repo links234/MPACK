@@ -12,7 +12,7 @@ namespace MPACK
 	namespace Graphics
 	{
 		PNGImage::PNGImage()
-			: m_imageBuffer(0.0f)
+			: m_imageBuffer(NULL)
 		{
 		}
 
@@ -21,7 +21,7 @@ namespace MPACK
 			Unload();
 		}
 
-		ReturnValue PNGImage::Load(const string& filename)
+		ReturnValue PNGImage::Load(const std::string& filename)
 		{
 			LOGI("PNGImage::Load Loading texture %s", filename.c_str());
 

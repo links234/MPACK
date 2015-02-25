@@ -13,7 +13,7 @@ namespace MPACK
 			CameraObject();
 			virtual ~CameraObject();
 
-			virtual Vector2f GetCameraPosition() const = 0;
+			virtual Math::Vector2f GetCameraPosition() const = 0;
 		};
 	}
 }

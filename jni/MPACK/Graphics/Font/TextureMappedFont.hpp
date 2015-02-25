@@ -18,9 +18,6 @@
 #include <vector>
 #include <string>
 
-using std::vector;
-using std::string;
-
 namespace MPACK
 {
 	namespace Graphics
@@ -44,9 +41,9 @@ namespace MPACK
 			void SetFontSize(GLfloat fontSize);
 			void SetCharSpacing(GLfloat charSpacing=0.0f);
 			void SetMonospaced(bool monospaced=true);
-			void SendString(const std::string& str, GLfloat x, GLfloat y, Align alignType=ALIGN_LEFT_TOP, vector<Math::Vector4f> *colorPattern=NULL);
+			void SendString(const std::string& str, GLfloat x, GLfloat y, Align alignType=ALIGN_LEFT_TOP, std::vector<Math::Vector4f> *colorPattern=NULL);
 
-			bool 		Load(const string& textureName);
+			bool 		Load(const std::string& textureName);
 
 			Texture2D* 	GetTexturePointer();
 

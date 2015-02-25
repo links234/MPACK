@@ -7,9 +7,6 @@
 
 #include <vector>
 
-using namespace std;
-using namespace MPACK::Math;
-
 namespace MPACK
 {
 	namespace Graphics
@@ -25,7 +22,7 @@ namespace MPACK
 			void BuildFrameGrid(int rows, int cols);
 
 		protected:
-			vector<AABB2Df> m_frames;
+			std::vector<Math::AABB2Df> m_frames;
 		};
 	}
 }

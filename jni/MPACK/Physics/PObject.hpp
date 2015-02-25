@@ -10,8 +10,6 @@
 
 #include <list>
 
-using namespace std;
-
 namespace MPACK
 {
 	namespace Physics
@@ -71,7 +69,7 @@ namespace MPACK
 			PAABB m_aabb;
 			void* m_userData;
 
-			list<PObject*>::iterator m_iterator;
+			std::list<PObject*>::iterator m_iterator;
 		};
 
 		inline void 	PObject::SetPosition(const PVec2& position) { m_position = position; }

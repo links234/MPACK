@@ -3,8 +3,6 @@
 
 #include "Types.hpp"
 
-using namespace std;
-
 namespace MPACK
 {
 	namespace Graphics
@@ -15,7 +13,7 @@ namespace MPACK
 			Image();
 			virtual ~Image();
 
-			virtual Core::ReturnValue Load(const string& filename) = 0;
+			virtual Core::ReturnValue Load(const std::string& filename) = 0;
 			virtual void Unload() = 0;
 
 			GLushort GetWidth() const;

@@ -13,12 +13,12 @@ namespace MPACK
 		{
 		public:
 			ParticleEffectorColor();
-			ParticleEffectorColor(const Vector4f &colorStart, const Vector4f &colorEnd);
+			ParticleEffectorColor(const Math::Vector4f &colorStart, const Math::Vector4f &colorEnd);
 			virtual ~ParticleEffectorColor();
 
 			void UpdateParticle(Particle* particle, const GLfloat &delta);
 
-			Vector4f m_colorStart,m_colorEnd;
+			Math::Vector4f m_colorStart,m_colorEnd;
 		};
 	}
 }

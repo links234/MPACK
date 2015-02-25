@@ -13,8 +13,6 @@
 //maximum number of simultaneouse sounds, excluding backgroud music
 #define MAX_SOUNDS 5
 
-using namespace std;
-
 namespace MPACK
 {
 	namespace Sound

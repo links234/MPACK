@@ -3,8 +3,6 @@
 
 #include "ParticleEmitter.hpp"
 
-using namespace MPACK::Math;
-
 namespace MPACK
 {
 	namespace Graphics
@@ -17,7 +15,7 @@ namespace MPACK
 
 			virtual void Update(GLfloat delta);
 
-			void SetPosition(const Vector2f position);
+			void SetPosition(const Math::Vector2f position);
 			void SetVelocity(const GLfloat &min, const GLfloat &max);
 			void SetAngularVelocity(const GLfloat &min, const GLfloat &max);
 			void SetParticleLife(const GLfloat &min, const GLfloat &max);
@@ -25,7 +23,7 @@ namespace MPACK
 			void SetTexture(Texture2D *texture);
 
 		protected:
-			Vector2f	m_position;
+			Math::Vector2f	m_position;
 			GLfloat		m_minVelocity,m_maxVelocity;
 			GLfloat		m_minAngularVelocity,m_maxAngularVelocity;
 			GLfloat		m_minParticleLife,m_maxParticleLife;

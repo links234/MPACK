@@ -19,9 +19,6 @@
 #include <vector>
 #include <map>
 
-using namespace MPACK::Core;
-using namespace MPACK::Math;
-
 namespace MPACK
 {
 	namespace Graphics
@@ -60,8 +57,8 @@ namespace MPACK
 		class SpriteBatcher
 		{
 		public:
-			static void SendDebugPolygon(Vector2f *posPointer,GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
-			static void SendDebugCircle(GLuint count,Vector4f color,TransformState2f transformState=TransformState2f(),GLfloat layer=Debug::layer);
+			static void SendDebugPolygon(Math::Vector2f *posPointer,GLuint count,Math::Vector4f color,Math::TransformState2f transformState=Math::TransformState2f(),GLfloat layer=Debug::layer);
+			static void SendDebugCircle(GLuint count,Math::Vector4f color,Math::TransformState2f transformState=Math::TransformState2f(),GLfloat layer=Debug::layer);
 
 			static void SendQuad(SpriteVertex *vertexPointer, GLuint vertexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
 			static void Send(SpriteVertex *vertexPointer, GLuint vertexCount, GLushort *indexPointer, GLushort indexCount, Texture2D *texture, IndexData::Type type, GLfloat layer);
@@ -84,14 +81,14 @@ namespace MPACK
 
 			GLenum GetGLType(const GLint type);
 
-			GLushort				m_currentIndexBatchSize;
-			vector<SpriteVertex> 	m_vertexData;
-			vector<GLushort> 		m_indexData;
-			vector<SpriteBatch>		m_batches;
-			Texture2D				*m_lastTexture;
-			IndexData::Type			m_lastType;
+			GLushort					m_currentIndexBatchSize;
+			std::vector<SpriteVertex> 	m_vertexData;
+			std::vector<GLushort> 		m_indexData;
+			std::vector<SpriteBatch>	m_batches;
+			Texture2D					*m_lastTexture;
+			IndexData::Type				m_lastType;
 
-			static map<GLfloat, SpriteBatcher*> s_spriteBatcherLayer;
+			static std::map<GLfloat, SpriteBatcher*> s_spriteBatcherLayer;
 			static bool						 s_useCamera;
 		};
 	}

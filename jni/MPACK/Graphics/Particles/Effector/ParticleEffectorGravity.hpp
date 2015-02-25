@@ -13,12 +13,12 @@ namespace MPACK
 		{
 		public:
 			ParticleEffectorGravity();
-			ParticleEffectorGravity(const Vector2f &gravity);
+			ParticleEffectorGravity(const Math::Vector2f &gravity);
 			virtual ~ParticleEffectorGravity();
 	
 			void UpdateParticle(Particle* particle, const GLfloat &delta);
 
-			Vector2f m_gravity;
+			Math::Vector2f m_gravity;
 		};
 	}
 }

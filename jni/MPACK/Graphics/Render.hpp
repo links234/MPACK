@@ -44,7 +44,7 @@ namespace MPACK
 			static GLfloat	s_screenWidth;
 			static GLfloat	s_screenHeight;
 			static GLfloat	s_orthoLeft,s_orthoRight,s_orthoTop,s_orthoBottom;
-			static Matrix4f	s_orthoModeMatrix;
+			static Math::Matrix4f	s_orthoModeMatrix;
 		};
 	}
 }

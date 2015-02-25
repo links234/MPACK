@@ -5,8 +5,6 @@
 #include "Frustum.hpp"
 #include "Types.hpp"
 
-using namespace MPACK::Math;
-
 namespace MPACK
 {
 	namespace Graphics
@@ -17,9 +15,9 @@ namespace MPACK
 			Camera();
 			virtual ~Camera();
 
-			Matrix4f GetViewMatrix();
-			Matrix4f GetProjMatrix();
-			Matrix4f GetViewProjMatrix();
+			Math::Matrix4f GetViewMatrix();
+			Math::Matrix4f GetProjMatrix();
+			Math::Matrix4f GetViewProjMatrix();
 
 			GLfloat* GetViewMatrixPointer();
 			GLfloat* GetProjMatrixPointer();
@@ -29,17 +27,17 @@ namespace MPACK
 			void SetClipPlane(const GLfloat &nearf, const GLfloat &farf);
 			void SetViewport(const GLuint &width, const GLuint &height);
 			void SetFOV(const GLfloat &fov);
-			void SetVelocity(const Vector3f &velocity);
+			void SetVelocity(const Math::Vector3f &velocity);
 			void SetMinFOV(const GLfloat &angle);
 			void SetMaxFOV(const GLfloat &angle);
-			void LookAt(const Vector3f &point, Vector3f up=Vector3f(0.0f,1.0f,0.0f));
-			void SetPosition(const Vector3f &position);
+			void LookAt(const Math::Vector3f &point, Math::Vector3f up=Math::Vector3f(0.0f,1.0f,0.0f));
+			void SetPosition(const Math::Vector3f &position);
 
-			Vector3f GetLookVector3();
-			Vector3f GetUpVector3();
-			Vector3f GetRightVector3();
-			Vector3f GetPositionVector3();
-			Vector3f GetVelocityVector3();
+			Math::Vector3f GetLookVector3();
+			Math::Vector3f GetUpVector3();
+			Math::Vector3f GetRightVector3();
+			Math::Vector3f GetPositionVector3();
+			Math::Vector3f GetVelocityVector3();
 
 			GLfloat GetFOV();
 			GLfloat GetMinFOV();
@@ -50,10 +48,10 @@ namespace MPACK
 			GLuint GetHeight();
 			GLuint GetWidth();
 
-			Frustum* GetFrustumPointer();
+			Math::Frustum* GetFrustumPointer();
 
 		protected:
-			void Adjust(const Matrix4f &matrix);
+			void Adjust(const Math::Matrix4f &matrix);
 			void RegenerateVectors();
 			void GetOrientationFromMatrix();
 
@@ -63,15 +61,15 @@ namespace MPACK
 			GLfloat	 m_fovMax;
 			GLfloat	 m_fov;
 			GLfloat	 m_near,m_far;
-			Vector3f m_look;
-			Vector3f m_right;
-			Vector3f m_up;
-			Vector3f m_position;
-			Vector3f m_velocity;
-			Matrix4f m_viewMatrix;
-			Matrix4f m_projectionMatrix;
-			Matrix4f m_viewProjMatrix;
-			Frustum  m_frustum;
+			Math::Vector3f m_look;
+			Math::Vector3f m_right;
+			Math::Vector3f m_up;
+			Math::Vector3f m_position;
+			Math::Vector3f m_velocity;
+			Math::Matrix4f m_viewMatrix;
+			Math::Matrix4f m_projectionMatrix;
+			Math::Matrix4f m_viewProjMatrix;
+			Math::Frustum  m_frustum;
 		};
 
 		class FreeCamera : public Camera

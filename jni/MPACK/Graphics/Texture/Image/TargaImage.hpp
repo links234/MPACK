@@ -16,10 +16,6 @@
 #include <string>
 #include <fstream>
 
-using std::vector;
-using std::string;
-using std::istream;
-
 namespace MPACK
 {
 	namespace Graphics

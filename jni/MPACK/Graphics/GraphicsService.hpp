@@ -14,15 +14,15 @@ namespace MPACK
 		public:
 			GraphicsService();
 
-			ReturnValue Start();
+			Core::ReturnValue Start();
 			void Stop();
 
 			void Update(GLfloat delta);
-			ReturnValue Render();
+			Core::ReturnValue Render();
 
 		protected:
-			ReturnValue LoadResources();
-			ReturnValue UnloadResources();
+			Core::ReturnValue LoadResources();
+			Core::ReturnValue UnloadResources();
 		};
 	}
 }

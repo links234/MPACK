@@ -14,10 +14,6 @@
 
 #include <vector>
 
-//class Texture2D;
-
-using namespace MPACK::Math;
-
 namespace MPACK
 {
 	namespace Graphics
@@ -34,11 +30,11 @@ namespace MPACK
 
 			GLuint	GetVertexFormat();
 
-			std::vector<Vector3f>	m_position;
-			std::vector<Vector4f>	m_color;
-			std::vector<Vector2f>	m_texCoord[8];
-			std::vector<Vector3f>	m_normal;
-			std::vector<Vector3f>	m_tangent;
+			std::vector<Math::Vector3f>	m_position;
+			std::vector<Math::Vector4f>	m_color;
+			std::vector<Math::Vector2f>	m_texCoord[8];
+			std::vector<Math::Vector3f>	m_normal;
+			std::vector<Math::Vector3f>	m_tangent;
 		protected:
 			GLuint					m_vertexFormat;
 		};

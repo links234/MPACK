@@ -16,7 +16,7 @@ namespace MPACK
 			PNGImage();
 			virtual ~PNGImage();
 
-			Core::ReturnValue Load(const string& filename);
+			Core::ReturnValue Load(const std::string& filename);
 			void Unload();
 
 			const BYTE* GetImageData() const;
