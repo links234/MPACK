@@ -28,14 +28,27 @@
 #ifdef LINUX_PLATFORM
 	#include <stdint.h>
 #elif	defined(ANDROID_PLATFORM)
-	#define		intptr_t	int
+	#define	intptr_t	int
+#elif	defined(WINDOWS_PLATFORM)
+	#define unordered_map map
+	#define unordered_set set
 #endif
 
 #include <cstdlib>
 #include <cstring>
+
 #include <string>
-#include <map>
 #include <vector>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <set>
+#include <map>
+
+#if defined(LINUX_PLATFORM) || defined(ANDROID_PLATFORM)
+	#include <unordered_map>
+	#include <unordered_set>
+#endif
 
 #include "Math.hpp"
 #include "../Debug/Debug.hpp"
