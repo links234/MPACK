@@ -75,6 +75,6 @@ vec4 PostFX(sampler2D tex, vec2 uv)
 void main()
 {
 	vec2 uv=texCoord0.st;
-  	outColor = texture2D(texture0, uv);
+  	outColor = PostFX(texture0, uv);
   	gl_FragColor=outColor;
 }

@@ -172,7 +172,5 @@ void main()
 	{
 		outColor=vec4(FxaaPixelShader(texCoord0,texture0,rcpFrame),1.0);
 	}
-	float c=(outColor.r+outColor.g+outColor.b)/3.0f;
-	outColor=vec4(c,c,0.0f,1.0f);
 	gl_FragColor=outColor;
 }
