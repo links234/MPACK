@@ -8,6 +8,8 @@
 
 #include "ShaderUniform.hpp"
 
+using namespace MPACK::Math;
+
 namespace MPACK
 {
 	namespace Graphics

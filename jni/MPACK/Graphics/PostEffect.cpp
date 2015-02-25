@@ -2,6 +2,8 @@
 
 #include "ShaderTypes.hpp"
 
+using namespace std;
+
 namespace MPACK
 {
 	namespace Graphics

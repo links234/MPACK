@@ -8,6 +8,8 @@
 
 #include "Render.hpp"
 
+using namespace MPACK::Math;
+
 namespace MPACK
 {
 	namespace Graphics

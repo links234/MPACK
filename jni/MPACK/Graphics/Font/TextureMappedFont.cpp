@@ -12,6 +12,10 @@
 #include "TargaImage.hpp"
 #include "Types.hpp"
 
+using namespace std;
+using namespace MPACK::Core;
+using namespace MPACK::Math;
+
 namespace MPACK
 {
 	namespace Graphics

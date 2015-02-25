@@ -8,6 +8,8 @@
 
 #include "Sprite.hpp"
 
+using namespace std;
+
 namespace MPACK
 {
 	namespace Graphics

@@ -4,6 +4,7 @@
 #include "TargaImage.hpp"
 #include "PNGImage.hpp"
 
+using namespace std;
 using namespace MPACK::Core;
 
 namespace MPACK

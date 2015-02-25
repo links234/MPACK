@@ -3,6 +3,8 @@
 #include "Render.hpp"
 #include "Camera2D.hpp"
 
+using namespace MPACK::Math;
+
 namespace MPACK
 {
 	namespace Graphics

@@ -10,6 +10,8 @@
 #include "Render.hpp"
 #include "Log.hpp"
 
+using namespace MPACK::Graphics;
+
 namespace MPACK
 {
 	namespace Core

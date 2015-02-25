@@ -167,7 +167,7 @@ namespace MPACK
 				return RETURN_VALUE_KO;
 							//goto ERROR_LABEL;
 			}
-			for (int32_t i = 0; i < height; ++i)
+			for (::int32_t i = 0; i < height; ++i)
 			{
 				rowPtrs[height - (i + 1)] = m_imageBuffer + i * rowSize;
 			}

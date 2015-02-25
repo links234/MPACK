@@ -2,6 +2,7 @@
 
 using namespace MPACK;
 using namespace MPACK::Core;
+using namespace MPACK::Math;
 using namespace MPACK::Graphics;
 
 GUIMenu::GUIMenu()

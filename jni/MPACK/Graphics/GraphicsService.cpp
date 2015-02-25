@@ -15,6 +15,8 @@
 #include "ShaderTypes.hpp"
 #include "PostEffect.hpp"
 
+using namespace MPACK::Core;
+
 namespace MPACK
 {
 	namespace Graphics

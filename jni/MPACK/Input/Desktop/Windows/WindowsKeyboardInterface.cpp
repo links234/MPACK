@@ -4,7 +4,7 @@
 
 #include "Types.hpp"
 
-namespace MAPCK
+namespace MPACK
 {
 	namespace Input
 	{

@@ -4,6 +4,8 @@
 #include "Types.hpp"
 #include "Log.hpp"
 
+using namespace std;
+
 namespace MPACK
 {
 	namespace Debug

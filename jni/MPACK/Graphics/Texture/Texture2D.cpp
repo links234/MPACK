@@ -12,6 +12,8 @@
 #include "Math.hpp"
 #include "Misc.hpp"
 
+using namespace std;
+
 namespace MPACK
 {
 	namespace Graphics

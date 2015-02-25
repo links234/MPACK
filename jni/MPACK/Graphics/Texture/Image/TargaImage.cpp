@@ -14,6 +14,7 @@
 
 #include "Resource.hpp"
 
+using namespace std;
 using namespace MPACK::Core;
 
 namespace MPACK

@@ -59,7 +59,7 @@ namespace MPACK
 			TargaImage();
 			virtual ~TargaImage();
 
-			Core::ReturnValue Load(const string& filename);
+			Core::ReturnValue Load(const std::string& filename);
 			void Unload();
 
 			const BYTE* GetImageData() const;
@@ -71,7 +71,7 @@ namespace MPACK
 		private:
 			TargaHeader m_header;
 
-			vector<unsigned char> m_imageData;
+			std::vector<unsigned char> m_imageData;
 
 			bool LoadUncompressedTarga(unsigned char* pointer);
 			bool LoadCompressedTarga(unsigned char* pointer);
