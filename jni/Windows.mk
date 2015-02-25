@@ -34,8 +34,8 @@ OBJ_FOLDERS = $(patsubst $(SRC_DIR)%, $(OBJ_DIR)%, $(shell /usr/bin/find $(SRC_D
 OBJS = $(patsubst %,$(OBJ_DIR)%,$(CC_OBJS))
 OBJS += $(patsubst %,$(OBJ_DIR)%,$(CXX_OBJS))
 
-CFLAGS := -O0 -g -DWINDOWS_PLATFORM
-CXXFLAGS := -O0 -g -DWINDOWS_PLATFORM
+CFLAGS := -O2 -g -DWINDOWS_PLATFORM
+CXXFLAGS := -O2 -g -DWINDOWS_PLATFORM
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(OBJ_FOLDERS)
