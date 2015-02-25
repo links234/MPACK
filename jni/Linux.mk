@@ -35,7 +35,7 @@ OBJS = $(patsubst %,$(OBJ_DIR)%,$(CC_OBJS))
 OBJS += $(patsubst %,$(OBJ_DIR)%,$(CXX_OBJS))
 
 CFLAGS := -O2 -g -DLINUX_PLATFORM
-CXXFLAGS := -O2 -g -DLINUX_PLATFORM
+CXXFLAGS := -O2 -g -std=gnu++11 -DLINUX_PLATFORM
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(OBJ_FOLDERS)
