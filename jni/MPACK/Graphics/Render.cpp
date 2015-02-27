@@ -95,8 +95,6 @@ namespace MPACK
 
 		void Render::SetScreenSize(GLint width, GLint height)
 		{
-			LOGD("SetScreenSize First: %d %d",width,height);
-
 			s_needUpdateOrtho=true;
 			s_screenWidth=(GLfloat)(width);
 			s_screenHeight=(GLfloat)(height);
