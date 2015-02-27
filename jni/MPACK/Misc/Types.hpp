@@ -37,11 +37,13 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <deque>
 #include <queue>
 #include <stack>
+#include <list>
 #include <set>
 #include <map>
 
