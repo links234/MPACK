@@ -8,21 +8,11 @@ namespace MPACK
 		SDInputFile::SDInputFile(const char* pPath):
 			Resource(pPath), mInputStream(), mBuffer(NULL)
 		{
-			LOGD("SDInputFile constructor");
 		}
 
 		ReturnValue SDInputFile::Open()
 		{
-			LOGD("SDInputFile Opening |%s| ",mPath);
 			mInputStream.open(mPath, std::ios::in | std::ios::binary);
-			if(mInputStream.fail())
-			{
-				LOGD("Failed to open SD file: |%s|",mPath);
-			}
-			else
-			{
-				LOGD("Successfully opened SD file");
-			}
 			return mInputStream ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
@@ -48,7 +38,6 @@ namespace MPACK
 		int SDInputFile::GetLength()
 		{
 			int len;
-			LOGD("getting size of %s",mPath);
 
 			if(mInputStream.is_open())
 			{
@@ -70,7 +59,6 @@ namespace MPACK
 		const void* SDInputFile::Bufferize()
 		{
 			int lSize = GetLength();
-			LOGD("lSize = %d",lSize);
 			if (lSize <= 0)
 			{
 				return NULL;

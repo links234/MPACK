@@ -48,7 +48,6 @@ namespace MPACK
 		{
 			if(s_orthoLeft!=left || s_orthoRight!=right || s_orthoTop!=top || s_orthoBottom!=bottom)
 			{
-				LOGD("PRINT %f %f %f %f",left,right,top,bottom);
 				s_orthoLeft=left;
 				s_orthoRight=right;
 				s_orthoTop=top;

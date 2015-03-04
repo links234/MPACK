@@ -10,7 +10,6 @@ namespace MPACK
 
 		Resource::Resource(const char* pPath)
 		{
-			LOGD("%s = %d",pPath,strlen(pPath));
 			mPath = new char[strlen(pPath)+2];
 			strcpy(mPath,pPath);
 		}
@@ -47,9 +46,6 @@ namespace MPACK
 			{
 				strcpy(pathBuffer,pPath+1);
 			}
-			LOGI("LoadResource:");
-			LOGI("%s", pPath);
-			LOGI("%s", pathBuffer);
 			return (Resource*)(new SDInputFile(pathBuffer));
 	#endif
 			LOGE("LoadResource: invalid path %s",pPath);

@@ -186,8 +186,6 @@ void GUIMenu::UPEvent(void *pointer1, void *pointer2)
 		{
 			(*it)->m_pFinger=NULL;
 
-			LOGD("leftThreshold = %f   rightThreshold = %f",leftThreshold,rightThreshold);
-
 			if((*it)->m_pos.x<leftThreshold || (*it)->m_pos.x>rightThreshold)
 			{
 				pGUI->action=(*it)->m_id;

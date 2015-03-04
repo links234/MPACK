@@ -42,20 +42,16 @@ namespace MPACK
 
 		Image* LoadImage(const char *pPath)
 		{
-			LOGD("LoadImage: pPath = %s",pPath);
-
 			string ext;
 			Core::StringEx::GetExtension(pPath,ext);
 			Core::StringEx::Upper(ext);
 			Image *image=NULL;
 			if(ext=="TGA")
 			{
-				LOGD("LoadImage: TGA format");
 				image=new TargaImage;
 			}
 			else if(ext=="PNG")
 			{
-				LOGD("LoadImage: PNG format");
 				image=new PNGImage;
 			}
 

@@ -136,22 +136,16 @@ namespace MPACK
 
 		bool LoadShaders()
 		{
-			LOGD("OK HERE!!!!! LOADSHADERS 1");
 			Sprite_Shader = (AbstractShaderType*)(new ShaderType_Sprite(VERTEXSHADER_SPRITE,FRAGMENTSHADER_SPRITE));
-			LOGD("OK HERE!!!!! LOADSHADERS 1.2");
 			if(!Sprite_Shader->Initialize())
 			{
 				return false;
 			}
-			LOGD("OK HERE!!!!! LOADSHADERS 2");
 			Sprite_Shader->BindAttributeLocations();
-			LOGD("OK HERE!!!!! LOADSHADERS 3");
 			if(!Sprite_Shader->LinkProgram())
 			{
 				return false;
 			}
-
-			LOGD("OK HERE!!!!! LOADSHADERS");
 
 			FXAAII_Shader = (AbstractShaderType*)(new ShaderType_Tex0Pass(VERTEXSHADER_FXAAII,FRAGMENTSHADER_FXAAII));
 			if(!FXAAII_Shader->Initialize())

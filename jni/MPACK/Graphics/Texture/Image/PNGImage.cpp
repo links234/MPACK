@@ -40,7 +40,7 @@ namespace MPACK
 				return RETURN_VALUE_KO;
 				//goto ERROR_LABEL;
 			}
-			LOGD("PNGImage::Load Checking signature.");
+
 			if (pResource->Read(header, sizeof(header)) != RETURN_VALUE_OK)
 			{
 				return RETURN_VALUE_KO;
@@ -53,7 +53,6 @@ namespace MPACK
 			}
 
 			// Creates required structures.
-			LOGD("PNGImage::Load Creating required structures.");
 			pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 			if (!pngPtr)
 			{
@@ -62,13 +61,13 @@ namespace MPACK
 							//goto ERROR_LABEL;
 			}
 			infoPtr = png_create_info_struct(pngPtr);
-			LOGD("PNGImage::Load check 0");
+
 			if (!infoPtr)
 			{
 				return RETURN_VALUE_KO;
 							//goto ERROR_LABEL;
 			}
-			LOGD("PNGImage::Load check 1");
+
 			// Prepares reading operation by setting-up a read callback.
 			png_set_read_fn(pngPtr, pResource, callback_read);
 			// Set-up error management. If an error occurs while reading,
@@ -78,7 +77,6 @@ namespace MPACK
 				return RETURN_VALUE_KO;
 							//goto ERROR_LABEL;
 			}
-			LOGD("PNGImage::Load check 2");
 
 			// Ignores first 8 bytes already read and processes header.
 			png_set_sig_bytes(pngPtr, 8);
@@ -99,7 +97,7 @@ namespace MPACK
 				return RETURN_VALUE_KO;
 							//goto ERROR_LABEL;
 			}
-			LOGD("PNGImage::Load check 3");
+
 			// Expands PNG with less than 8bits per channel to 8bits.
 			if (depth < 8)
 			{
@@ -117,24 +115,18 @@ namespace MPACK
 				case PNG_COLOR_TYPE_PALETTE:
 					png_set_palette_to_rgb(pngPtr);
 					m_format = transparency ? GL_RGBA : GL_RGB;
-					LOGD("GL_RGBA/GL_RGB from palette");
 					break;
 				case PNG_COLOR_TYPE_RGB:
 					m_format = transparency ? GL_RGBA : GL_RGB;
-					LOGD("%d = %d",colorType,PNG_COLOR_TYPE_RGB);
-					LOGD("GL_RGBA/GL_RGB");
 					break;
 				case PNG_COLOR_TYPE_RGBA:
-					LOGD("GL_RGBA");
 					m_format = GL_RGBA;
 					break;
 				case PNG_COLOR_TYPE_GRAY:
-					LOGD("GL_LUMINANCE_ALPHA/GL_LUMINANCE");
 					png_set_expand_gray_1_2_4_to_8(pngPtr);
 					m_format = transparency ? GL_LUMINANCE_ALPHA:GL_LUMINANCE;
 					break;
 				case PNG_COLOR_TYPE_GA:
-					LOGD("GL_LUMINANCE_ALPHA");
 					png_set_expand_gray_1_2_4_to_8(pngPtr);
 					m_format = GL_LUMINANCE_ALPHA;
 					break;
