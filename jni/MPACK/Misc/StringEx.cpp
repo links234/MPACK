@@ -51,7 +51,7 @@ namespace MPACK
 				}
 			}
 
-			void Upper(string &str)
+			string& Upper(string &str)
 			{
 				for(int i=0;i<str.size();++i)
 				{
@@ -60,9 +60,10 @@ namespace MPACK
 						str[i]+='A'-'a';
 					}
 				}
+				return str;
 			}
 
-			void Lower(string &str)
+			string& Lower(string &str)
 			{
 				for(int i=0;i<str.size();++i)
 				{
@@ -71,9 +72,10 @@ namespace MPACK
 						str[i]+='a'-'A';
 					}
 				}
+				return str;
 			}
 
-			std::string ToUpper(std::string str)
+			string ToUpper(std::string str)
 			{
 				for(int i=0;i<str.size();++i)
 				{
@@ -85,7 +87,7 @@ namespace MPACK
 				return str;
 			}
 
-			std::string ToLower(std::string str)
+			string ToLower(std::string str)
 			{
 				for(int i=0;i<str.size();++i)
 				{
@@ -97,20 +99,22 @@ namespace MPACK
 				return str;
 			}
 
-			void Upper(char &ch)
+			char& Upper(char &ch)
 			{
 				if('a'<=ch && ch<='z')
 				{
 					ch=ch-'a'+'A';
 				}
+				return ch;
 			}
 
-			void Lower(char &ch)
+			char& Lower(char &ch)
 			{
 				if('A'<=ch && ch<='Z')
 				{
 					ch=ch-'A'+'a';
 				}
+				return ch;
 			}
 
 			char ToUpper(const char &ch)
@@ -152,7 +156,64 @@ namespace MPACK
 
 			bool IsWhiteSpace(const char &ch)
 			{
-				return ch==' ' || ch=='\t' || ch=='\n';
+				return ch==' ' || ch=='\t' || ch=='\n' || ch=='\r';
+			}
+
+			string StripLeft(string &str)
+			{
+				string ans;
+				int i=0;
+				for(;i<str.size();++i)
+				{
+					if(!IsWhiteSpace(str[i]))
+					{
+						break;
+					}
+				}
+				for(;i<str.size();++i)
+				{
+					ans+=str[i];
+				}
+				return ans;
+			}
+
+			string StripRight(string &str)
+			{
+				int i=str.size()-1;
+				for(;i>=0 && IsWhiteSpace(str[i]);--i);
+				if(IsWhiteSpace(str[i]))
+				{
+					--i;
+				}
+				string ans=str;
+				ans.resize(i+1);
+				return ans;
+			}
+
+			string Strip(string &str)
+			{
+				string ans;
+				int i=0;
+				for(;i<str.size();++i)
+				{
+					if(!IsWhiteSpace(str[i]))
+					{
+						break;
+					}
+				}
+				for(;i<str.size();++i)
+				{
+					ans+=str[i];
+				}
+
+				i=ans.size()-1;
+				for(;i>=0 && IsWhiteSpace(ans[i]);--i);
+				if(IsWhiteSpace(ans[i]))
+				{
+					--i;
+				}
+				ans.resize(i+1);
+				return ans;
 			}
 		}
 	}

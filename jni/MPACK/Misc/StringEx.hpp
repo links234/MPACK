@@ -12,14 +12,14 @@ namespace MPACK
 			const char* GetExtension(const char* pStr);
 			void GetExtension(std::string path, std::string &ext);
 
-			void Upper(std::string &str);
-			void Lower(std::string &str);
+			std::string& Upper(std::string &str);
+			std::string& Lower(std::string &str);
 
 			std::string ToUpper(std::string str);
 			std::string ToLower(std::string str);
 
-			void Upper(char &ch);
-			void Lower(char &ch);
+			char& Upper(char &ch);
+			char& Lower(char &ch);
 
 			char ToUpper(const char &ch);
 			char ToLower(const char &ch);
@@ -29,6 +29,10 @@ namespace MPACK
 			bool IsNumeric(const char &ch);
 			bool IsAlphaNumeric(const char &ch);
 			bool IsWhiteSpace(const char &ch);
+
+			std::string StripLeft(std::string &str);
+			std::string StripRight(std::string &str);
+			std::string Strip(std::string &str);
 		}
 	}
 }
