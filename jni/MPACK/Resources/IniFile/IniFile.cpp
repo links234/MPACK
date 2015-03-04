@@ -15,10 +15,28 @@ namespace MPACK
 
 		IniFile::~IniFile()
 		{
+			for(vector<IniFileSection*>::iterator it=m_sectionOrder.begin();it!=m_sectionOrder.end();++it)
+			{
+				delete *it;
+			}
+		}
+
+		void IniFile::Clear()
+		{
+			m_globalSection.Clear();
+
+			m_section.clear();
+			for(vector<IniFileSection*>::iterator it=m_sectionOrder.begin();it!=m_sectionOrder.end();++it)
+			{
+				delete *it;
+			}
+			m_sectionOrder.clear();
 		}
 
 		void IniFile::Load(const char *pPath)
 		{
+			Clear();
+
 			Resource *pResource = LoadResource(pPath);
 			pResource->Open();
 			ResourceReader reader(pResource);

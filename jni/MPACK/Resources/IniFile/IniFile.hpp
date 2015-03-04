@@ -15,6 +15,8 @@ namespace MPACK
 			IniFile();
 			~IniFile();
 
+			void Clear();
+
 			void Load(const char *pPath);
 			void Save(const char *pPath);
 

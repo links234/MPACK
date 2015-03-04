@@ -21,6 +21,8 @@ namespace MPACK
 			IniFileSection();
 			~IniFileSection();
 
+			void Clear();
+
 			IniFileObject* GetObject(std::string key) const;
 			IniFileObject* AddObject(std::string key, std::string value);
 			void DeleteObject(std::string key);

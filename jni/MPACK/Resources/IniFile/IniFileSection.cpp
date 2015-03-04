@@ -20,6 +20,16 @@ namespace MPACK
 			}
 		}
 
+		void IniFileSection::Clear()
+		{
+			m_object.clear();
+			for(vector<IniFileObject*>::iterator it=m_objectOrder.begin();it!=m_objectOrder.end();++it)
+			{
+				delete *it;
+			}
+			m_objectOrder.clear();
+		}
+
 		IniFileObject* IniFileSection::GetObject(string key) const
 		{
 			unordered_map<string,IniFileObject*>::const_iterator it=m_object.find(key);
