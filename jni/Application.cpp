@@ -6,12 +6,14 @@
 #include "Context.hpp"
 #include "Global.hpp"
 #include "EventLoop.hpp"
+#include "IniFile.hpp"
 
 #include "MainMenuState.hpp"
 #include "PlayGameState.hpp"
 #include "Log.hpp"
 
 using namespace MPACK;
+using namespace MPACK::Core;
 using namespace MPACK::Graphics;
 
 namespace Game
@@ -30,6 +32,8 @@ namespace Game
 
 	MPACK::Core::ReturnValue Application::onActivate()
     {
+
+
 		LOGI("Application::onActivate");
         // Starts services.
 		if (Global::pContext->pGraphicsService->Start() != Core::RETURN_VALUE_OK)
@@ -62,6 +66,16 @@ namespace Game
 		CursorDrawer::GetInstance()->Show();
 		CursorDrawer::GetInstance()->EnableAutohide();
 #endif
+
+		IniFile ini;
+		ini.Load("@menu.ini");
+
+		LOGD("::key = <%s>",ini.GetObject("key")->GetValue().c_str());
+
+		LOGD("Section1::some_path = <%s>",ini.GetSection("Section1")->GetObject("some_path")->GetValue().c_str());
+		LOGD("Section1::var1 = <%s>",ini.GetSection("Section1")->GetObject("var1")->GetValue().c_str());
+		LOGD("Section1::var2 = <%s>",ini.GetSection("Section1")->GetObject("var2")->GetValue().c_str());
+		LOGD("Section2::nr_of_enemies = <%s>",ini.GetSection("Section2")->GetObject("nr_of_enemies")->GetValue().c_str());
 
 		m_pGameState = new MainMenu;
 		return Core::RETURN_VALUE_OK;
