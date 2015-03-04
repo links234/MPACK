@@ -1,5 +1,6 @@
 #include "IniFile.hpp"
 
+#include "Misc.hpp"
 #include "Resource.hpp"
 #include "ResourceReader.hpp"
 
@@ -108,7 +109,7 @@ namespace MPACK
 						}
 						else if(ch==']')
 						{
-							//LOGD("token = %s", token.c_str());
+							token=StringEx::Strip(token);
 							pCurrentSection=new IniFileSection;
 							m_sectionOrder.push_back(pCurrentSection);
 							m_section[token]=pCurrentSection;
@@ -203,11 +204,15 @@ namespace MPACK
 						}
 						else if(ch=='\n' || ch=='\r')
 						{
+							previousToken=StringEx::Strip(previousToken);
+							token=StringEx::Strip(token);
 							pCurrentSection->AddObject(previousToken,token);
 							state=Default;
 						}
 						else if(ch==';' || ch=='#')
 						{
+							previousToken=StringEx::Strip(previousToken);
+							token=StringEx::Strip(token);
 							pCurrentSection->AddObject(previousToken,token);
 							state=InComment;
 							token="";
