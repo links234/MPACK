@@ -2,6 +2,7 @@
 #define MPACK_INIFILESECTION_HPP
 
 #include "IniFileObject.hpp"
+#include "SearchList.hpp"
 
 namespace MPACK
 {
@@ -23,15 +24,14 @@ namespace MPACK
 
 			void Clear();
 
-			IniFileObject* GetObject(std::string key) const;
+			IniFileObject* GetObject(std::string key);
 			IniFileObject* AddObject(std::string key, std::string value);
 			void DeleteObject(std::string key);
 
 			bool IsValid() const;
 
 		private:
-			std::unordered_map<std::string,IniFileObject*> m_object;
-			std::vector<IniFileObject*> m_objectOrder;
+			Algorithm::SearchList<std::string,IniFileObject*> m_object;
 
 			static IniFileSection s_sentinel;
 

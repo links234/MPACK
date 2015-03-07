@@ -5,6 +5,7 @@
 #include "ResourceReader.hpp"
 
 using namespace std;
+using namespace MPACK::Algorithm;
 
 namespace MPACK
 {
@@ -16,9 +17,9 @@ namespace MPACK
 
 		IniFile::~IniFile()
 		{
-			for(vector<IniFileSection*>::iterator it=m_sectionOrder.begin();it!=m_sectionOrder.end();++it)
+			for(SearchList<string,IniFileSection*>::Iterator it=m_section.Begin();it!=m_section.End();++it)
 			{
-				delete *it;
+				delete it->value;
 			}
 		}
 
@@ -26,12 +27,11 @@ namespace MPACK
 		{
 			m_globalSection.Clear();
 
-			m_section.clear();
-			for(vector<IniFileSection*>::iterator it=m_sectionOrder.begin();it!=m_sectionOrder.end();++it)
+			for(SearchList<string,IniFileSection*>::Iterator it=m_section.Begin();it!=m_section.End();++it)
 			{
-				delete *it;
+				delete it->value;
 			}
-			m_sectionOrder.clear();
+			m_section.Clear();
 		}
 
 		void IniFile::Load(const char *pPath)
@@ -111,7 +111,6 @@ namespace MPACK
 						{
 							token=StringEx::Strip(token);
 							pCurrentSection=new IniFileSection;
-							m_sectionOrder.push_back(pCurrentSection);
 							m_section[token]=pCurrentSection;
 							state=AfterSection;
 						}
@@ -232,50 +231,34 @@ namespace MPACK
 		{
 		}
 
-		IniFileSection* IniFile::GetSection(string section) const
+		IniFileSection* IniFile::GetSection(string section)
 		{
-			unordered_map<string,IniFileSection*>::const_iterator it=m_section.find(section);
-			if(it==m_section.end())
+			SearchList<string,IniFileSection*>::Iterator it=m_section.Find(section);
+			if(it==m_section.End())
 			{
 				return &IniFileSection::s_sentinel;
 			}
-			return it->second;
+			return it->value;
 		}
 
 		IniFileSection* IniFile::AddSection(string section)
 		{
-			unordered_map<string,IniFileSection*>::iterator it=m_section.find(section);
-			if(it==m_section.end())
+			SearchList<string,IniFileSection*>::Iterator it=m_section.Find(section);
+			if(it==m_section.End())
 			{
 				IniFileSection *pSection=new IniFileSection();
 				m_section[section]=pSection;
 				return pSection;
 			}
-			return it->second;
+			return it->value;
 		}
 
 		void IniFile::DeleteSection(string section)
 		{
-			unordered_map<string,IniFileSection*>::iterator it=m_section.find(section);
-			if(it==m_section.end())
-			{
-				return;
-			}
-			int index=0;
-			for(vector<IniFileSection*>::iterator it2=m_sectionOrder.begin();it2!=m_sectionOrder.end();++it2)
-			{
-				if(*it2==it->second)
-				{
-					delete *it2;
-					swap(m_sectionOrder[index],m_sectionOrder[m_sectionOrder.size()-1]);
-					m_sectionOrder.pop_back();
-					return;
-				}
-				++index;
-			}
+			m_section.Erase(section);
 		}
 
-		IniFileObject* IniFile::GetObject(string key) const
+		IniFileObject* IniFile::GetObject(string key)
 		{
 			return m_globalSection.GetObject(key);
 		}
