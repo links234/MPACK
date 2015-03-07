@@ -13,6 +13,7 @@ namespace MPACK
 			class Iterator
 			{
 			public:
+				Iterator();
 				Iterator(const Iterator& other);
 
 				const Iterator& operator= (const Iterator& other);

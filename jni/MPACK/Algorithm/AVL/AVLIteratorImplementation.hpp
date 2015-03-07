@@ -5,6 +5,10 @@ namespace MPACK
 {
 	namespace Algorithm
 	{
+		template<class T> AVL<T>::Iterator::Iterator()
+		{
+		}
+
 		template<class T> AVL<T>::Iterator::Iterator(const Iterator& other)
 			: m_avl(other.m_avl), m_node(other.m_node), m_count(other.m_count)
 		{
