@@ -4,6 +4,7 @@
 #include "IndexedSkipList.hpp"
 #include "StaticStack.hpp"
 #include "StaticQueue.hpp"
+#include "SearchList.hpp"
 #include "AVL.hpp"
 
 #endif
