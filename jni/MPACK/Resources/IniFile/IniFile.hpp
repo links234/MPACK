@@ -30,6 +30,8 @@ namespace MPACK
 			void DeleteObject(std::string key);
 
 		private:
+			std::string OutputBackspace(const std::string &text) const;
+
 			Algorithm::SearchList<std::string,IniFileSection*> m_section;
 
 			IniFileSection m_globalSection;

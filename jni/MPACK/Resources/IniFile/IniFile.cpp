@@ -1,5 +1,7 @@
 #include "IniFile.hpp"
 
+#include <fstream>
+
 #include "Misc.hpp"
 #include "Resource.hpp"
 #include "ResourceReader.hpp"
@@ -229,6 +231,22 @@ namespace MPACK
 
 		void IniFile::Save(const char *pPath)
 		{
+			ofstream fout(pPath);
+			for(SearchList<string,IniFileObject*>::Iterator it=m_globalSection.m_object.Begin();it!=m_globalSection.m_object.End();++it)
+			{
+				fout<<it->key<<"="<<OutputBackspace(it->value->GetValue())<<"\n";
+			}
+			fout<<"\n";
+			for(SearchList<string,IniFileSection*>::Iterator it=m_section.Begin();it!=m_section.End();++it)
+			{
+				fout<<"["<<OutputBackspace(it->key)<<"]\n";
+				for(SearchList<string,IniFileObject*>::Iterator itt=it->value->m_object.Begin();itt!=it->value->m_object.End();++itt)
+				{
+					fout<<itt->key<<"="<<OutputBackspace(itt->value->GetValue())<<"\n";
+				}
+				fout<<"\n";
+			}
+			fout.close();
 		}
 
 		IniFileSection* IniFile::GetSection(string section)
@@ -271,6 +289,55 @@ namespace MPACK
 		void IniFile::DeleteObject(string key)
 		{
 			m_globalSection.DeleteObject(key);
+		}
+
+
+		string IniFile::OutputBackspace(const string &text) const
+		{
+			string ans;
+			for(int i=0;i<text.size();++i)
+			{
+				switch(text[i])
+				{
+					case '\\':
+						ans+="\\\\";
+					break;
+					case '\0':
+						ans+="\\0";
+					break;
+					case '\a':
+						ans+="\\a";
+					break;
+					case '\b':
+						ans+="\\b";
+					break;
+					case '\t':
+						ans+="\\t";
+					break;
+					case '\r':
+						ans+="\\r";
+					break;
+					case '\n':
+						ans+="\\n";
+					break;
+					case ';':
+						ans+="\\;";
+					break;
+					case '#':
+						ans+="\\#";
+					break;
+					case '=':
+						ans+="\\=";
+					break;
+					case ':':
+						ans+="\\:";
+					break;
+					default:
+						ans+=text[i];
+					break;
+				}
+			}
+			return ans;
 		}
 	}
 }
