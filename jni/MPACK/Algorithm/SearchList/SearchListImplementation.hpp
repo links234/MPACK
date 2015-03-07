@@ -125,6 +125,22 @@ namespace MPACK
 			m_hash[key]=it;
 			return it->value;
 		}
+
+		template<class TKey, class TValue> void SearchList<TKey,TValue>::Clear()
+		{
+		    m_hash.clear();
+		    m_order.clear();
+		}
+
+		template<class TKey, class TValue> int SearchList<TKey,TValue>::Size()
+		{
+		    return m_order.size();
+		}
+
+		template<class TKey, class TValue> bool SearchList<TKey,TValue>::Empty()
+		{
+		    return m_order.empty();
+		}
 	}
 }
 

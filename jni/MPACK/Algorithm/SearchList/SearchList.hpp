@@ -65,6 +65,11 @@ namespace MPACK
 
 			TValue& operator[] (const TKey &key);
 
+			void Clear();
+
+			int Size();
+			bool Empty();
+
 		private:
 			std::unordered_map<TKey,typename std::list<Pair>::iterator> m_hash;
 			std::list<Pair> m_order;
