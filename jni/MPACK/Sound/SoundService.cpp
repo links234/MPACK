@@ -8,6 +8,7 @@
 #define LOGSS(...)
 #endif
 
+using namespace std;
 using namespace MPACK::Core;
 
 namespace MPACK

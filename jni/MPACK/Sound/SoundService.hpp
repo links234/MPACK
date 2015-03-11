@@ -67,7 +67,7 @@ namespace MPACK
 			Sound* tempSounds[MAX_SOUNDS];
 			// Sounds.
 			//Sound* mSounds[32]; int32_t mSoundCount;
-			map<string, Sound*> mSounds;
+			std::map<std::string, Sound*> mSounds;
 
 			Playlist *mPlaylist;
 

@@ -8,7 +8,8 @@
 #include "InputService.hpp"
 
 using namespace std;
-using namespace Math;
+using namespace MPACK::Math;
+using namespace MPACK::Core;
 
 namespace MPACK
 {

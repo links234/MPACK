@@ -39,7 +39,7 @@ namespace MPACK
 			{
 				Global::pContext->pTimeService->Update();
 				Global::pContext->pInputService->Update();
-
+				LOGD("AndroidEventLoop::1");
 				// Event processing loop.
 				while ((lResult = ALooper_pollAll(mEnabled ? 0 : -1, NULL, &lEvents, (void**) &lSource)) >= 0)
 				{
@@ -56,22 +56,26 @@ namespace MPACK
 						return RETURN_VALUE_OK;
 					}
 				}
-
+				LOGD("AndroidEventLoop::2");
 				// Steps the application.
 				if ((mEnabled) && (!mQuit))
 				{
+					LOGD("AndroidEventLoop::2.1");
 					if (m_pActivityHandler->onStep() != RETURN_VALUE_OK)
 					{
 						mQuit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
 					}
+					LOGD("AndroidEventLoop::2.2");
 					if(eglSwapBuffers(mDisplay, mSurface)!=EGL_TRUE)
 					{
 						LOGE("Error %d swapping buffers.",eglGetError());
 						mQuit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
 					}
+					LOGD("AndroidEventLoop::2.3");
 				}
+				LOGD("AndroidEventLoop::3");
 			}
 			return RETURN_VALUE_OK;
 		}
@@ -127,8 +131,11 @@ namespace MPACK
 					m_pActivityHandler->onDestroy();
 					break;
 				case APP_CMD_GAINED_FOCUS:
+					LOGD("OK HERE! 0");
 					Activate();
+					LOGD("OK HERE! 1");
 					m_pActivityHandler->onGainFocus();
+					LOGD("OK HERE! 2");
 					break;
 				case APP_CMD_LOST_FOCUS:
 					m_pActivityHandler->onLostFocus();
@@ -280,7 +287,7 @@ namespace MPACK
 			LOGI("Renderer : %s", glGetString(GL_RENDERER));
 			LOGI("Viewport : %d x %d", mWidth, mHeight);
 
-			Render::SetScreenSize(mWidth,mHeight);
+			Graphics::Render::SetScreenSize(mWidth,mHeight);
 
 			return RETURN_VALUE_OK;
 

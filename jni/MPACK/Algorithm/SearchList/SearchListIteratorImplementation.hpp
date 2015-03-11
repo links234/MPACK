@@ -38,7 +38,7 @@ namespace MPACK
 
 		template<class TKey, class TValue> typename SearchList<TKey,TValue>::Iterator SearchList<TKey,TValue>::Iterator::operator++ (int)
 		{
-			SearchList<TKey,TValue>::Iterator tempIt=*this;
+			typename SearchList<TKey,TValue>::Iterator tempIt=*this;
 			++m_it;
 			return tempIt;
 		}
@@ -51,7 +51,7 @@ namespace MPACK
 
 		template<class TKey, class TValue> typename SearchList<TKey,TValue>::Iterator SearchList<TKey,TValue>::Iterator::operator-- (int)
 		{
-			SearchList<TKey,TValue>::Iterator tempIt=*this;
+			typename SearchList<TKey,TValue>::Iterator tempIt=*this;
 			--m_it;
 			return tempIt;
 		}

@@ -6,10 +6,13 @@
 #include "Context.hpp"
 #include "InputService.hpp"
 
+using namespace MPACK;
+using namespace MPACK::Core;
+
 MMAndroidInput::MMAndroidInput()
 {
-	Global::pContext->pInputService->Link_FDOWN(Param2PtrCallbackStruct(MMAndroidInput::DOWNEvent,this));
-	Global::pContext->pInputService->Link_FUP(Param2PtrCallbackStruct(MMAndroidInput::UPEvent,this));
+	Global::pContext->pInputService->Link_FDOWN(Core::Param2PtrCallbackStruct(MMAndroidInput::DOWNEvent,this));
+	Global::pContext->pInputService->Link_FUP(Core::Param2PtrCallbackStruct(MMAndroidInput::UPEvent,this));
 }
 
 MMAndroidInput::~MMAndroidInput()

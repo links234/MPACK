@@ -15,7 +15,7 @@ OBJ_DIR = obj_win
 SRC_DIR = jni
 
 #Path to includes (this example is on a Windows machine, begin each entry with -I)
-LOCAL_C_INCLUDES = $(patsubst %, -I%, $(shell /usr/bin/find $(SDIR) -type d))
+LOCAL_C_INCLUDES = $(patsubst %, -I%, $(shell /usr/bin/find $(SRC_DIR) -type d))
 INC =  $(LOCAL_C_INCLUDES) -I/usr/i586-mingw32msvc/include/ -I/usr/i586-mingw32msvc/libpng/include -Iinclude
 
 #Begin each directory location with -L and each flag with -l

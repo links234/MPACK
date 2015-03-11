@@ -1,5 +1,3 @@
-#version 120
-
 uniform mat4 projection_matrix;
 
 attribute vec2 a_Vertex;

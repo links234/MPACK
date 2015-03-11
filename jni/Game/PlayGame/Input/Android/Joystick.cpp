@@ -2,6 +2,8 @@
 
 #include "Joystick.hpp"
 
+using namespace MPACK;
+
 Joystick::Joystick(Vector2f point, Vector2f renderDirection, GLfloat radius)
 	: m_pFinger(NULL), m_maxDistance(0.0f)
 {

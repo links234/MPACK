@@ -67,6 +67,7 @@ namespace Game
 		CursorDrawer::GetInstance()->EnableAutohide();
 #endif
 
+		/*
 		IniFile ini;
 		ini.Load("@menu.ini");
 
@@ -76,7 +77,7 @@ namespace Game
 		LOGD("Section1::var1 = <%s>",ini.GetSection("Section1")->GetObject("var1")->GetValue().c_str());
 		LOGD("Section1::var2 = <%s>",ini.GetSection("Section1")->GetObject("var2")->GetValue().c_str());
 		LOGD("Section2::nr_of_enemies = <%s>",ini.GetSection("Section2")->GetObject("nr_of_enemies")->GetValue().c_str());
-
+*/
 		m_pGameState = new MainMenu;
 		return Core::RETURN_VALUE_OK;
     }
@@ -99,23 +100,25 @@ namespace Game
 
     Core::ReturnValue Application::onStep()
     {
+    	LOGD("Application::onStep() 1");
     	// Update clock
     	const GLfloat &delta = Global::pContext->pTimeService->Elapsed();
 
-
+    	LOGD("Application::onStep() 2");
 
     	// Debug messages here
 		Debug::Print(Global::pFont,"Frame time: %f (%f FPS)",delta,1.0f/delta);
-
+		LOGD("Application::onStep() 3");
     	// Update per-frame debug messages
     	Debug::InitFrame();
-
+    	LOGD("Application::onStep() 4");
     	// Updates services
     	if(!m_pSavedGameState)
     	{
     		Global::pContext->pPhysicsService->Update(delta);
     	}
     	Global::pContext->pGraphicsService->Update(delta);
+    	LOGD("Application::onStep() 5");
 
     	// Event dispatcher
     	int action=m_pGameState->Update();
@@ -159,10 +162,10 @@ namespace Game
 				m_pGameState->Update();
 			break;
     	}
-
+    	LOGD("Application::onStep() 6");
     	// Render current game state
     	m_pGameState->Render();
-
+    	LOGD("Application::onStep() 7");
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	CursorDrawer::GetInstance()->Update();
     	CursorDrawer::GetInstance()->Render();

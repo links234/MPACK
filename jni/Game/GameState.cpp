@@ -11,7 +11,7 @@ namespace Game
 	GameState::~GameState()
 	{
 #ifdef ANDROID_PLATFORM
-		Global::pContext->pInputService->ClearLinks();
+		MPACK::Global::pContext->pInputService->ClearLinks();
 #elif 	defined(WINDOWS_PLATFORM)
 
 #endif

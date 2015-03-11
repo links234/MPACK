@@ -16,7 +16,7 @@ SRC_DIR = jni
 
 #Path to includes (begin each entry with -I)
 LOCAL_C_INCLUDES = $(patsubst %, -I%, $(shell /usr/bin/find $(SRC_DIR) -type d))
-INC =  $(LOCAL_C_INCLUDES) -I/usr/local/libpng/include
+INC =  $(LOCAL_C_INCLUDES) 
 
 #Begin each directory location with -L and each flag with -l
 LIBS = -lpng -lm -lXxf86vm -lX11 -lXau -lXdmcp -lXext -lGL -lz 

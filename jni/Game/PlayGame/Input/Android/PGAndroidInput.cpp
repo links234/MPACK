@@ -4,6 +4,8 @@
 
 #include "PGAndroidInput.hpp"
 
+using namespace MPACK;
+
 PGAndroidInput::PGAndroidInput()
 	: m_firstScale(1.0f)
 {

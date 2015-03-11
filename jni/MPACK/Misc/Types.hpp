@@ -28,7 +28,7 @@
 #ifdef LINUX_PLATFORM
 	#include <stdint.h>
 #elif	defined(ANDROID_PLATFORM)
-	#define	intptr_t	int
+	//#define	intptr_t int
 #elif	defined(WINDOWS_PLATFORM)
 	#define unordered_map map
 	#define unordered_set set

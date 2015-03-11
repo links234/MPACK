@@ -6,6 +6,7 @@
 using namespace MPACK::Math;
 using namespace MPACK::Core;
 using namespace MPACK::Graphics;
+using namespace MPACK::Input;
 
 class Joystick
 {

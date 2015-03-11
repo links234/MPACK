@@ -55,21 +55,21 @@ namespace MPACK
 
 		template<class TKey, class TValue> typename SearchList<TKey,TValue>::Iterator SearchList<TKey,TValue>::Begin()
 		{
-			SearchList<TKey,TValue>::Iterator it;
+			typename SearchList<TKey,TValue>::Iterator it;
 			it.m_it=m_order.begin();
 			return it;
 		}
 
 		template<class TKey, class TValue> typename SearchList<TKey,TValue>::Iterator SearchList<TKey,TValue>::End()
 		{
-			SearchList<TKey,TValue>::Iterator it;
+			typename SearchList<TKey,TValue>::Iterator it;
 			it.m_it=m_order.end();
 			return it;
 		}
 
 		template<class TKey, class TValue> typename SearchList<TKey,TValue>::Iterator SearchList<TKey,TValue>::Find(TKey key)
 		{
-			SearchList<TKey,TValue>::Iterator it;
+			typename SearchList<TKey,TValue>::Iterator it;
 			typename std::unordered_map<TKey,typename std::list<Pair>::iterator>::iterator hash_it=m_hash.find(key);
 			if(hash_it==m_hash.end())
 			{

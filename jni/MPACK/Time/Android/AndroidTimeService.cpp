@@ -2,7 +2,7 @@
 
 #include "AndroidTimeService.hpp"
 
-#include "Log.hpp"
+#include "Debug.hpp"
 
 #include <time.h>
 #include <cstdlib>
