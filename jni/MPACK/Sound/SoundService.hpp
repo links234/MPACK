@@ -8,6 +8,7 @@ namespace MPACK
 	namespace Sound
 	{
 		class OutputMixer;
+		class AudioPlayer;
 	}
 }
 
@@ -24,19 +25,14 @@ namespace MPACK
 			Core::ReturnValue Start();
 			void Stop();
 
-			Core::ReturnValue Test();
-
 		private:
 			SLEngineItf& GetOpenSLEngine();
 
-			// OpenSL ES engine.
-			SLObjectItf m_engineObj; SLEngineItf m_engine;
-
-			// Background music player.
-			SLObjectItf mBGMPlayerObj; SLPlayItf mBGMPlayer;
-			SLBufferQueueItf mBGMPlayerQueue;
+			SLObjectItf m_engineObj;
+			SLEngineItf m_engine;
 
 			friend class OutputMixer;
+			friend class AudioPlayer;
 		};
 	}
 }
