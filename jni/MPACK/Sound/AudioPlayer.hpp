@@ -23,27 +23,6 @@ namespace MPACK
 			Core::ReturnValue Pause();
 			Core::ReturnValue Stop();
 
-			/*
-			struct SLVolumeItf_ {
-
-			SLresult (*EnableStereoPosition) (
-			SLVolumeItf self,
-			SLboolean enable
-			);
-			SLresult (*IsEnabledStereoPosition) (
-			SLVolumeItf self,
-			SLboolean *pEnable
-			);OpenSL ES 1.0.1 Specification
-			SLresult (*SetStereoPosition) (
-			SLVolumeItf self,
-			SLpermille stereoPosition
-			);
-			SLresult (*GetStereoPosition) (
-			SLVolumeItf self,
-			SLpermille *pStereoPosition
-			);
-			}; */
-
 			bool IsMuted() const;
 			Core::ReturnValue ToggleMute();
 			Core::ReturnValue Mute();
@@ -52,6 +31,14 @@ namespace MPACK
 
 			Core::ReturnValue SetVolume(double linear);
 			double GetVolume() const;
+
+			bool IsStereoEnabled() const;
+			Core::ReturnValue EnableStereo();
+			Core::ReturnValue DisableStereo();
+			Core::ReturnValue ToggleStereo();
+			Core::ReturnValue SetEnableStereo(bool enabled);
+			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
+			SLpermille GetStereoPosition() const;
 
 		private:
 			std::string m_path;
@@ -64,6 +51,9 @@ namespace MPACK
 			double m_volume;
 			SLmillibel m_mBMinVolume;
 			SLmillibel m_mBMaxVolume;
+
+			bool m_stereoEnabled;
+			SLpermille m_stereoPosition;
 		};
 	}
 }

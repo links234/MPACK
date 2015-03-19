@@ -16,7 +16,8 @@ namespace MPACK
 	{
 		AudioPlayer::AudioPlayer()
 			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
-			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0)
+			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
+			  m_stereoEnabled(false), m_stereoPosition(0)
 		{
 		}
 
@@ -177,17 +178,17 @@ namespace MPACK
 
 		Core::ReturnValue AudioPlayer::ToggleMute()
 		{
-			SetMute(!m_muted);
+			return SetMute(!m_muted);
 		}
 
 		Core::ReturnValue AudioPlayer::Mute()
 		{
-			SetMute(true);
+			return SetMute(true);
 		}
 
 		Core::ReturnValue AudioPlayer::Unmute()
 		{
-			SetMute(false);
+			return SetMute(false);
 		}
 
 		ReturnValue AudioPlayer::SetMute(SLboolean mute)
@@ -195,7 +196,7 @@ namespace MPACK
 			SLresult res = (*m_audioVolume)->SetMute(m_audioVolume,mute);
 			if (res != SL_RESULT_SUCCESS)
 			{
-				LOGE("AudioPlayer::SetMute() errpr: res = %d",res);
+				LOGE("AudioPlayer::SetMute() error: res = %d",res);
 				return RETURN_VALUE_KO;
 			}
 			m_muted=mute;
@@ -223,6 +224,55 @@ namespace MPACK
 		double AudioPlayer::GetVolume() const
 		{
 			return m_volume;
+		}
+
+		bool AudioPlayer::IsStereoEnabled() const
+		{
+			return m_stereoEnabled;
+		}
+
+		Core::ReturnValue AudioPlayer::EnableStereo()
+		{
+			return SetEnableStereo(true);
+		}
+
+		Core::ReturnValue AudioPlayer::DisableStereo()
+		{
+			return SetEnableStereo(false);
+		}
+
+		Core::ReturnValue AudioPlayer::ToggleStereo()
+		{
+			return SetEnableStereo(!m_stereoEnabled);
+		}
+
+		Core::ReturnValue AudioPlayer::SetEnableStereo(bool enabled)
+		{
+			SLresult res = (*m_audioVolume)->EnableStereoPosition(m_audioVolume, enabled);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetEnableStereo() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			m_stereoEnabled=enabled;
+			return RETURN_VALUE_OK;
+		}
+
+		Core::ReturnValue AudioPlayer::SetStereoPosition(SLpermille stereoPosition)
+		{
+			SLresult res = (*m_audioVolume)->SetStereoPosition(m_audioVolume, stereoPosition);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetStereoPosition() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			m_stereoPosition=stereoPosition;
+			return RETURN_VALUE_OK;
+		}
+
+		SLpermille AudioPlayer::GetStereoPosition() const
+		{
+			return m_stereoPosition;
 		}
 	}
 }
