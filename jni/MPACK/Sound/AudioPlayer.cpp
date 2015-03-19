@@ -17,7 +17,8 @@ namespace MPACK
 		AudioPlayer::AudioPlayer()
 			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
 			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
-			  m_stereoEnabled(false), m_stereoPosition(0)
+			  m_stereoEnabled(false), m_stereoPosition(0),
+			  m_audioBassBoost(NULL), m_bassBoostEnabled(false), m_bassBoostStrength(0)
 		{
 		}
 
@@ -62,8 +63,8 @@ namespace MPACK
 			dataSink.pFormat  = NULL;
 
 			const SLuint32 audioPlayerIIDCount = 2;
-			const SLInterfaceID audioPlayerIIDs[] =	{ SL_IID_PLAY, SL_IID_VOLUME };
-			const SLboolean audioPlayerReqs[] = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
+			const SLInterfaceID audioPlayerIIDs[] =	{ SL_IID_PLAY, SL_IID_VOLUME, SL_IID_BASSBOOST };
+			const SLboolean audioPlayerReqs[] = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
 
 			SLresult res = (*engine)->CreateAudioPlayer(engine, &m_audioPlayerObj, &dataSource, &dataSink, audioPlayerIIDCount, audioPlayerIIDs, audioPlayerReqs);
 			if (res != SL_RESULT_SUCCESS)
@@ -100,6 +101,14 @@ namespace MPACK
 			{
 				LOGE("AudioPlayer::Load() at (*m_audioVolume)->GetMaxVolumeLevel");
 				goto ERROR;
+			}
+
+			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_BASSBOOST, &m_audioBassBoost);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_BASSBOOST)");
+				LOGE("AudioPlayer::Load(): Bass boost is not supported!");
+				m_audioBassBoost=NULL;
 			}
 
 			m_path=path;
@@ -273,6 +282,55 @@ namespace MPACK
 		SLpermille AudioPlayer::GetStereoPosition() const
 		{
 			return m_stereoPosition;
+		}
+
+		bool AudioPlayer::IsBassBostEnabled() const
+		{
+			return m_bassBoostEnabled;
+		}
+
+		Core::ReturnValue AudioPlayer::EnableBassBoost()
+		{
+			return SetEnableBassBoost(true);
+		}
+
+		Core::ReturnValue AudioPlayer::DisableBassBoost()
+		{
+			return SetEnableBassBoost(false);
+		}
+
+		Core::ReturnValue AudioPlayer::ToggleBassBoost()
+		{
+			return SetEnableBassBoost(!m_bassBoostEnabled);
+		}
+
+		Core::ReturnValue AudioPlayer::SetEnableBassBoost(bool enabled)
+		{
+			SLresult res = (*m_audioBassBoost)->SetEnabled(m_audioBassBoost, enabled);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetEnableBassBoost() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			m_bassBoostEnabled=enabled;
+			return RETURN_VALUE_OK;
+		}
+
+		Core::ReturnValue AudioPlayer::SetBassBoostStrength(SLpermille bassBoostStrength)
+		{
+			SLresult res = (*m_audioBassBoost)->SetStrength(m_audioBassBoost, bassBoostStrength);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetBassBoostStrength() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			m_bassBoostStrength=bassBoostStrength;
+			return RETURN_VALUE_OK;
+		}
+
+		SLpermille AudioPlayer::GetBassBoostStrength() const
+		{
+			return m_bassBoostStrength;
 		}
 	}
 }

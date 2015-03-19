@@ -40,6 +40,14 @@ namespace MPACK
 			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
 			SLpermille GetStereoPosition() const;
 
+			bool IsBassBostEnabled() const;
+			Core::ReturnValue EnableBassBoost();
+			Core::ReturnValue DisableBassBoost();
+			Core::ReturnValue ToggleBassBoost();
+			Core::ReturnValue SetEnableBassBoost(bool enabled);
+			Core::ReturnValue SetBassBoostStrength(SLpermille bassBoostStrength);
+			SLpermille GetBassBoostStrength() const;
+
 		private:
 			std::string m_path;
 
@@ -54,6 +62,10 @@ namespace MPACK
 
 			bool m_stereoEnabled;
 			SLpermille m_stereoPosition;
+
+			SLBassBoostItf m_audioBassBoost;
+			bool m_bassBoostEnabled;
+			SLpermille m_bassBoostStrength;
 		};
 	}
 }
