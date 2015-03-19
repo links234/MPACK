@@ -2,7 +2,5 @@
 #define MPACK_SOUND_HPP
 
 #include "SoundService.hpp"
-#include "SoundFile.hpp"
-#include "Playlist.hpp"
 
 #endif
