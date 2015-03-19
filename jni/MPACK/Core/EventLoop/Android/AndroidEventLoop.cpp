@@ -39,7 +39,7 @@ namespace MPACK
 			{
 				Global::pContext->pTimeService->Update();
 				Global::pContext->pInputService->Update();
-				LOGD("AndroidEventLoop::1");
+
 				// Event processing loop.
 				while ((lResult = ALooper_pollAll(mEnabled ? 0 : -1, NULL, &lEvents, (void**) &lSource)) >= 0)
 				{
@@ -56,26 +56,22 @@ namespace MPACK
 						return RETURN_VALUE_OK;
 					}
 				}
-				LOGD("AndroidEventLoop::2");
+
 				// Steps the application.
 				if ((mEnabled) && (!mQuit))
 				{
-					LOGD("AndroidEventLoop::2.1");
 					if (m_pActivityHandler->onStep() != RETURN_VALUE_OK)
 					{
 						mQuit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
 					}
-					LOGD("AndroidEventLoop::2.2");
 					if(eglSwapBuffers(mDisplay, mSurface)!=EGL_TRUE)
 					{
 						LOGE("Error %d swapping buffers.",eglGetError());
 						mQuit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
 					}
-					LOGD("AndroidEventLoop::2.3");
 				}
-				LOGD("AndroidEventLoop::3");
 			}
 			return RETURN_VALUE_OK;
 		}

@@ -50,7 +50,7 @@ namespace Game
 			return Core::RETURN_VALUE_KO;
 		}
 
-		Global::pContext->pSoundService->PlayBGMPlaylist("@Sounds/playlist.txt");
+		Global::pContext->pSoundService->Test();
 
 		Global::pContext->pInputService->Reset();
 
@@ -100,25 +100,21 @@ namespace Game
 
     Core::ReturnValue Application::onStep()
     {
-    	LOGD("Application::onStep() 1");
     	// Update clock
     	const GLfloat &delta = Global::pContext->pTimeService->Elapsed();
 
-    	LOGD("Application::onStep() 2");
-
     	// Debug messages here
 		Debug::Print(Global::pFont,"Frame time: %f (%f FPS)",delta,1.0f/delta);
-		LOGD("Application::onStep() 3");
+
     	// Update per-frame debug messages
     	Debug::InitFrame();
-    	LOGD("Application::onStep() 4");
+
     	// Updates services
     	if(!m_pSavedGameState)
     	{
     		Global::pContext->pPhysicsService->Update(delta);
     	}
     	Global::pContext->pGraphicsService->Update(delta);
-    	LOGD("Application::onStep() 5");
 
     	// Event dispatcher
     	int action=m_pGameState->Update();
@@ -162,10 +158,10 @@ namespace Game
 				m_pGameState->Update();
 			break;
     	}
-    	LOGD("Application::onStep() 6");
+
     	// Render current game state
     	m_pGameState->Render();
-    	LOGD("Application::onStep() 7");
+
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	CursorDrawer::GetInstance()->Update();
     	CursorDrawer::GetInstance()->Render();
