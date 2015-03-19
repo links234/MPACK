@@ -4,6 +4,7 @@
 #include "Global.hpp"
 #include "Context.hpp"
 #include "OutputMixer.hpp"
+#include "Math.hpp"
 
 using namespace std;
 using namespace MPACK::Core;
@@ -15,7 +16,7 @@ namespace MPACK
 	{
 		AudioPlayer::AudioPlayer()
 			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
-			  m_muted(false)
+			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0)
 		{
 		}
 
@@ -88,6 +89,15 @@ namespace MPACK
 			if (res != SL_RESULT_SUCCESS)
 			{
 				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_VOLUME)");
+				goto ERROR;
+			}
+
+			m_mBMinVolume = SL_MILLIBEL_MIN;
+			m_mBMaxVolume = SL_MILLIBEL_MIN;
+			res = (*m_audioVolume)->GetMaxVolumeLevel(m_audioVolume, &m_mBMaxVolume);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::Load() at (*m_audioVolume)->GetMaxVolumeLevel");
 				goto ERROR;
 			}
 
@@ -190,6 +200,29 @@ namespace MPACK
 			}
 			m_muted=mute;
 			return RETURN_VALUE_OK;
+		}
+
+		Core::ReturnValue AudioPlayer::SetVolume(double linear)
+		{
+			int dBVolume = 20*log10(linear);
+			SLmillibel mBVolume = dBVolume*100;
+
+			mBVolume = Math::Misc<SLmillibel>::Clamp(mBVolume,m_mBMinVolume,m_mBMaxVolume);
+
+			SLresult res = (*m_audioVolume)->SetVolumeLevel(m_audioVolume, mBVolume);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetVolume() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+
+			m_volume=linear;
+			return RETURN_VALUE_OK;
+		}
+
+		double AudioPlayer::GetVolume() const
+		{
+			return m_volume;
 		}
 	}
 }

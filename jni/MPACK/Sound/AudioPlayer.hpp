@@ -25,18 +25,6 @@ namespace MPACK
 
 			/*
 			struct SLVolumeItf_ {
-			SLresult (*SetVolumeLevel) (
-			SLVolumeItf self,
-			SLmillibel level
-			);
-			SLresult (*GetVolumeLevel) (
-			SLVolumeItf self,
-			SLmillibel *pLevel
-			);
-			SLresult (*GetMaxVolumeLevel) (
-			SLVolumeItf self,
-			SLmillibel *pMaxLevel
-			);
 
 			SLresult (*EnableStereoPosition) (
 			SLVolumeItf self,
@@ -62,6 +50,9 @@ namespace MPACK
 			Core::ReturnValue Unmute();
 			Core::ReturnValue SetMute(SLboolean mute);
 
+			Core::ReturnValue SetVolume(double linear);
+			double GetVolume() const;
+
 		private:
 			std::string m_path;
 
@@ -70,6 +61,9 @@ namespace MPACK
 			SLVolumeItf m_audioVolume;
 
 			bool m_muted;
+			double m_volume;
+			SLmillibel m_mBMinVolume;
+			SLmillibel m_mBMaxVolume;
 		};
 	}
 }
