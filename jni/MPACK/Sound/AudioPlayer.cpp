@@ -14,7 +14,8 @@ namespace MPACK
 	namespace Sound
 	{
 		AudioPlayer::AudioPlayer()
-			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL)
+			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
+			  m_muted(false)
 		{
 		}
 
@@ -58,9 +59,9 @@ namespace MPACK
 			dataSink.pLocator = &dataLocatorOut;
 			dataSink.pFormat  = NULL;
 
-			const SLuint32 audioPlayerIIDCount = 1;
-			const SLInterfaceID audioPlayerIIDs[] =	{ SL_IID_PLAY };
-			const SLboolean audioPlayerReqs[] = { SL_BOOLEAN_TRUE };
+			const SLuint32 audioPlayerIIDCount = 2;
+			const SLInterfaceID audioPlayerIIDs[] =	{ SL_IID_PLAY, SL_IID_VOLUME };
+			const SLboolean audioPlayerReqs[] = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
 
 			SLresult res = (*engine)->CreateAudioPlayer(engine, &m_audioPlayerObj, &dataSource, &dataSink, audioPlayerIIDCount, audioPlayerIIDs, audioPlayerReqs);
 			if (res != SL_RESULT_SUCCESS)
@@ -79,7 +80,14 @@ namespace MPACK
 			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_PLAY, &m_audioPlayer);
 			if (res != SL_RESULT_SUCCESS)
 			{
-				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface");
+				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_PLAY)");
+				goto ERROR;
+			}
+
+			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_VOLUME, &m_audioVolume);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_VOLUME)");
 				goto ERROR;
 			}
 
@@ -98,6 +106,7 @@ namespace MPACK
 				(*m_audioPlayerObj)->Destroy(m_audioPlayerObj);
 				m_audioPlayerObj = NULL;
 				m_audioPlayer = NULL;
+				m_audioVolume = NULL;
 			}
 		}
 
@@ -148,6 +157,38 @@ namespace MPACK
 				LOGE("AudioPlayer::Stop() error: res = %d",res);
 				return RETURN_VALUE_KO;
 			}
+			return RETURN_VALUE_OK;
+		}
+
+		bool AudioPlayer::IsMuted() const
+		{
+			return m_muted;
+		}
+
+		Core::ReturnValue AudioPlayer::ToggleMute()
+		{
+			SetMute(!m_muted);
+		}
+
+		Core::ReturnValue AudioPlayer::Mute()
+		{
+			SetMute(true);
+		}
+
+		Core::ReturnValue AudioPlayer::Unmute()
+		{
+			SetMute(false);
+		}
+
+		ReturnValue AudioPlayer::SetMute(SLboolean mute)
+		{
+			SLresult res = (*m_audioVolume)->SetMute(m_audioVolume,mute);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetMute() errpr: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			m_muted=mute;
 			return RETURN_VALUE_OK;
 		}
 	}
