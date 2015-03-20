@@ -23,6 +23,9 @@ namespace MPACK
 			Core::ReturnValue Pause();
 			Core::ReturnValue Stop();
 
+			SLmillisecond GetPosition();
+			SLmillisecond GetDuration();
+
 			bool IsMuted() const;
 			Core::ReturnValue ToggleMute();
 			Core::ReturnValue Mute();

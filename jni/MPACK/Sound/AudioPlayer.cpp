@@ -232,6 +232,30 @@ namespace MPACK
 			return RETURN_VALUE_OK;
 		}
 
+		SLmillisecond AudioPlayer::GetPosition()
+		{
+			SLmillisecond position;
+			SLresult res = (*m_audioPlayer)->GetPosition(m_audioPlayer, &position);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::GetPosition() error: res = %d",res);
+				return 0;
+			}
+			return position;
+		}
+
+		SLmillisecond AudioPlayer::GetDuration()
+		{
+			SLmillisecond duration;
+			SLresult res = (*m_audioPlayer)->GetDuration(m_audioPlayer, &duration);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::GetDuration() error: res = %d",res);
+				return 0;
+			}
+			return duration;
+		}
+
 		bool AudioPlayer::IsMuted() const
 		{
 			return m_muted;
