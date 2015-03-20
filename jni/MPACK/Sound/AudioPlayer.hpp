@@ -48,6 +48,9 @@ namespace MPACK
 			Core::ReturnValue SetBassBoostStrength(SLpermille bassBoostStrength);
 			SLpermille GetBassBoostStrength() const;
 
+			Core::ReturnValue SetPlaybackRate(double rate);
+			double GetPlaybackRate() const;
+
 		private:
 			std::string m_path;
 
@@ -66,6 +69,11 @@ namespace MPACK
 			SLBassBoostItf m_audioBassBoost;
 			bool m_bassBoostEnabled;
 			SLpermille m_bassBoostStrength;
+
+			SLPlaybackRateItf m_audioPlaybackRate;
+			double m_playbackRate;
+			double m_minPlaybackRate;
+			double m_maxPlaybackRate;
 		};
 	}
 }

@@ -18,7 +18,8 @@ namespace MPACK
 			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
 			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
 			  m_stereoEnabled(false), m_stereoPosition(0),
-			  m_audioBassBoost(NULL), m_bassBoostEnabled(false), m_bassBoostStrength(0)
+			  m_audioBassBoost(NULL), m_bassBoostEnabled(false), m_bassBoostStrength(0),
+			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0)
 		{
 		}
 
@@ -62,9 +63,22 @@ namespace MPACK
 			dataSink.pLocator = &dataLocatorOut;
 			dataSink.pFormat  = NULL;
 
-			const SLuint32 audioPlayerIIDCount = 2;
-			const SLInterfaceID audioPlayerIIDs[] =	{ SL_IID_PLAY, SL_IID_VOLUME, SL_IID_BASSBOOST };
-			const SLboolean audioPlayerReqs[] = { SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE, SL_BOOLEAN_TRUE };
+			const SLuint32 audioPlayerIIDCount = 10;
+			SLInterfaceID audioPlayerIIDs[audioPlayerIIDCount];
+			SLboolean audioPlayerReqs[audioPlayerIIDCount];
+			for(int indexIID=0;indexIID<audioPlayerIIDCount;++indexIID)
+			{
+				audioPlayerIIDs[indexIID]=SL_IID_NULL;
+				audioPlayerReqs[indexIID]=SL_BOOLEAN_FALSE;
+			}
+			audioPlayerIIDs[0]=SL_IID_PLAY;
+			audioPlayerReqs[0]=SL_BOOLEAN_TRUE;
+			audioPlayerIIDs[1]=SL_IID_VOLUME;
+			audioPlayerReqs[1]=SL_BOOLEAN_TRUE;
+			audioPlayerIIDs[2]=SL_IID_BASSBOOST;
+			audioPlayerReqs[2]=SL_BOOLEAN_FALSE;
+			audioPlayerIIDs[3]=SL_IID_PLAYBACKRATE;
+			audioPlayerReqs[3]=SL_BOOLEAN_FALSE;
 
 			SLresult res = (*engine)->CreateAudioPlayer(engine, &m_audioPlayerObj, &dataSource, &dataSink, audioPlayerIIDCount, audioPlayerIIDs, audioPlayerReqs);
 			if (res != SL_RESULT_SUCCESS)
@@ -107,8 +121,27 @@ namespace MPACK
 			if (res != SL_RESULT_SUCCESS)
 			{
 				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_BASSBOOST)");
-				LOGE("AudioPlayer::Load(): Bass boost is not supported!");
+				LOGE("AudioPlayer::Load(): BassBoostItf is not supported!");
 				m_audioBassBoost=NULL;
+			}
+
+			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_PLAYBACKRATE, &m_audioPlaybackRate);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_PLAYBACKRATE)");
+				LOGE("AudioPlayer::Load(): PlaybackRateItf is not supported!");
+				m_audioPlaybackRate=NULL;
+			}
+			else
+			{
+				m_minPlaybackRate=0.5;
+				m_maxPlaybackRate=2.0;
+
+				res = (*m_audioPlaybackRate)->SetPropertyConstraints(m_audioPlaybackRate, SL_RATEPROP_PITCHCORAUDIO);
+				if(res != SL_RESULT_SUCCESS)
+				{
+					LOGE("AudioPlayer::Load() at (*m_audioPlaybackRate)->SetPropertyConstraints");
+				}
 			}
 
 			m_path=path;
@@ -331,6 +364,25 @@ namespace MPACK
 		SLpermille AudioPlayer::GetBassBoostStrength() const
 		{
 			return m_bassBoostStrength;
+		}
+
+		Core::ReturnValue AudioPlayer::SetPlaybackRate(double rate)
+		{
+			rate = Math::Misc<double>::Clamp(rate,m_minPlaybackRate,m_maxPlaybackRate);
+
+			SLresult res = (*m_audioPlaybackRate)->SetRate(m_audioPlaybackRate, (SLpermille)(rate*1000));
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetPlaybackRate() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			m_playbackRate=rate;
+			return RETURN_VALUE_OK;
+		}
+
+		double AudioPlayer::GetPlaybackRate() const
+		{
+			return m_playbackRate;
 		}
 	}
 }
