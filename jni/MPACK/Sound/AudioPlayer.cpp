@@ -1,9 +1,10 @@
 #include "AudioPlayer.hpp"
 
 #include "SoundService.hpp"
-#include "Global.hpp"
-#include "Context.hpp"
 #include "OutputMixer.hpp"
+#include "BassBoostController.hpp"
+#include "Context.hpp"
+#include "Global.hpp"
 #include "Math.hpp"
 
 using namespace std;
@@ -17,8 +18,7 @@ namespace MPACK
 		AudioPlayer::AudioPlayer()
 			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
 			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
-			  m_stereoEnabled(false), m_stereoPosition(0),
-			  m_audioBassBoost(NULL), m_bassBoostEnabled(false), m_bassBoostStrength(0),
+			  m_stereoEnabled(false), m_stereoPosition(0), m_pBassBoostController(NULL),
 			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0),
 			  m_audioPitch(NULL), m_pitch(1000), m_minPitch(1000), m_maxPitch(1000),
 			  m_audioSeek(NULL), m_looping(false)
@@ -37,6 +37,8 @@ namespace MPACK
 
 		ReturnValue AudioPlayer::Load(string path)
 		{
+			Unload();
+
 			SLEngineItf &engine=Global::pContext->pSoundService->GetOpenSLEngine();
 
 			AAsset* asset = AAssetManager_open(pAAssetManager, path.c_str(), AASSET_MODE_UNKNOWN);
@@ -123,13 +125,7 @@ namespace MPACK
 				goto ERROR;
 			}
 
-			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_BASSBOOST, &m_audioBassBoost);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_BASSBOOST)");
-				LOGE("AudioPlayer::Load(): BassBoostItf is not supported: res = %d",res);
-				m_audioBassBoost=NULL;
-			}
+			//BassBoostController
 
 			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_PLAYBACKRATE, &m_audioPlaybackRate);
 			if (res != SL_RESULT_SUCCESS)
@@ -186,6 +182,11 @@ namespace MPACK
 		{
 			if (m_audioPlayerObj != NULL)
 			{
+				if(m_pBassBoostController!=BassBoostController::GetSentinel())
+				{
+					delete m_pBassBoostController;
+					m_pBassBoostController=NULL;
+				}
 				(*m_audioPlayerObj)->Destroy(m_audioPlayerObj);
 				m_audioPlayerObj = NULL;
 				m_audioPlayer = NULL;
@@ -372,53 +373,9 @@ namespace MPACK
 			return m_stereoPosition;
 		}
 
-		bool AudioPlayer::IsBassBostEnabled() const
+		BassBoostController* AudioPlayer::BassBoost()
 		{
-			return m_bassBoostEnabled;
-		}
-
-		ReturnValue AudioPlayer::EnableBassBoost()
-		{
-			return SetEnableBassBoost(true);
-		}
-
-		ReturnValue AudioPlayer::DisableBassBoost()
-		{
-			return SetEnableBassBoost(false);
-		}
-
-		ReturnValue AudioPlayer::ToggleBassBoost()
-		{
-			return SetEnableBassBoost(!m_bassBoostEnabled);
-		}
-
-		ReturnValue AudioPlayer::SetEnableBassBoost(bool enabled)
-		{
-			SLresult res = (*m_audioBassBoost)->SetEnabled(m_audioBassBoost, enabled);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetEnableBassBoost() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			m_bassBoostEnabled=enabled;
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue AudioPlayer::SetBassBoostStrength(SLpermille bassBoostStrength)
-		{
-			SLresult res = (*m_audioBassBoost)->SetStrength(m_audioBassBoost, bassBoostStrength);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetBassBoostStrength() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			m_bassBoostStrength=bassBoostStrength;
-			return RETURN_VALUE_OK;
-		}
-
-		SLpermille AudioPlayer::GetBassBoostStrength() const
-		{
-			return m_bassBoostStrength;
+			return m_pBassBoostController;
 		}
 
 		ReturnValue AudioPlayer::SetPlaybackRate(double rate)

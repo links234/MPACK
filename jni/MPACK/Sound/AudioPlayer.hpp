@@ -7,6 +7,14 @@ namespace MPACK
 {
 	namespace Sound
 	{
+		class BassBoostController;
+	}
+}
+
+namespace MPACK
+{
+	namespace Sound
+	{
 		class AudioPlayer
 		{
 		public:
@@ -43,13 +51,7 @@ namespace MPACK
 			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
 			SLpermille GetStereoPosition() const;
 
-			bool IsBassBostEnabled() const;
-			Core::ReturnValue EnableBassBoost();
-			Core::ReturnValue DisableBassBoost();
-			Core::ReturnValue ToggleBassBoost();
-			Core::ReturnValue SetEnableBassBoost(bool enabled);
-			Core::ReturnValue SetBassBoostStrength(SLpermille bassBoostStrength);
-			SLpermille GetBassBoostStrength() const;
+			BassBoostController* BassBoost();
 
 			Core::ReturnValue SetPlaybackRate(double rate);
 			double GetPlaybackRate() const;
@@ -79,9 +81,7 @@ namespace MPACK
 			bool m_stereoEnabled;
 			SLpermille m_stereoPosition;
 
-			SLBassBoostItf m_audioBassBoost;
-			bool m_bassBoostEnabled;
-			SLpermille m_bassBoostStrength;
+			BassBoostController *m_pBassBoostController;
 
 			SLPlaybackRateItf m_audioPlaybackRate;
 			double m_playbackRate;
