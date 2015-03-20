@@ -51,6 +51,9 @@ namespace MPACK
 			Core::ReturnValue SetPlaybackRate(double rate);
 			double GetPlaybackRate() const;
 
+			Core::ReturnValue SetPitch(SLpermille pitch);
+			SLpermille GetPitch() const;
+
 		private:
 			std::string m_path;
 
@@ -74,6 +77,11 @@ namespace MPACK
 			double m_playbackRate;
 			double m_minPlaybackRate;
 			double m_maxPlaybackRate;
+
+			SLPitchItf m_audioPitch;
+			SLpermille m_minPitch;
+			SLpermille m_maxPitch;
+			SLpermille m_pitch;
 		};
 	}
 }

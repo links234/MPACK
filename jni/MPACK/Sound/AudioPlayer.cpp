@@ -19,7 +19,8 @@ namespace MPACK
 			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
 			  m_stereoEnabled(false), m_stereoPosition(0),
 			  m_audioBassBoost(NULL), m_bassBoostEnabled(false), m_bassBoostStrength(0),
-			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0)
+			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0),
+			  m_audioPitch(NULL), m_pitch(1000), m_minPitch(1000), m_maxPitch(1000)
 		{
 		}
 
@@ -79,6 +80,8 @@ namespace MPACK
 			audioPlayerReqs[2]=SL_BOOLEAN_FALSE;
 			audioPlayerIIDs[3]=SL_IID_PLAYBACKRATE;
 			audioPlayerReqs[3]=SL_BOOLEAN_FALSE;
+			audioPlayerIIDs[4]=SL_IID_PITCH;
+			audioPlayerReqs[4]=SL_BOOLEAN_FALSE;
 
 			SLresult res = (*engine)->CreateAudioPlayer(engine, &m_audioPlayerObj, &dataSource, &dataSink, audioPlayerIIDCount, audioPlayerIIDs, audioPlayerReqs);
 			if (res != SL_RESULT_SUCCESS)
@@ -121,7 +124,7 @@ namespace MPACK
 			if (res != SL_RESULT_SUCCESS)
 			{
 				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_BASSBOOST)");
-				LOGE("AudioPlayer::Load(): BassBoostItf is not supported!");
+				LOGE("AudioPlayer::Load(): BassBoostItf is not supported: res = %d",res);
 				m_audioBassBoost=NULL;
 			}
 
@@ -129,7 +132,7 @@ namespace MPACK
 			if (res != SL_RESULT_SUCCESS)
 			{
 				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_PLAYBACKRATE)");
-				LOGE("AudioPlayer::Load(): PlaybackRateItf is not supported!");
+				LOGE("AudioPlayer::Load(): PlaybackRateItf is not supported: res = %d",res);
 				m_audioPlaybackRate=NULL;
 			}
 			else
@@ -137,10 +140,26 @@ namespace MPACK
 				m_minPlaybackRate=0.5;
 				m_maxPlaybackRate=2.0;
 
-				res = (*m_audioPlaybackRate)->SetPropertyConstraints(m_audioPlaybackRate, SL_RATEPROP_PITCHCORAUDIO);
+				res = (*m_audioPlaybackRate)->SetPropertyConstraints(m_audioPlaybackRate, SL_RATEPROP_NOPITCHCORAUDIO);
 				if(res != SL_RESULT_SUCCESS)
 				{
 					LOGE("AudioPlayer::Load() at (*m_audioPlaybackRate)->SetPropertyConstraints");
+				}
+			}
+
+			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_PITCH, &m_audioPitch);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_PITCH)");
+				LOGE("AudioPlayer::Load(): PitchItf is not supported: res = %d",res);
+				m_audioPitch=NULL;
+			}
+			else
+			{
+				SLresult res = (*m_audioPitch)->GetPitchCapabilities(m_audioPitch, &m_minPitch, &m_maxPitch);
+				if (res == SL_RESULT_SUCCESS)
+				{
+					LOGE("AudioPlayer::Load() at (*m_audioPlaybackRate)->GetPitchCapabilities");
 				}
 			}
 
@@ -383,6 +402,24 @@ namespace MPACK
 		double AudioPlayer::GetPlaybackRate() const
 		{
 			return m_playbackRate;
+		}
+
+		Core::ReturnValue AudioPlayer::SetPitch(SLpermille pitch)
+		{
+			pitch=Math::Misc<SLpermille>::Clamp(pitch,m_minPitch,m_maxPitch);
+			SLresult res = (*m_audioPitch)->SetPitch(m_audioPitch, pitch);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetPitch() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			m_pitch=pitch;
+			return RETURN_VALUE_OK;
+		}
+
+		SLpermille AudioPlayer::GetPitch() const
+		{
+			return m_pitch;
 		}
 	}
 }
