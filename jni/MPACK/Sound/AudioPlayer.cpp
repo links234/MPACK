@@ -20,7 +20,8 @@ namespace MPACK
 			  m_stereoEnabled(false), m_stereoPosition(0),
 			  m_audioBassBoost(NULL), m_bassBoostEnabled(false), m_bassBoostStrength(0),
 			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0),
-			  m_audioPitch(NULL), m_pitch(1000), m_minPitch(1000), m_maxPitch(1000)
+			  m_audioPitch(NULL), m_pitch(1000), m_minPitch(1000), m_maxPitch(1000),
+			  m_audioSeek(NULL)
 		{
 		}
 
@@ -29,12 +30,12 @@ namespace MPACK
 			Unload();
 		}
 
-		std::string AudioPlayer::GetPath() const
+		string AudioPlayer::GetPath() const
 		{
 			return m_path;
 		}
 
-		Core::ReturnValue AudioPlayer::Load(string path)
+		ReturnValue AudioPlayer::Load(string path)
 		{
 			SLEngineItf &engine=Global::pContext->pSoundService->GetOpenSLEngine();
 
@@ -82,6 +83,8 @@ namespace MPACK
 			audioPlayerReqs[3]=SL_BOOLEAN_FALSE;
 			audioPlayerIIDs[4]=SL_IID_PITCH;
 			audioPlayerReqs[4]=SL_BOOLEAN_FALSE;
+			audioPlayerIIDs[5]=SL_IID_SEEK;
+			audioPlayerReqs[5]=SL_BOOLEAN_FALSE;
 
 			SLresult res = (*engine)->CreateAudioPlayer(engine, &m_audioPlayerObj, &dataSource, &dataSink, audioPlayerIIDCount, audioPlayerIIDs, audioPlayerReqs);
 			if (res != SL_RESULT_SUCCESS)
@@ -163,6 +166,14 @@ namespace MPACK
 				}
 			}
 
+			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_SEEK, &m_audioSeek);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_SEEK)");
+				LOGE("AudioPlayer::Load(): SeekItf is not supported: res = %d",res);
+				m_audioPlaybackRate=NULL;
+			}
+
 			m_path=path;
 			return RETURN_VALUE_OK;
 
@@ -179,6 +190,7 @@ namespace MPACK
 				m_audioPlayerObj = NULL;
 				m_audioPlayer = NULL;
 				m_audioVolume = NULL;
+				m_path = "";
 			}
 		}
 
@@ -261,17 +273,17 @@ namespace MPACK
 			return m_muted;
 		}
 
-		Core::ReturnValue AudioPlayer::ToggleMute()
+		ReturnValue AudioPlayer::ToggleMute()
 		{
 			return SetMute(!m_muted);
 		}
 
-		Core::ReturnValue AudioPlayer::Mute()
+		ReturnValue AudioPlayer::Mute()
 		{
 			return SetMute(true);
 		}
 
-		Core::ReturnValue AudioPlayer::Unmute()
+		ReturnValue AudioPlayer::Unmute()
 		{
 			return SetMute(false);
 		}
@@ -288,7 +300,7 @@ namespace MPACK
 			return RETURN_VALUE_OK;
 		}
 
-		Core::ReturnValue AudioPlayer::SetVolume(double linear)
+		ReturnValue AudioPlayer::SetVolume(double linear)
 		{
 			int dBVolume = 20*log10(linear);
 			SLmillibel mBVolume = dBVolume*100;
@@ -316,22 +328,22 @@ namespace MPACK
 			return m_stereoEnabled;
 		}
 
-		Core::ReturnValue AudioPlayer::EnableStereo()
+		ReturnValue AudioPlayer::EnableStereo()
 		{
 			return SetEnableStereo(true);
 		}
 
-		Core::ReturnValue AudioPlayer::DisableStereo()
+		ReturnValue AudioPlayer::DisableStereo()
 		{
 			return SetEnableStereo(false);
 		}
 
-		Core::ReturnValue AudioPlayer::ToggleStereo()
+		ReturnValue AudioPlayer::ToggleStereo()
 		{
 			return SetEnableStereo(!m_stereoEnabled);
 		}
 
-		Core::ReturnValue AudioPlayer::SetEnableStereo(bool enabled)
+		ReturnValue AudioPlayer::SetEnableStereo(bool enabled)
 		{
 			SLresult res = (*m_audioVolume)->EnableStereoPosition(m_audioVolume, enabled);
 			if (res != SL_RESULT_SUCCESS)
@@ -343,7 +355,7 @@ namespace MPACK
 			return RETURN_VALUE_OK;
 		}
 
-		Core::ReturnValue AudioPlayer::SetStereoPosition(SLpermille stereoPosition)
+		ReturnValue AudioPlayer::SetStereoPosition(SLpermille stereoPosition)
 		{
 			SLresult res = (*m_audioVolume)->SetStereoPosition(m_audioVolume, stereoPosition);
 			if (res != SL_RESULT_SUCCESS)
@@ -365,22 +377,22 @@ namespace MPACK
 			return m_bassBoostEnabled;
 		}
 
-		Core::ReturnValue AudioPlayer::EnableBassBoost()
+		ReturnValue AudioPlayer::EnableBassBoost()
 		{
 			return SetEnableBassBoost(true);
 		}
 
-		Core::ReturnValue AudioPlayer::DisableBassBoost()
+		ReturnValue AudioPlayer::DisableBassBoost()
 		{
 			return SetEnableBassBoost(false);
 		}
 
-		Core::ReturnValue AudioPlayer::ToggleBassBoost()
+		ReturnValue AudioPlayer::ToggleBassBoost()
 		{
 			return SetEnableBassBoost(!m_bassBoostEnabled);
 		}
 
-		Core::ReturnValue AudioPlayer::SetEnableBassBoost(bool enabled)
+		ReturnValue AudioPlayer::SetEnableBassBoost(bool enabled)
 		{
 			SLresult res = (*m_audioBassBoost)->SetEnabled(m_audioBassBoost, enabled);
 			if (res != SL_RESULT_SUCCESS)
@@ -392,7 +404,7 @@ namespace MPACK
 			return RETURN_VALUE_OK;
 		}
 
-		Core::ReturnValue AudioPlayer::SetBassBoostStrength(SLpermille bassBoostStrength)
+		ReturnValue AudioPlayer::SetBassBoostStrength(SLpermille bassBoostStrength)
 		{
 			SLresult res = (*m_audioBassBoost)->SetStrength(m_audioBassBoost, bassBoostStrength);
 			if (res != SL_RESULT_SUCCESS)
@@ -409,7 +421,7 @@ namespace MPACK
 			return m_bassBoostStrength;
 		}
 
-		Core::ReturnValue AudioPlayer::SetPlaybackRate(double rate)
+		ReturnValue AudioPlayer::SetPlaybackRate(double rate)
 		{
 			rate = Math::Misc<double>::Clamp(rate,m_minPlaybackRate,m_maxPlaybackRate);
 
@@ -428,7 +440,7 @@ namespace MPACK
 			return m_playbackRate;
 		}
 
-		Core::ReturnValue AudioPlayer::SetPitch(SLpermille pitch)
+		ReturnValue AudioPlayer::SetPitch(SLpermille pitch)
 		{
 			pitch=Math::Misc<SLpermille>::Clamp(pitch,m_minPitch,m_maxPitch);
 			SLresult res = (*m_audioPitch)->SetPitch(m_audioPitch, pitch);
@@ -444,6 +456,17 @@ namespace MPACK
 		SLpermille AudioPlayer::GetPitch() const
 		{
 			return m_pitch;
+		}
+
+		ReturnValue AudioPlayer::SetPosition(SLmillisecond position)
+		{
+			SLresult res = (*m_audioSeek)->SetPosition(m_audioSeek, position, SL_SEEKMODE_FAST);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetPosition() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			return RETURN_VALUE_OK;
 		}
 	}
 }

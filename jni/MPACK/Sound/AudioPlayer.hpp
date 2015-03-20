@@ -57,6 +57,8 @@ namespace MPACK
 			Core::ReturnValue SetPitch(SLpermille pitch);
 			SLpermille GetPitch() const;
 
+			Core::ReturnValue SetPosition(SLmillisecond position);
+
 		private:
 			std::string m_path;
 
@@ -85,6 +87,8 @@ namespace MPACK
 			SLpermille m_minPitch;
 			SLpermille m_maxPitch;
 			SLpermille m_pitch;
+
+			SLSeekItf m_audioSeek;
 		};
 	}
 }
