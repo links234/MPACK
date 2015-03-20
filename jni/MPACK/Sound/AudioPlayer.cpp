@@ -21,7 +21,7 @@ namespace MPACK
 			  m_audioBassBoost(NULL), m_bassBoostEnabled(false), m_bassBoostStrength(0),
 			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0),
 			  m_audioPitch(NULL), m_pitch(1000), m_minPitch(1000), m_maxPitch(1000),
-			  m_audioSeek(NULL)
+			  m_audioSeek(NULL), m_looping(false)
 		{
 		}
 
@@ -466,6 +466,38 @@ namespace MPACK
 				LOGE("AudioPlayer::SetPosition() error: res = %d",res);
 				return RETURN_VALUE_KO;
 			}
+			return RETURN_VALUE_OK;
+		}
+
+		bool AudioPlayer::IsLoopingEnabled() const
+		{
+			return m_looping;
+		}
+
+		Core::ReturnValue AudioPlayer::EnableLooping()
+		{
+			return SetEnableLooping(true);
+		}
+
+		Core::ReturnValue AudioPlayer::DisableLooping()
+		{
+			return SetEnableLooping(false);
+		}
+
+		Core::ReturnValue AudioPlayer::ToggleLooping()
+		{
+			return SetEnableLooping(!m_looping);
+		}
+
+		Core::ReturnValue AudioPlayer::SetEnableLooping(bool enabled)
+		{
+			SLresult res = (*m_audioSeek)->SetLoop(m_audioSeek, enabled, 0, SL_TIME_UNKNOWN);
+			if (res != SL_RESULT_SUCCESS)
+			{
+				LOGE("AudioPlayer::SetEnableLooping() error: res = %d",res);
+				return RETURN_VALUE_KO;
+			}
+			m_looping = enabled;
 			return RETURN_VALUE_OK;
 		}
 	}

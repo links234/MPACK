@@ -58,6 +58,11 @@ namespace MPACK
 			SLpermille GetPitch() const;
 
 			Core::ReturnValue SetPosition(SLmillisecond position);
+			bool IsLoopingEnabled() const;
+			Core::ReturnValue EnableLooping();
+			Core::ReturnValue DisableLooping();
+			Core::ReturnValue ToggleLooping();
+			Core::ReturnValue SetEnableLooping(bool enabled);
 
 		private:
 			std::string m_path;
@@ -89,6 +94,7 @@ namespace MPACK
 			SLpermille m_pitch;
 
 			SLSeekItf m_audioSeek;
+			bool m_looping;
 		};
 	}
 }
