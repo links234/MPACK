@@ -39,7 +39,7 @@ namespace MPACK
 			SLresult res = (*m_interface)->SetPosition(m_interface, position, SL_SEEKMODE_FAST);
 			if (res != SL_RESULT_SUCCESS)
 			{
-				LOGE("AudioPlayer::SetPosition() error: res = %d",res);
+				LOGE("SeekController::SetPosition() error: res = %d",res);
 				return RETURN_VALUE_KO;
 			}
 			return RETURN_VALUE_OK;
