@@ -8,6 +8,7 @@ namespace MPACK
 	namespace Sound
 	{
 		class BassBoostController;
+		class PlaybackRateController;
 		class PitchController;
 		class SeekController;
 	}
@@ -53,14 +54,10 @@ namespace MPACK
 			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
 			SLpermille GetStereoPosition() const;
 
-			BassBoostController* BassBoost() const;
-
-			Core::ReturnValue SetPlaybackRate(double rate);
-			double GetPlaybackRate() const;
-
-			PitchController* Pitch() const;
-
-			SeekController* Seek() const;
+			BassBoostController* 	BassBoost() const;
+			PlaybackRateController* PlaybackRate() const;
+			PitchController* 		Pitch() const;
+			SeekController* 		Seek() const;
 
 		private:
 			std::string m_path;
@@ -79,10 +76,7 @@ namespace MPACK
 
 			BassBoostController *m_pBassBoostController;
 
-			SLPlaybackRateItf m_audioPlaybackRate;
-			double m_playbackRate;
-			double m_minPlaybackRate;
-			double m_maxPlaybackRate;
+			PlaybackRateController *m_pPlaybackRateController;
 
 			PitchController *m_pPitchController;
 

@@ -8,6 +8,7 @@
 
 #include "BassBoostController.hpp"
 #include "PitchController.hpp"
+#include "PlaybackRateController.hpp"
 #include "SeekController.hpp"
 
 using namespace std;
@@ -23,7 +24,7 @@ namespace MPACK
 			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
 			  m_stereoEnabled(false), m_stereoPosition(0),
 			  m_pBassBoostController(BassBoostController::GetSentinel()),
-			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0),
+			  m_pPlaybackRateController(PlaybackRateController::GetSentinel()),
 			  m_pPitchController(PitchController::GetSentinel()),
 			  m_pSeekController(SeekController::GetSentinel())
 		{
@@ -131,24 +132,7 @@ namespace MPACK
 
 			m_pBassBoostController = new BassBoostController(m_audioPlayerObj);
 
-			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_PLAYBACKRATE, &m_audioPlaybackRate);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_PLAYBACKRATE)");
-				LOGE("AudioPlayer::Load(): PlaybackRateItf is not supported: res = %d",res);
-				m_audioPlaybackRate=NULL;
-			}
-			else
-			{
-				m_minPlaybackRate=0.5;
-				m_maxPlaybackRate=2.0;
-
-				res = (*m_audioPlaybackRate)->SetPropertyConstraints(m_audioPlaybackRate, SL_RATEPROP_NOPITCHCORAUDIO);
-				if(res != SL_RESULT_SUCCESS)
-				{
-					LOGE("AudioPlayer::Load() at (*m_audioPlaybackRate)->SetPropertyConstraints");
-				}
-			}
+			m_pPlaybackRateController = new PlaybackRateController(m_audioPlayerObj);
 
 			m_pPitchController = new PitchController(m_audioPlayerObj);
 
@@ -170,6 +154,11 @@ namespace MPACK
 				{
 					delete m_pBassBoostController;
 					m_pBassBoostController=BassBoostController::GetSentinel();
+				}
+				if(m_pPlaybackRateController!=PlaybackRateController::GetSentinel())
+				{
+					delete m_pPlaybackRateController;
+					m_pPlaybackRateController=PlaybackRateController::GetSentinel();
 				}
 				if(m_pPitchController!=PitchController::GetSentinel())
 				{
@@ -370,23 +359,9 @@ namespace MPACK
 			return m_pBassBoostController;
 		}
 
-		ReturnValue AudioPlayer::SetPlaybackRate(double rate)
+		PlaybackRateController* AudioPlayer::PlaybackRate() const
 		{
-			rate = Math::Misc<double>::Clamp(rate,m_minPlaybackRate,m_maxPlaybackRate);
-
-			SLresult res = (*m_audioPlaybackRate)->SetRate(m_audioPlaybackRate, (SLpermille)(rate*1000));
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetPlaybackRate() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			m_playbackRate=rate;
-			return RETURN_VALUE_OK;
-		}
-
-		double AudioPlayer::GetPlaybackRate() const
-		{
-			return m_playbackRate;
+			return m_pPlaybackRateController;
 		}
 
 		PitchController* AudioPlayer::Pitch() const
