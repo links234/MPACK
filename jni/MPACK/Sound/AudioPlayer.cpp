@@ -125,7 +125,7 @@ namespace MPACK
 				goto ERROR;
 			}
 
-			//BassBoostController
+			m_pBassBoostController = new BassBoostController(m_audioPlayerObj);
 
 			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_PLAYBACKRATE, &m_audioPlaybackRate);
 			if (res != SL_RESULT_SUCCESS)
@@ -185,12 +185,10 @@ namespace MPACK
 				if(m_pBassBoostController!=BassBoostController::GetSentinel())
 				{
 					delete m_pBassBoostController;
-					m_pBassBoostController=NULL;
+					m_pBassBoostController=BassBoostController::GetSentinel();
 				}
 				(*m_audioPlayerObj)->Destroy(m_audioPlayerObj);
 				m_audioPlayerObj = NULL;
-				m_audioPlayer = NULL;
-				m_audioVolume = NULL;
 				m_path = "";
 			}
 		}
