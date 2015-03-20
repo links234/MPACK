@@ -8,6 +8,7 @@ namespace MPACK
 	namespace Sound
 	{
 		class BassBoostController;
+		class SeekController;
 	}
 }
 
@@ -51,7 +52,7 @@ namespace MPACK
 			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
 			SLpermille GetStereoPosition() const;
 
-			BassBoostController* BassBoost();
+			BassBoostController* BassBoost() const;
 
 			Core::ReturnValue SetPlaybackRate(double rate);
 			double GetPlaybackRate() const;
@@ -59,12 +60,7 @@ namespace MPACK
 			Core::ReturnValue SetPitch(SLpermille pitch);
 			SLpermille GetPitch() const;
 
-			Core::ReturnValue SetPosition(SLmillisecond position);
-			bool IsLoopingEnabled() const;
-			Core::ReturnValue EnableLooping();
-			Core::ReturnValue DisableLooping();
-			Core::ReturnValue ToggleLooping();
-			Core::ReturnValue SetEnableLooping(bool enabled);
+			SeekController* Seek() const;
 
 		private:
 			std::string m_path;
@@ -93,8 +89,7 @@ namespace MPACK
 			SLpermille m_maxPitch;
 			SLpermille m_pitch;
 
-			SLSeekItf m_audioSeek;
-			bool m_looping;
+			SeekController *m_pSeekController;
 		};
 	}
 }

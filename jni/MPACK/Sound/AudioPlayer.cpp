@@ -2,10 +2,12 @@
 
 #include "SoundService.hpp"
 #include "OutputMixer.hpp"
-#include "BassBoostController.hpp"
 #include "Context.hpp"
 #include "Global.hpp"
 #include "Math.hpp"
+
+#include "BassBoostController.hpp"
+#include "SeekController.hpp"
 
 using namespace std;
 using namespace MPACK::Core;
@@ -18,10 +20,10 @@ namespace MPACK
 		AudioPlayer::AudioPlayer()
 			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
 			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
-			  m_stereoEnabled(false), m_stereoPosition(0), m_pBassBoostController(NULL),
+			  m_stereoEnabled(false), m_stereoPosition(0), m_pBassBoostController(BassBoostController::GetSentinel()),
 			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0),
 			  m_audioPitch(NULL), m_pitch(1000), m_minPitch(1000), m_maxPitch(1000),
-			  m_audioSeek(NULL), m_looping(false)
+			  m_pSeekController(SeekController::GetSentinel())
 		{
 		}
 
@@ -162,13 +164,7 @@ namespace MPACK
 				}
 			}
 
-			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_SEEK, &m_audioSeek);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_SEEK)");
-				LOGE("AudioPlayer::Load(): SeekItf is not supported: res = %d",res);
-				m_audioPlaybackRate=NULL;
-			}
+			m_pSeekController = new SeekController(m_audioPlayerObj);
 
 			m_path=path;
 			return RETURN_VALUE_OK;
@@ -186,6 +182,11 @@ namespace MPACK
 				{
 					delete m_pBassBoostController;
 					m_pBassBoostController=BassBoostController::GetSentinel();
+				}
+				if(m_pSeekController!=SeekController::GetSentinel())
+				{
+					delete m_pSeekController;
+					m_pSeekController=SeekController::GetSentinel();
 				}
 				(*m_audioPlayerObj)->Destroy(m_audioPlayerObj);
 				m_audioPlayerObj = NULL;
@@ -371,7 +372,7 @@ namespace MPACK
 			return m_stereoPosition;
 		}
 
-		BassBoostController* AudioPlayer::BassBoost()
+		BassBoostController* AudioPlayer::BassBoost() const
 		{
 			return m_pBassBoostController;
 		}
@@ -413,47 +414,9 @@ namespace MPACK
 			return m_pitch;
 		}
 
-		ReturnValue AudioPlayer::SetPosition(SLmillisecond position)
+		SeekController* AudioPlayer::Seek() const
 		{
-			SLresult res = (*m_audioSeek)->SetPosition(m_audioSeek, position, SL_SEEKMODE_FAST);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetPosition() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			return RETURN_VALUE_OK;
-		}
-
-		bool AudioPlayer::IsLoopingEnabled() const
-		{
-			return m_looping;
-		}
-
-		Core::ReturnValue AudioPlayer::EnableLooping()
-		{
-			return SetEnableLooping(true);
-		}
-
-		Core::ReturnValue AudioPlayer::DisableLooping()
-		{
-			return SetEnableLooping(false);
-		}
-
-		Core::ReturnValue AudioPlayer::ToggleLooping()
-		{
-			return SetEnableLooping(!m_looping);
-		}
-
-		Core::ReturnValue AudioPlayer::SetEnableLooping(bool enabled)
-		{
-			SLresult res = (*m_audioSeek)->SetLoop(m_audioSeek, enabled, 0, SL_TIME_UNKNOWN);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetEnableLooping() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			m_looping = enabled;
-			return RETURN_VALUE_OK;
+			return m_pSeekController;
 		}
 	}
 }
