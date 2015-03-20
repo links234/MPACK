@@ -7,6 +7,7 @@
 #include "Math.hpp"
 
 #include "BassBoostController.hpp"
+#include "PitchController.hpp"
 #include "SeekController.hpp"
 
 using namespace std;
@@ -20,9 +21,10 @@ namespace MPACK
 		AudioPlayer::AudioPlayer()
 			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
 			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
-			  m_stereoEnabled(false), m_stereoPosition(0), m_pBassBoostController(BassBoostController::GetSentinel()),
+			  m_stereoEnabled(false), m_stereoPosition(0),
+			  m_pBassBoostController(BassBoostController::GetSentinel()),
 			  m_audioPlaybackRate(NULL), m_playbackRate(1.0), m_minPlaybackRate(1.0), m_maxPlaybackRate(1.0),
-			  m_audioPitch(NULL), m_pitch(1000), m_minPitch(1000), m_maxPitch(1000),
+			  m_pPitchController(PitchController::GetSentinel()),
 			  m_pSeekController(SeekController::GetSentinel())
 		{
 		}
@@ -148,21 +150,7 @@ namespace MPACK
 				}
 			}
 
-			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_PITCH, &m_audioPitch);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_PITCH)");
-				LOGE("AudioPlayer::Load(): PitchItf is not supported: res = %d",res);
-				m_audioPitch=NULL;
-			}
-			else
-			{
-				SLresult res = (*m_audioPitch)->GetPitchCapabilities(m_audioPitch, &m_minPitch, &m_maxPitch);
-				if (res == SL_RESULT_SUCCESS)
-				{
-					LOGE("AudioPlayer::Load() at (*m_audioPlaybackRate)->GetPitchCapabilities");
-				}
-			}
+			m_pPitchController = new PitchController(m_audioPlayerObj);
 
 			m_pSeekController = new SeekController(m_audioPlayerObj);
 
@@ -182,6 +170,11 @@ namespace MPACK
 				{
 					delete m_pBassBoostController;
 					m_pBassBoostController=BassBoostController::GetSentinel();
+				}
+				if(m_pPitchController!=PitchController::GetSentinel())
+				{
+					delete m_pPitchController;
+					m_pPitchController=PitchController::GetSentinel();
 				}
 				if(m_pSeekController!=SeekController::GetSentinel())
 				{
@@ -396,22 +389,9 @@ namespace MPACK
 			return m_playbackRate;
 		}
 
-		ReturnValue AudioPlayer::SetPitch(SLpermille pitch)
+		PitchController* AudioPlayer::Pitch() const
 		{
-			pitch=Math::Misc<SLpermille>::Clamp(pitch,m_minPitch,m_maxPitch);
-			SLresult res = (*m_audioPitch)->SetPitch(m_audioPitch, pitch);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetPitch() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			m_pitch=pitch;
-			return RETURN_VALUE_OK;
-		}
-
-		SLpermille AudioPlayer::GetPitch() const
-		{
-			return m_pitch;
+			return m_pPitchController;
 		}
 
 		SeekController* AudioPlayer::Seek() const
