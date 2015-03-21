@@ -1,17 +1,11 @@
 #include "AudioPlayer.hpp"
 
 #include "SoundService.hpp"
+#include "AudioControllers.hpp"
 #include "OutputMixer.hpp"
 #include "Context.hpp"
 #include "Global.hpp"
 #include "Math.hpp"
-
-#include "PlayController.hpp"
-#include "VolumeController.hpp"
-#include "BassBoostController.hpp"
-#include "PitchController.hpp"
-#include "PlaybackRateController.hpp"
-#include "SeekController.hpp"
 
 using namespace std;
 using namespace MPACK::Core;
