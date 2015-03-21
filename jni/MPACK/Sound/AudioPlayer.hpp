@@ -39,6 +39,8 @@ namespace MPACK
 			SeekController* 		Seek() const;
 
 		private:
+			Core::ReturnValue LoadControllers();
+
 			std::string m_path;
 
 			SLObjectItf m_audioPlayerObj;

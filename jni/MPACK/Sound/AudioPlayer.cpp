@@ -103,23 +103,17 @@ namespace MPACK
 				goto ERROR;
 			}
 
-			m_pPlayController = new PlayController(m_audioPlayerObj);
-
-			m_pVolumeController = new VolumeController(m_audioPlayerObj);
-
-			m_pBassBoostController = new BassBoostController(m_audioPlayerObj);
-
-			m_pPlaybackRateController = new PlaybackRateController(m_audioPlayerObj);
-
-			m_pPitchController = new PitchController(m_audioPlayerObj);
-
-			m_pSeekController = new SeekController(m_audioPlayerObj);
+			if(LoadControllers()==RETURN_VALUE_KO)
+			{
+				LOGE("AudioPlater::Load() failed to LoadControllers()");
+				goto ERROR;
+			}
 
 			m_path=path;
 			return RETURN_VALUE_OK;
 
 		ERROR:
-			LOGE("AudioPlayer()::Load(\"%s\") error: res = %d ",path.c_str(),res);
+			LOGE("AudioPlayer()::Load(\"%s\") failed ",path.c_str(),res);
 			return RETURN_VALUE_KO;
 		}
 
@@ -191,6 +185,34 @@ namespace MPACK
 		SeekController* AudioPlayer::Seek() const
 		{
 			return m_pSeekController;
+		}
+
+		Core::ReturnValue AudioPlayer::LoadControllers()
+		{
+			m_pPlayController = new PlayController(m_audioPlayerObj);
+			if(!m_pPlayController->IsSupported())
+			{
+				LOGE("AudioPlayer::LoadControllers(): PlayController() failed");
+				goto ERROR;
+			}
+
+			m_pVolumeController = new VolumeController(m_audioPlayerObj);
+			if(!m_pVolumeController->IsSupported())
+			{
+				LOGE("AudioPlayer::LoadControllers(): VolumeController() failed");
+				goto ERROR;
+			}
+
+			m_pBassBoostController = new BassBoostController(m_audioPlayerObj);
+			m_pPlaybackRateController = new PlaybackRateController(m_audioPlayerObj);
+			m_pPitchController = new PitchController(m_audioPlayerObj);
+			m_pSeekController = new SeekController(m_audioPlayerObj);
+
+			return RETURN_VALUE_OK;
+
+		ERROR:
+			LOGE("AudioPlayer()::LoadControllers() failed");
+			return RETURN_VALUE_KO;
 		}
 	}
 }
