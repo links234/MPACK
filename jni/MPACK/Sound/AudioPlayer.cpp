@@ -6,6 +6,7 @@
 #include "Global.hpp"
 #include "Math.hpp"
 
+#include "PlayController.hpp"
 #include "BassBoostController.hpp"
 #include "PitchController.hpp"
 #include "PlaybackRateController.hpp"
@@ -20,7 +21,9 @@ namespace MPACK
 	namespace Sound
 	{
 		AudioPlayer::AudioPlayer()
-			: m_path(), m_audioPlayerObj(NULL), m_audioPlayer(NULL), m_audioVolume(NULL),
+			: m_path(), m_audioPlayerObj(NULL),
+			  m_pPlayController(PlayController::GetSentinel()),
+			  m_audioVolume(NULL),
 			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
 			  m_stereoEnabled(false), m_stereoPosition(0),
 			  m_pBassBoostController(BassBoostController::GetSentinel()),
@@ -107,12 +110,7 @@ namespace MPACK
 				goto ERROR;
 			}
 
-			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_PLAY, &m_audioPlayer);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_PLAY)");
-				goto ERROR;
-			}
+			m_pPlayController = new PlayController(m_audioPlayerObj);
 
 			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_VOLUME, &m_audioVolume);
 			if (res != SL_RESULT_SUCCESS)
@@ -150,6 +148,11 @@ namespace MPACK
 		{
 			if (m_audioPlayerObj != NULL)
 			{
+				if(m_pPlayController!=PlayController::GetSentinel())
+				{
+					delete m_pPlayController;
+					m_pPlayController=PlayController::GetSentinel();
+				}
 				if(m_pBassBoostController!=BassBoostController::GetSentinel())
 				{
 					delete m_pBassBoostController;
@@ -176,78 +179,9 @@ namespace MPACK
 			}
 		}
 
-		ReturnValue AudioPlayer::Start()
+		PlayController* AudioPlayer::Play() const
 		{
-			SLresult res = (*m_audioPlayer)->SetPlayState(m_audioPlayer,SL_PLAYSTATE_STOPPED);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Start() error at SL_PLAYSTATE_STOPPED: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			res = (*m_audioPlayer)->SetPlayState(m_audioPlayer,SL_PLAYSTATE_PLAYING);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Start() error at SL_PLAYSTATE_PLAYING: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue AudioPlayer::Resume()
-		{
-			SLresult res = (*m_audioPlayer)->SetPlayState(m_audioPlayer,SL_PLAYSTATE_PLAYING);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Resume() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue AudioPlayer::Pause()
-		{
-			SLresult res = (*m_audioPlayer)->SetPlayState(m_audioPlayer,SL_PLAYSTATE_PAUSED);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Pause() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue AudioPlayer::Stop()
-		{
-			SLresult res = (*m_audioPlayer)->SetPlayState(m_audioPlayer,SL_PLAYSTATE_STOPPED);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Stop() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			return RETURN_VALUE_OK;
-		}
-
-		SLmillisecond AudioPlayer::GetPosition()
-		{
-			SLmillisecond position;
-			SLresult res = (*m_audioPlayer)->GetPosition(m_audioPlayer, &position);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::GetPosition() error: res = %d",res);
-				return 0;
-			}
-			return position;
-		}
-
-		SLmillisecond AudioPlayer::GetDuration()
-		{
-			SLmillisecond duration;
-			SLresult res = (*m_audioPlayer)->GetDuration(m_audioPlayer, &duration);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::GetDuration() error: res = %d",res);
-				return 0;
-			}
-			return duration;
+			return m_pPlayController;
 		}
 
 		bool AudioPlayer::IsMuted() const

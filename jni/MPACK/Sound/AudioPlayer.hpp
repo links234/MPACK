@@ -7,6 +7,7 @@ namespace MPACK
 {
 	namespace Sound
 	{
+		class PlayController;
 		class BassBoostController;
 		class PlaybackRateController;
 		class PitchController;
@@ -29,13 +30,7 @@ namespace MPACK
 			Core::ReturnValue Load(std::string path);
 			void Unload();
 
-			Core::ReturnValue Start();
-			Core::ReturnValue Resume();
-			Core::ReturnValue Pause();
-			Core::ReturnValue Stop();
-
-			SLmillisecond GetPosition();
-			SLmillisecond GetDuration();
+			PlayController* Play() const;
 
 			bool IsMuted() const;
 			Core::ReturnValue ToggleMute();
@@ -63,7 +58,9 @@ namespace MPACK
 			std::string m_path;
 
 			SLObjectItf m_audioPlayerObj;
-			SLPlayItf m_audioPlayer;
+
+			PlayController *m_pPlayController;
+
 			SLVolumeItf m_audioVolume;
 
 			bool m_muted;
