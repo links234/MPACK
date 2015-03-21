@@ -8,6 +8,7 @@ namespace MPACK
 	namespace Sound
 	{
 		class PlayController;
+		class VolumeController;
 		class BassBoostController;
 		class PlaybackRateController;
 		class PitchController;
@@ -30,25 +31,8 @@ namespace MPACK
 			Core::ReturnValue Load(std::string path);
 			void Unload();
 
-			PlayController* Play() const;
-
-			bool IsMuted() const;
-			Core::ReturnValue ToggleMute();
-			Core::ReturnValue Mute();
-			Core::ReturnValue Unmute();
-			Core::ReturnValue SetMute(SLboolean mute);
-
-			Core::ReturnValue SetVolume(double linear);
-			double GetVolume() const;
-
-			bool IsStereoEnabled() const;
-			Core::ReturnValue EnableStereo();
-			Core::ReturnValue DisableStereo();
-			Core::ReturnValue ToggleStereo();
-			Core::ReturnValue SetEnableStereo(bool enabled);
-			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
-			SLpermille GetStereoPosition() const;
-
+			PlayController* 		Play() const;
+			VolumeController* 		Volume() const;
 			BassBoostController* 	BassBoost() const;
 			PlaybackRateController* PlaybackRate() const;
 			PitchController* 		Pitch() const;
@@ -60,23 +44,10 @@ namespace MPACK
 			SLObjectItf m_audioPlayerObj;
 
 			PlayController *m_pPlayController;
-
-			SLVolumeItf m_audioVolume;
-
-			bool m_muted;
-			double m_volume;
-			SLmillibel m_mBMinVolume;
-			SLmillibel m_mBMaxVolume;
-
-			bool m_stereoEnabled;
-			SLpermille m_stereoPosition;
-
+			VolumeController *m_pVolumeController;
 			BassBoostController *m_pBassBoostController;
-
 			PlaybackRateController *m_pPlaybackRateController;
-
 			PitchController *m_pPitchController;
-
 			SeekController *m_pSeekController;
 		};
 	}

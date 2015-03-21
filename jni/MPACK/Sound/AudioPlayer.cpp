@@ -7,6 +7,7 @@
 #include "Math.hpp"
 
 #include "PlayController.hpp"
+#include "VolumeController.hpp"
 #include "BassBoostController.hpp"
 #include "PitchController.hpp"
 #include "PlaybackRateController.hpp"
@@ -23,9 +24,7 @@ namespace MPACK
 		AudioPlayer::AudioPlayer()
 			: m_path(), m_audioPlayerObj(NULL),
 			  m_pPlayController(PlayController::GetSentinel()),
-			  m_audioVolume(NULL),
-			  m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
-			  m_stereoEnabled(false), m_stereoPosition(0),
+			  m_pVolumeController(VolumeController::GetSentinel()),
 			  m_pBassBoostController(BassBoostController::GetSentinel()),
 			  m_pPlaybackRateController(PlaybackRateController::GetSentinel()),
 			  m_pPitchController(PitchController::GetSentinel()),
@@ -112,21 +111,7 @@ namespace MPACK
 
 			m_pPlayController = new PlayController(m_audioPlayerObj);
 
-			res = (*m_audioPlayerObj)->GetInterface(m_audioPlayerObj, SL_IID_VOLUME, &m_audioVolume);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Load() at (*m_audioPlayerObj)->GetInterface(SL_IID_VOLUME)");
-				goto ERROR;
-			}
-
-			m_mBMinVolume = SL_MILLIBEL_MIN;
-			m_mBMaxVolume = SL_MILLIBEL_MIN;
-			res = (*m_audioVolume)->GetMaxVolumeLevel(m_audioVolume, &m_mBMaxVolume);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::Load() at (*m_audioVolume)->GetMaxVolumeLevel");
-				goto ERROR;
-			}
+			m_pVolumeController = new VolumeController(m_audioPlayerObj);
 
 			m_pBassBoostController = new BassBoostController(m_audioPlayerObj);
 
@@ -152,6 +137,11 @@ namespace MPACK
 				{
 					delete m_pPlayController;
 					m_pPlayController=PlayController::GetSentinel();
+				}
+				if(m_pVolumeController!=VolumeController::GetSentinel())
+				{
+					delete m_pVolumeController;
+					m_pVolumeController=VolumeController::GetSentinel();
 				}
 				if(m_pBassBoostController!=BassBoostController::GetSentinel())
 				{
@@ -184,108 +174,9 @@ namespace MPACK
 			return m_pPlayController;
 		}
 
-		bool AudioPlayer::IsMuted() const
+		VolumeController *AudioPlayer::Volume() const
 		{
-			return m_muted;
-		}
-
-		ReturnValue AudioPlayer::ToggleMute()
-		{
-			return SetMute(!m_muted);
-		}
-
-		ReturnValue AudioPlayer::Mute()
-		{
-			return SetMute(true);
-		}
-
-		ReturnValue AudioPlayer::Unmute()
-		{
-			return SetMute(false);
-		}
-
-		ReturnValue AudioPlayer::SetMute(SLboolean mute)
-		{
-			SLresult res = (*m_audioVolume)->SetMute(m_audioVolume,mute);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetMute() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			m_muted=mute;
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue AudioPlayer::SetVolume(double linear)
-		{
-			int dBVolume = 20*log10(linear);
-			SLmillibel mBVolume = dBVolume*100;
-
-			mBVolume = Math::Misc<SLmillibel>::Clamp(mBVolume,m_mBMinVolume,m_mBMaxVolume);
-
-			SLresult res = (*m_audioVolume)->SetVolumeLevel(m_audioVolume, mBVolume);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetVolume() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-
-			m_volume=linear;
-			return RETURN_VALUE_OK;
-		}
-
-		double AudioPlayer::GetVolume() const
-		{
-			return m_volume;
-		}
-
-		bool AudioPlayer::IsStereoEnabled() const
-		{
-			return m_stereoEnabled;
-		}
-
-		ReturnValue AudioPlayer::EnableStereo()
-		{
-			return SetEnableStereo(true);
-		}
-
-		ReturnValue AudioPlayer::DisableStereo()
-		{
-			return SetEnableStereo(false);
-		}
-
-		ReturnValue AudioPlayer::ToggleStereo()
-		{
-			return SetEnableStereo(!m_stereoEnabled);
-		}
-
-		ReturnValue AudioPlayer::SetEnableStereo(bool enabled)
-		{
-			SLresult res = (*m_audioVolume)->EnableStereoPosition(m_audioVolume, enabled);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetEnableStereo() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			m_stereoEnabled=enabled;
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue AudioPlayer::SetStereoPosition(SLpermille stereoPosition)
-		{
-			SLresult res = (*m_audioVolume)->SetStereoPosition(m_audioVolume, stereoPosition);
-			if (res != SL_RESULT_SUCCESS)
-			{
-				LOGE("AudioPlayer::SetStereoPosition() error: res = %d",res);
-				return RETURN_VALUE_KO;
-			}
-			m_stereoPosition=stereoPosition;
-			return RETURN_VALUE_OK;
-		}
-
-		SLpermille AudioPlayer::GetStereoPosition() const
-		{
-			return m_stereoPosition;
+			return m_pVolumeController;
 		}
 
 		BassBoostController* AudioPlayer::BassBoost() const
