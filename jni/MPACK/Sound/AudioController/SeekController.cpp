@@ -36,6 +36,10 @@ namespace MPACK
 
 		ReturnValue SeekController::SetPosition(SLmillisecond position)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetPosition(m_interface, position, SL_SEEKMODE_FAST);
 			if (res != SL_RESULT_SUCCESS)
 			{
@@ -67,6 +71,10 @@ namespace MPACK
 
 		ReturnValue SeekController::SetEnabledLooping(bool enabled)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetLoop(m_interface, enabled, 0, SL_TIME_UNKNOWN);
 			if (res != SL_RESULT_SUCCESS)
 			{

@@ -2,7 +2,6 @@
 
 using namespace MPACK::Core;
 
-
 namespace MPACK
 {
 	namespace Sound
@@ -69,6 +68,10 @@ namespace MPACK
 
 		ReturnValue VolumeController::SetMute(SLboolean mute)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetMute(m_interface,mute);
 			if (res != SL_RESULT_SUCCESS)
 			{
@@ -81,6 +84,10 @@ namespace MPACK
 
 		ReturnValue VolumeController::Set(double linear)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			int dBVolume = 20*log10(linear);
 			SLmillibel mBVolume = dBVolume*100;
 
@@ -124,6 +131,10 @@ namespace MPACK
 
 		ReturnValue VolumeController::SetEnabledStereo(bool enabled)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->EnableStereoPosition(m_interface, enabled);
 			if (res != SL_RESULT_SUCCESS)
 			{
@@ -136,6 +147,10 @@ namespace MPACK
 
 		ReturnValue VolumeController::SetStereoPosition(SLpermille stereoPosition)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetStereoPosition(m_interface, stereoPosition);
 			if (res != SL_RESULT_SUCCESS)
 			{

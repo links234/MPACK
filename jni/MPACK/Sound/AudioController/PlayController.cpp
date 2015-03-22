@@ -36,6 +36,10 @@ namespace MPACK
 
 		ReturnValue PlayController::Start()
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetPlayState(m_interface,SL_PLAYSTATE_STOPPED);
 			if (res != SL_RESULT_SUCCESS)
 			{
@@ -53,6 +57,10 @@ namespace MPACK
 
 		ReturnValue PlayController::Resume()
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetPlayState(m_interface,SL_PLAYSTATE_PLAYING);
 			if (res != SL_RESULT_SUCCESS)
 			{
@@ -64,6 +72,10 @@ namespace MPACK
 
 		ReturnValue PlayController::Pause()
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetPlayState(m_interface,SL_PLAYSTATE_PAUSED);
 			if (res != SL_RESULT_SUCCESS)
 			{
@@ -75,6 +87,10 @@ namespace MPACK
 
 		ReturnValue PlayController::Stop()
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetPlayState(m_interface,SL_PLAYSTATE_STOPPED);
 			if (res != SL_RESULT_SUCCESS)
 			{
@@ -86,6 +102,10 @@ namespace MPACK
 
 		SLmillisecond PlayController::GetPosition()
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLmillisecond position;
 			SLresult res = (*m_interface)->GetPosition(m_interface, &position);
 			if (res != SL_RESULT_SUCCESS)
@@ -98,6 +118,10 @@ namespace MPACK
 
 		SLmillisecond PlayController::GetDuration()
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLmillisecond duration;
 			SLresult res = (*m_interface)->GetDuration(m_interface, &duration);
 			if (res != SL_RESULT_SUCCESS)

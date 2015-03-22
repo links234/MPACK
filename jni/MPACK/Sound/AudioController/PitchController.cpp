@@ -44,6 +44,10 @@ namespace MPACK
 
 		ReturnValue PitchController::Set(SLpermille value)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			value=Math::Misc<SLpermille>::Clamp(value,m_minValue,m_maxValue);
 			SLresult res = (*m_interface)->SetPitch(m_interface, value);
 			if (res != SL_RESULT_SUCCESS)

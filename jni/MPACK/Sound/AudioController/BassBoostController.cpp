@@ -56,6 +56,10 @@ namespace MPACK
 
 		ReturnValue BassBoostController::SetEnabled(bool enabled)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetEnabled(m_interface, enabled);
 			if (res != SL_RESULT_SUCCESS)
 			{
@@ -68,6 +72,10 @@ namespace MPACK
 
 		ReturnValue BassBoostController::SetStrength(SLpermille strength)
 		{
+			if(m_interface==NULL)
+			{
+				return RETURN_VALUE_OK;
+			}
 			SLresult res = (*m_interface)->SetStrength(m_interface, strength);
 			if (res != SL_RESULT_SUCCESS)
 			{
