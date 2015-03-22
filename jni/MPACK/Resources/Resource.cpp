@@ -2,6 +2,8 @@
 #include "Asset.hpp"
 #include "SDInputFile.hpp"
 
+using namespace std;
+
 namespace MPACK
 {
 	namespace Core
@@ -31,7 +33,7 @@ namespace MPACK
 			{
 				return (Resource*)(new Asset(pPath+1));
 			}
-			if(pPath[1]=='&')
+			if(pPath[0]=='&')
 			{
 				return (Resource*)(new SDInputFile(pPath+1));
 			}
@@ -42,7 +44,7 @@ namespace MPACK
 				strcpy(pathBuffer,"assets/");
 				strcat(pathBuffer,pPath+1);
 			}
-			if(pPath[1]=='&')
+			if(pPath[0]=='&')
 			{
 				strcpy(pathBuffer,pPath+1);
 			}
