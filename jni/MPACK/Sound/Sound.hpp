@@ -4,5 +4,6 @@
 #include "SoundService.hpp"
 #include "OutputMixer.hpp"
 #include "AudioPlayer.hpp"
+#include "AudioControllers.hpp"
 
 #endif
