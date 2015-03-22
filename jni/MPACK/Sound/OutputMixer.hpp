@@ -7,6 +7,14 @@ namespace MPACK
 {
 	namespace Sound
 	{
+		class VolumeController;
+	}
+}
+
+namespace MPACK
+{
+	namespace Sound
+	{
 		class OutputMixer
 		{
 		public:
@@ -14,13 +22,19 @@ namespace MPACK
 
 			SLObjectItf GetObjectItf() const;
 
+			VolumeController* Volume() const;
+
 			static OutputMixer* GetOutputMixer();
 			static void DestroyOutputMixer();
 
 		private:
 			OutputMixer();
 
+			void LoadControllers();
+
 			SLObjectItf m_outputMixerObj;
+
+			VolumeController *m_pVolumeController;
 
 			static OutputMixer *s_outputMixer;
 		};
