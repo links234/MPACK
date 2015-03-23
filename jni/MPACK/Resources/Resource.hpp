@@ -26,6 +26,7 @@ namespace MPACK
 		};
 
 		Resource* LoadResource(const char* pPath);
+		std::string GetResourcePath(std::string path);
 	}
 }
 
