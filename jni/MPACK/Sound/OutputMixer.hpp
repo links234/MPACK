@@ -39,7 +39,7 @@ namespace MPACK
 
 			static OutputMixer *s_outputMixer;
 
-			static unordered_set<OutputMixer*> s_mixer;
+			static std::unordered_set<OutputMixer*> s_objects;
 		};
 	}
 }

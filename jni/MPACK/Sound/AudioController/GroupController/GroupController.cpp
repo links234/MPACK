@@ -63,7 +63,7 @@ namespace MPACK
 		GroupController* GroupController::New()
 		{
 			GroupController *pGroupController = new GroupController();
-			s_untrackedGroups.push_back(pGroupController);
+			s_untrackedGroups.insert(pGroupController);
 			return pGroupController;
 		}
 

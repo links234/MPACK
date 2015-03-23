@@ -38,6 +38,7 @@ namespace MPACK
 			PitchController* 		Pitch() const;
 			SeekController* 		Seek() const;
 
+			static void DestroyAll();
 		private:
 			Core::ReturnValue LoadControllers();
 
@@ -51,6 +52,8 @@ namespace MPACK
 			PlaybackRateController *m_pPlaybackRateController;
 			PitchController *m_pPitchController;
 			SeekController *m_pSeekController;
+
+			static std::unordered_set<AudioPlayer*> s_objects;
 		};
 	}
 }

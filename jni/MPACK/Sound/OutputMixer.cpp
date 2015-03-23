@@ -6,17 +6,20 @@
 
 #include "AudioControllers.hpp"
 
+using namespace std;
+
 namespace MPACK
 {
 	namespace Sound
 	{
 		OutputMixer *OutputMixer::s_outputMixer=NULL;
+		unordered_set<OutputMixer*> OutputMixer::s_objects;
 
 		OutputMixer::OutputMixer()
 			: m_outputMixerObj(NULL),
 			  m_pVolumeController(VolumeController::GetSentinel())
 		{
-			s_mixer.insert(this);
+			s_objects.insert(this);
 		}
 
 		OutputMixer::~OutputMixer()
@@ -32,7 +35,7 @@ namespace MPACK
 				m_outputMixerObj = NULL;
 				m_outputMixerObj=NULL;
 			}
-			s_mixer.erase(this);
+			s_objects.erase(this);
 		}
 
 		SLObjectItf OutputMixer::GetObjectItf() const
@@ -100,8 +103,8 @@ namespace MPACK
 		void OutputMixer::DestroyAll()
 		{
 			vector<OutputMixer*> allObjects;
-			allObjects.reserve(s_mixer.size());
-			for(unordered_set<OutputMixer*>::iterator it=s_mixer.begin();it!=s_mixer.end();++it)
+			allObjects.reserve(s_objects.size());
+			for(unordered_set<OutputMixer*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
 			{
 				allObjects.push_back(*it);
 			}

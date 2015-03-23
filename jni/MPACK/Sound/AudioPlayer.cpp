@@ -16,6 +16,8 @@ namespace MPACK
 {
 	namespace Sound
 	{
+		unordered_set<AudioPlayer*> AudioPlayer::s_objects;
+
 		AudioPlayer::AudioPlayer()
 			: m_path(), m_audioPlayerObj(NULL),
 			  m_pPlayController(PlayController::GetSentinel()),
@@ -25,10 +27,12 @@ namespace MPACK
 			  m_pPitchController(PitchController::GetSentinel()),
 			  m_pSeekController(SeekController::GetSentinel())
 		{
+			s_objects.insert(this);
 		}
 
 		AudioPlayer::~AudioPlayer()
 		{
+			s_objects.erase(this);
 			Unload();
 		}
 
@@ -188,6 +192,19 @@ namespace MPACK
 		SeekController* AudioPlayer::Seek() const
 		{
 			return m_pSeekController;
+		}
+
+		void AudioPlayer::DestroyAll()
+		{
+			vector<AudioPlayer*> allObjects;
+			for(unordered_set<AudioPlayer*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
+			{
+				allObjects.push_back(*it);
+			}
+			for(vector<AudioPlayer*>::iterator it=allObjects.begin();it!=allObjects.end();++it)
+			{
+				delete (*it);
+			}
 		}
 
 		Core::ReturnValue AudioPlayer::LoadControllers()
