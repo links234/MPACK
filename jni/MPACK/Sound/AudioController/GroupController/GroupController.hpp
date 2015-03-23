@@ -29,7 +29,7 @@ namespace MPACK
 			static GroupController* Get(std::string name);
 			static GroupController* New();
 
-			static void Destroy();
+			static void DestroyAll();
 
 		protected:
 			GroupController(std::string name=std::string(""));

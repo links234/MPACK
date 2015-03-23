@@ -67,15 +67,21 @@ namespace MPACK
 			return pGroupController;
 		}
 
-		void GroupController::Destroy()
+		void GroupController::DestroyAll()
 		{
+			vector<GroupController*> allObjects;
+			allObjects.reserve(s_untrackedGroups.size()+s_group.size());
 			for(unordered_set<GroupController*>::iterator it=s_untrackedGroups.begin();it!=s_untrackedGroups.end();++it)
 			{
-				delete (*it);
+				allObjects.push_back(*it);
 			}
 			for(unordered_map<string,GroupController*>::iterator it=s_group.begin();it!=s_group.end();++it)
 			{
-				delete it->second;
+				allObjects.push_back(it->second);
+			}
+			for(vector<GroupController*>::iterator it=allObjects.begin();it!=allObjects.end();++it)
+			{
+				delete (*it);
 			}
 		}
 	}
