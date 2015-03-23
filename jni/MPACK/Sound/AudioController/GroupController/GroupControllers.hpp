@@ -1,5 +1,5 @@
-#ifndef MPACK_AUDIOCONTROLLERS_HPP
-#define MPACK_AUDIOCONTROLLERS_HPP
+#ifndef MPACK_GROUPCONTROLLERS_HPP
+#define MPACK_GROUPCONTROLLERS_HPP
 
 #include "GroupController.hpp"
 #include "VolumeGroupController.hpp"
