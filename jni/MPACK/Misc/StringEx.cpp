@@ -1,6 +1,7 @@
 #include "StringEx.hpp"
 
 using namespace std;
+using namespace MPACK::Math;
 
 namespace MPACK
 {
@@ -8,6 +9,8 @@ namespace MPACK
 	{
 		namespace StringEx
 		{
+			const int PARAMETER_DEFAULT_VALUE=1<<30;
+
 			const char* GetExtension(const char* pStr)
 			{
 				const char* last=NULL;
@@ -216,12 +219,19 @@ namespace MPACK
 				return ans;
 			}
 
-
 			string Substr(string &str, int start, int length)
 			{
 				string ans;
+				if(start<0)
+				{
+					start+=str.size();
+				}
+				if(start<0)
+				{
+					return ans;
+				}
 				int end;
-				if(length==-1)
+				if(length==PARAMETER_DEFAULT_VALUE)
 				{
 					end=str.size();
 				}
@@ -234,6 +244,26 @@ namespace MPACK
 					end=str.size()-1;
 				}
 				for(int i=start;i<=end;++i)
+				{
+					ans+=str[i];
+				}
+				return ans;
+			}
+
+			string Substring(string &str, int start, int end)
+			{
+				string ans;
+				start=Math::Misc<int>::Clamp(start,0,str.size());
+				end=Math::Misc<int>::Clamp(end,0,str.size());
+				if(end==PARAMETER_DEFAULT_VALUE)
+				{
+					end=str.size();
+				}
+				if(start>end)
+				{
+					swap(start,end);
+				}
+				for(int i=start;i<end;++i)
 				{
 					ans+=str[i];
 				}
