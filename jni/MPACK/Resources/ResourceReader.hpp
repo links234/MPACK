@@ -1,7 +1,13 @@
 #ifndef MPACK_RESOURCEREADER_HPP
 #define MPACK_RESOURCEREADER_HPP
 
-#include "Resource.hpp"
+namespace MPACK
+{
+	namespace Core
+	{
+		class Resource;
+	}
+}
 
 namespace MPACK
 {
