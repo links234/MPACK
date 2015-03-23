@@ -13,6 +13,8 @@ namespace MPACK
 		class PlaybackRateController;
 		class PitchController;
 		class SeekController;
+
+		class GroupController;
 	}
 }
 
@@ -28,8 +30,11 @@ namespace MPACK
 
 			std::string GetPath() const;
 
-			Core::ReturnValue Load(std::string path);
+			Core::ReturnValue LoadFD(std::string path);
 			void Unload();
+
+			void AddToGroup(GroupController *pGroupController);
+			void AddToGroup(std::string name);
 
 			PlayController* 		Play() const;
 			VolumeController* 		Volume() const;

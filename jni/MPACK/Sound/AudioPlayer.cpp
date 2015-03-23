@@ -2,6 +2,7 @@
 
 #include "SoundService.hpp"
 #include "AudioControllers.hpp"
+#include "GroupControllers.hpp"
 #include "OutputMixer.hpp"
 #include "Resources.hpp"
 #include "Context.hpp"
@@ -41,7 +42,7 @@ namespace MPACK
 			return m_path;
 		}
 
-		ReturnValue AudioPlayer::Load(string path)
+		ReturnValue AudioPlayer::LoadFD(string path)
 		{
 			Unload();
 
@@ -162,6 +163,16 @@ namespace MPACK
 				m_audioPlayerObj = NULL;
 				m_path = "";
 			}
+		}
+
+		void AudioPlayer::AddToGroup(GroupController *pGroupController)
+		{
+			pGroupController->Add(this);
+		}
+
+		void AudioPlayer::AddToGroup(std::string name)
+		{
+			GroupController::Get(name)->Add(this);
 		}
 
 		PlayController* AudioPlayer::Play() const
