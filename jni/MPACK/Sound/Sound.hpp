@@ -5,5 +5,6 @@
 #include "OutputMixer.hpp"
 #include "AudioPlayer.hpp"
 #include "AudioControllers.hpp"
+#include "GroupControllers.hpp"
 
 #endif
