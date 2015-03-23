@@ -27,6 +27,7 @@ namespace MPACK
 			static OutputMixer* GetOutputMixer();
 			static void DestroyOutputMixer();
 
+			static void DestroyAll();
 		private:
 			OutputMixer();
 
@@ -37,6 +38,8 @@ namespace MPACK
 			VolumeController *m_pVolumeController;
 
 			static OutputMixer *s_outputMixer;
+
+			static unordered_set<OutputMixer*> s_mixer;
 		};
 	}
 }

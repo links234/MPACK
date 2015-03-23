@@ -77,7 +77,9 @@ namespace MPACK
 		{
 			LOGI("Stopping SoundService.");
 
-			GroupController::Destroy();
+			OutputMixer::DestroyAll();
+
+			GroupController::DestroyAll();
 
 			OutputMixer::DestroyOutputMixer();
 

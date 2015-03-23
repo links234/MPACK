@@ -16,6 +16,7 @@ namespace MPACK
 			: m_outputMixerObj(NULL),
 			  m_pVolumeController(VolumeController::GetSentinel())
 		{
+			s_mixer.insert(this);
 		}
 
 		OutputMixer::~OutputMixer()
@@ -31,6 +32,7 @@ namespace MPACK
 				m_outputMixerObj = NULL;
 				m_outputMixerObj=NULL;
 			}
+			s_mixer.erase(this);
 		}
 
 		SLObjectItf OutputMixer::GetObjectItf() const
@@ -93,6 +95,20 @@ namespace MPACK
 		void OutputMixer::LoadControllers()
 		{
 			m_pVolumeController = new VolumeController(m_outputMixerObj);
+		}
+
+		void OutputMixer::DestroyAll()
+		{
+			vector<OutputMixer*> allObjects;
+			allObjects.reserve(s_mixer.size());
+			for(unordered_set<OutputMixer*>::iterator it=s_mixer.begin();it!=s_mixer.end();++it)
+			{
+				allObjects.push_back(*it);
+			}
+			for(vector<OutputMixer*>::iterator it=allObjects.begin();it!=allObjects.end();++it)
+			{
+				delete (*it);
+			}
 		}
 	}
 }
