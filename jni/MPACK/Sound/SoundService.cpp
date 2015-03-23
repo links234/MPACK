@@ -2,6 +2,7 @@
 
 #include "Log.hpp"
 #include "Global.hpp"
+#include "GroupControllers.hpp"
 #include "OutputMixer.hpp"
 #include "AudioPlayer.hpp"
 
@@ -75,6 +76,8 @@ namespace MPACK
 		void SoundService::Stop()
 		{
 			LOGI("Stopping SoundService.");
+
+			GroupController::Destroy();
 
 			OutputMixer::DestroyOutputMixer();
 
