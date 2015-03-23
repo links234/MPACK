@@ -1,5 +1,5 @@
-#ifndef MPACK_RESOURCE_HPP
-#define MPACK_RESOURCE_HPP
+#ifndef MPACK_RESOURCES_HPP
+#define MPACK_RESOURCES_HPP
 
 #include "Resource.hpp"
 #include "ResourceReader.hpp"
