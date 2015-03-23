@@ -2,6 +2,7 @@
 #define MPACK_GROUPCONTROLLERS_HPP
 
 #include "GroupController.hpp"
+#include "PlayGroupController.hpp"
 #include "VolumeGroupController.hpp"
 
 #endif

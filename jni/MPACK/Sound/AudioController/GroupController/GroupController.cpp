@@ -1,7 +1,7 @@
 #include "GroupController.hpp"
 
 #include "AudioPlayer.hpp"
-#include "VolumeGroupController.hpp"
+#include "GroupControllers.hpp"
 
 using namespace std;
 using namespace MPACK::Core;
@@ -16,7 +16,8 @@ namespace MPACK
 		GroupController::GroupController(string name)
 			: m_name(name)
 		{
-			m_pVolumeController = new VolumeGroupController(this);
+			m_pPlayGroupController = new PlayGroupController(this);
+			m_pVolumeGroupController = new VolumeGroupController(this);
 		}
 
 		GroupController::~GroupController()
@@ -30,7 +31,8 @@ namespace MPACK
 				s_group.erase(m_name);
 			}
 
-			delete m_pVolumeController;
+			delete m_pPlayGroupController;
+			delete m_pVolumeGroupController;
 		}
 
 		void GroupController::Add(AudioPlayer *audioPlayer)
@@ -43,9 +45,14 @@ namespace MPACK
 			m_objects.clear();
 		}
 
+		PlayGroupController* GroupController::Play() const
+		{
+			return m_pPlayGroupController;
+		}
+
 		VolumeGroupController* GroupController::Volume() const
 		{
-			return m_pVolumeController;
+			return m_pVolumeGroupController;
 		}
 
 		GroupController* GroupController::Get(std::string name)
