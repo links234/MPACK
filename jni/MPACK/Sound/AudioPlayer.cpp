@@ -3,6 +3,7 @@
 #include "SoundService.hpp"
 #include "AudioControllers.hpp"
 #include "OutputMixer.hpp"
+#include "Resources.hpp"
 #include "Context.hpp"
 #include "Global.hpp"
 #include "Math.hpp"
@@ -40,9 +41,11 @@ namespace MPACK
 		{
 			Unload();
 
+			string realPath=Core::GetResourcePath(path);
+
 			SLEngineItf &engine=Global::pContext->pSoundService->GetOpenSLEngine();
 
-			AAsset* asset = AAssetManager_open(pAAssetManager, path.c_str(), AASSET_MODE_UNKNOWN);
+			AAsset* asset = AAssetManager_open(pAAssetManager, realPath.c_str(), AASSET_MODE_UNKNOWN);
 
 			off_t start, length;
 			int fileDescriptor = AAsset_openFileDescriptor(asset, &start, &length);
