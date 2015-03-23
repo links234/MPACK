@@ -19,7 +19,6 @@ namespace MPACK
 		class GroupController
 		{
 		public:
-			GroupController();
 			~GroupController();
 
 			void Add(AudioPlayer *audioPlayer);
@@ -27,10 +26,22 @@ namespace MPACK
 
 			VolumeGroupController* Volume() const;
 
+			static GroupController* Get(std::string name);
+			static GroupController* New();
+
+			static void Destroy();
+
 		protected:
+			GroupController(std::string name=std::string(""));
+
 			std::vector<AudioPlayer*> m_objects;
 
 			VolumeGroupController *m_pVolumeController;
+
+			std::string m_name;
+
+			static std::unordered_map<std::string, GroupController*> s_group;
+			static std::unordered_set<GroupController*> s_untrackedGroups;
 
 			friend class VolumeGroupController;
 		};
