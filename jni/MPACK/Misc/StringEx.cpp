@@ -269,6 +269,40 @@ namespace MPACK
 				}
 				return ans;
 			}
+
+			string Slice(string &str, int start, int end)
+			{
+				string ans;
+				if(end==PARAMETER_DEFAULT_VALUE)
+				{
+					end=str.size();
+				}
+				else if(end<0)
+				{
+					end=str.size()-1+end;
+				}
+				end=Math::Misc<int>::Clamp(end,0,str.size());
+				start=Math::Misc<int>::Clamp(start,0,str.size());
+				if(start<end)
+				{
+					for(int i=start;i<end;++i)
+					{
+						ans+=str[i];
+					}
+				}
+				else
+				{
+					for(int i=start;i<str.size();++i)
+					{
+						ans+=str[i];
+					}
+					for(int i=0;i<end;++i)
+					{
+						ans+=str[i];
+					}
+				}
+				return ans;
+			}
 		}
 	}
 }
