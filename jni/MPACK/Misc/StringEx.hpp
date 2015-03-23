@@ -33,6 +33,7 @@ namespace MPACK
 			std::string StripLeft(std::string &str);
 			std::string StripRight(std::string &str);
 			std::string Strip(std::string &str);
+			std::string Substr(std::string &str, int start, int length=-1);
 		}
 	}
 }

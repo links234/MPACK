@@ -215,6 +215,30 @@ namespace MPACK
 				ans.resize(i+1);
 				return ans;
 			}
+
+
+			string Substr(string &str, int start, int length)
+			{
+				string ans;
+				int end;
+				if(length==-1)
+				{
+					end=str.size();
+				}
+				else
+				{
+					end=start+length-1;
+				}
+				if(end>=str.size())
+				{
+					end=str.size()-1;
+				}
+				for(int i=start;i<=end;++i)
+				{
+					ans+=str[i];
+				}
+				return ans;
+			}
 		}
 	}
 }
