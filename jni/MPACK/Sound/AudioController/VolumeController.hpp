@@ -7,6 +7,14 @@ namespace MPACK
 {
 	namespace Sound
 	{
+		class StereoController;
+	}
+}
+
+namespace MPACK
+{
+	namespace Sound
+	{
 		class VolumeController
 		{
 		public:
@@ -24,18 +32,15 @@ namespace MPACK
 			Core::ReturnValue Set(double linear);
 			double Get() const;
 
-			bool IsStereoEnabled() const;
-			Core::ReturnValue EnableStereo();
-			Core::ReturnValue DisableStereo();
-			Core::ReturnValue ToggleStereo();
-			Core::ReturnValue SetEnabledStereo(bool enabled);
-			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
-			SLpermille GetStereoPosition() const;
+			StereoController* Stereo() const;
 
 			static VolumeController* GetSentinel();
 
 		private:
 			VolumeController();
+
+			Core::ReturnValue SetEnabledStereo(bool enabled);
+			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
 
 			SLVolumeItf m_interface;
 
@@ -44,10 +49,11 @@ namespace MPACK
 			SLmillibel m_mBMinVolume;
 			SLmillibel m_mBMaxVolume;
 
-			bool m_stereoEnabled;
-			SLpermille m_stereoPosition;
+			StereoController *m_pStereoController;
 
 			static VolumeController s_sentinel;
+
+			friend class StereoController;
 		};
 	}
 }

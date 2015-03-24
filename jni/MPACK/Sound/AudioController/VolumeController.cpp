@@ -1,5 +1,7 @@
 #include "VolumeController.hpp"
 
+#include "StereoController.hpp"
+
 using namespace MPACK::Core;
 
 namespace MPACK
@@ -10,13 +12,13 @@ namespace MPACK
 
 		VolumeController::VolumeController()
 			: m_interface(NULL), m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
-			  m_stereoEnabled(false), m_stereoPosition(0)
+			  m_pStereoController(StereoController::GetSentinel())
 		{
 		}
 
 		VolumeController::VolumeController(SLObjectItf object)
 			: m_interface(NULL), m_muted(false), m_volume(1.0), m_mBMinVolume(0), m_mBMaxVolume(0),
-			  m_stereoEnabled(false), m_stereoPosition(0)
+			  m_pStereoController(StereoController::GetSentinel())
 		{
 			SLresult res = (*object)->GetInterface(object, SL_IID_VOLUME, &m_interface);
 			if (res != SL_RESULT_SUCCESS)
@@ -34,10 +36,14 @@ namespace MPACK
 					LOGE("VolumeController() error at (*m_interface)->GetMaxVolumeLevel: res = %d ",res);
 					m_interface=NULL;
 				}
+
+				m_pStereoController = new StereoController(this);
 			}
 		}
 		VolumeController::~VolumeController()
 		{
+			delete m_pStereoController;
+
 			m_interface=NULL;
 		}
 
@@ -96,7 +102,7 @@ namespace MPACK
 			SLresult res = (*m_interface)->SetVolumeLevel(m_interface, mBVolume);
 			if (res != SL_RESULT_SUCCESS)
 			{
-				LOGE("AudioPlayer::SetVolume() error: res = %d",res);
+				LOGE("VolumeController::Set() error: res = %d",res);
 				return RETURN_VALUE_KO;
 			}
 
@@ -104,29 +110,14 @@ namespace MPACK
 			return RETURN_VALUE_OK;
 		}
 
-		double VolumeController::Get() const
+		StereoController* VolumeController::Stereo() const
 		{
-			return m_volume;
+			return m_pStereoController;
 		}
 
-		bool VolumeController::IsStereoEnabled() const
+		VolumeController* VolumeController::GetSentinel()
 		{
-			return m_stereoEnabled;
-		}
-
-		ReturnValue VolumeController::EnableStereo()
-		{
-			return SetEnabledStereo(true);
-		}
-
-		ReturnValue VolumeController::DisableStereo()
-		{
-			return SetEnabledStereo(false);
-		}
-
-		ReturnValue VolumeController::ToggleStereo()
-		{
-			return SetEnabledStereo(!m_stereoEnabled);
+			return &s_sentinel;
 		}
 
 		ReturnValue VolumeController::SetEnabledStereo(bool enabled)
@@ -138,10 +129,9 @@ namespace MPACK
 			SLresult res = (*m_interface)->EnableStereoPosition(m_interface, enabled);
 			if (res != SL_RESULT_SUCCESS)
 			{
-				LOGE("AudioPlayer::SetEnableStereo() error: res = %d",res);
+				LOGE("VolumeController::SetEnableStereo() error: res = %d",res);
 				return RETURN_VALUE_KO;
 			}
-			m_stereoEnabled=enabled;
 			return RETURN_VALUE_OK;
 		}
 
@@ -154,21 +144,10 @@ namespace MPACK
 			SLresult res = (*m_interface)->SetStereoPosition(m_interface, stereoPosition);
 			if (res != SL_RESULT_SUCCESS)
 			{
-				LOGE("AudioPlayer::SetStereoPosition() error: res = %d",res);
+				LOGE("VolumeController::SetStereoPosition() error: res = %d",res);
 				return RETURN_VALUE_KO;
 			}
-			m_stereoPosition=stereoPosition;
 			return RETURN_VALUE_OK;
-		}
-
-		SLpermille VolumeController::GetStereoPosition() const
-		{
-			return m_stereoPosition;
-		}
-
-		VolumeController* VolumeController::GetSentinel()
-		{
-			return &s_sentinel;
 		}
 	}
 }

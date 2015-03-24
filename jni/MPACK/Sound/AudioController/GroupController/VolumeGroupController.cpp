@@ -3,6 +3,7 @@
 #include "AudioPlayer.hpp"
 #include "GroupController.hpp"
 #include "VolumeController.hpp"
+#include "StereoController.hpp"
 
 using namespace std;
 using namespace MPACK::Core;
@@ -64,7 +65,7 @@ namespace MPACK
 		{
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->EnableStereo();
+				(*it)->Volume()->Stereo()->Enable();
 			}
 		}
 
@@ -72,7 +73,7 @@ namespace MPACK
 		{
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->DisableStereo();
+				(*it)->Volume()->Stereo()->Disable();
 			}
 		}
 
@@ -80,7 +81,7 @@ namespace MPACK
 		{
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->ToggleStereo();
+				(*it)->Volume()->Stereo()->Toggle();
 			}
 		}
 
@@ -88,7 +89,7 @@ namespace MPACK
 		{
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->SetEnabledStereo(enabled);
+				(*it)->Volume()->Stereo()->SetEnabled(enabled);
 			}
 		}
 
@@ -96,7 +97,7 @@ namespace MPACK
 		{
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->SetStereoPosition(stereoPosition);
+				(*it)->Volume()->Stereo()->Set(stereoPosition);
 			}
 		}
 	}
