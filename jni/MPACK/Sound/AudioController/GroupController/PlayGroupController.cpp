@@ -22,34 +22,54 @@ namespace MPACK
 
 		ReturnValue PlayGroupController::Start()
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Play()->Start();
+				if((*it)->Play()->Start()==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 
 		ReturnValue PlayGroupController::Resume()
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Play()->Resume();
+				if((*it)->Play()->Resume()==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 
 		ReturnValue PlayGroupController::Pause()
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Play()->Pause();
+				if((*it)->Play()->Pause()==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 
 		ReturnValue PlayGroupController::Stop()
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Play()->Stop();
+				if((*it)->Play()->Stop()==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 	}
 }

@@ -23,42 +23,67 @@ namespace MPACK
 
 		ReturnValue StereoGroupController::Enable()
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->Stereo()->Enable();
+				if((*it)->Volume()->Stereo()->Enable()==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 
 		ReturnValue StereoGroupController::Disable()
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->Stereo()->Disable();
+				if((*it)->Volume()->Stereo()->Disable()==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 
 		ReturnValue StereoGroupController::Toggle()
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->Stereo()->Toggle();
+				if((*it)->Volume()->Stereo()->Toggle()==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 
 		ReturnValue StereoGroupController::SetEnabled(bool enabled)
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->Stereo()->SetEnabled(enabled);
+				if((*it)->Volume()->Stereo()->SetEnabled(enabled)==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 
 		ReturnValue StereoGroupController::Set(SLpermille position)
 		{
+			ReturnValue retVal=RETURN_VALUE_OK;
 			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
-				(*it)->Volume()->Stereo()->Set(position);
+				if((*it)->Volume()->Stereo()->Set(position)==RETURN_VALUE_KO)
+				{
+					retVal=RETURN_VALUE_KO;
+				}
 			}
+			return retVal;
 		}
 	}
 }
