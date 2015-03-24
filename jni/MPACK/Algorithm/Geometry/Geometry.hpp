@@ -1,10 +1,16 @@
-#ifndef MPACK_ALGORITHM_HPP
-#define MPACK_ALGORITHM_HPP
+#ifndef MPACK_GEOMETRY_HPP
+#define MPACK_GEOMETRY_HPP
 
-#include "IndexedSkipList.hpp"
-#include "StaticStack.hpp"
-#include "StaticQueue.hpp"
-#include "SearchList.hpp"
-#include "AVL.hpp"
+#include "Types.hpp"
+#include "Math.hpp"
+
+namespace MPACK
+{
+	namespace Algorithm
+	{
+		float Cross(const Math::Vector2f &O, const Math::Vector2f &A, const Math::Vector2f &B);
+		std::vector<Math::Vector2f> ConvexHull(std::vector<Math::Vector2f> points);
+	}
+}
 
 #endif
