@@ -3,7 +3,7 @@
 #include "AudioPlayer.hpp"
 #include "GroupController.hpp"
 #include "VolumeController.hpp"
-#include "StereoController.hpp"
+#include "StereoGroupController.hpp"
 
 using namespace std;
 using namespace MPACK::Core;
@@ -15,10 +15,12 @@ namespace MPACK
 		VolumeGroupController::VolumeGroupController(GroupController *groupController)
 			: m_pGroupController(groupController)
 		{
+			m_pStereoGroupController = new StereoGroupController(groupController);
 		}
 
 		VolumeGroupController::~VolumeGroupController()
 		{
+			delete m_pStereoGroupController;
 		}
 
 		ReturnValue VolumeGroupController::ToggleMute()
@@ -61,44 +63,9 @@ namespace MPACK
 			}
 		}
 
-		ReturnValue VolumeGroupController::EnableStereo()
+		StereoGroupController* VolumeGroupController::Stereo() const
 		{
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
-			{
-				(*it)->Volume()->Stereo()->Enable();
-			}
-		}
-
-		ReturnValue VolumeGroupController::DisableStereo()
-		{
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
-			{
-				(*it)->Volume()->Stereo()->Disable();
-			}
-		}
-
-		ReturnValue VolumeGroupController::ToggleStereo()
-		{
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
-			{
-				(*it)->Volume()->Stereo()->Toggle();
-			}
-		}
-
-		ReturnValue VolumeGroupController::SetEnabledStereo(bool enabled)
-		{
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
-			{
-				(*it)->Volume()->Stereo()->SetEnabled(enabled);
-			}
-		}
-
-		ReturnValue VolumeGroupController::SetStereoPosition(SLpermille stereoPosition)
-		{
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
-			{
-				(*it)->Volume()->Stereo()->Set(stereoPosition);
-			}
+			return m_pStereoGroupController;
 		}
 	}
 }

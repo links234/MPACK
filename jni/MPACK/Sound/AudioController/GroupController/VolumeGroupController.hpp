@@ -9,6 +9,7 @@ namespace MPACK
 	{
 		class GroupController;
 		class VolumeController;
+		class StereoGroupController;
 	}
 }
 
@@ -28,16 +29,13 @@ namespace MPACK
 
 			Core::ReturnValue Set(double linear);
 
-			Core::ReturnValue EnableStereo();
-			Core::ReturnValue DisableStereo();
-			Core::ReturnValue ToggleStereo();
-			Core::ReturnValue SetEnabledStereo(bool enabled);
-			Core::ReturnValue SetStereoPosition(SLpermille stereoPosition);
+			StereoGroupController* Stereo() const;
 
 		protected:
 			VolumeGroupController(GroupController *groupController);
 
 			GroupController *m_pGroupController;
+			StereoGroupController *m_pStereoGroupController;
 
 			friend class GroupController;
 		};

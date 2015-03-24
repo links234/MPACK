@@ -7,7 +7,8 @@ namespace MPACK
 {
 	namespace Sound
 	{
-
+		class GroupController;
+		class VolumeGroupController;
 	}
 }
 
@@ -18,9 +19,20 @@ namespace MPACK
 		class StereoGroupController
 		{
 		public:
+			~StereoGroupController();
+
+			Core::ReturnValue Enable();
+			Core::ReturnValue Disable();
+			Core::ReturnValue Toggle();
+			Core::ReturnValue SetEnabled(bool enabled);
+			Core::ReturnValue Set(SLpermille position);
 
 		private:
+			StereoGroupController(GroupController *pGroupController);
 
+			GroupController *m_pGroupController;
+
+			friend class VolumeGroupController;
 		};
 	}
 }

@@ -10,6 +10,7 @@ namespace MPACK
 		class AudioPlayer;
 		class PlayGroupController;
 		class VolumeGroupController;
+		class StereoGroupController;
 	}
 }
 
@@ -48,6 +49,7 @@ namespace MPACK
 
 			friend class PlayGroupController;
 			friend class VolumeGroupController;
+			friend class StereoGroupController;
 		};
 	}
 }
