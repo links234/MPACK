@@ -4,5 +4,6 @@
 #include "GroupController.hpp"
 #include "PlayGroupController.hpp"
 #include "VolumeGroupController.hpp"
+#include "StereoGroupController.hpp"
 
 #endif
