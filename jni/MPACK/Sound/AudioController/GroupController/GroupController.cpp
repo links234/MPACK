@@ -37,7 +37,12 @@ namespace MPACK
 
 		void GroupController::Add(AudioPlayer *audioPlayer)
 		{
-			m_objects.push_back(audioPlayer);
+			m_objects.insert(audioPlayer);
+		}
+
+		void GroupController::Remove(AudioPlayer *audioPlayer)
+		{
+			m_objects.erase(audioPlayer);
 		}
 
 		void GroupController::Clear()

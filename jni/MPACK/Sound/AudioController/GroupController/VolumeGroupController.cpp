@@ -26,7 +26,7 @@ namespace MPACK
 		ReturnValue VolumeGroupController::ToggleMute()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->ToggleMute()==RETURN_VALUE_KO)
 				{
@@ -39,7 +39,7 @@ namespace MPACK
 		ReturnValue VolumeGroupController::Mute()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->Mute()==RETURN_VALUE_KO)
 				{
@@ -52,7 +52,7 @@ namespace MPACK
 		ReturnValue VolumeGroupController::Unmute()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->Unmute()==RETURN_VALUE_KO)
 				{
@@ -65,7 +65,7 @@ namespace MPACK
 		ReturnValue VolumeGroupController::SetMute(SLboolean mute)
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->SetMute(mute)==RETURN_VALUE_KO)
 				{
@@ -78,7 +78,7 @@ namespace MPACK
 		ReturnValue VolumeGroupController::Set(double linear)
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->Set(linear)==RETURN_VALUE_KO)
 				{

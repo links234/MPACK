@@ -24,7 +24,7 @@ namespace MPACK
 		ReturnValue StereoGroupController::Enable()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->Stereo()->Enable()==RETURN_VALUE_KO)
 				{
@@ -37,7 +37,7 @@ namespace MPACK
 		ReturnValue StereoGroupController::Disable()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->Stereo()->Disable()==RETURN_VALUE_KO)
 				{
@@ -50,7 +50,7 @@ namespace MPACK
 		ReturnValue StereoGroupController::Toggle()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->Stereo()->Toggle()==RETURN_VALUE_KO)
 				{
@@ -63,7 +63,7 @@ namespace MPACK
 		ReturnValue StereoGroupController::SetEnabled(bool enabled)
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->Stereo()->SetEnabled(enabled)==RETURN_VALUE_KO)
 				{
@@ -76,7 +76,7 @@ namespace MPACK
 		ReturnValue StereoGroupController::Set(SLpermille position)
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Volume()->Stereo()->Set(position)==RETURN_VALUE_KO)
 				{

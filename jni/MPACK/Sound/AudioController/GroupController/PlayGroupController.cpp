@@ -23,7 +23,7 @@ namespace MPACK
 		ReturnValue PlayGroupController::Start()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Play()->Start()==RETURN_VALUE_KO)
 				{
@@ -36,7 +36,7 @@ namespace MPACK
 		ReturnValue PlayGroupController::Resume()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Play()->Resume()==RETURN_VALUE_KO)
 				{
@@ -49,7 +49,7 @@ namespace MPACK
 		ReturnValue PlayGroupController::Pause()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Play()->Pause()==RETURN_VALUE_KO)
 				{
@@ -62,7 +62,7 @@ namespace MPACK
 		ReturnValue PlayGroupController::Stop()
 		{
 			ReturnValue retVal=RETURN_VALUE_OK;
-			for(vector<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
+			for(unordered_set<AudioPlayer*>::iterator it=m_pGroupController->m_objects.begin();it!=m_pGroupController->m_objects.end();++it)
 			{
 				if((*it)->Play()->Stop()==RETURN_VALUE_KO)
 				{

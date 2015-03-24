@@ -24,6 +24,7 @@ namespace MPACK
 			~GroupController();
 
 			void Add(AudioPlayer *audioPlayer);
+			void Remove(AudioPlayer *audioPlayer);
 			void Clear();
 
 			PlayGroupController* Play() const;
@@ -37,7 +38,7 @@ namespace MPACK
 		protected:
 			GroupController(std::string name=std::string(""));
 
-			std::vector<AudioPlayer*> m_objects;
+			std::unordered_set<AudioPlayer*> m_objects;
 
 			PlayGroupController *m_pPlayGroupController;
 			VolumeGroupController *m_pVolumeGroupController;
