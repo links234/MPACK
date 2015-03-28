@@ -3,6 +3,10 @@
 
 #define DEBUG
 
+#include "Types.hpp"
+#include "Helper.hpp"
+#include "Log.hpp"
+
 #ifndef DEBUG
     #define PRINT(x)
     #define D if(0)
@@ -11,9 +15,6 @@
 		LOGD("%s\t%s\n",#x,x)
     #define D if(1)
 #endif
-
-#include "Helper.hpp"
-#include "Log.hpp"
 
 #ifndef DEBUG
 	#define LOGE(...)
@@ -25,6 +26,15 @@
 	#define LOGW(...) MPACK::Core::Log::Warn(__VA_ARGS__)
 	#define LOGI(...) MPACK::Core::Log::Info(__VA_ARGS__)
 	#define LOGD(...) MPACK::Core::Log::Debug(__VA_ARGS__)
+#endif
+
+#ifndef DEBUG
+	#define GL_CHECK(something) something
+#else
+	#define GL_CHECK(something) do { \
+            something; \
+            Debug::OpenGL::CheckErrorMacro(#something, __FILE__, __LINE__); \
+        } while (0)
 #endif
 
 namespace MPACK
@@ -46,7 +56,22 @@ namespace MPACK
 
 		void InitFrame();
 		void Print(Graphics::TextureMappedFont *font, const char *message, ...);
-		void AssertGL(const char *pMessage);
+
+		namespace OpenGL
+		{
+			GLenum GetError();
+			const char* GetErrorString(const GLenum &error);
+
+			void SetMaxErrorCounter(int number);
+			int GetMaxErrorCounter();
+
+			int GetErrorCounter();
+
+			void Assert(const char *pMessage);
+			void FlushErrors(const char *pMessage);
+
+			void CheckErrorMacro(const char* pContent, const char* pFilename, int line);
+		}
 	}
 }
 
