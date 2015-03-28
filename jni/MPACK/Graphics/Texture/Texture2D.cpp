@@ -28,7 +28,7 @@ namespace MPACK
 
 		Texture2D::~Texture2D()
 		{
-			glDeleteTextures(1, &m_texId);
+			GL_CHECK( glDeleteTextures(1, &m_texId) );
 		}
 
 		bool Texture2D::Load(string path, FilteringType filtering, GLenum s_mode, GLenum t_mode)
@@ -49,9 +49,9 @@ namespace MPACK
 		bool Texture2D::Load(const Image* image, FilteringType filtering, GLenum s_mode, GLenum t_mode)
 		{
 			LOGI("Texture2D::Load - load image to texture");
-			glDeleteTextures(1, &m_texId);
-			glGenTextures(1, &m_texId);
-			glBindTexture(GL_TEXTURE_2D, m_texId);
+			GL_CHECK( glDeleteTextures(1, &m_texId) );
+			GL_CHECK( glGenTextures(1, &m_texId) );
+			GL_CHECK( glBindTexture(GL_TEXTURE_2D, m_texId) );
 
 			GLenum internalFormat;
 			GLenum format;
@@ -65,9 +65,9 @@ namespace MPACK
 
 			Init();
 
-			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_width,
+			GL_CHECK( glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_width,
 							m_height, 0, format, GL_UNSIGNED_BYTE,
-							image->GetImageData());
+							image->GetImageData()) );
 			return true;
 		}
 
@@ -76,11 +76,11 @@ namespace MPACK
 			GLenum colorAttachmentInternalFormat = GL_RGBA;
 			GLenum colorAttachmentType = GL_UNSIGNED_BYTE;
 
-			glDeleteTextures(1, &m_texId);
-			glGenTextures(1, &m_texId);
-			glBindTexture(GL_TEXTURE_2D, m_texId);
-			glTexImage2D(GL_TEXTURE_2D, 0, colorAttachmentInternalFormat, width, height, 0,
-							 GL_RGBA, colorAttachmentType, 0);
+			GL_CHECK( glDeleteTextures(1, &m_texId) );
+			GL_CHECK( glGenTextures(1, &m_texId) );
+			GL_CHECK( glBindTexture(GL_TEXTURE_2D, m_texId) );
+			GL_CHECK( glTexImage2D(GL_TEXTURE_2D, 0, colorAttachmentInternalFormat, width, height, 0,
+							 GL_RGBA, colorAttachmentType, 0) );
 
 			m_width=width;
 			m_height=height;
@@ -98,7 +98,7 @@ namespace MPACK
 			if(textureBinded[textureIndex]!=m_texId)
 			{
 				textureBinded[textureIndex]=m_texId;
-				glBindTexture(GL_TEXTURE_2D, m_texId);
+				GL_CHECK( glBindTexture(GL_TEXTURE_2D, m_texId) );
 			}
 
 			if(m_needUpdate)
@@ -134,22 +134,22 @@ namespace MPACK
 		{
 			if(m_filteringType==Point)
 			{
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST) );
+				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST) );
 			}
 			else if(m_filteringType==Bilinear)
 			{
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
+				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR) );
 			}
 			else if(m_filteringType==Trilinear)
 			{
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
+				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR) );
 			}
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_sWrapMode);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_sWrapMode);
+			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_sWrapMode) );
+			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_sWrapMode) );
 
 			m_needUpdate=false;
 		}
@@ -169,7 +169,7 @@ namespace MPACK
 			static GLenum currentTEXTURE=0;
 			if(TEXTURE!=currentTEXTURE)
 			{
-				glActiveTexture(TEXTURE);
+				GL_CHECK( glActiveTexture(TEXTURE) );
 				currentTEXTURE=TEXTURE;
 			}
 		}

@@ -34,31 +34,31 @@ namespace MPACK
 		}
 		void ShaderType_Sprite::SendVertexBuffer()
 		{
-			glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),BUFFER_OFFSET(0));
-			glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),BUFFER_OFFSET(sizeof(GLfloat)*2));
-			glVertexAttribPointer((GLint)2,4,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),BUFFER_OFFSET(sizeof(GLfloat)*4));
-			glVertexAttribPointer((GLint)3,1,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),BUFFER_OFFSET(sizeof(GLfloat)*8));
+			GL_CHECK( glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),BUFFER_OFFSET(0)) );
+			GL_CHECK( glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),BUFFER_OFFSET(sizeof(GLfloat)*2)) );
+			GL_CHECK( glVertexAttribPointer((GLint)2,4,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),BUFFER_OFFSET(sizeof(GLfloat)*4)) );
+			GL_CHECK( glVertexAttribPointer((GLint)3,1,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),BUFFER_OFFSET(sizeof(GLfloat)*8)) );
 		}
 		void ShaderType_Sprite::SendVertexBuffer(GLfloat *VA)
 		{
-			glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),VA);
-			glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*2)));
-			glVertexAttribPointer((GLint)2,4,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*4)));
-			glVertexAttribPointer((GLint)3,1,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*8)));
+			GL_CHECK( glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),VA) );
+			GL_CHECK( glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*2))) );
+			GL_CHECK( glVertexAttribPointer((GLint)2,4,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*4))) );
+			GL_CHECK( glVertexAttribPointer((GLint)3,1,GL_FLOAT,GL_FALSE,sizeof(SpriteVertex),(GLvoid*)((intptr_t)(VA)+(intptr_t)(sizeof(GLfloat)*8))) );
 		}
 		void ShaderType_Sprite::EnableVertexAttributes()
 		{
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
-			glEnableVertexAttribArray(2);
-			glEnableVertexAttribArray(3);
+			GL_CHECK( glEnableVertexAttribArray(0) );
+			GL_CHECK( glEnableVertexAttribArray(1) );
+			GL_CHECK( glEnableVertexAttribArray(2) );
+			GL_CHECK( glEnableVertexAttribArray(3) );
 		}
 		void ShaderType_Sprite::DisableVertexAttributes()
 		{
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
-			glEnableVertexAttribArray(2);
-			glEnableVertexAttribArray(3);
+			GL_CHECK( glEnableVertexAttribArray(0) );
+			GL_CHECK( glEnableVertexAttribArray(1) );
+			GL_CHECK( glEnableVertexAttribArray(2) );
+			GL_CHECK( glEnableVertexAttribArray(3) );
 		}
 
 		ShaderType_Tex0Pass::ShaderType_Tex0Pass(const char* vertexShader, const char* fragmentShader, const char* header)
@@ -88,23 +88,23 @@ namespace MPACK
 		}
 		void ShaderType_Tex0Pass::SendVertexBuffer()
 		{
-			glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,BUFFER_OFFSET(0));
-			glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,BUFFER_OFFSET(sizeof(GLfloat)*2));
+			GL_CHECK( glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,BUFFER_OFFSET(0)) );
+			GL_CHECK( glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,BUFFER_OFFSET(sizeof(GLfloat)*2)) );
 		}
 		void ShaderType_Tex0Pass::SendVertexBuffer(GLfloat *VAO)
 		{
-			glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,VAO);
-			glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,(GLvoid*)((intptr_t)VAO+(intptr_t)sizeof(GLfloat)*2));
+			GL_CHECK( glVertexAttribPointer((GLint)0,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,VAO) );
+			GL_CHECK( glVertexAttribPointer((GLint)1,2,GL_FLOAT,GL_FALSE,sizeof(GLfloat)*4,(GLvoid*)((intptr_t)VAO+(intptr_t)sizeof(GLfloat)*2)) );
 		}
 		void ShaderType_Tex0Pass::EnableVertexAttributes()
 		{
-			glEnableVertexAttribArray(0);
-			glEnableVertexAttribArray(1);
+			GL_CHECK( glEnableVertexAttribArray(0) );
+			GL_CHECK( glEnableVertexAttribArray(1) );
 		}
 		void ShaderType_Tex0Pass::DisableVertexAttributes()
 		{
-			glDisableVertexAttribArray(0);
-			glDisableVertexAttribArray(1);
+			GL_CHECK( glDisableVertexAttribArray(0) );
+			GL_CHECK( glDisableVertexAttribArray(1) );
 		}
 
 		AbstractShaderType* Sprite_Shader;
@@ -174,9 +174,18 @@ namespace MPACK
 
 		void DeleteShaders()
 		{
-			delete Sprite_Shader;
-			delete FXAAII_Shader;
-			delete FXAAI_Shader;
+			if(Sprite_Shader)
+			{
+				delete Sprite_Shader;
+			}
+			if(FXAAII_Shader)
+			{
+				delete FXAAII_Shader;
+			}
+			if(FXAAI_Shader)
+			{
+				delete FXAAI_Shader;
+			}
 		}
 	}
 }

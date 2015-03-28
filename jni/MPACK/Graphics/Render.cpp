@@ -30,13 +30,13 @@ namespace MPACK
 				s_screenWidth=s_screenHeight=1.0f;
 			}
 
-			glEnable(GL_DEPTH_TEST);
-			glDepthFunc(GL_LEQUAL);
-			glClearColor(0.2f,0.4f,0.4f,1.0f);
+			GL_CHECK( glEnable(GL_DEPTH_TEST) );
+			GL_CHECK( glDepthFunc(GL_LEQUAL) );
+			GL_CHECK( glClearColor(0.2f,0.4f,0.4f,1.0f) );
 
-			glEnable(GL_CULL_FACE);
-			glFrontFace(GL_CCW);
-			glCullFace(GL_BACK);
+			GL_CHECK( glEnable(GL_CULL_FACE) );
+			GL_CHECK( glFrontFace(GL_CCW) );
+			GL_CHECK( glCullFace(GL_BACK) );
 		}
 
 		void Render::Uninit()
@@ -66,7 +66,7 @@ namespace MPACK
 			if(!s_orthoModeEnabled || s_needUpdateOrtho)
 			{
 				ShaderUniform::projectionMatrix=s_orthoModeMatrix;
-				glDisable(GL_DEPTH_TEST);
+				GL_CHECK( glDisable(GL_DEPTH_TEST) );
 				s_orthoModeEnabled=true;
 				s_needUpdateOrtho=false;
 			}
@@ -76,20 +76,20 @@ namespace MPACK
 		{
 			if(s_orthoModeEnabled)
 			{
-				glEnable(GL_DEPTH_TEST);
+				GL_CHECK( glEnable(GL_DEPTH_TEST) );
 				s_orthoModeEnabled=false;
 			}
 		}
 
 		void Render::EnableAlphaBlend()
 		{
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			GL_CHECK( glEnable(GL_BLEND) );
+			GL_CHECK( glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) );
 		}
 
 		void Render::DisableAlphaBlend()
 		{
-			glDisable(GL_BLEND);
+			GL_CHECK( glDisable(GL_BLEND) );
 		}
 
 		void Render::SetScreenSize(GLint width, GLint height)
@@ -98,7 +98,7 @@ namespace MPACK
 			s_screenWidth=(GLfloat)(width);
 			s_screenHeight=(GLfloat)(height);
 
-			glViewport(0,0,(GLint)(width),(GLint)(height));
+			GL_CHECK( glViewport(0,0,(GLint)(width),(GLint)(height)) );
 		}
 
 		GLint Render::GetScreenWidth()
