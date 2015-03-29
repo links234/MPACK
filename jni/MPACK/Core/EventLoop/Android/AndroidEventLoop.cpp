@@ -46,7 +46,6 @@ namespace MPACK
 					// An event has to be processed.
 					if (lSource != NULL)
 					{
-						LOGI("Processing an event");
 						lSource->process(Global::pAndroidApp, lSource);
 					}
 					// Application is getting destroyed.
@@ -127,11 +126,8 @@ namespace MPACK
 					m_pActivityHandler->onDestroy();
 					break;
 				case APP_CMD_GAINED_FOCUS:
-					LOGD("OK HERE! 0");
 					Activate();
-					LOGD("OK HERE! 1");
 					m_pActivityHandler->onGainFocus();
-					LOGD("OK HERE! 2");
 					break;
 				case APP_CMD_LOST_FOCUS:
 					m_pActivityHandler->onLostFocus();
@@ -216,7 +212,7 @@ namespace MPACK
 					EGL_RED_SIZE, 8,
 					EGL_GREEN_SIZE, 8,
 					EGL_BLUE_SIZE, 8,
-					EGL_DEPTH_SIZE, 24,
+					EGL_DEPTH_SIZE, 16,
 					EGL_NONE
 				};
 			const EGLint lContextAttrib[] =
@@ -225,40 +221,45 @@ namespace MPACK
 			};
 
 			// Retrieves a display connection and initializes it.
-			mDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+			EGL_CHECK( mDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY) );
 			if (mDisplay == EGL_NO_DISPLAY)
 			{
 				LOGE("EGL_NO_DISPLAY");
 				goto ERROR;
 			}
-			if (!eglInitialize(mDisplay, NULL, NULL))
+			EGLint result;
+			EGL_CHECK( result = eglInitialize(mDisplay, NULL, NULL) );
+			if (!result)
 			{
 				LOGE("Unable to initialize display");
 				goto ERROR;
 			}
 
 			// Selects the first OpenGL configuration found.
-			if(!eglChooseConfig(mDisplay, lAttributes, &lConfig, 1, &lNumConfigs) || (lNumConfigs <= 0))
+			EGL_CHECK( result = eglChooseConfig(mDisplay, lAttributes, &lConfig, 1, &lNumConfigs) );
+			if(!result || (lNumConfigs <= 0))
 			{
-				LOGE("Unable to select display configuration");
+				Debug::EGL::Assert("Unable to select display configuration");
 				goto ERROR;
 			}
 
 			// Reconfigures the Android window with the EGL format.
-			if (!eglGetConfigAttrib(mDisplay, lConfig, EGL_NATIVE_VISUAL_ID, &lFormat))
+			EGL_CHECK( result = eglGetConfigAttrib(mDisplay, lConfig, EGL_NATIVE_VISUAL_ID, &lFormat) );
+			if (!result)
 			{
 				LOGE("Unable to configure window format");
 				goto ERROR;
 			}
 			ANativeWindow_setBuffersGeometry(Global::pAndroidApp->window, 0, 0, lFormat);
+
 			// Creates the display surface.
-			mSurface = eglCreateWindowSurface(mDisplay, lConfig, Global::pAndroidApp->window, NULL);
+			EGL_CHECK( mSurface = eglCreateWindowSurface(mDisplay, lConfig, Global::pAndroidApp->window, NULL) );
 			if (mSurface == EGL_NO_SURFACE)
 			{
 				LOGE("EGL_NO_SURFACE");
 				goto ERROR;
 			}
-			mContext = eglCreateContext(mDisplay, lConfig, EGL_NO_CONTEXT, lContextAttrib);
+			EGL_CHECK( mContext = eglCreateContext(mDisplay, lConfig, EGL_NO_CONTEXT, lContextAttrib) );
 			if (mContext == EGL_NO_CONTEXT)
 			{
 				LOGE("EGL_NO_CONTEXT");
@@ -267,10 +268,10 @@ namespace MPACK
 
 			// Activates the display surface.
 			LOGD("Activating the display.");
-			if (!eglMakeCurrent(mDisplay, mSurface, mSurface, mContext)
-			 || !eglQuerySurface(mDisplay, mSurface, EGL_WIDTH, &mWidth)
-			 || !eglQuerySurface(mDisplay, mSurface, EGL_HEIGHT, &mHeight)
-			 || (mWidth <= 0) || (mHeight <= 0))
+			EGL_CHECK( result = eglMakeCurrent(mDisplay, mSurface, mSurface, mContext) );
+			EGL_CHECK( result += eglQuerySurface(mDisplay, mSurface, EGL_WIDTH, &mWidth) );
+			EGL_CHECK( result += eglQuerySurface(mDisplay, mSurface, EGL_HEIGHT, &mHeight) );
+			if (!result || (mWidth <= 0) || (mHeight <= 0))
 			{
 				LOGE("Unable to activate display");
 				goto ERROR;
@@ -297,18 +298,18 @@ namespace MPACK
 		{
 			if (mDisplay != EGL_NO_DISPLAY)
 			{
-				eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+				EGL_CHECK( eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) );
 				if (mContext != EGL_NO_CONTEXT)
 				{
-					eglDestroyContext(mDisplay, mContext);
+					EGL_CHECK( eglDestroyContext(mDisplay, mContext) );
 					mContext = EGL_NO_CONTEXT;
 				}
 				if (mSurface != EGL_NO_SURFACE)
 				{
-					eglDestroySurface(mDisplay, mSurface);
+					EGL_CHECK( eglDestroySurface(mDisplay, mSurface) );
 					mSurface = EGL_NO_SURFACE;
 				}
-				eglTerminate(mDisplay);
+				EGL_CHECK( eglTerminate(mDisplay) );
 				mDisplay = EGL_NO_DISPLAY;
 			}
 		}
