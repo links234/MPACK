@@ -106,7 +106,7 @@ namespace MPACK
 				{
 					LOGE(pMessage);
 					LOGE("OpenGL Error: %s",GetErrorString(error));
-				 }
+				}
 			}
 
 			void FlushErrors(const char *pMessage)
@@ -133,6 +133,98 @@ namespace MPACK
 			        LOGE("OpenGL error %s (%08x), at %s:%i - for %s\n", GetErrorString(error), error, pFilename, line, pContent);
 			        terminate();
 			    }
+			}
+		}
+
+		namespace EGL
+		{
+			int	i_errorCounter = 0;
+			int i_maxErrorCounter = 1;
+
+			EGLint GetError()
+			{
+				GLenum error = eglGetError();
+				if(error != EGL_SUCCESS)
+				{
+					++i_errorCounter;
+					if(i_errorCounter>i_maxErrorCounter)
+					{
+						LOGE("EGL Error: Number of errors exceeded %d. Terminating process!",i_maxErrorCounter);
+						terminate();
+					}
+				}
+				return error;
+			}
+
+			const char* GetErrorString(const EGLint &error)
+			{
+				switch(error)
+				{
+					case EGL_SUCCESS:
+						return "EGL_SUCCESS";
+					case EGL_NOT_INITIALIZED:
+						return "EGL_NOT_INITIALIZED";
+					case EGL_BAD_ACCESS:
+						return "EGL_BAD_ACCESS";
+					case EGL_BAD_ALLOC:
+						return "EGL_BAD_ALLOC";
+					case EGL_BAD_ATTRIBUTE:
+						return "EGL_BAD_ATTRIBUTE";
+					case EGL_BAD_CONTEXT:
+						return "EGL_BAD_CONTEXT";
+					case EGL_BAD_CONFIG:
+						return "EGL_BAD_CONFIG";
+					case EGL_BAD_CURRENT_SURFACE:
+						return "EGL_BAD_CURRENT_SURFACE";
+					case EGL_BAD_DISPLAY:
+						return "EGL_BAD_DISPLAY";
+					case EGL_BAD_SURFACE:
+						return "EGL_BAD_SURFACE";
+					case EGL_BAD_PARAMETER:
+						return "EGL_BAD_PARAMETER";
+					case EGL_BAD_NATIVE_PIXMAP:
+						return "EGL_BAD_NATIVE_PIXMAP";
+					case EGL_BAD_NATIVE_WINDOW:
+						return "EGL_BAD_NATIVE_WINDOW";
+					case EGL_CONTEXT_LOST:
+						return "EGL_CONTEXT_LOST";
+				}
+				return "EGL_INVALID_ERROR";
+			}
+
+			void SetMaxErrorCounter(int number)
+			{
+				i_maxErrorCounter=number;
+			}
+
+			int GetMaxErrorCounter()
+			{
+				return i_maxErrorCounter;
+			}
+
+			int GetErrorCounter()
+			{
+				return i_errorCounter;
+			}
+
+			void Assert(const char *pMessage)
+			{
+				GLenum error = GetError();
+				if(error != EGL_SUCCESS)
+				{
+					LOGE(pMessage);
+					LOGE("EGL Error: %s",GetErrorString(error));
+				}
+			}
+
+			void CheckErrorMacro(const char* pContent, const char* pFilename, int line)
+			{
+				GLenum error = GetError();
+				if (error != EGL_SUCCESS)
+				{
+					LOGE("EGL error %s (%08x), at %s:%i - for %s\n", GetErrorString(error), error, pFilename, line, pContent);
+					terminate();
+				}
 			}
 		}
 	}

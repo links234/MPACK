@@ -37,6 +37,15 @@
         } while (0)
 #endif
 
+#ifndef DEBUG
+	#define EGL_CHECK(something) something
+#else
+	#define EGL_CHECK(something) do { \
+            something; \
+            Debug::EGL::CheckErrorMacro(#something, __FILE__, __LINE__); \
+        } while (0)
+#endif
+
 namespace MPACK
 {
 	namespace Graphics
@@ -69,6 +78,21 @@ namespace MPACK
 
 			void Assert(const char *pMessage);
 			void FlushErrors(const char *pMessage);
+
+			void CheckErrorMacro(const char* pContent, const char* pFilename, int line);
+		}
+
+		namespace EGL
+		{
+			EGLint GetError();
+			const char* GetErrorString(const EGLint &error);
+
+			void SetMaxErrorCounter(int number);
+			int GetMaxErrorCounter();
+
+			int GetErrorCounter();
+
+			void Assert(const char *pMessage);
 
 			void CheckErrorMacro(const char* pContent, const char* pFilename, int line);
 		}
