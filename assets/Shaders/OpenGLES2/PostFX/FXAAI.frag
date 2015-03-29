@@ -171,9 +171,6 @@ void main()
 {
 	vec2 rcpFrame = vec2(1.0/rt_w, 1.0/rt_h);
 	outColor=texture2D(texture0,texCoord0);
-	if(texCoord0.x<0.0)
-	{
-		outColor=vec4(FxaaPixelShader(texCoord0,texture0,rcpFrame),1.0);
-	}
+
 	gl_FragColor=outColor;
 }
