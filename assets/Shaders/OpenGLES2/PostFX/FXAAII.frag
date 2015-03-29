@@ -1,9 +1,12 @@
+precision mediump float;
+precision mediump int;
+
 uniform sampler2D texture0;
 
-float rt_w = 1920.0f;
-float rt_h = 1080.0f;
-float inv_w_size = 1.0f/rt_w;
-float inv_h_size = 1.0f/rt_h;
+float rt_w = 1920.0;
+float rt_h = 1080.0;
+float inv_w_size = 1.0/rt_w;
+float inv_h_size = 1.0/rt_h;
 vec2 inv_screen_size = vec2(inv_w_size,inv_h_size);
 
 float FXAA_SPAN_MAX = 8.0;
@@ -27,9 +30,9 @@ vec3 FxaaPixelShader(
     	#define FXAA_REDUCE_MIN   (1.0/128.0)
 /*---------------------------------------------------------*/
     	vec3 rgbNW = FxaaTexLod0(tex, posPos.zw).xyz;
-    	vec3 rgbNE = FxaaTexOff(tex, posPos.zw, vec2(1.0f,0.0f)).xyz;
-    	vec3 rgbSW = FxaaTexOff(tex, posPos.zw, vec2(0.0f,1.0f)).xyz;
-    	vec3 rgbSE = FxaaTexOff(tex, posPos.zw, vec2(1.0f,1.0f)).xyz;
+    	vec3 rgbNE = FxaaTexOff(tex, posPos.zw, vec2(1.0,0.0)).xyz;
+    	vec3 rgbSW = FxaaTexOff(tex, posPos.zw, vec2(0.0,1.0)).xyz;
+    	vec3 rgbSE = FxaaTexOff(tex, posPos.zw, vec2(1.0,1.0)).xyz;
     	vec3 rgbM  = FxaaTexLod0(tex, posPos.xy).xyz;
 /*---------------------------------------------------------*/
     	vec3 luma = vec3(0.299, 0.587, 0.114);

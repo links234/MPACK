@@ -2,8 +2,8 @@ uniform mat4 projection_matrix;
 
 float FXAA_SUBPIX_SHIFT = 1.0/4.0;
 
-float rt_w = 1920.0f;
-float rt_h = 1080.0f;
+float rt_w = 1920.0;
+float rt_h = 1080.0;
 
 attribute vec2 a_Vertex;
 attribute vec2 a_TexCoord0;
