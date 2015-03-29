@@ -27,6 +27,7 @@ namespace MPACK
 			struct GLSLShader
 			{
 				unsigned int id;
+				std::string path;
 				std::string source;
 			};
 

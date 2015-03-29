@@ -29,11 +29,13 @@ namespace MPACK
 			}
 			Core::Resource *vertexShaderResourcePointer=Core::LoadResource(vertexShader);
 			vertexShaderResourcePointer->Open();
+			m_vertexShader.path = vertexShader;
 			m_vertexShader.source=string((const char*)(vertexShaderResourcePointer->Bufferize()));
 			delete vertexShaderResourcePointer;
 
 			Core::Resource *fragmentShaderResourcePointer=Core::LoadResource(fragmentShader);
 			fragmentShaderResourcePointer->Open();
+			m_fragmentShader.path = fragmentShader;
 			m_fragmentShader.source=string((const char*)(fragmentShaderResourcePointer->Bufferize()));
 			delete fragmentShaderResourcePointer;
 		}
@@ -183,7 +185,7 @@ namespace MPACK
 
 			if (!result)
 			{
-				LOGE("Failed to compile shader:\n %s",shader.source.c_str());
+				LOGE("Failed to compile shader from \"%s\":\n %s",shader.path.c_str(),shader.source.c_str());
 				OutputShaderLog(shader.id);
 				return false;
 			}
@@ -194,7 +196,7 @@ namespace MPACK
 		{
 			GLint infoLen;
 			GL_CHECK( glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLen) );
-			const int BUFFER_SIZE=4096;
+			const int BUFFER_SIZE=64*1024;
 			char buffer[BUFFER_SIZE];
 
 			LOGE("Shader output log:");
@@ -208,7 +210,7 @@ namespace MPACK
 		{
 			GLint infoLen;
 			GL_CHECK( glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &infoLen) );
-			const int BUFFER_SIZE=4096;
+			const int BUFFER_SIZE=64*1024;
 			char buffer[BUFFER_SIZE];
 
 			LOGE("Program output log: ");
