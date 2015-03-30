@@ -15,8 +15,8 @@ namespace MPACK
 	namespace Core
 	{
 		AndroidEventLoop::AndroidEventLoop(void *data) :
-			mEnabled(false), mQuit(false), mDisplay(EGL_NO_DISPLAY), mSurface(EGL_NO_CONTEXT),
-			mContext(EGL_NO_SURFACE)
+			m_enabled(false), m_quit(false), m_display(EGL_NO_DISPLAY), m_surface(EGL_NO_CONTEXT),
+			m_context(EGL_NO_SURFACE), m_majorVersion(0), m_minorVersion(0)
 		{
 			Global::pAndroidApp->userData = this;
 			Global::pAndroidApp->onAppCmd = callback_event;
@@ -25,9 +25,9 @@ namespace MPACK
 
 		ReturnValue AndroidEventLoop::Run(ActivityHandler* pActivityHandler)
 		{
-			int32_t lResult;
-			int32_t lEvents;
-			android_poll_source* lSource;
+			int32_t result;
+			int32_t events;
+			android_poll_source* source;
 
 			// Makes sure native glue is not stripped by the linker.
 			app_dummy();
@@ -41,12 +41,12 @@ namespace MPACK
 				Global::pContext->pInputService->Update();
 
 				// Event processing loop.
-				while ((lResult = ALooper_pollAll(mEnabled ? 0 : -1, NULL, &lEvents, (void**) &lSource)) >= 0)
+				while ((result = ALooper_pollAll(m_enabled ? 0 : -1, NULL, &events, (void**) &source)) >= 0)
 				{
 					// An event has to be processed.
-					if (lSource != NULL)
+					if (source != NULL)
 					{
-						lSource->process(Global::pAndroidApp, lSource);
+						source->process(Global::pAndroidApp, source);
 					}
 					// Application is getting destroyed.
 					if (Global::pAndroidApp->destroyRequested)
@@ -57,17 +57,17 @@ namespace MPACK
 				}
 
 				// Steps the application.
-				if ((mEnabled) && (!mQuit))
+				if ((m_enabled) && (!m_quit))
 				{
 					if (m_pActivityHandler->onStep() != RETURN_VALUE_OK)
 					{
-						mQuit = true;
+						m_quit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
 					}
-					if(eglSwapBuffers(mDisplay, mSurface)!=EGL_TRUE)
+					if(eglSwapBuffers(m_display, m_surface)!=EGL_TRUE)
 					{
 						LOGE("Error %d swapping buffers.",eglGetError());
-						mQuit = true;
+						m_quit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
 					}
 				}
@@ -83,19 +83,20 @@ namespace MPACK
 		void AndroidEventLoop::Activate()
 		{
 			// Enables activity only if a window is available.
-			if ((!mEnabled) && (Global::pAndroidApp->window != NULL))
+			if ((!m_enabled) && (Global::pAndroidApp->window != NULL))
 			{
-				mQuit = false; mEnabled = true;
+				m_quit = false;
+				m_enabled = true;
 				if ( InitializeDisplay() != RETURN_VALUE_OK )
 				{
-					mQuit = true;
+					m_quit = true;
 					Deactivate();
 					ANativeActivity_finish(Global::pAndroidApp->activity);
 					return;
 				}
 				if (m_pActivityHandler->onActivate() != RETURN_VALUE_OK)
 				{
-					mQuit = true;
+					m_quit = true;
 					Deactivate();
 					ANativeActivity_finish(Global::pAndroidApp->activity);
 				}
@@ -104,10 +105,10 @@ namespace MPACK
 
 		void AndroidEventLoop::Deactivate()
 		{
-			if (mEnabled)
+			if (m_enabled)
 			{
 				m_pActivityHandler->onDeactivate();
-				mEnabled = false;
+				m_enabled = false;
 			}
 			DestroyDisplay();
 		}
@@ -164,14 +165,14 @@ namespace MPACK
 
 		void AndroidEventLoop::callback_event(android_app* pApplication, int32_t pCommand)
 		{
-			AndroidEventLoop& lEventLoop = *(AndroidEventLoop*) pApplication->userData;
-			lEventLoop.ProcessAppEvent(pCommand);
+			AndroidEventLoop& eventLoop = *(AndroidEventLoop*) pApplication->userData;
+			eventLoop.ProcessAppEvent(pCommand);
 		}
 
 		int32_t AndroidEventLoop::ProcessInputEvent(AInputEvent* pEvent)
 		{
-			int32_t lEventType = AInputEvent_getType(pEvent);
-			switch (lEventType)
+			int32_t eventType = AInputEvent_getType(pEvent);
+			switch (eventType)
 			{
 				case AINPUT_EVENT_TYPE_MOTION:
 					switch (AInputEvent_getSource(pEvent))
@@ -195,18 +196,19 @@ namespace MPACK
 
 		int32_t AndroidEventLoop::callback_input(android_app* pApplication, AInputEvent* pEvent)
 		{
-			AndroidEventLoop& lEventLoop = *(AndroidEventLoop*) pApplication->userData;
-			return lEventLoop.ProcessInputEvent(pEvent);
+			AndroidEventLoop& eventLoop = *(AndroidEventLoop*) pApplication->userData;
+			return eventLoop.ProcessInputEvent(pEvent);
 		}
 
 		ReturnValue AndroidEventLoop::InitializeDisplay()
 		{
-			int mWidth, mHeight;
+			int width, height;
 
-			EGLint lFormat, lNumConfigs, lErrorResult;
-			EGLConfig lConfig;
+			EGLint format, numConfigs, errorResult;
+			EGLConfig config;
+			EGLint result;
 
-			const EGLint lAttributes[] =
+			const EGLint attributes[] =
 				{
 					EGL_RENDERABLE_TYPE, EGL_WINDOW_BIT,
 					EGL_RED_SIZE, 8,
@@ -215,20 +217,19 @@ namespace MPACK
 					EGL_DEPTH_SIZE, 16,
 					EGL_NONE
 				};
-			const EGLint lContextAttrib[] =
+			const EGLint contextAttrib[] =
 			{
 				EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE
 			};
 
 			// Retrieves a display connection and initializes it.
-			EGL_CHECK( mDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY) );
-			if (mDisplay == EGL_NO_DISPLAY)
+			EGL_CHECK( m_display = eglGetDisplay(EGL_DEFAULT_DISPLAY) );
+			if (m_display == EGL_NO_DISPLAY)
 			{
 				LOGE("EGL_NO_DISPLAY");
 				goto ERROR;
 			}
-			EGLint result;
-			EGL_CHECK( result = eglInitialize(mDisplay, NULL, NULL) );
+			EGL_CHECK( result = eglInitialize(m_display, &m_majorVersion, &m_minorVersion) );
 			if (!result)
 			{
 				LOGE("Unable to initialize display");
@@ -236,31 +237,31 @@ namespace MPACK
 			}
 
 			// Selects the first OpenGL configuration found.
-			EGL_CHECK( result = eglChooseConfig(mDisplay, lAttributes, &lConfig, 1, &lNumConfigs) );
-			if(!result || (lNumConfigs <= 0))
+			EGL_CHECK( result = eglChooseConfig(m_display, attributes, &config, 1, &numConfigs) );
+			if(!result || (numConfigs <= 0))
 			{
 				Debug::EGL::Assert("Unable to select display configuration");
 				goto ERROR;
 			}
 
 			// Reconfigures the Android window with the EGL format.
-			EGL_CHECK( result = eglGetConfigAttrib(mDisplay, lConfig, EGL_NATIVE_VISUAL_ID, &lFormat) );
+			EGL_CHECK( result = eglGetConfigAttrib(m_display, config, EGL_NATIVE_VISUAL_ID, &format) );
 			if (!result)
 			{
 				LOGE("Unable to configure window format");
 				goto ERROR;
 			}
-			ANativeWindow_setBuffersGeometry(Global::pAndroidApp->window, 0, 0, lFormat);
+			ANativeWindow_setBuffersGeometry(Global::pAndroidApp->window, 0, 0, format);
 
 			// Creates the display surface.
-			EGL_CHECK( mSurface = eglCreateWindowSurface(mDisplay, lConfig, Global::pAndroidApp->window, NULL) );
-			if (mSurface == EGL_NO_SURFACE)
+			EGL_CHECK( m_surface = eglCreateWindowSurface(m_display, config, Global::pAndroidApp->window, NULL) );
+			if (m_surface == EGL_NO_SURFACE)
 			{
 				LOGE("EGL_NO_SURFACE");
 				goto ERROR;
 			}
-			EGL_CHECK( mContext = eglCreateContext(mDisplay, lConfig, EGL_NO_CONTEXT, lContextAttrib) );
-			if (mContext == EGL_NO_CONTEXT)
+			EGL_CHECK( m_context = eglCreateContext(m_display, config, EGL_NO_CONTEXT, contextAttrib) );
+			if (m_context == EGL_NO_CONTEXT)
 			{
 				LOGE("EGL_NO_CONTEXT");
 				goto ERROR;
@@ -268,10 +269,10 @@ namespace MPACK
 
 			// Activates the display surface.
 			LOGD("Activating the display.");
-			EGL_CHECK( result = eglMakeCurrent(mDisplay, mSurface, mSurface, mContext) );
-			EGL_CHECK( result += eglQuerySurface(mDisplay, mSurface, EGL_WIDTH, &mWidth) );
-			EGL_CHECK( result += eglQuerySurface(mDisplay, mSurface, EGL_HEIGHT, &mHeight) );
-			if (!result || (mWidth <= 0) || (mHeight <= 0))
+			EGL_CHECK( result = eglMakeCurrent(m_display, m_surface, m_surface, m_context) );
+			EGL_CHECK( result += eglQuerySurface(m_display, m_surface, EGL_WIDTH, &width) );
+			EGL_CHECK( result += eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &height) );
+			if (!result || (width <= 0) || (height <= 0))
 			{
 				LOGE("Unable to activate display");
 				goto ERROR;
@@ -282,9 +283,9 @@ namespace MPACK
 			LOGI("Version  : %s", glGetString(GL_VERSION));
 			LOGI("Vendor   : %s", glGetString(GL_VENDOR));
 			LOGI("Renderer : %s", glGetString(GL_RENDERER));
-			LOGI("Viewport : %d x %d", mWidth, mHeight);
+			LOGI("Viewport : %d x %d", width, height);
 
-			Graphics::Render::SetScreenSize(mWidth,mHeight);
+			Graphics::Render::SetScreenSize(width,height);
 
 			return RETURN_VALUE_OK;
 
@@ -296,21 +297,21 @@ namespace MPACK
 
 		void AndroidEventLoop::DestroyDisplay()
 		{
-			if (mDisplay != EGL_NO_DISPLAY)
+			if (m_display != EGL_NO_DISPLAY)
 			{
-				EGL_CHECK( eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) );
-				if (mContext != EGL_NO_CONTEXT)
+				EGL_CHECK( eglMakeCurrent(m_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) );
+				if (m_context != EGL_NO_CONTEXT)
 				{
-					EGL_CHECK( eglDestroyContext(mDisplay, mContext) );
-					mContext = EGL_NO_CONTEXT;
+					EGL_CHECK( eglDestroyContext(m_display, m_context) );
+					m_context = EGL_NO_CONTEXT;
 				}
-				if (mSurface != EGL_NO_SURFACE)
+				if (m_surface != EGL_NO_SURFACE)
 				{
-					EGL_CHECK( eglDestroySurface(mDisplay, mSurface) );
-					mSurface = EGL_NO_SURFACE;
+					EGL_CHECK( eglDestroySurface(m_display, m_surface) );
+					m_surface = EGL_NO_SURFACE;
 				}
-				EGL_CHECK( eglTerminate(mDisplay) );
-				mDisplay = EGL_NO_DISPLAY;
+				EGL_CHECK( eglTerminate(m_display) );
+				m_display = EGL_NO_DISPLAY;
 			}
 		}
 	}
