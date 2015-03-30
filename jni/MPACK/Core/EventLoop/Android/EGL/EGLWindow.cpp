@@ -33,20 +33,20 @@ namespace MPACK
 			return RETURN_VALUE_OK;
 		}
 
-		ReturnValue EGLWindow::ChooseConfig()
+		ReturnValue EGLWindow::ChooseConfig(EGLint redSize, EGLint greenSize, EGLint blueSize, EGLint depthSize)
 		{
 			EGLint numConfigs = 0;
 			EGLint result = 0;
 
 			const EGLint attributes[] =
-				{
-					EGL_RENDERABLE_TYPE, EGL_WINDOW_BIT,
-					EGL_RED_SIZE, 8,
-					EGL_GREEN_SIZE, 8,
-					EGL_BLUE_SIZE, 8,
-					EGL_DEPTH_SIZE, 16,
-					EGL_NONE
-				};
+			{
+				EGL_RENDERABLE_TYPE, EGL_WINDOW_BIT,
+				EGL_RED_SIZE, redSize,
+				EGL_GREEN_SIZE, greenSize,
+				EGL_BLUE_SIZE, blueSize,
+				EGL_DEPTH_SIZE, depthSize,
+				EGL_NONE
+			};
 
 			EGL_CHECK( result = eglChooseConfig(m_display, attributes, &m_config, 1, &numConfigs) );
 			if(!result || (numConfigs <= 0))

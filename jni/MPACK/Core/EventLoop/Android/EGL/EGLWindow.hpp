@@ -7,6 +7,14 @@ namespace MPACK
 {
 	namespace Core
 	{
+		class EGLBufferConfigManager;
+	}
+}
+
+namespace MPACK
+{
+	namespace Core
+	{
 		class EGLWindow
 		{
 		public:
@@ -14,7 +22,7 @@ namespace MPACK
 			~EGLWindow();
 
 			ReturnValue Init();
-			ReturnValue ChooseConfig();
+			ReturnValue ChooseConfig(EGLint redSize=8, EGLint greenSize=8, EGLint blueSize=8, EGLint depthSize=24);
 			ReturnValue GetFormat(EGLint &format) const;
 			ReturnValue CreateSurface(NativeWindowType &window);
 			ReturnValue Bind(EGLint &width, EGLint &height);
@@ -33,6 +41,8 @@ namespace MPACK
 			EGLConfig 	m_config;
 
 			EGLint 		m_majorVersion, m_minorVersion;
+
+			friend class EGLBufferConfigManager;
 		};
 	}
 }

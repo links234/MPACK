@@ -26,7 +26,17 @@ namespace MPACK
 			EGLint m_maxSwapInterval;
 			EGLint m_minSwapInterval;
 			EGLint m_nativeRenderable;
+			EGLint m_nativeVisualId;
+			EGLint m_nativeVisualType;
 			EGLint m_redSize;
+			EGLint m_sampleBuffers;
+			EGLint m_samples;
+			EGLint m_stencilSize;
+			EGLint m_surfaceType;
+			EGLint m_transparentType;
+			EGLint m_transparentRedValue;
+			EGLint m_transparentGreenValue;
+			EGLint m_transparentBlueValue;
 
 			EGLint m_alphaMaskSize;
 			EGLint m_colorBufferType;

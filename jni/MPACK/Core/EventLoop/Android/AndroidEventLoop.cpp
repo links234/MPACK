@@ -5,6 +5,7 @@
 #include "ActivityHandler.hpp"
 #include "InputService.hpp"
 #include "TimeService.hpp"
+#include "EGLBufferConfigManager.hpp"
 #include "EGLWindow.hpp"
 #include "Context.hpp"
 #include "Global.hpp"
@@ -201,14 +202,24 @@ namespace MPACK
 
 		ReturnValue AndroidEventLoop::InitializeDisplay()
 		{
+			EGLBufferConfigManager *pConfigManager = NULL;
 			EGLint format;
+			EGLint redSize=0, greenSize=0, blueSize=0, depthSize=16;
 
 			if(m_window.Init() != RETURN_VALUE_OK)
 			{
 				goto ERROR;
 			}
 
-			if(m_window.ChooseConfig() != RETURN_VALUE_OK)
+			pConfigManager = new EGLBufferConfigManager(&m_window);
+			LOGI("AndroidEventLoop::InitializeDisplay() info: number of configurations = %d",pConfigManager->GetCount());
+			pConfigManager->PrintAll();
+			pConfigManager->Match(redSize,greenSize,blueSize,depthSize);
+			delete pConfigManager;
+
+			LOGI("AndroidEventLoop::InitializeDisplay() info: matched configuration to: (R:%d G:%d B:%d depth:%d)",redSize,greenSize,blueSize,depthSize);
+
+			if(m_window.ChooseConfig(redSize,greenSize,blueSize,depthSize) != RETURN_VALUE_OK)
 			{
 				goto ERROR;
 			}
