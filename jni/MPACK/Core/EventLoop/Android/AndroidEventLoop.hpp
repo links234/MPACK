@@ -5,6 +5,7 @@
 
 #include "Types.hpp"
 #include "EventLoop.hpp"
+#include "EGLWindow.hpp"
 
 namespace MPACK
 {
@@ -47,12 +48,8 @@ namespace MPACK
 			// Indicates if the event handler wants to exit.
 			bool m_quit;
 
-			EGLint		m_majorVersion;
-			EGLint		m_minorVersion;
-
-			EGLDisplay 	m_display;
-			EGLSurface	m_surface;
-			EGLContext 	m_context;
+			EGLint		m_width, m_height;
+			EGLWindow 	m_window;
 		};
 	}
 }

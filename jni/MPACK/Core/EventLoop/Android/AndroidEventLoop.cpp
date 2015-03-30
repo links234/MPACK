@@ -3,9 +3,10 @@
 #include "AndroidEventLoop.hpp"
 
 #include "ActivityHandler.hpp"
-#include "Context.hpp"
 #include "InputService.hpp"
 #include "TimeService.hpp"
+#include "EGLWindow.hpp"
+#include "Context.hpp"
 #include "Global.hpp"
 #include "Render.hpp"
 #include "Log.hpp"
@@ -15,8 +16,7 @@ namespace MPACK
 	namespace Core
 	{
 		AndroidEventLoop::AndroidEventLoop(void *data) :
-			m_enabled(false), m_quit(false), m_display(EGL_NO_DISPLAY), m_surface(EGL_NO_CONTEXT),
-			m_context(EGL_NO_SURFACE), m_majorVersion(0), m_minorVersion(0)
+			m_enabled(false), m_quit(false), m_width(0), m_height(0)
 		{
 			Global::pAndroidApp->userData = this;
 			Global::pAndroidApp->onAppCmd = callback_event;
@@ -64,9 +64,8 @@ namespace MPACK
 						m_quit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
 					}
-					if(eglSwapBuffers(m_display, m_surface)!=EGL_TRUE)
+					if(m_window.SwapBuffers() != RETURN_VALUE_OK)
 					{
-						LOGE("Error %d swapping buffers.",eglGetError());
 						m_quit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
 					}
@@ -202,79 +201,37 @@ namespace MPACK
 
 		ReturnValue AndroidEventLoop::InitializeDisplay()
 		{
-			int width, height;
+			EGLint format;
 
-			EGLint format, numConfigs, errorResult;
-			EGLConfig config;
-			EGLint result;
-
-			const EGLint attributes[] =
-				{
-					EGL_RENDERABLE_TYPE, EGL_WINDOW_BIT,
-					EGL_RED_SIZE, 8,
-					EGL_GREEN_SIZE, 8,
-					EGL_BLUE_SIZE, 8,
-					EGL_DEPTH_SIZE, 16,
-					EGL_NONE
-				};
-			const EGLint contextAttrib[] =
+			if(m_window.Init() != RETURN_VALUE_OK)
 			{
-				EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE
-			};
-
-			// Retrieves a display connection and initializes it.
-			EGL_CHECK( m_display = eglGetDisplay(EGL_DEFAULT_DISPLAY) );
-			if (m_display == EGL_NO_DISPLAY)
-			{
-				LOGE("EGL_NO_DISPLAY");
-				goto ERROR;
-			}
-			EGL_CHECK( result = eglInitialize(m_display, &m_majorVersion, &m_minorVersion) );
-			if (!result)
-			{
-				LOGE("Unable to initialize display");
 				goto ERROR;
 			}
 
-			// Selects the first OpenGL configuration found.
-			EGL_CHECK( result = eglChooseConfig(m_display, attributes, &config, 1, &numConfigs) );
-			if(!result || (numConfigs <= 0))
+			if(m_window.ChooseConfig() != RETURN_VALUE_OK)
 			{
-				Debug::EGL::Assert("Unable to select display configuration");
 				goto ERROR;
 			}
 
-			// Reconfigures the Android window with the EGL format.
-			EGL_CHECK( result = eglGetConfigAttrib(m_display, config, EGL_NATIVE_VISUAL_ID, &format) );
-			if (!result)
+			if(m_window.GetFormat(format) != RETURN_VALUE_OK)
 			{
-				LOGE("Unable to configure window format");
 				goto ERROR;
 			}
 			ANativeWindow_setBuffersGeometry(Global::pAndroidApp->window, 0, 0, format);
 
-			// Creates the display surface.
-			EGL_CHECK( m_surface = eglCreateWindowSurface(m_display, config, Global::pAndroidApp->window, NULL) );
-			if (m_surface == EGL_NO_SURFACE)
+			if(m_window.CreateSurface(Global::pAndroidApp->window) != RETURN_VALUE_OK)
 			{
-				LOGE("EGL_NO_SURFACE");
-				goto ERROR;
-			}
-			EGL_CHECK( m_context = eglCreateContext(m_display, config, EGL_NO_CONTEXT, contextAttrib) );
-			if (m_context == EGL_NO_CONTEXT)
-			{
-				LOGE("EGL_NO_CONTEXT");
 				goto ERROR;
 			}
 
-			// Activates the display surface.
-			LOGD("Activating the display.");
-			EGL_CHECK( result = eglMakeCurrent(m_display, m_surface, m_surface, m_context) );
-			EGL_CHECK( result += eglQuerySurface(m_display, m_surface, EGL_WIDTH, &width) );
-			EGL_CHECK( result += eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &height) );
-			if (!result || (width <= 0) || (height <= 0))
+			if(m_window.Bind(m_width, m_height) != RETURN_VALUE_OK)
 			{
-				LOGE("Unable to activate display");
+				goto ERROR;
+			}
+
+			if(m_width<=0 || m_height<=0)
+			{
+				LOGE("AndroidEventLoop::InitializeDisplay() invalid width or height (%d x %d)", m_width, m_height);
 				goto ERROR;
 			}
 
@@ -283,36 +240,23 @@ namespace MPACK
 			LOGI("Version  : %s", glGetString(GL_VERSION));
 			LOGI("Vendor   : %s", glGetString(GL_VENDOR));
 			LOGI("Renderer : %s", glGetString(GL_RENDERER));
-			LOGI("Viewport : %d x %d", width, height);
+			LOGI("Viewport : %d x %d", m_width, m_height);
 
-			Graphics::Render::SetScreenSize(width,height);
+			Graphics::Render::SetScreenSize(m_width,m_height);
 
 			return RETURN_VALUE_OK;
 
 		ERROR:
-			LOGE("Error while starting GraphicsService");
+			LOGE("AndroidEventLoop::InitializeDisplay() failed");
 			DestroyDisplay();
 			return RETURN_VALUE_KO;
 		}
 
 		void AndroidEventLoop::DestroyDisplay()
 		{
-			if (m_display != EGL_NO_DISPLAY)
-			{
-				EGL_CHECK( eglMakeCurrent(m_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) );
-				if (m_context != EGL_NO_CONTEXT)
-				{
-					EGL_CHECK( eglDestroyContext(m_display, m_context) );
-					m_context = EGL_NO_CONTEXT;
-				}
-				if (m_surface != EGL_NO_SURFACE)
-				{
-					EGL_CHECK( eglDestroySurface(m_display, m_surface) );
-					m_surface = EGL_NO_SURFACE;
-				}
-				EGL_CHECK( eglTerminate(m_display) );
-				m_display = EGL_NO_DISPLAY;
-			}
+			m_width=0;
+			m_height=0;
+			m_window.Destroy();
 		}
 	}
 }
