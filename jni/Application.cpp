@@ -7,14 +7,22 @@
 #include "Global.hpp"
 #include "EventLoop.hpp"
 #include "IniFile.hpp"
+#include "GoogleAds.hpp"
 
 #include "MainMenuState.hpp"
 #include "PlayGameState.hpp"
 #include "Log.hpp"
 
+//Add - test
+#include <jni.h>
+#include <android_native_app_glue.h>
+//test
+
 using namespace MPACK;
 using namespace MPACK::Core;
 using namespace MPACK::Graphics;
+
+MPACK::ADS::GoogleAds *test;
 
 namespace Game
 {
@@ -78,8 +86,22 @@ namespace Game
 		LOGD("Section1::var2 = <%s>",ini.GetSection("Section1")->GetObject("var2")->GetValue().c_str());
 		LOGD("Section2::nr_of_enemies = <%s>",ini.GetSection("Section2")->GetObject("nr_of_enemies")->GetValue().c_str());
 */
+
+
+		test = new MPACK::ADS::GoogleAds();
+
 		m_pGameState = new MainMenu;
+
+
+
 		return Core::RETURN_VALUE_OK;
+
+
+		//Test ad mob
+
+
+
+		// Pana aici
     }
 
     void Application::onDeactivate()
@@ -100,6 +122,8 @@ namespace Game
 
     Core::ReturnValue Application::onStep()
     {
+    	//test->showVideoInterstitial();
+
     	LOGD("Application::onStep() 1");
     	// Update clock
     	const GLfloat &delta = Global::pContext->pTimeService->Elapsed();
@@ -126,6 +150,7 @@ namespace Game
     	{
     		case EVENT_MAINMENU_CONTINUE:
     			delete m_pGameState;
+    			test->showSmartBanner();
     			m_pGameState=m_pSavedGameState;
     			m_pGameState->Continue();
     			m_pGameState->Update();
@@ -138,14 +163,16 @@ namespace Game
     				m_pSavedGameState=NULL;
     			}
     			delete m_pGameState;
+    			test->hideSmartBanner();
+    			test->hideLargeBanner();
     			m_pGameState=new PlayGame();
     			m_pGameState->Update();
     		break;
     		case EVENT_MAINMENU_HIGHSCORE:
-
+    			test->showLargeBanner();
     		break;
     		case EVENT_MAINMENU_CREDITS:
-
+    			test->showTextImageVideoInterstitial();
     		break;
     		case EVENT_MAINMENU_EXIT:
     			return RETURN_VALUE_KO;
