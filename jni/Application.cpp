@@ -16,6 +16,8 @@ using namespace MPACK;
 using namespace MPACK::Core;
 using namespace MPACK::Graphics;
 
+#define MPACK_TESTING
+
 namespace Game
 {
 	Application::Application()
@@ -32,8 +34,6 @@ namespace Game
 
 	MPACK::Core::ReturnValue Application::onActivate()
     {
-
-
 		LOGI("Application::onActivate");
         // Starts services.
 		if (Global::pContext->pGraphicsService->Start() != Core::RETURN_VALUE_OK)
@@ -50,8 +50,6 @@ namespace Game
 			return Core::RETURN_VALUE_KO;
 		}
 
-		Global::pContext->pSoundService->Test();
-
 		Global::pContext->pInputService->Reset();
 
 		Global::pContext->pTimeService->Reset();
@@ -67,17 +65,6 @@ namespace Game
 		CursorDrawer::GetInstance()->EnableAutohide();
 #endif
 
-		/*
-		IniFile ini;
-		ini.Load("@menu.ini");
-
-		LOGD("::key = <%s>",ini.GetObject("key")->GetValue().c_str());
-
-		LOGD("Section1::some_path = <%s>",ini.GetSection("Section1")->GetObject("some_path")->GetValue().c_str());
-		LOGD("Section1::var1 = <%s>",ini.GetSection("Section1")->GetObject("var1")->GetValue().c_str());
-		LOGD("Section1::var2 = <%s>",ini.GetSection("Section1")->GetObject("var2")->GetValue().c_str());
-		LOGD("Section2::nr_of_enemies = <%s>",ini.GetSection("Section2")->GetObject("nr_of_enemies")->GetValue().c_str());
-*/
 		m_pGameState = new MainMenu;
 		return Core::RETURN_VALUE_OK;
     }
@@ -100,6 +87,58 @@ namespace Game
 
     Core::ReturnValue Application::onStep()
     {
+#ifdef MPACK_TESTING
+    	static bool started=false;
+    	static Time::Timer *timer=Time::Timer::Create();
+    	static Sound::AudioPlayer *sound=new Sound::AudioPlayer();
+    	static string message="";
+
+    	if(!started)
+    	{
+    		started=true;
+
+    		timer->Start();
+
+    		sound->LoadFD("@Sounds/bgm.mp3");
+    		sound->AddToGroup("background");
+
+    		Sound::GroupController::Get("background")->Play()->Start();
+
+    		IniFile ini;
+			ini.Load("@local/menu.ini");
+
+			LOGD("::key = <%s>",ini.GetObject("key")->GetValue().c_str());
+
+			LOGD("Section1::some_path = <%s>",ini.GetSection("Section1")->GetObject("some_path")->GetValue().c_str());
+			LOGD("Section1::var1 = <%s>",ini.GetSection("Section1")->GetObject("var1")->GetValue().c_str());
+			LOGD("Section1::var2 = <%s>",ini.GetSection("Section1")->GetObject("var2")->GetValue().c_str());
+			LOGD("Section2::nr_of_enemies = <%s>",ini.GetSection("Section2")->GetObject("nr_of_enemies")->GetValue().c_str());
+
+			message = ini.GetSection("ModifyHere")->GetObject("ThisKey")->GetValue();
+    	}
+    	static int state=0;
+    	if(timer->Time()>10.0f && state==0)
+    	{
+    		LOGE("TOGGLE GROUPCONTROLLER MUTE");
+    		++state;
+    		Sound::GroupController::Get("background")->Volume()->ToggleMute();
+    	}
+    	if(timer->Time()>15.0f && state==1)
+		{
+    		LOGE("TOGGLE GROUPCONTROLLER MUTE");
+			++state;
+			//Sound::OutputMixer::GetOutputMixer()->Volume()->ToggleMute();
+    		Sound::GroupController::Get("background")->Volume()->ToggleMute();
+		}
+    	if(timer->Time()>20.0f && state==2)
+    	{
+    		LOGE("Reset and 0.2 volume");
+    		++state;
+    		Sound::GroupController::Get("background")->Volume()->Set(0.2);
+    		Sound::GroupController::Get("background")->Play()->Start();
+    	}
+#endif
+
     	// Update clock
     	const GLfloat &delta = Global::pContext->pTimeService->Elapsed();
 
@@ -161,6 +200,10 @@ namespace Game
 
     	// Render current game state
     	m_pGameState->Render();
+
+#ifdef MPACK_TESTING
+    	Debug::Print(Global::pFont,"%s",message.c_str());
+#endif
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	CursorDrawer::GetInstance()->Update();
