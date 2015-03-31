@@ -7,7 +7,7 @@ using namespace MPACK::Core;
 using namespace MPACK::Math;
 using namespace MPACK::Graphics;
 
-#include "Application.hpp"
+#include "DemoApplication.hpp"
 #include "GUIMenu.hpp"
 
 namespace Game

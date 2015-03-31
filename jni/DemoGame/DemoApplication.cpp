@@ -1,4 +1,4 @@
-#include "Application.hpp"
+#include "DemoApplication.hpp"
 #include "GraphicsService.hpp"
 #include "PhysicsService.hpp"
 #include "SoundService.hpp"
@@ -20,25 +20,25 @@ using namespace MPACK::Graphics;
 
 namespace Game
 {
-	Application::Application()
+	DemoApplication::DemoApplication()
     {
 		m_pGameState = NULL;
 		m_pSavedGameState = NULL;
 		m_pCursorTex = NULL;
     }
 
-	Application::~Application()
+	DemoApplication::~DemoApplication()
     {
-		LOGI("Application::~Application");
+		LOGI("DemoApplication::~DemoApplication()");
     }
 
-	MPACK::Core::ReturnValue Application::onActivate()
+	MPACK::Core::ReturnValue DemoApplication::onActivate()
     {
-		LOGI("Application::onActivate");
+		LOGI("DemoApplication::onActivate()");
         // Starts services.
 		if (Global::pContext->pGraphicsService->Start() != Core::RETURN_VALUE_OK)
 		{
-			LOGE("Application::onActivate failed to start graphics service");
+			LOGE("DemoApplication::onActivate failed to start graphics service");
 			return Core::RETURN_VALUE_KO;
 		}
 		PostEffect::ClearFX();
@@ -46,7 +46,7 @@ namespace Game
 
 		if (Global::pContext->pSoundService->Start() != Core::RETURN_VALUE_OK)
 		{
-			LOGE("Application::onActivate failed to start sound service");
+			LOGE("DemoApplication::onActivate failed to start sound service");
 			return Core::RETURN_VALUE_KO;
 		}
 
@@ -69,9 +69,9 @@ namespace Game
 		return Core::RETURN_VALUE_OK;
     }
 
-    void Application::onDeactivate()
+    void DemoApplication::onDeactivate()
     {
-    	LOGI("Application::onDeactivate");
+    	LOGI("DemoApplication::onDeactivate()");
     	MPACK::Global::pContext->pGraphicsService->Stop();
     	MPACK::Global::pContext->pSoundService->Stop();
 
@@ -85,7 +85,7 @@ namespace Game
     	delete m_pCursorTex;
     }
 
-    Core::ReturnValue Application::onStep()
+    Core::ReturnValue DemoApplication::onStep()
     {
 #ifdef MPACK_TESTING
     	static bool started=false;
@@ -218,63 +218,63 @@ namespace Game
 		return Core::RETURN_VALUE_OK;
     }
 
-    void Application::onStart()
+    void DemoApplication::onStart()
     {
     	LOGI("Application::onStart");
     }
 
-    void Application::onResume()
+    void DemoApplication::onResume()
     {
     	LOGI("Application::onResume");
     }
 
-    void Application::onPause()
+    void DemoApplication::onPause()
     {
     	LOGI("Application::onPause");
     }
 
-    void Application::onStop()
+    void DemoApplication::onStop()
     {
     	LOGI("Application::onStop");
     }
 
-    void Application::onDestroy()
+    void DemoApplication::onDestroy()
     {
     	LOGI("Application::onDestroy");
     }
 
-    void Application::onSaveState(void** pData, size_t* pSize)
+    void DemoApplication::onSaveState(void** pData, size_t* pSize)
     {
     	LOGI("Application::onSaveInstanceState");
     }
 
-    void Application::onConfigurationChanged()
+    void DemoApplication::onConfigurationChanged()
     {
     	LOGI("Application::onConfigurationChanged");
     }
 
-    void Application::onLowMemory()
+    void DemoApplication::onLowMemory()
     {
     	LOGI("Application::onLowMemory");
     	LOGW("Please buy a better device!");
     }
 
-    void Application::onCreateWindow()
+    void DemoApplication::onCreateWindow()
     {
     	LOGI("Application::onCreateWindow");
     }
 
-    void Application::onDestroyWindow()
+    void DemoApplication::onDestroyWindow()
     {
     	LOGI("Application::onDestroyWindow");
     }
 
-    void Application::onGainFocus()
+    void DemoApplication::onGainFocus()
     {
     	LOGI("Application::onGainFocus");
     }
 
-    void Application::onLostFocus()
+    void DemoApplication::onLostFocus()
     {
     	LOGI("Application::onLostFocus");
     }

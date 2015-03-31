@@ -1,5 +1,5 @@
-#ifndef APPLICATION_HPP
-#define APPLICATION_HPP
+#ifndef DEMOAPPLICATION_HPP
+#define DEMOAPPLICATION_HPP
 
 #include "Types.hpp"
 #include "ActivityHandler.hpp"
@@ -35,11 +35,11 @@ namespace Game
 		EVENT_PLAYGAME_EXIT
 	};
 
-    class Application : public MPACK::Core::ActivityHandler
+    class DemoApplication : public MPACK::Core::ActivityHandler
     {
     public:
-    	Application();
-    	~Application();
+    	DemoApplication();
+    	~DemoApplication();
 
 	protected:
         MPACK::Core::ReturnValue onActivate();

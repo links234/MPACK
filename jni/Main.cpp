@@ -1,14 +1,14 @@
 #include "MPACK.hpp"
-#include "Application.hpp"
+#include "DemoApplication.hpp"
 
 int result = 0;
-Game::Application application;
+Game::DemoApplication demoApplication;
 
 MPACK_MAIN
 {
 	MPACK_INITIALIZE;
 
-	MPACK_RUN(&application, result);
+	MPACK_RUN(&demoApplication, result);
 
     MPACK_SHUTDOWN;
 

@@ -4,7 +4,7 @@
 #include "InputService.hpp"
 #include "TimeService.hpp"
 #include "PhysicsService.hpp"
-#include "Application.hpp"
+#include "DemoApplication.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
 #include "Context.hpp"
