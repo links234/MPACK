@@ -29,11 +29,13 @@ namespace MPACK
 			}
 			Core::Resource *vertexShaderResourcePointer=Core::LoadResource(vertexShader);
 			vertexShaderResourcePointer->Open();
+			m_vertexShader.path = vertexShader;
 			m_vertexShader.source=string((const char*)(vertexShaderResourcePointer->Bufferize()));
 			delete vertexShaderResourcePointer;
 
 			Core::Resource *fragmentShaderResourcePointer=Core::LoadResource(fragmentShader);
 			fragmentShaderResourcePointer->Open();
+			m_fragmentShader.path = fragmentShader;
 			m_fragmentShader.source=string((const char*)(fragmentShaderResourcePointer->Bufferize()));
 			delete fragmentShaderResourcePointer;
 		}
@@ -44,18 +46,18 @@ namespace MPACK
 
 		void GLSLProgram::Unload()
 		{
-			glDetachShader(m_programID, m_vertexShader.id);
-			glDetachShader(m_programID, m_fragmentShader.id);
-			glDeleteShader(m_vertexShader.id);
-			glDeleteShader(m_fragmentShader.id);
-			glDeleteShader(m_programID);
+			GL_CHECK( glDetachShader(m_programID, m_vertexShader.id) );
+			GL_CHECK( glDetachShader(m_programID, m_fragmentShader.id) );
+			GL_CHECK( glDeleteShader(m_vertexShader.id) );
+			GL_CHECK( glDeleteShader(m_fragmentShader.id) );
+			GL_CHECK( glDeleteShader(m_programID) );
 		}
 
 		bool GLSLProgram::Initialize()
 		{
-			m_programID = glCreateProgram();
-			m_vertexShader.id = glCreateShader(GL_VERTEX_SHADER);
-			m_fragmentShader.id = glCreateShader(GL_FRAGMENT_SHADER);
+			GL_CHECK( m_programID = glCreateProgram() );
+			GL_CHECK( m_vertexShader.id = glCreateShader(GL_VERTEX_SHADER) );
+			GL_CHECK( m_fragmentShader.id = glCreateShader(GL_FRAGMENT_SHADER) );
 
 			if (m_vertexShader.source.empty() || m_fragmentShader.source.empty())
 			{
@@ -63,10 +65,10 @@ namespace MPACK
 			}
 
 			const GLchar* tmp = static_cast<const GLchar*>(m_vertexShader.source.c_str());
-			glShaderSource(m_vertexShader.id, 1, (const GLchar**)&tmp, NULL);
+			GL_CHECK( glShaderSource(m_vertexShader.id, 1, (const GLchar**)&tmp, NULL) );
 
 			tmp = static_cast<const GLchar*>(m_fragmentShader.source.c_str());
-			glShaderSource(m_fragmentShader.id, 1, (const GLchar**)&tmp, NULL);
+			GL_CHECK( glShaderSource(m_fragmentShader.id, 1, (const GLchar**)&tmp, NULL) );
 
 			if (!CompileShader(m_vertexShader) || !CompileShader(m_fragmentShader))
 			{
@@ -74,18 +76,18 @@ namespace MPACK
 				return false;
 			}
 
-			glAttachShader(m_programID, m_vertexShader.id);
-			glAttachShader(m_programID, m_fragmentShader.id);
+			GL_CHECK( glAttachShader(m_programID, m_vertexShader.id) );
+			GL_CHECK( glAttachShader(m_programID, m_fragmentShader.id) );
 
-			glLinkProgram(m_programID);
+			GL_CHECK( glLinkProgram(m_programID) );
 			return true;
 		}
 
 		bool GLSLProgram::LinkProgram()
 		{
 			GLint result=0xDEADBEAF;
-			glLinkProgram(m_programID);
-			glGetProgramiv(m_programID,GL_LINK_STATUS,&result);
+			GL_CHECK( glLinkProgram(m_programID) );
+			GL_CHECK( glGetProgramiv(m_programID,GL_LINK_STATUS,&result) );
 			if(!result)
 			{
 				LOGE("Failed to link shader program");
@@ -100,7 +102,8 @@ namespace MPACK
 			map<string, GLuint>::iterator i = m_uniformMap.find(name);
 			if (i == m_uniformMap.end())
 			{
-				GLuint location = glGetUniformLocation(m_programID, name.c_str());
+				GLuint location;
+				GL_CHECK( location = glGetUniformLocation(m_programID, name.c_str()) );
 				m_uniformMap.insert(std::make_pair(name, location));
 				return location;
 			}
@@ -113,7 +116,8 @@ namespace MPACK
 			map<string, GLuint>::iterator i = m_attribMap.find(name);
 			if (i == m_attribMap.end())
 			{
-				GLuint location = glGetAttribLocation(m_programID, name.c_str());
+				GLuint location;
+				GL_CHECK( location = glGetAttribLocation(m_programID, name.c_str()) );
 				m_attribMap.insert(std::make_pair(name, location));
 				return location;
 			}
@@ -124,44 +128,44 @@ namespace MPACK
 		void GLSLProgram::SendUniform(const string& name, const int id)
 		{
 			GLuint location = GetUniformLocation(name);
-			glUniform1i(location, id);
+			GL_CHECK( glUniform1i(location, id) );
 		}
 
 		void GLSLProgram::SendUniform4x4(const string& name, const float* matrix, bool transpose)
 		{
 			GLuint location = GetUniformLocation(name);
-			glUniformMatrix4fv(location, 1, transpose, matrix);
+			GL_CHECK( glUniformMatrix4fv(location, 1, transpose, matrix) );
 		}
 
 		void GLSLProgram::SendUniform3x3(const string& name, const float* matrix, bool transpose)
 		{
 			GLuint location = GetUniformLocation(name);
-			glUniformMatrix3fv(location, 1, transpose, matrix);
+			GL_CHECK( glUniformMatrix3fv(location, 1, transpose, matrix) );
 		}
 
 		void GLSLProgram::SendUniform(const string& name, const float red, const float green,
 						 const float blue, const float alpha)
 		{
 			GLuint location = GetUniformLocation(name);
-			glUniform4f(location, red, green, blue, alpha);
+			GL_CHECK( glUniform4f(location, red, green, blue, alpha) );
 		}
 
 		void GLSLProgram::SendUniform(const string& name, const float x, const float y,
 						 const float z)
 		{
 			GLuint location = GetUniformLocation(name);
-			glUniform3f(location, x, y, z);
+			GL_CHECK( glUniform3f(location, x, y, z) );
 		}
 
 		void GLSLProgram::SendUniform(const string& name, const float scalar)
 		{
 			GLuint location = GetUniformLocation(name);
-			glUniform1f(location, scalar);
+			GL_CHECK( glUniform1f(location, scalar) );
 		}
 
 		void GLSLProgram::BindAttrib(unsigned int index, const string& attribName)
 		{
-			glBindAttribLocation(m_programID, index, attribName.c_str());
+			GL_CHECK( glBindAttribLocation(m_programID, index, attribName.c_str()) );
 		}
 
 		void GLSLProgram::BindShader()
@@ -169,19 +173,19 @@ namespace MPACK
 			if(lastBindedShader!=this)
 			{
 				lastBindedShader=this;
-				glUseProgram(m_programID);
+				GL_CHECK( glUseProgram(m_programID) );
 			}
 		}
 
 		bool GLSLProgram::CompileShader(const GLSLShader& shader)
 		{
-			glCompileShader(shader.id);
+			GL_CHECK( glCompileShader(shader.id) );
 			GLint result = 0xDEADBEEF;
-			glGetShaderiv(shader.id, GL_COMPILE_STATUS, &result);
+			GL_CHECK( glGetShaderiv(shader.id, GL_COMPILE_STATUS, &result) );
 
 			if (!result)
 			{
-				LOGE("Failed to compile shader:\n %s",shader.source.c_str());
+				LOGE("Failed to compile shader from \"%s\":\n %s",shader.path.c_str(),shader.source.c_str());
 				OutputShaderLog(shader.id);
 				return false;
 			}
@@ -191,13 +195,13 @@ namespace MPACK
 		void GLSLProgram::OutputShaderLog(unsigned int shaderID)
 		{
 			GLint infoLen;
-			glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLen);
-			const int BUFFER_SIZE=4096;
+			GL_CHECK( glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &infoLen) );
+			const int BUFFER_SIZE=64*1024;
 			char buffer[BUFFER_SIZE];
 
 			LOGE("Shader output log:");
 
-			glGetShaderInfoLog(shaderID, BUFFER_SIZE, &infoLen, buffer);
+			GL_CHECK( glGetShaderInfoLog(shaderID, BUFFER_SIZE, &infoLen, buffer) );
 
 			LOGE("\n%s",buffer);
 		}
@@ -205,13 +209,13 @@ namespace MPACK
 		void GLSLProgram::OutputProgramLog()
 		{
 			GLint infoLen;
-			glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &infoLen);
-			const int BUFFER_SIZE=4096;
+			GL_CHECK( glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &infoLen) );
+			const int BUFFER_SIZE=64*1024;
 			char buffer[BUFFER_SIZE];
 
 			LOGE("Program output log: ");
 
-			glGetProgramInfoLog(m_programID, BUFFER_SIZE, &infoLen, buffer);
+			GL_CHECK( glGetProgramInfoLog(m_programID, BUFFER_SIZE, &infoLen, buffer) );
 
 			LOGE("\n%s",buffer);
 		}

@@ -5,6 +5,7 @@
 
 #include "Types.hpp"
 #include "EventLoop.hpp"
+#include "EGLWindow.hpp"
 
 namespace MPACK
 {
@@ -42,16 +43,14 @@ namespace MPACK
 			static void callback_event(android_app* pApplication, int32_t pCommand);
 			static int32_t callback_input(android_app* pApplication, AInputEvent* pEvent);
 
-			const char* eglGetErrorString(EGLint error) const;
 		private:
 			// Saves application state when application is active/paused.
-			bool mEnabled;
+			bool m_enabled;
 			// Indicates if the event handler wants to exit.
-			bool mQuit;
+			bool m_quit;
 
-			EGLDisplay mDisplay;
-			EGLSurface mSurface;
-			EGLContext mContext;
+			EGLint		m_width, m_height;
+			EGLWindow 	m_window;
 		};
 	}
 }

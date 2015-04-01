@@ -1,5 +1,5 @@
-#ifndef GOOGLEADS.H
-#define GOOGLEADS.H
+#ifndef GOOGLEADS_H
+#define GOOGLEADS_H
 
 #include <jni.h>
 #include <android_native_app_glue.h>
@@ -20,10 +20,9 @@ namespace MPACK
 			//	jobject mGoogleAdsJobject;
 
 			public:
-				void callMainActivityJavaFunction(char * , char *);
+				void callMainActivityJavaFunction(const char * ,const char *);
 				void getGoogleAdsJavaReff();
-
-				void callGoogleAdsJavaFunction(char * , char *);
+				void callGoogleAdsJavaFunction(const char * , const char *);
 
 			public:
 				GoogleAds();

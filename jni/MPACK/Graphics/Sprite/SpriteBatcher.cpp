@@ -216,8 +216,8 @@ namespace MPACK
 					it->m_texture->Bind(GL_TEXTURE0);
 				}
 
-				glDrawElements(GetGLType(it->m_type),it->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]);
-				Debug::AssertGL("ERROR: SpriteBatcher::Flush() : glDrawElements");
+				GL_CHECK( glDrawElements(GetGLType(it->m_type),it->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]) );
+				//Debug::OpenGL::Assert("ERROR: SpriteBatcher::Flush() : glDrawElements");
 
 				firstIndex+=it->m_indexSize;
 			}

@@ -327,7 +327,7 @@ class GoogleAds
 				{	
 					layout = new LinearLayout(mContext);
 					mainLayout = new LinearLayout(mContext);
-					layout.setPadding(-10, 0, -10, 0);
+					layout.setPadding(-12, 0, -12, 0);
 					//layout.setPadding(0, 0, 0, 0);
 					MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 					params.setMargins(0, 0, 0, 0);
@@ -335,7 +335,7 @@ class GoogleAds
 					layout.addView(adView, params);
 					popUp.setContentView(layout);
 					mContext.setContentView(mainLayout, params);
-					popUp.showAtLocation(mainLayout, Gravity.BOTTOM, 0, 0);
+					popUp.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER, 0, 0);
 					popUp.update();
 				}
 			});	

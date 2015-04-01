@@ -1,5 +1,7 @@
 #include "ResourceReader.hpp"
 
+#include "Resource.hpp"
+
 namespace MPACK
 {
 	namespace Core

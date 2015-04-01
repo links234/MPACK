@@ -1,7 +1,7 @@
 #ifndef MPACK_STRINGEX_HPP
 #define MPACK_STRINGEX_HPP
 
-#include <string>
+#include "Types.hpp"
 
 namespace MPACK
 {
@@ -9,6 +9,8 @@ namespace MPACK
 	{
 		namespace StringEx
 		{
+			extern const int PARAMETER_DEFAULT_VALUE;
+
 			const char* GetExtension(const char* pStr);
 			void GetExtension(std::string path, std::string &ext);
 
@@ -33,6 +35,9 @@ namespace MPACK
 			std::string StripLeft(std::string &str);
 			std::string StripRight(std::string &str);
 			std::string Strip(std::string &str);
+			std::string Substr(std::string &str, int start, int length=-1);
+			std::string Substring(std::string &str, int start, int end=PARAMETER_DEFAULT_VALUE);
+			std::string Slice(std::string &str, int start, int end=PARAMETER_DEFAULT_VALUE);
 		}
 	}
 }

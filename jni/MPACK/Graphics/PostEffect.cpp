@@ -36,20 +36,20 @@ namespace MPACK
 			m_shader->UpdateFrameUniforms();
 
 			BindTextureSlot(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, s_renderTexture1->m_colorTex->m_texId);
+			GL_CHECK( glBindTexture(GL_TEXTURE_2D, s_renderTexture1->m_colorTex->m_texId) );
 
 			m_shader->EnableVertexAttributes();
 
-			glBindBuffer(GL_ARRAY_BUFFER,s_screenVertexBuffer);
+			GL_CHECK( glBindBuffer(GL_ARRAY_BUFFER,s_screenVertexBuffer) );
 			m_shader->SendVertexBuffer();
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,s_screenIndexBuffer);
-			glDrawElements(GL_TRIANGLES,s_screenIndexCount,GL_UNSIGNED_INT,BUFFER_OFFSET(0));
+			GL_CHECK( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,s_screenIndexBuffer) );
+			GL_CHECK( glDrawElements(GL_TRIANGLES,s_screenIndexCount,GL_UNSIGNED_INT,BUFFER_OFFSET(0)) );
 
 			m_shader->DisableVertexAttributes();
 
-			glBindBuffer(GL_ARRAY_BUFFER,0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+			GL_CHECK( glBindBuffer(GL_ARRAY_BUFFER,0) );
+			GL_CHECK( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0) );
 		}
 		void PostEffect::Init(GLuint width, GLuint height)
 		{
@@ -85,15 +85,15 @@ namespace MPACK
 			screenIndices.push_back(2);
 			screenIndices.push_back(3);
 
-			glGenBuffers(1,&s_screenVertexBuffer);
-			glBindBuffer(GL_ARRAY_BUFFER,s_screenVertexBuffer);
-			glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*screenVertices.size(),&screenVertices[0],GL_STATIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER,0);
+			GL_CHECK( glGenBuffers(1,&s_screenVertexBuffer) );
+			GL_CHECK( glBindBuffer(GL_ARRAY_BUFFER,s_screenVertexBuffer) );
+			GL_CHECK( glBufferData(GL_ARRAY_BUFFER,sizeof(GLfloat)*screenVertices.size(),&screenVertices[0],GL_STATIC_DRAW) );
+			GL_CHECK( glBindBuffer(GL_ARRAY_BUFFER,0) );
 
-			glGenBuffers(1,&s_screenIndexBuffer);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,s_screenIndexBuffer);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLint)*screenIndices.size(),&screenIndices[0],GL_STATIC_DRAW);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+			GL_CHECK( glGenBuffers(1,&s_screenIndexBuffer) );
+			GL_CHECK( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,s_screenIndexBuffer) );
+			GL_CHECK( glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLint)*screenIndices.size(),&screenIndices[0],GL_STATIC_DRAW) );
+			GL_CHECK( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0) );
 
 			s_screenIndexCount=screenIndices.size();
 	
@@ -127,8 +127,8 @@ namespace MPACK
 				delete s_renderTexture2;
 				s_renderTexture2=NULL;
 			}
-			glDeleteBuffers(1,&s_screenVertexBuffer);
-			glDeleteBuffers(1,&s_screenIndexBuffer);
+			GL_CHECK( glDeleteBuffers(1,&s_screenVertexBuffer) );
+			GL_CHECK( glDeleteBuffers(1,&s_screenIndexBuffer) );
 		}
 		void PostEffect::Begin()
 		{

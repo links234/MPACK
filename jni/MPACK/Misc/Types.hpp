@@ -37,6 +37,8 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <exception>
+
 #include <algorithm>
 #include <string>
 #include <vector>

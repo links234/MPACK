@@ -65,11 +65,12 @@ namespace MPACK
 			Render::EnableOrthoMode();
 			Render::EnableAlphaBlend();
 
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			GL_CHECK( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
 			SpriteBatcher::FlushAll();
 
 			PostEffect::End();
 
+			Debug::OpenGL::FlushErrors("GraphicsService::Render()");
 			return RETURN_VALUE_OK;
 		}
 
@@ -78,14 +79,21 @@ namespace MPACK
 			Global::pFont=new TextureMappedFont;
 			Global::pFont->Load("@Fonts/Font.tga");
 
-			LoadShaders();
+			if(!LoadShaders())
+			{
+				LOGE("GraphicsService::LoadResources() failed to LoadShaders()");
+				return RETURN_VALUE_KO;
+			}
 
 			return RETURN_VALUE_OK;
 		}
 
 		ReturnValue GraphicsService::UnloadResources()
 		{
-			delete Global::pFont;
+			if(Global::pFont)
+			{
+				delete Global::pFont;
+			}
 
 			DeleteShaders();
 

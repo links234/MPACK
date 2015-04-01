@@ -2,7 +2,9 @@
 #define MPACK_SOUND_HPP
 
 #include "SoundService.hpp"
-#include "SoundFile.hpp"
-#include "Playlist.hpp"
+#include "OutputMixer.hpp"
+#include "AudioPlayer.hpp"
+#include "AudioControllers.hpp"
+#include "GroupControllers.hpp"
 
 #endif

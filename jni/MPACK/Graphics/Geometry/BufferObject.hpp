@@ -11,6 +11,8 @@
 
 #include "Types.hpp"
 
+#include "Debug.hpp"
+
 namespace MPACK
 {
 	namespace Graphics
@@ -55,9 +57,9 @@ namespace MPACK
 			Destroy();
 			m_size=size;
 			m_usage=usage;
-			glGenBuffers(1,&m_ibo);
+			GL_CHECK( glGenBuffers(1,&m_ibo) );
 			Bind();
-			glBufferData(target,m_size,data,m_usage);
+			GL_CHECK( glBufferData(target,m_size,data,m_usage) );
 		}
 
 		template<GLenum target> inline GLvoid BufferObject<target>::Update(GLvoid *pointer, GLuint size)
@@ -67,14 +69,14 @@ namespace MPACK
 				size=m_size;
 			}
 			Bind();
-			glBufferSubData(target,0,size,pointer);
+			GL_CHECK( glBufferSubData(target,0,size,pointer) );
 		}
 
 		template<GLenum target> inline GLvoid BufferObject<target>::Bind()
 		{
 			if(s_currBuffer!=m_ibo)
 			{
-				glBindBuffer(target,m_ibo);
+				GL_CHECK( glBindBuffer(target,m_ibo) );
 				s_currBuffer=m_ibo;
 			}
 		}
@@ -83,7 +85,7 @@ namespace MPACK
 		{
 			if(s_currBuffer!=0)
 			{
-				glBindBuffer(target,0);
+				GL_CHECK( glBindBuffer(target,0) );
 				s_currBuffer=0;
 			}
 		}
@@ -94,10 +96,10 @@ namespace MPACK
 			{
 				if(s_currBuffer==m_ibo)
 				{
-					glBindBuffer(target,0);
+					GL_CHECK( glBindBuffer(target,0) );
 					s_currBuffer=0;
 				}
-				glDeleteBuffers(1,&m_ibo);
+				GL_CHECK( glDeleteBuffers(1,&m_ibo) );
 			}
 		}
 
@@ -115,7 +117,7 @@ namespace MPACK
 		{
 			if(s_currBuffer!=0)
 			{
-				glBindBuffer(target,0);
+				GL_CHECK( glBindBuffer(target,0) );
 				s_currBuffer=0;
 			}
 		}

@@ -12,7 +12,7 @@
 #endif
 
 #define LOG_TAG 		"MPACK"
-#define	BUFFERSIZE 		64*1024
+#define	BUFFERSIZE 		128*1024
 
 namespace MPACK
 {

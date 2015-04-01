@@ -17,9 +17,9 @@ namespace MPACK
 			void Bind();
 			void Unbind();
 
-			GLuint		m_fboId;
+			GLuint		m_FBOId;
 			Texture2D	*m_colorTex;
-			Texture2D	*m_depthTex;
+			GLuint 		m_depthRBOId;
 		};
 	}
 }

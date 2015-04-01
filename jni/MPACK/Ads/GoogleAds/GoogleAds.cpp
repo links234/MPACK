@@ -14,7 +14,7 @@ namespace MPACK
 
 			mActivity = MPACK::Global::pAndroidApp->activity;
 			mJvm = MPACK::Global::pAndroidApp->activity->vm;
-			callMainActivityJavaFunction("sendGoogleAdsJavaVmToCpp","()V");
+			callMainActivityJavaFunction("sendGoogleAdsJavaVmToCpp",(char*)("()V"));
 
 		}
 
@@ -72,7 +72,7 @@ namespace MPACK
 			callGoogleAdsJavaFunction("showVideoInterstitial","()V");
 		}
 
-		void GoogleAds::callMainActivityJavaFunction(char *name , char *param)
+		void GoogleAds::callMainActivityJavaFunction(const char *name ,const char *param)
 		{
 			JNIEnv* env = NULL;
 
@@ -91,7 +91,7 @@ namespace MPACK
 		}
 
 
-		void GoogleAds::callGoogleAdsJavaFunction(char * name, char * param)
+		void GoogleAds::callGoogleAdsJavaFunction(const char * name,const char * param)
 		{
 
 
