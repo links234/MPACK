@@ -1,4 +1,4 @@
-package com.mpack.Framework;
+package com.PukApp.MPACK;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -36,7 +36,7 @@ class GoogleAds
 
 	public GoogleAds(MainActivity mainActivity) 
 	{
-		System.loadLibrary("Framework");
+		System.loadLibrary("MPACK");
 		mContext = mainActivity;
 		GoogleAdsInit();
 	}

@@ -151,7 +151,7 @@ namespace MPACK
 
 extern "C"
 {
-	JNIEXPORT void JNICALL Java_com_mpack_Framework_GoogleAds_nativeGoogleAds(JNIEnv *env,jobject obj)
+	JNIEXPORT void JNICALL Java_com_PukApp_MPACK_GoogleAds_nativeGoogleAds(JNIEnv *env,jobject obj)
 	{
 		 int status = env->GetJavaVM( &GoogleAdsJvm);
 

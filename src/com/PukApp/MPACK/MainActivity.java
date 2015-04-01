@@ -1,4 +1,4 @@
-package com.mpack.Framework;
+package com.PukApp.MPACK;
 
 import android.app.NativeActivity;
 import android.os.Bundle;
