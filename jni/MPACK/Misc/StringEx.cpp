@@ -137,6 +137,21 @@ namespace MPACK
 				}
 			}
 
+			bool IsControl(const char &ch)
+			{
+				return (0<=ch && ch<=31) || ch==127;
+			}
+
+			bool IsPrintable(const char &ch)
+			{
+				return !IsControl(ch);
+			}
+
+			bool IsVisible(const char &ch)
+			{
+				return IsPrintable(ch) && !IsWhiteSpace(ch);
+			}
+
 			bool IsLowercase(const char &ch)
 			{
 				return 'a'<=ch && ch<='z';
@@ -147,9 +162,19 @@ namespace MPACK
 				return 'A'<=ch && ch<='Z';
 			}
 
-			bool IsNumeric(const char &ch)
+			bool IsAlpha(const char &ch)
+			{
+				return ('A'<=ch && ch<='Z') || ('a'<=ch && ch<='z');
+			}
+
+			bool IsDigit(const char &ch)
 			{
 				return '0'<=ch && ch<='9';
+			}
+
+			bool IsXDigit(const char &ch)
+			{
+				return ('0'<=ch && ch<='9') || ('A'<=ch && ch<='F') || ('a'<=ch && ch<='f');
 			}
 
 			bool IsAlphaNumeric(const char &ch)
@@ -160,6 +185,11 @@ namespace MPACK
 			bool IsWhiteSpace(const char &ch)
 			{
 				return ch==' ' || ch=='\t' || ch=='\n' || ch=='\r' || ch=='\v' || ch=='\f';
+			}
+
+			bool IsPunctuation(const char &ch)
+			{
+				return !IsAlphaNumeric(ch) && IsVisible(ch);
 			}
 
 			string StripLeft(string &str)

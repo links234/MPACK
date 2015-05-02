@@ -26,11 +26,17 @@ namespace MPACK
 			char ToUpper(const char &ch);
 			char ToLower(const char &ch);
 
+			bool IsControl(const char &ch);
+			bool IsPrintable(const char &ch);
+			bool IsVisible(const char &ch);
 			bool IsLowercase(const char &ch);
 			bool IsUppercase(const char &ch);
-			bool IsNumeric(const char &ch);
+			bool IsAlpha(const char &ch);
+			bool IsDigit(const char &ch);
+			bool IsXDigit(const char &ch);
 			bool IsAlphaNumeric(const char &ch);
 			bool IsWhiteSpace(const char &ch);
+			bool IsPunctuation(const char &ch);
 
 			std::string StripLeft(std::string &str);
 			std::string StripRight(std::string &str);
