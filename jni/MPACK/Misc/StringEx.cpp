@@ -192,6 +192,97 @@ namespace MPACK
 				return !IsAlphaNumeric(ch) && IsVisible(ch);
 			}
 
+			int ToInt(const string &str)
+			{
+				int ans=0;
+				int semn=1;
+				int index=0;
+				if(str[0]=='-')
+				{
+					semn=-1;
+					++index;
+				}
+				else if(str[0]=='+')
+				{
+					++index;
+				}
+				for(;index<str.size();++index)
+				{
+					if(!('0'<=str[index] && str[index]<='9') )
+					{
+						return 0;
+					}
+					ans*=10;
+					ans+=str[index]-'0';
+				}
+				return semn*ans;
+			}
+
+			bool ToBool(const string &str)
+			{
+				string ustr=ToUpper(str);
+				if(ustr=="TRUE")
+				{
+					return true;
+				}
+				if(ustr=="T")
+				{
+					return true;
+				}
+				if(ustr=="Y")
+				{
+					return true;
+				}
+				if(ustr=="YES")
+				{
+					return true;
+				}
+				if(ustr=="1")
+				{
+					return true;
+				}
+				return false;
+			}
+
+			double ToDouble(const string &str)
+			{
+				double ans=0;
+				double semn=1;
+				int index=0;
+				if(str[0]=='-')
+				{
+					semn=-1.0;
+					++index;
+				}
+				else if(str[0]=='+')
+				{
+					++index;
+				}
+				double div=1.0;
+				bool afterPoint=false;
+				for(;index<str.size();++index)
+				{
+					if(str[index]=='.')
+					{
+						afterPoint=true;
+					}
+					else
+					{
+						if(afterPoint)
+						{
+							div*=10.0;
+						}
+						if(!('0'<=str[index] && str[index]<='9') )
+						{
+							return 0;
+						}
+						ans*=10.0;
+						ans+=str[index]-'0';
+					}
+				}
+				return semn*ans/div;
+			}
+
 			string StripLeft(string &str)
 			{
 				string ans;
