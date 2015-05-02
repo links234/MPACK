@@ -6,4 +6,7 @@
 
 #include "IniFile.hpp"
 
+#include "DOM.hpp"
+#include "JSONParser.hpp"
+
 #endif
