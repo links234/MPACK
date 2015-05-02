@@ -1,5 +1,5 @@
-#ifndef JSONPARSER_HPP
-#define JSONPARSER_HPP
+#ifndef MPACK_JSONPARSER_HPP
+#define MPACK_JSONPARSER_HPP
 
 #include "Types.hpp"
 
