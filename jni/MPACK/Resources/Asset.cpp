@@ -23,7 +23,7 @@ namespace MPACK
 			mAsset = AAssetManager_open(Global::pAAssetManager, mPath, AASSET_MODE_UNKNOWN);
 			if(mAsset == NULL)
 			{
-				LOGE("Failed to open asset: %s",mPath);
+				LOGE("Asset::Open() error: failed to open asset: %s",mPath);
 			}
 			return (mAsset != NULL) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
@@ -51,11 +51,21 @@ namespace MPACK
 
 		int Asset::GetLength()
 		{
+			if(!mAsset)
+			{
+				LOGE("Asset::GetLength() error: asset is not opened");
+				return 0;
+			}
 			return AAsset_getLength(mAsset);
 		}
 
 		const void* Asset::Bufferize()
 		{
+			if(!mAsset)
+			{
+				LOGE("Asset::Bufferize() error: asset is not opened");
+				return NULL;
+			}
 			int length=AAsset_getLength(mAsset);
 			mBuffer=new char[length+1];
 			memcpy(mBuffer,AAsset_getBuffer(mAsset),length);
