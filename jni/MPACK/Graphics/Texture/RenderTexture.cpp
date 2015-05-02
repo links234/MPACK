@@ -68,9 +68,9 @@ namespace MPACK
 
 			GLenum status;
 			GL_CHECK( status = glCheckFramebufferStatus(GL_FRAMEBUFFER) );
-			if ( status == GL_FRAMEBUFFER_COMPLETE )
+			if ( status != GL_FRAMEBUFFER_COMPLETE )
 			{
-				LOGE("ERROR: Failed to init FBO");
+				LOGE("RenderTexture::Init(): Failed to init FBO");
 			}
 		}
 
