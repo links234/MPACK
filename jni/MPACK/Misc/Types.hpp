@@ -55,6 +55,7 @@
 #endif
 
 #include "Math.hpp"
+#include "Uncopyable.hpp"
 #include "../Debug/Debug.hpp"
 
 typedef unsigned int	 	GLenum;
