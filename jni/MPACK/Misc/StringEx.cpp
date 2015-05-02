@@ -159,7 +159,7 @@ namespace MPACK
 
 			bool IsWhiteSpace(const char &ch)
 			{
-				return ch==' ' || ch=='\t' || ch=='\n' || ch=='\r';
+				return ch==' ' || ch=='\t' || ch=='\n' || ch=='\r' || ch=='\v' || ch=='\f';
 			}
 
 			string StripLeft(string &str)
