@@ -25,7 +25,7 @@
 	#define LOGE(...) MPACK::Core::Log::Error(__VA_ARGS__)
 	#define LOGW(...) MPACK::Core::Log::Warn(__VA_ARGS__)
 	#define LOGI(...) MPACK::Core::Log::Info(__VA_ARGS__)
-	#define LOGD(...) //MPACK::Core::Log::Debug(__VA_ARGS__)
+	#define LOGD(...) MPACK::Core::Log::Debug(__VA_ARGS__)
 #endif
 
 #ifndef DEBUG
