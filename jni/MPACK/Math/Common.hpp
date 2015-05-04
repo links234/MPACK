@@ -133,7 +133,7 @@ namespace MPACK
 		template<> inline float		Misc<float>::Mod(const float a, const float b)			{ return (float)fmod((double)(a),(double)(b));		}
 		template<> inline double	Misc<double>::Mod(const double a, const double b)		{ return fmod(a,b);	}
 
-		template<class T> inline T Interpolate(const T from, const T to, const double coeff)
+		template<class T> inline T Misc<T>::Interpolate(const T from, const T to, const double coeff)
 		{
 			return from*(1.0-coeff)+to*coeff;
 		}
