@@ -33,4 +33,6 @@
 #include "Camera2D.hpp"
 #include "CameraObject.hpp"
 
+#include "UI.hpp"
+
 #endif

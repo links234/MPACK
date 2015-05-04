@@ -14,16 +14,20 @@
 #include "SpriteBatcher.hpp"
 #include "Texture2D.hpp"
 #include "Render.hpp"
+#include "UI.hpp"
 
 namespace MPACK
 {
 	namespace Graphics
 	{
-		class Sprite
+		class Sprite : public UI::UIWidget
 		{
 		public:
 			Sprite();
 			virtual ~Sprite();
+
+			virtual Math::AABB2Df GetUISpace() const;
+			virtual UI::Anchor GetUIPositionAnchor() const;
 
 			virtual void Render();
 
@@ -49,6 +53,10 @@ namespace MPACK
 			Math::Vector4f	m_color[4];
 
 		protected:
+			virtual void UIWidgetCallback_SetPosition(const Math::Vector2f &position);
+			virtual void UIWidgetCallback_SetX(const double &x);
+			virtual void UIWidgetCallback_SetY(const double &y);
+
 			GLfloat			m_width,m_height;
 			Texture2D		*m_texture;
 

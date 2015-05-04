@@ -9,6 +9,8 @@
 #include "Sprite.hpp"
 
 using namespace std;
+using namespace MPACK::Math;
+using namespace MPACK::UI;
 
 namespace MPACK
 {
@@ -23,6 +25,16 @@ namespace MPACK
 
 		Sprite::~Sprite()
 		{
+		}
+
+		AABB2Df Sprite::GetUISpace() const
+		{
+			return AABB2Df(-m_width,m_width,-m_height,m_height);
+		}
+
+		Anchor Sprite::GetUIPositionAnchor() const
+		{
+			return Anchor::Get(Anchor::Center);
 		}
 
 		void Sprite::Render()
@@ -121,6 +133,21 @@ namespace MPACK
 		GLfloat Sprite::GetLayer() const
 		{
 			return m_layer;
+		}
+
+		void Sprite::UIWidgetCallback_SetPosition(const Math::Vector2f &position)
+		{
+			m_position=position;
+		}
+
+		void Sprite::UIWidgetCallback_SetX(const double &x)
+		{
+			m_position.x=x;
+		}
+
+		void Sprite::UIWidgetCallback_SetY(const double &y)
+		{
+			m_position.y=y;
 		}
 	}
 }

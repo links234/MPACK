@@ -110,5 +110,10 @@ namespace MPACK
 		{
 			return s_screenHeight;
 		}
+
+		AABB2Df Render::GetUISpace()
+		{
+			return AABB2Df(0.0f,(float)(s_screenWidth),0.0f,(float)(s_screenHeight));
+		}
 	}
 }

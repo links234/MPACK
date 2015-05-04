@@ -14,6 +14,7 @@
 #include "Vertex.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
+#include "Math.hpp"
 
 namespace MPACK
 {
@@ -35,6 +36,8 @@ namespace MPACK
 
 			static GLint GetScreenWidth();
 			static GLint GetScreenHeight();
+
+			static Math::AABB2Df GetUISpace();
 
 		private:
 			Render();
