@@ -44,7 +44,7 @@ namespace MPACK
 			m_shader->SendVertexBuffer();
 
 			GL_CHECK( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,s_screenIndexBuffer) );
-			GL_CHECK( glDrawElements(GL_TRIANGLES,s_screenIndexCount,GL_UNSIGNED_INT,BUFFER_OFFSET(0)) );
+			GL_CHECK( glDrawElements(GL_TRIANGLES,s_screenIndexCount,GL_UNSIGNED_SHORT,BUFFER_OFFSET(0)) );
 
 			m_shader->DisableVertexAttributes();
 
@@ -76,7 +76,7 @@ namespace MPACK
 			screenVertices.push_back(0.0f);
 			screenVertices.push_back(1.0f);
 
-			vector<GLuint> screenIndices;
+			vector<GLushort> screenIndices;
 			screenIndices.push_back(0);
 			screenIndices.push_back(1);
 			screenIndices.push_back(2);
@@ -92,7 +92,7 @@ namespace MPACK
 
 			GL_CHECK( glGenBuffers(1,&s_screenIndexBuffer) );
 			GL_CHECK( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,s_screenIndexBuffer) );
-			GL_CHECK( glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLint)*screenIndices.size(),&screenIndices[0],GL_STATIC_DRAW) );
+			GL_CHECK( glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(GLushort)*screenIndices.size(),&screenIndices[0],GL_STATIC_DRAW) );
 			GL_CHECK( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0) );
 
 			s_screenIndexCount=screenIndices.size();
