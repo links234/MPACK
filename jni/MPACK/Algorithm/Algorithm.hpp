@@ -7,4 +7,7 @@
 #include "SearchList.hpp"
 #include "AVL.hpp"
 
+#include "Geometry.hpp"
+#include "Polygon.hpp"
+
 #endif
