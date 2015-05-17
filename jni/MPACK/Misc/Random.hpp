@@ -12,6 +12,8 @@ namespace MPACK
 			int Int(int low, int high);
 
 			double Double(double minv, double maxv);
+
+			bool FlipCoin();
 		}
 	}
 }

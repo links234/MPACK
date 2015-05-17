@@ -48,6 +48,11 @@ namespace MPACK
 				temp = (rand() / (static_cast<double>(RAND_MAX) + 1.0))* (high - low) + low;
 				return temp;
 			}
+
+			bool FlipCoin()
+			{
+				return rand()&1;
+			}
 		}
 	}
 }
