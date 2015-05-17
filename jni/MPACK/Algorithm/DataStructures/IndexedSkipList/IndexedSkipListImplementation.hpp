@@ -5,6 +5,8 @@
 
 #include "Random.hpp"
 
+using namespace MPACK::Core;
+
 namespace MPACK
 {
 	namespace Algorithm
