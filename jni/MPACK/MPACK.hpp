@@ -3,6 +3,7 @@
 
 #include "Global.hpp"
 
+#include "Algorithm.hpp"
 #include "Core.hpp"
 #include "Debug.hpp"
 #include "Graphics.hpp"
