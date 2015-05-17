@@ -1,6 +1,7 @@
 #include "UIHelper.hpp"
 
 #include "Render.hpp"
+#include "Anchor.hpp"
 
 using namespace MPACK::Math;
 using namespace MPACK::Graphics;
@@ -36,6 +37,11 @@ namespace MPACK
 			double ratio=width/height;
 			height=originalHeight;
 			width=height*ratio;
+		}
+
+		Anchor ScreenToAnchor(const MPACK::Math::Vector2f &position)
+		{
+			return Anchor(position.x/Render::GetScreenWidth(),position.y/Render::GetScreenHeight());
 		}
 	}
 }

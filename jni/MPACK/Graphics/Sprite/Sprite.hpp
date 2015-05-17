@@ -56,6 +56,7 @@ namespace MPACK
 			virtual void UIWidgetCallback_SetPosition(const Math::Vector2f &position);
 			virtual void UIWidgetCallback_SetX(const double &x);
 			virtual void UIWidgetCallback_SetY(const double &y);
+			virtual Math::Vector2f UIWidgetCallback_GetPosition();
 
 			GLfloat			m_width,m_height;
 			Texture2D		*m_texture;

@@ -149,5 +149,10 @@ namespace MPACK
 		{
 			m_position.y=y;
 		}
+
+		Vector2f Sprite::UIWidgetCallback_GetPosition()
+		{
+			return m_position;
+		}
 	}
 }

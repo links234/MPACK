@@ -18,6 +18,11 @@ namespace MPACK
 		{
 		}
 
+		void UIWidget::UIMatch(const Anchor &object)
+		{
+			UIWidgetCallback_SetPosition(MatchAnchors(Render::GetUISpace(),ScreenToAnchor(UIWidgetCallback_GetPosition()),GetUISpace(),object,GetUIPositionAnchor()));
+		}
+
 		void UIWidget::UIMatch(const Anchor &target, const Anchor &object)
 		{
 			UIWidgetCallback_SetPosition(MatchAnchors(Render::GetUISpace(),target,GetUISpace(),object,GetUIPositionAnchor()));
