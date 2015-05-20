@@ -33,7 +33,7 @@
 #else
 	#define GL_CHECK(something) do { \
             something; \
-            Debug::OpenGL::CheckErrorMacro(#something, __FILE__, __LINE__); \
+            MPACK::Debug::OpenGL::CheckErrorMacro(#something, __FILE__, __LINE__); \
         } while (0)
 #endif
 
@@ -42,7 +42,7 @@
 #else
 	#define EGL_CHECK(something) do { \
             something; \
-            Debug::EGL::CheckErrorMacro(#something, __FILE__, __LINE__); \
+            MPACK::Debug::EGL::CheckErrorMacro(#something, __FILE__, __LINE__); \
         } while (0)
 #endif
 
