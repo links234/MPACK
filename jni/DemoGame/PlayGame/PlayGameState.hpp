@@ -47,6 +47,11 @@ namespace Game
 
 		MPACK::Graphics::Texture2D		*m_testTexture;
 		MPACK::Graphics::AnimatedSprite	*m_testSprite;
+
+		MPACK::Graphics::Sprite			*m_UIMatch1Sprite;
+		MPACK::Graphics::Sprite			*m_UIMatch2Sprite;
+		MPACK::Graphics::Sprite			*m_UIMatch3Sprite;
+		MPACK::Graphics::Sprite			*m_UIMatch4Sprite;
 	};
 }
 

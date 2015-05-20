@@ -14,6 +14,7 @@
 using namespace MPACK;
 using namespace MPACK::Physics;
 using namespace MPACK::Graphics;
+using namespace MPACK::UI;
 
 namespace Game
 {
@@ -96,12 +97,43 @@ namespace Game
 
 		m_testSprite->BuildFrameGrid(5,4);
 		m_testSprite->SetAnimation(Animation(0,20,10.0f));
+
+		const float FRONT_LAYER=99910000.0f;
+		m_UIMatch1Sprite = new Sprite();
+		m_UIMatch1Sprite->SetTexture(m_playerTexture);
+		m_UIMatch1Sprite->SetSize(300.0f,300.0f);
+		m_UIMatch1Sprite->UIMatch(Anchor(Anchor::Get(Anchor::TopLeft)),Anchor(Anchor::Get(Anchor::TopLeft)));
+		m_UIMatch1Sprite->SetLayer(FRONT_LAYER);
+		m_UIMatch1Sprite->SetShading(SpriteVertex::ALPHA_BLEND);
+
+		m_UIMatch2Sprite = new Sprite();
+		m_UIMatch2Sprite->SetTexture(m_playerTexture);
+		m_UIMatch2Sprite->SetSize(300.0f,300.0f);
+		m_UIMatch2Sprite->UIMatch(Anchor(Anchor::Get(Anchor::BottomLeft)),Anchor(Anchor::Get(Anchor::BottomLeft)));
+		m_UIMatch2Sprite->SetLayer(FRONT_LAYER);
+		m_UIMatch2Sprite->SetShading(SpriteVertex::ALPHA_BLEND);
+
+		m_UIMatch3Sprite = new Sprite();
+		m_UIMatch3Sprite->SetTexture(m_playerTexture);
+		m_UIMatch3Sprite->SetSize(300.0f,300.0f);
+		m_UIMatch3Sprite->UIMatch(Anchor(Anchor::Get(Anchor::TopRight)),Anchor(Anchor::Get(Anchor::TopRight)));
+		m_UIMatch3Sprite->SetLayer(FRONT_LAYER);
+		m_UIMatch3Sprite->SetShading(SpriteVertex::ALPHA_BLEND);
+
+		m_UIMatch4Sprite = new Sprite();
+		m_UIMatch4Sprite->SetTexture(m_playerTexture);
+		m_UIMatch4Sprite->SetSize(300.0f,300.0f);
+		m_UIMatch4Sprite->UIMatch(Anchor(Anchor::Get(Anchor::BottomRight)),Anchor(Anchor::Get(Anchor::BottomRight)));
+		m_UIMatch4Sprite->SetLayer(FRONT_LAYER);
+		m_UIMatch4Sprite->SetShading(SpriteVertex::ALPHA_BLEND);
 	}
 
 	int PlayGame::Update()
 	{
 		float lTimeStep = Global::pContext->pTimeService->Elapsed();
 		float delta=lTimeStep;
+
+		m_testSprite->Update(delta);
 
 		m_pPGInputController->Update(lTimeStep);
 
@@ -124,11 +156,16 @@ namespace Game
 		//Debug::Print(Global::pFont,"X = %lf  Y = %lf",m_playerObject->GetLinearAcceleration().x,m_playerObject->GetLinearAcceleration().y);
 
 		m_background->Render();
+		m_testSprite->Render();
+		m_UIMatch1Sprite->Render();
+		m_UIMatch2Sprite->Render();
+		m_UIMatch3Sprite->Render();
+		m_UIMatch4Sprite->Render();
 
-		SpriteBatcher::EnableCamera();
+		Batcher::EnableCamera();
 		Object::RenderAll();
 		Particle::RenderAll();
-		SpriteBatcher::DisableCamera();
+		Batcher::DisableCamera();
 
 		m_pPGInputController->Render();
 	}
@@ -170,6 +207,11 @@ namespace Game
 		//should be deleted in final version
 		delete m_testSprite;
 		delete m_testTexture;
+
+		delete m_UIMatch1Sprite;
+		delete m_UIMatch2Sprite;
+		delete m_UIMatch3Sprite;
+		delete m_UIMatch4Sprite;
 
 		Particle::Clear();
 	}

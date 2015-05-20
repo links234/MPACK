@@ -1,6 +1,6 @@
 #include "PhysicalObject.hpp"
 
-#include "SpriteBatcher.hpp"
+#include "Batcher.hpp"
 
 using namespace MPACK;
 using namespace MPACK::Physics;
@@ -34,14 +34,14 @@ void PhysicalObject::Render()
 		if(m_shape->m_type==PShape::e_poly)
 		{
 			PPoly *poly=(PPoly*)(m_shape);
-			SpriteBatcher::SendDebugPolygon(&poly->GetVertex(0),poly->GetVertexCount(),color,transformState);
+			Batcher::SendDebugPolygon(&poly->GetVertex(0),poly->GetVertexCount(),color,transformState);
 		}
 
 		else if(m_shape->m_type==PShape::e_circle)
 		{
 			PCircle *circle=(PCircle*)(m_shape);
 			transformState.SetScale(circle->GetRadius());
-			SpriteBatcher::SendDebugCircle(Debug::circlePoints,color,transformState);
+			Batcher::SendDebugCircle(Debug::circlePoints,color,transformState);
 		}
 	}
 	m_debugInCollision=false;

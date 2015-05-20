@@ -80,6 +80,11 @@ namespace Game
 		LOGD("Section1::var2 = <%s>",ini.GetSection("Section1")->GetObject("var2")->GetValue().c_str());
 		LOGD("Section2::nr_of_enemies = <%s>",ini.GetSection("Section2")->GetObject("nr_of_enemies")->GetValue().c_str());
 
+		JSONParser json;
+		DOM *dom=json.Load("@local/test.json");
+		LOGD("%s",dom->Child("bla")->GetValue().c_str());
+		delete dom;
+
 		test = new MPACK::ADS::GoogleAds();
 
 		return Core::RETURN_VALUE_OK;
