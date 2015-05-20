@@ -11,7 +11,7 @@
 
 #include "Math.hpp"
 #include "Types.hpp"
-#include "SpriteBatcher.hpp"
+#include "Batcher.hpp"
 #include "Texture2D.hpp"
 #include "Render.hpp"
 #include "UI.hpp"

@@ -14,7 +14,7 @@
 #include "ShaderTypes.hpp"
 #include "ShaderUniform.hpp"
 
-#include "SpriteBatcher.hpp"
+#include "Batcher.hpp"
 #include "Sprite.hpp"
 #include "AnimatedSprite.hpp"
 #include "TiledBackground.hpp"

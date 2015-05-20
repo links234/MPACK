@@ -65,7 +65,7 @@ namespace MPACK
 			Render::EnableAlphaBlend();
 
 			GL_CHECK( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
-			SpriteBatcher::FlushAll();
+			Batcher::FlushAll();
 
 			PostEffect::End();
 
