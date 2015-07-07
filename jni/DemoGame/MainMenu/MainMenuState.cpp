@@ -8,6 +8,7 @@ using namespace MPACK::Math;
 using namespace MPACK::Graphics;
 
 #include "DemoApplication.hpp"
+#include "GameResources.hpp"
 #include "GUIMenu.hpp"
 
 namespace Game
@@ -84,6 +85,8 @@ namespace Game
 	{
 		m_pBackgroundSprite->Render();
 		m_pMenuGUI->Render();
+
+		GameResources::GetFont()->SendString("TeStInG!!!:D ...",Render::GetScreenWidth()*0.4,Render::GetScreenHeight()*0.4);
 	}
 
 	void MainMenu::Pause()

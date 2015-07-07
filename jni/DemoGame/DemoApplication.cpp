@@ -9,6 +9,7 @@
 #include "IniFile.hpp"
 #include "GoogleAds.hpp"
 
+#include "GameResources.hpp"
 #include "MainMenuState.hpp"
 #include "PlayGameState.hpp"
 #include "Log.hpp"
@@ -68,6 +69,8 @@ namespace Game
 		CursorDrawer::GetInstance()->EnableAutohide();
 #endif
 
+		GameResources::Init();
+
 		m_pGameState = new MainMenu;
 
 		IniFile ini;
@@ -92,6 +95,8 @@ namespace Game
 
     void DemoApplication::onDeactivate()
     {
+    	GameResources::Uninit();
+
     	LOGI("DemoApplication::onDeactivate()");
     	MPACK::Global::pContext->pGraphicsService->Stop();
     	MPACK::Global::pContext->pSoundService->Stop();
