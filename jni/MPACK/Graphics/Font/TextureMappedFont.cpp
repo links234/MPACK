@@ -9,7 +9,7 @@
 #include "TextureMappedFont.hpp"
 #include "Render.hpp"
 #include "Vertex.hpp"
-#include "TargaImage.hpp"
+#include "Image.hpp"
 #include "Types.hpp"
 
 using namespace std;
@@ -147,7 +147,6 @@ namespace MPACK
 				}
 				quadData.push_back(vertex);
 
-
 				if(!m_monospaced)
 				{
 					x+=m_fontSize*(1-m_cellSpacing[chX][chY].right);
@@ -173,17 +172,17 @@ namespace MPACK
 
 		bool TextureMappedFont::Load(const string& textureName)
 		{
-			TargaImage fontImage;
-			if(fontImage.Load(textureName.c_str())==RETURN_VALUE_KO)
+			Image *pFontImage = LoadImage(textureName.c_str());
+			if(pFontImage->Load(textureName.c_str())==RETURN_VALUE_KO)
 			{
 				LOGE("Texture Mapped Font: Could not load the font texture: %s",textureName.c_str());
 				return false;
 			}
 
-			fontImage.FlipVertical();
+			pFontImage->FlipVertical();
 
-			GLuint width=fontImage.GetWidth();
-			GLuint height=fontImage.GetHeight();
+			GLuint width=pFontImage->GetWidth();
+			GLuint height=pFontImage->GetHeight();
 			GLuint cellWidth=width>>4;
 			GLuint cellHeight=height>>4;
 			const float OneOver255=1.0f/255.0f;
@@ -201,7 +200,7 @@ namespace MPACK
 						{
 							GLuint ri=i*cellWidth+ci;
 							GLuint rj=j*cellHeight+cj;
-							BYTE *p=(BYTE*)(fontImage.GetPixel(ri,rj));
+							BYTE *p=(BYTE*)(pFontImage->GetPixel(ri,rj));
 							BYTE b=*p;
 							BYTE g=*(p+1);
 							BYTE r=*(p+2);
@@ -230,15 +229,15 @@ namespace MPACK
 				}
 			}
 
-			fontImage.FlipVertical();
-			if (!m_texture.Load(&fontImage, Bilinear))
+			pFontImage->FlipVertical();
+			if (!m_texture.Load(pFontImage, Bilinear))
 			{
 				LOGE("Texture Mapped Font: Could not load font image to texture memory: %s",textureName.c_str());
-				while(1);
+				delete pFontImage;
 				return false;
 			}
+			delete pFontImage;
 			return true;
-
 		}
 
 		Texture2D* TextureMappedFont::GetTexturePointer()
