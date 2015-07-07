@@ -38,10 +38,15 @@ namespace MPACK
 		public:
 			TextureMappedFont();
 
+			enum CaseType{NONE, UPPERCASE, LOWERCASE};
+
 			void SetFontSize(GLfloat fontSize);
 			void SetCharSpacing(GLfloat charSpacing=0.0f);
 			void SetMonospaced(bool monospaced=true);
-			void SendString(const std::string& str, GLfloat x, GLfloat y, Align alignType=ALIGN_LEFT_TOP, std::vector<Math::Vector4f> *colorPattern=NULL);
+			void SendString(std::string str, GLfloat x, GLfloat y, Align alignType=ALIGN_LEFT_TOP, std::vector<Math::Vector4f> *colorPattern=NULL);
+
+			void SetCase(CaseType caseType);
+			CaseType GetCase() const;
 
 			bool 		Load(const std::string& textureName);
 
@@ -60,6 +65,8 @@ namespace MPACK
 			bool			m_monospaced;
 
 			CellSpacing		m_cellSpacing[16][16];
+
+			CaseType		m_caseType;
 		};
 	}
 }

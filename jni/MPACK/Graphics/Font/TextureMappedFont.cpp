@@ -7,6 +7,7 @@
 
 
 #include "TextureMappedFont.hpp"
+#include "StringEx.hpp"
 #include "Render.hpp"
 #include "Vertex.hpp"
 #include "Image.hpp"
@@ -21,12 +22,22 @@ namespace MPACK
 	namespace Graphics
 	{
 		TextureMappedFont::TextureMappedFont()
-			: m_layer(1000.0f), m_fontSize(40.0f), m_charSpacing(0.6f), m_monospaced(false)
+			: m_layer(1000.0f), m_fontSize(40.0f), m_charSpacing(0.6f), m_monospaced(false), m_caseType(NONE)
 		{
 		}
 
-		void TextureMappedFont::SendString(const string& str, GLfloat x, GLfloat y, Align alignType, vector<Math::Vector4f> *colorPattern)
+		void TextureMappedFont::SendString(string str, GLfloat x, GLfloat y, Align alignType, vector<Math::Vector4f> *colorPattern)
 		{
+			switch(m_caseType)
+			{
+				case CaseType::LOWERCASE:
+					str=StringEx::ToLower(str);
+				break;
+				case CaseType::UPPERCASE:
+					str=StringEx::ToUpper(str);
+				break;
+			}
+
 			if(alignType==ALIGN_CENTER)
 			{
 				GLfloat width=GetTextWidth(str);
@@ -158,6 +169,16 @@ namespace MPACK
 			}
 
 			Batcher::SendSpriteVertexQuad(&quadData[0],quadData.size(),&m_texture,IndexData::TRIANGLES,m_layer);
+		}
+
+		void TextureMappedFont::SetCase(CaseType caseType)
+		{
+			m_caseType=caseType;
+		}
+
+		TextureMappedFont::CaseType TextureMappedFont::GetCase() const
+		{
+			return m_caseType;
 		}
 
 		void TextureMappedFont::SetFontSize(GLfloat fontSize)

@@ -12,6 +12,7 @@ namespace GameResources
 		{
 			pFont = new TextureMappedFont();
 			pFont->Load("@Fonts/Font.png");
+			pFont->SetCase(TextureMappedFont::UPPERCASE);
 		}
 	}
 
