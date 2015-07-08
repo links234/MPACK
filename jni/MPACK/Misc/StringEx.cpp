@@ -424,6 +424,14 @@ namespace MPACK
 				}
 				return ans;
 			}
+
+			void MemSwap(char *pointer1, char *pointer2, int size)
+			{
+				for(int i=0;i<size;++i,++pointer1,++pointer2)
+				{
+					swap(*pointer1,*pointer2);
+				}
+			}
 		}
 	}
 }

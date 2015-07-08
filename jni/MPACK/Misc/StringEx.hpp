@@ -48,6 +48,8 @@ namespace MPACK
 			std::string Substr(std::string &str, int start, int length=-1);
 			std::string Substring(std::string &str, int start, int end=PARAMETER_DEFAULT_VALUE);
 			std::string Slice(std::string &str, int start, int end=PARAMETER_DEFAULT_VALUE);
+
+			void MemSwap(char *pointer1, char *pointer2, int size);
 		}
 	}
 }
