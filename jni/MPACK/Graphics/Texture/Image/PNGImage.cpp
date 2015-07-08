@@ -3,6 +3,7 @@
 #include "Resource.hpp"
 #include "SDInputFile.hpp"
 #include "Asset.hpp"
+#include "Misc.hpp"
 #include "Log.hpp"
 
 using namespace MPACK::Core;
@@ -214,10 +215,42 @@ namespace MPACK
 
 		void PNGImage::FlipVertical()
 		{
+			for(int i=0;i<(m_width>>1);++i)
+			{
+				for(int j=0;j<m_height;++j)
+				{
+					int offset1=i*m_width+j;
+					offset1*=m_bytesPerPixel;
+
+					int vi=m_width-i-1;
+					int vj=j;
+
+					int offset2=vi*m_width+vj;
+					offset2*=m_bytesPerPixel;
+
+					StringEx::MemSwap((char*)(m_imageBuffer+offset1),(char*)(m_imageBuffer+offset2),m_bytesPerPixel);
+				}
+			}
 		}
 
 		void PNGImage::FlipHorizontal()
 		{
+			for(int i=0;i<m_width;++i)
+			{
+				for(int j=0;j<(m_height>>1);++j)
+				{
+					int offset1=i*m_width+j;
+					offset1*=m_bytesPerPixel;
+
+					int vi=i;
+					int vj=m_height-j+1;
+
+					int offset2=vi*m_width+vj;
+					offset2*=m_bytesPerPixel;
+
+					StringEx::MemSwap((char*)(m_imageBuffer+offset1),(char*)(m_imageBuffer+offset2),m_bytesPerPixel);
+				}
+			}
 		}
 
 		void PNGImage::callback_read(png_structp pStruct, png_bytep pData, png_size_t pSize)

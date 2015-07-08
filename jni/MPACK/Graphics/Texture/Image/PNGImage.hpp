@@ -28,7 +28,6 @@ namespace MPACK
 		private:
 			static void callback_read(png_structp pStruct, png_bytep pData, png_size_t pSize);
 
-		private:
 			BYTE *m_imageBuffer;
 		};
 	}
