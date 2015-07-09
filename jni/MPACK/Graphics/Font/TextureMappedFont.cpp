@@ -22,11 +22,14 @@ namespace MPACK
 	namespace Graphics
 	{
 		TextureMappedFont::TextureMappedFont()
-			: m_layer(1000.0f), m_fontSize(40.0f), m_charSpacing(0.6f), m_monospaced(false), m_caseType(NONE)
+			: m_layer(1000.0f), m_fontSize(40.0f),
+			  m_charSpacing(0.6f), m_charPadding(0.05f),
+			  m_monospaced(false), m_caseType(NONE),
+			  m_formatType(RGB_MAGNITUDE)
 		{
 		}
 
-		void TextureMappedFont::SendString(string str, GLfloat x, GLfloat y, Align alignType, vector<Math::Vector4f> *colorPattern)
+		void TextureMappedFont::SendString(string str, GLfloat x, GLfloat y, AlignType alignType, vector<Math::Vector4f> *colorPattern)
 		{
 			switch(m_caseType)
 			{
@@ -51,7 +54,14 @@ namespace MPACK
 
 			vector<SpriteVertex> quadData;
 			SpriteVertex vertex;
-			vertex.stype=SpriteVertex::ALPHA_TEST;
+			if(m_formatType == FormatType::RGB_MAGNITUDE)
+			{
+				vertex.stype=SpriteVertex::ALPHA_TEST;
+			}
+			else
+			{
+				vertex.stype=SpriteVertex::ALPHA_BLEND;
+			}
 
 			int ind=0;
 			for(string::size_type i = 0; i < str.size(); ++i)
@@ -160,7 +170,7 @@ namespace MPACK
 
 				if(!m_monospaced)
 				{
-					x+=m_fontSize*(1-m_cellSpacing[chX][chY].right);
+					x+=m_fontSize*(1-m_cellSpacing[chX][chY].right)+m_charPadding*m_fontSize;
 				}
 				else
 				{
@@ -181,6 +191,21 @@ namespace MPACK
 			return m_caseType;
 		}
 
+		TextureMappedFont::FormatType TextureMappedFont::GetFormat() const
+		{
+			return m_formatType;
+		}
+
+		void TextureMappedFont::SetCharPadding(GLfloat charPadding)
+		{
+			m_charPadding = charPadding;
+		}
+
+		GLfloat TextureMappedFont::GetCharPadding() const
+		{
+			return m_charPadding;
+		}
+
 		void TextureMappedFont::SetFontSize(GLfloat fontSize)
 		{
 			m_fontSize=fontSize;
@@ -191,63 +216,32 @@ namespace MPACK
 			m_charSpacing=charSpacing;
 		}
 
-		bool TextureMappedFont::Load(const string& textureName)
+		bool TextureMappedFont::Load(const string& textureName, FormatType format)
 		{
 			Image *pFontImage = LoadImage(textureName.c_str());
 			if(pFontImage->Load(textureName.c_str())==RETURN_VALUE_KO)
 			{
-				LOGE("Texture Mapped Font: Could not load the font texture: %s",textureName.c_str());
+				LOGE("TextureMappedFont::Load() could not load the font texture: %s",textureName.c_str());
 				return false;
 			}
 
+			if(format == FormatType::ALPHA && pFontImage->GetBytesPerPixel()!=4)
+			{
+				LOGE("TextureMappedFont::Load() format is set to ALPHA but font image does not have alpha channel!");
+				return false;
+			}
+
+			m_formatType = format;
+
 			pFontImage->FlipVertical();
 
-			GLuint width=pFontImage->GetWidth();
-			GLuint height=pFontImage->GetHeight();
-			GLuint cellWidth=width>>4;
-			GLuint cellHeight=height>>4;
-			const float OneOver255=1.0f/255.0f;
-			float OneOverCellWidth=1.0f/(GLfloat)(cellWidth);
-			float OneOverCellHeight=1.0f/(GLfloat)(cellHeight);
-			AABB2Df cell;
-			for(register GLuint i=0;i<16;++i)
+			if(format == FormatType::ALPHA)
 			{
-				for(register GLuint j=0;j<16;++j)
-				{
-					cell.Clear();
-					for(register GLuint ci=0;ci<cellWidth;++ci)
-					{
-						for(register GLuint cj=0;cj<cellHeight;++cj)
-						{
-							GLuint ri=i*cellWidth+ci;
-							GLuint rj=j*cellHeight+cj;
-							BYTE *p=(BYTE*)(pFontImage->GetPixel(ri,rj));
-							BYTE b=*p;
-							BYTE g=*(p+1);
-							BYTE r=*(p+2);
-							Math::Vector3f color((GLfloat)(r)*OneOver255,(GLfloat)(g)*OneOver255,(GLfloat)(b)*OneOver255);
-							if(color.Magnitude()>0.01f)
-							{
-								cell.AddPoint(Vector2f((GLfloat)(cj),(GLfloat)(ci)));
-							}
-						}
-					}
-
-					if(cell.m_xmin>cellWidth)
-					{
-						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
-						m_cellSpacing[i][j].right=0.0f;
-						m_cellSpacing[i][j].top=OneOverCellWidth*(cellWidth>>1);
-						m_cellSpacing[i][j].bottom=0.0f;
-					}
-					else
-					{
-						m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellWidth;
-						m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellWidth;
-						m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellWidth;
-						m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellWidth;
-					}
-				}
+				BuildCellSpacing_ALPHA(pFontImage);
+			}
+			else if(format == FormatType::RGB_MAGNITUDE)
+			{
+				BuildCellSpacing_RGB_MAGNITUDE(pFontImage);
 			}
 
 			pFontImage->FlipVertical();
@@ -302,15 +296,113 @@ namespace MPACK
 					GLfloat xPos = GLfloat(ch % 16) * oneOverSixteen;
 					GLfloat yPos = GLfloat(ch / 16) * oneOverSixteen;
 
-					x-=m_fontSize*m_cellSpacing[chX][chY].left;
-
-					width=x;
-
-					x+=m_fontSize*(1-m_cellSpacing[chX][chY].right);
+					width-=m_fontSize*m_cellSpacing[chX][chY].left;
+					width+=m_fontSize*(1-m_cellSpacing[chX][chY].right);
 				}
-				width+=m_fontSize;
+				width+=m_fontSize*m_charPadding*(str.size()-1);
 			}
 			return width;
+		}
+
+		void TextureMappedFont::BuildCellSpacing_RGB_MAGNITUDE(Image *pFontImage)
+		{
+			GLuint width=pFontImage->GetWidth();
+			GLuint height=pFontImage->GetHeight();
+			GLuint cellWidth=width>>4;
+			GLuint cellHeight=height>>4;
+			const float OneOver255=1.0f/255.0f;
+			float OneOverCellWidth=1.0f/(GLfloat)(cellWidth);
+			float OneOverCellHeight=1.0f/(GLfloat)(cellHeight);
+			AABB2Df cell;
+			for(register GLuint i=0;i<16;++i)
+			{
+				for(register GLuint j=0;j<16;++j)
+				{
+					cell.Clear();
+					for(register GLuint ci=0;ci<cellWidth;++ci)
+					{
+						for(register GLuint cj=0;cj<cellHeight;++cj)
+						{
+							GLuint ri=i*cellWidth+ci;
+							GLuint rj=j*cellHeight+cj;
+							BYTE *p=(BYTE*)(pFontImage->GetPixel(ri,rj));
+							BYTE b=*p;
+							BYTE g=*(p+1);
+							BYTE r=*(p+2);
+							Math::Vector3f color((GLfloat)(r)*OneOver255,(GLfloat)(g)*OneOver255,(GLfloat)(b)*OneOver255);
+
+							if(color.Magnitude()>=FORMATTYPE_RGB_MAGNITUDE_THRESHOLD)
+							{
+								cell.AddPoint(Vector2f((GLfloat)(cj),(GLfloat)(ci)));
+							}
+						}
+					}
+
+					if(cell.m_xmin>cellWidth)
+					{
+						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
+						m_cellSpacing[i][j].right=0.0f;
+						m_cellSpacing[i][j].top=OneOverCellWidth*(cellWidth>>1);
+						m_cellSpacing[i][j].bottom=0.0f;
+					}
+					else
+					{
+						m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellWidth;
+						m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellWidth;
+						m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellWidth;
+						m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellWidth;
+					}
+				}
+			}
+		}
+
+		void TextureMappedFont::BuildCellSpacing_ALPHA(Image *pFontImage)
+		{
+			GLuint width=pFontImage->GetWidth();
+			GLuint height=pFontImage->GetHeight();
+			GLuint cellWidth=width>>4;
+			GLuint cellHeight=height>>4;
+			const float OneOver255=1.0f/255.0f;
+			float OneOverCellWidth=1.0f/(GLfloat)(cellWidth);
+			float OneOverCellHeight=1.0f/(GLfloat)(cellHeight);
+			AABB2Df cell;
+			for(register GLuint i=0;i<16;++i)
+			{
+				for(register GLuint j=0;j<16;++j)
+				{
+					cell.Clear();
+					for(register GLuint ci=0;ci<cellWidth;++ci)
+					{
+						for(register GLuint cj=0;cj<cellHeight;++cj)
+						{
+							GLuint ri=i*cellWidth+ci;
+							GLuint rj=j*cellHeight+cj;
+							BYTE *p=(BYTE*)(pFontImage->GetPixel(ri,rj));
+							BYTE alpha=*(p+3);
+
+							if(alpha>=FORMATTYPE_ALPHA_THRESHOLD)
+							{
+								cell.AddPoint(Vector2f((GLfloat)(cj),(GLfloat)(ci)));
+							}
+						}
+					}
+
+					if(cell.m_xmin>cellWidth)
+					{
+						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
+						m_cellSpacing[i][j].right=0.0f;
+						m_cellSpacing[i][j].top=OneOverCellWidth*(cellWidth>>1);
+						m_cellSpacing[i][j].bottom=0.0f;
+					}
+					else
+					{
+						m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellWidth;
+						m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellWidth;
+						m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellWidth;
+						m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellWidth;
+					}
+				}
+			}
 		}
 	}
 }

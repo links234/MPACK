@@ -11,8 +11,9 @@ namespace GameResources
 		if(!pFont)
 		{
 			pFont = new TextureMappedFont();
-			pFont->Load("@Fonts/Font.png");
+			pFont->Load("@Fonts/Font.png",TextureMappedFont::FormatType::ALPHA);
 			pFont->SetCase(TextureMappedFont::UPPERCASE);
+			pFont->SetFontSize(100.0f);
 		}
 	}
 

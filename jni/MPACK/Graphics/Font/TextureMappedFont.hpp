@@ -27,28 +27,29 @@ namespace MPACK
 			GLfloat top,bottom,left,right;
 		};
 
-		enum Align
-		{
-			ALIGN_LEFT_TOP,
-			ALIGN_CENTER
-		};
-
 		class TextureMappedFont
 		{
 		public:
 			TextureMappedFont();
 
-			enum CaseType{NONE, UPPERCASE, LOWERCASE};
+			enum AlignType {ALIGN_LEFT_TOP, ALIGN_CENTER};
+			enum CaseType {NONE, UPPERCASE, LOWERCASE};
+			enum FormatType {RGB_MAGNITUDE, ALPHA};
 
 			void SetFontSize(GLfloat fontSize);
 			void SetCharSpacing(GLfloat charSpacing=0.0f);
 			void SetMonospaced(bool monospaced=true);
-			void SendString(std::string str, GLfloat x, GLfloat y, Align alignType=ALIGN_LEFT_TOP, std::vector<Math::Vector4f> *colorPattern=NULL);
+			void SendString(std::string str, GLfloat x, GLfloat y, AlignType alignType=ALIGN_LEFT_TOP, std::vector<Math::Vector4f> *colorPattern=NULL);
 
 			void SetCase(CaseType caseType);
 			CaseType GetCase() const;
 
-			bool 		Load(const std::string& textureName);
+			FormatType GetFormat() const;
+
+			void SetCharPadding(GLfloat charPadding);
+			GLfloat GetCharPadding() const;
+
+			bool 		Load(const std::string& textureName, FormatType format);
 
 			Texture2D* 	GetTexturePointer();
 
@@ -58,15 +59,23 @@ namespace MPACK
 			GLfloat 		m_layer;
 
 		private:
+			const float FORMATTYPE_ALPHA_THRESHOLD=0.009f;
+			const BYTE	FORMATTYPE_RGB_MAGNITUDE_THRESHOLD=5;
+
+			void		BuildCellSpacing_RGB_MAGNITUDE(Image *pFontImage);
+			void		BuildCellSpacing_ALPHA(Image *pFontImage);
+
 			Texture2D		m_texture;
 
 			GLfloat			m_fontSize;
 			GLfloat			m_charSpacing;
+			GLfloat			m_charPadding;
 			bool			m_monospaced;
 
 			CellSpacing		m_cellSpacing[16][16];
 
 			CaseType		m_caseType;
+			FormatType		m_formatType;
 		};
 	}
 }

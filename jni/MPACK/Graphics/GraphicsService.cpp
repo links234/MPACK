@@ -76,7 +76,7 @@ namespace MPACK
 		ReturnValue GraphicsService::LoadResources()
 		{
 			Global::pFont=new TextureMappedFont;
-			Global::pFont->Load("@Fonts/Font.tga");
+			Global::pFont->Load("@Fonts/Font.tga",TextureMappedFont::FormatType::RGB_MAGNITUDE);
 
 			if(!LoadShaders())
 			{
