@@ -74,14 +74,36 @@ namespace MPACK
 				GLfloat xPos = GLfloat(ch % 16) * oneOverSixteen;
 				GLfloat yPos = GLfloat(ch / 16) * oneOverSixteen;
 
+				GLfloat verticalDisplacement = 0.0;
+				/*//if(StringEx::IsAlphaNumeric(str[i]))
+				{
+					GLfloat charCenter = m_fontSize*(1.0f-m_cellSpacing[chX][chY].bottom);
+					GLfloat realCenter = m_fontSize*0.5f;
+
+					verticalDisplacement = m_cellSpacing[chX][chY].top+m_cellSpacing[chX][chY].bottom;
+					verticalDisplacement *= m_fontSize;
+
+					verticalDisplacement = realCenter-charCenter;
+				} */
+
 				if(!m_monospaced)
 				{
+					LOGD("str[i] = %c",str[i]);
 					x-=m_fontSize*m_cellSpacing[chX][chY].left;
 				}
 
+
+
+				if(m_formatType==FormatType::ALPHA)
+				{
+					LOGD("str[i]=%c   verticalDisplacement=%lf",char(ch),verticalDisplacement);
+				}
+
+
+
 				////////////////////////////////////
 				vertex.x=x;
-				vertex.y=y+m_fontSize;
+				vertex.y=y+m_fontSize+verticalDisplacement;
 				vertex.s=xPos;
 				vertex.t=1.0f-yPos-oneOverSixteen;
 				if(!colorPattern)
@@ -103,7 +125,7 @@ namespace MPACK
 				quadData.push_back(vertex);
 
 				vertex.x=x+m_fontSize;
-				vertex.y=y+m_fontSize;
+				vertex.y=y+m_fontSize+verticalDisplacement;
 				vertex.s=xPos+oneOverSixteen;
 				vertex.t=1.0f-yPos-oneOverSixteen;
 				if(!colorPattern)
@@ -125,9 +147,9 @@ namespace MPACK
 				quadData.push_back(vertex);
 
 				vertex.x=x+m_fontSize;
-				vertex.y=y;
+				vertex.y=y+verticalDisplacement;
 				vertex.s=xPos+oneOverSixteen;
-				vertex.t=1.0f-yPos-0.001f;
+				vertex.t=1.0f-yPos;
 				if(!colorPattern)
 				{
 					vertex.r=vertex.g=vertex.b=vertex.a=1.0;
@@ -147,9 +169,9 @@ namespace MPACK
 				quadData.push_back(vertex);
 
 				vertex.x=x;
-				vertex.y=y;
+				vertex.y=y+verticalDisplacement;
 				vertex.s=xPos;
-				vertex.t=1.0f-yPos-0.001f;
+				vertex.t=1.0f-yPos;
 				if(!colorPattern)
 				{
 					vertex.r=vertex.g=vertex.b=vertex.a=1.0;
@@ -206,6 +228,18 @@ namespace MPACK
 			return m_charPadding;
 		}
 
+		void TextureMappedFont::AutoCalibrate()
+		{
+			if(m_formatType == FormatType::RGB_MAGNITUDE)
+			{
+				m_charPadding = 0.0f;
+			}
+			else
+			{
+				m_charPadding = 0.05f;
+			}
+		}
+
 		void TextureMappedFont::SetFontSize(GLfloat fontSize)
 		{
 			m_fontSize=fontSize;
@@ -252,6 +286,8 @@ namespace MPACK
 				return false;
 			}
 			delete pFontImage;
+
+			AutoCalibrate();
 			return true;
 		}
 
@@ -342,15 +378,15 @@ namespace MPACK
 					{
 						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
 						m_cellSpacing[i][j].right=0.0f;
-						m_cellSpacing[i][j].top=OneOverCellWidth*(cellWidth>>1);
+						m_cellSpacing[i][j].top=OneOverCellWidth*(cellHeight>>1);
 						m_cellSpacing[i][j].bottom=0.0f;
 					}
 					else
 					{
 						m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellWidth;
 						m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellWidth;
-						m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellWidth;
-						m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellWidth;
+						m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellHeight;
+						m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellHeight;
 					}
 				}
 			}
@@ -391,13 +427,13 @@ namespace MPACK
 					{
 						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
 						m_cellSpacing[i][j].right=0.0f;
-						m_cellSpacing[i][j].top=OneOverCellWidth*(cellWidth>>1);
+						m_cellSpacing[i][j].top=OneOverCellWidth*(cellHeight>>1);
 						m_cellSpacing[i][j].bottom=0.0f;
 					}
 					else
 					{
-						m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellWidth;
-						m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellWidth;
+						m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellHeight;
+						m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellHeight;
 						m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellWidth;
 						m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellWidth;
 					}

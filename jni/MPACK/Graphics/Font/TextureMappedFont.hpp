@@ -49,6 +49,8 @@ namespace MPACK
 			void SetCharPadding(GLfloat charPadding);
 			GLfloat GetCharPadding() const;
 
+			void AutoCalibrate();
+
 			bool 		Load(const std::string& textureName, FormatType format);
 
 			Texture2D* 	GetTexturePointer();
@@ -59,8 +61,8 @@ namespace MPACK
 			GLfloat 		m_layer;
 
 		private:
-			const float FORMATTYPE_ALPHA_THRESHOLD=0.009f;
-			const BYTE	FORMATTYPE_RGB_MAGNITUDE_THRESHOLD=5;
+			const BYTE 	FORMATTYPE_ALPHA_THRESHOLD=0;
+			const float	FORMATTYPE_RGB_MAGNITUDE_THRESHOLD=0.01;
 
 			void		BuildCellSpacing_RGB_MAGNITUDE(Image *pFontImage);
 			void		BuildCellSpacing_ALPHA(Image *pFontImage);
