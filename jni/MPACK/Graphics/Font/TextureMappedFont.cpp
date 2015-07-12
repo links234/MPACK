@@ -74,36 +74,19 @@ namespace MPACK
 				GLfloat xPos = GLfloat(ch % 16) * oneOverSixteen;
 				GLfloat yPos = GLfloat(ch / 16) * oneOverSixteen;
 
-				GLfloat verticalDisplacement = 0.0;
-				/*//if(StringEx::IsAlphaNumeric(str[i]))
-				{
-					GLfloat charCenter = m_fontSize*(1.0f-m_cellSpacing[chX][chY].bottom);
-					GLfloat realCenter = m_fontSize*0.5f;
-
-					verticalDisplacement = m_cellSpacing[chX][chY].top+m_cellSpacing[chX][chY].bottom;
-					verticalDisplacement *= m_fontSize;
-
-					verticalDisplacement = realCenter-charCenter;
-				} */
-
 				if(!m_monospaced)
 				{
-					LOGD("str[i] = %c",str[i]);
 					x-=m_fontSize*m_cellSpacing[chX][chY].left;
 				}
 
-
-
-				if(m_formatType==FormatType::ALPHA)
+				if(m_formatType == FormatType::ALPHA)
 				{
-					LOGD("str[i]=%c   verticalDisplacement=%lf",char(ch),verticalDisplacement);
+					LOGD("str[i]=%c top=%f   bottom=%f",char(ch),m_cellSpacing[chX][chY].top,m_cellSpacing[chX][chY].bottom);
 				}
-
-
 
 				////////////////////////////////////
 				vertex.x=x;
-				vertex.y=y+m_fontSize+verticalDisplacement;
+				vertex.y=y+m_fontSize;
 				vertex.s=xPos;
 				vertex.t=1.0f-yPos-oneOverSixteen;
 				if(!colorPattern)
@@ -125,7 +108,7 @@ namespace MPACK
 				quadData.push_back(vertex);
 
 				vertex.x=x+m_fontSize;
-				vertex.y=y+m_fontSize+verticalDisplacement;
+				vertex.y=y+m_fontSize;
 				vertex.s=xPos+oneOverSixteen;
 				vertex.t=1.0f-yPos-oneOverSixteen;
 				if(!colorPattern)
@@ -147,7 +130,7 @@ namespace MPACK
 				quadData.push_back(vertex);
 
 				vertex.x=x+m_fontSize;
-				vertex.y=y+verticalDisplacement;
+				vertex.y=y;
 				vertex.s=xPos+oneOverSixteen;
 				vertex.t=1.0f-yPos;
 				if(!colorPattern)
@@ -169,7 +152,7 @@ namespace MPACK
 				quadData.push_back(vertex);
 
 				vertex.x=x;
-				vertex.y=y+verticalDisplacement;
+				vertex.y=y;
 				vertex.s=xPos;
 				vertex.t=1.0f-yPos;
 				if(!colorPattern)
@@ -377,9 +360,9 @@ namespace MPACK
 					if(cell.m_xmin>cellWidth)
 					{
 						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
-						m_cellSpacing[i][j].right=0.0f;
+						m_cellSpacing[i][j].right=OneOverCellWidth*(cellWidth>>1);
 						m_cellSpacing[i][j].top=OneOverCellWidth*(cellHeight>>1);
-						m_cellSpacing[i][j].bottom=0.0f;
+						m_cellSpacing[i][j].bottom=OneOverCellWidth*(cellHeight>>1);
 					}
 					else
 					{
@@ -390,6 +373,14 @@ namespace MPACK
 					}
 				}
 			}
+
+			GLuint chX = GLuint(' ') / 16;
+			GLuint chY = GLuint(' ') % 16;
+			m_cellSpacing[chX][chY].right=m_cellSpacing[chX][chY].bottom=0.0f;
+
+			chX = GLuint('\t') / 16;
+			chY = GLuint('\t') % 16;
+			m_cellSpacing[chX][chY].right=m_cellSpacing[chX][chY].bottom=0.0f;
 		}
 
 		void TextureMappedFont::BuildCellSpacing_ALPHA(Image *pFontImage)
@@ -426,9 +417,9 @@ namespace MPACK
 					if(cell.m_xmin>cellWidth)
 					{
 						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
-						m_cellSpacing[i][j].right=0.0f;
+						m_cellSpacing[i][j].right=OneOverCellWidth*(cellWidth>>1);
 						m_cellSpacing[i][j].top=OneOverCellWidth*(cellHeight>>1);
-						m_cellSpacing[i][j].bottom=0.0f;
+						m_cellSpacing[i][j].bottom=OneOverCellWidth*(cellHeight>>1);
 					}
 					else
 					{
@@ -439,6 +430,14 @@ namespace MPACK
 					}
 				}
 			}
+
+			GLuint chX = GLuint(' ') / 16;
+			GLuint chY = GLuint(' ') % 16;
+			m_cellSpacing[chX][chY].right=m_cellSpacing[chX][chY].bottom=0.0f;
+
+			chX = GLuint('\t') / 16;
+			chY = GLuint('\t') % 16;
+			m_cellSpacing[chX][chY].right=m_cellSpacing[chX][chY].bottom=0.0f;
 		}
 	}
 }

@@ -61,7 +61,7 @@ namespace MPACK
 			GLfloat 		m_layer;
 
 		private:
-			const BYTE 	FORMATTYPE_ALPHA_THRESHOLD=0;
+			const BYTE 	FORMATTYPE_ALPHA_THRESHOLD=3;
 			const float	FORMATTYPE_RGB_MAGNITUDE_THRESHOLD=0.01;
 
 			void		BuildCellSpacing_RGB_MAGNITUDE(Image *pFontImage);
