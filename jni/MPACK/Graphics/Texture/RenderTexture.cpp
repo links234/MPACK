@@ -14,6 +14,7 @@ namespace MPACK
 			if(m_FBOId)
 			{
 				GL_CHECK( glDeleteFramebuffers(1,&m_FBOId) );
+				m_FBOId = 0;
 			}
 			if(m_colorTex)
 			{
@@ -23,26 +24,29 @@ namespace MPACK
 			if(m_depthRBOId)
 			{
 				GL_CHECK( glDeleteRenderbuffers(1,&m_depthRBOId) );
+				m_depthRBOId = 0;
 			}
 		}
 
 		void RenderTexture::Init(GLuint width, GLuint height)
 		{
-			GL_CHECK( glDeleteFramebuffers(1,&m_FBOId) );
+			if(m_FBOId)
+			{
+				GL_CHECK( glDeleteFramebuffers(1,&m_FBOId) );
+				m_FBOId = 0;
+			}
 			if(m_colorTex)
 			{
-				GL_CHECK( glDeleteTextures(1,&m_colorTex->m_texId) );
+				delete m_colorTex;
+				m_colorTex = 0;
 			}
-			else
-			{
-				m_colorTex=new Texture2D();
-			}
+			m_colorTex=new Texture2D();
 			GL_CHECK( glGenTextures(1, &m_colorTex->m_texId) );
 			GL_CHECK( glBindTexture(GL_TEXTURE_2D, m_colorTex->m_texId) );
-			GL_CHECK( glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
-			GL_CHECK( glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR) );
-			GL_CHECK( glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE) );
-			GL_CHECK( glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
+			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
+			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR) );
+			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE) );
+			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
 			GL_CHECK( glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
 						 GL_RGBA, GL_UNSIGNED_BYTE, 0) );
 			GL_CHECK( glBindTexture(GL_TEXTURE_2D, 0) );
