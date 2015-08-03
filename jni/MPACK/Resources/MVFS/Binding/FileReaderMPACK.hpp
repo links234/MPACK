@@ -1,5 +1,5 @@
-#ifndef FILEREADERMPACK_HPP
-#define FILEREADERMPACK_HPP
+#ifndef MPACK_FILEREADERMPACK_HPP
+#define MPACK_FILEREADERMPACK_HPP
 
 #include "FileReaderInterface.hpp"
 
