@@ -29,31 +29,21 @@ namespace MPACK
 			}
 		}
 
-		ReturnValue SDInputFile::Read(void* pBuffer, size_t pCount)
+		ReturnValue SDInputFile::Read(void* pBuffer, size_t count)
 		{
 			mInputStream.read((char*)pBuffer, pCount);
 			return (!mInputStream.fail()) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
-		int SDInputFile::GetLength()
+		ReturnValue SDInputFile::ReadFrom(int offset, void* pBuffer, size_t count)
 		{
-			int len;
-
 			if(mInputStream.is_open())
 			{
-				int pos = mInputStream.tellg();
-				mInputStream.seekg(0, mInputStream.end);
-				len = mInputStream.tellg();
-				mInputStream.seekg(pos);
+				int oldOffset=GetOffset();
+				SetOffset(offset);
+				Read(pBuffer,count);
+				SetOffset(oldOffset);
 			}
-			else
-			{
-				std::ifstream file( mPath, std::ios::binary | std::ios::ate);
-				len = file.tellg();
-				file.close();
-			}
-
-			return len;
 		}
 
 		const void* SDInputFile::Bufferize()
@@ -87,6 +77,61 @@ namespace MPACK
 				LOGE("Bufferize failed for SDInputFile %s", mPath);
 				return NULL;
 			}
+		}
+
+		int SDInputFile::GetOffset()
+		{
+			if(mInputStream.is_open())
+			{
+				int offset=mInputStream.tellg();
+				if(offset < -1)
+				{
+					LOGE("SDInputFile::GetOffset error: tellg() returned -1 yet file is still opened!");
+				}
+				return offset;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+
+		void SDInputFile::SetOffset(int offset)
+		{
+			if(mInputStream.is_open())
+			{
+				mInputStream.seekg(offset, mInputStream.beg());
+			}
+		}
+
+		void SDInputFile::Skip(int bytes)
+		{
+			if(mInputStream.is_open())
+			{
+				int offset=GetOffset();
+				SetOffset(offset+bytes);
+			}
+		}
+
+		int SDInputFile::GetLength()
+		{
+			int len;
+
+			if(mInputStream.is_open())
+			{
+				int pos = mInputStream.tellg();
+				mInputStream.seekg(0, mInputStream.end);
+				len = mInputStream.tellg();
+				mInputStream.seekg(pos);
+			}
+			else
+			{
+				std::ifstream file( mPath, std::ios::binary | std::ios::ate);
+				len = file.tellg();
+				file.close();
+			}
+
+			return len;
 		}
 
 		SDInputFile::~SDInputFile()

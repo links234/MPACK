@@ -43,20 +43,18 @@ namespace MPACK
 			}
 		}
 
-		ReturnValue Asset::Read(void* pBuffer, size_t pCount)
+		ReturnValue Asset::Read(void* pBuffer, size_t count)
 		{
 			int32_t lReadCount = AAsset_read(mAsset, pBuffer, pCount);
 			return (lReadCount == pCount) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
-		int Asset::GetLength()
+		ReturnValue Asset::ReadFrom(int offset, void* pBuffer, size_t count)
 		{
-			if(!mAsset)
-			{
-				LOGE("Asset::GetLength() error: asset is not opened");
-				return 0;
-			}
-			return AAsset_getLength(mAsset);
+			int oldOffset=GetOffset();
+			SetOffset(offset);
+			Read(pBuffer,count);
+			SetOffset(oldOffset);
 		}
 
 		const void* Asset::Bufferize()
@@ -71,6 +69,45 @@ namespace MPACK
 			memcpy(mBuffer,AAsset_getBuffer(mAsset),length);
 			mBuffer[length]=0;
 			return mBuffer;
+		}
+
+		virtual int Asset::GetOffset()
+		{
+			if(!mAsset)
+			{
+				return 0;
+			}
+			else
+			{
+				return AAsset_getLength(mAsset)-AAsset_getRemainingLength(mAsset);
+			}
+		}
+
+		virtual void Asset::SetOffset(int offset)
+		{
+			if(mAsset)
+			{
+				AAsset_seek(mAsset,offset,SEEK_SET);
+			}
+		}
+
+		virtual void Asset::Skip(int bytes)
+		{
+			if(mAsset)
+			{
+				int offset=GetOffset();
+				SetOffset(offset+bytes);
+			}
+		}
+
+		int Asset::GetLength()
+		{
+			if(!mAsset)
+			{
+				LOGE("Asset::GetLength() error: asset is not opened");
+				return 0;
+			}
+			return AAsset_getLength(mAsset);
 		}
 
 		Asset::~Asset()
