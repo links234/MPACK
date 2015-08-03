@@ -1,5 +1,5 @@
-#ifndef MVFS_V1_HPP
-#define MVFS_V1_HPP
+#ifndef MVFS_MVFS_V1_HPP
+#define MVFS_MVFS_V1_HPP
 
 #include <vector>
 #include <string>

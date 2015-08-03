@@ -1,5 +1,5 @@
-#ifndef MVFSREADER_HPP
-#define MVFSREADER_HPP
+#ifndef MVFS_MVFSREADER_HPP
+#define MVFS_MVFSREADER_HPP
 
 #include <vector>
 

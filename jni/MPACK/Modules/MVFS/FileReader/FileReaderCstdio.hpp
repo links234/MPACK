@@ -1,5 +1,5 @@
-#ifndef FILEREADERCSTDIO_HPP
-#define FILEREADERCSTDIO_HPP
+#ifndef MVFS_FILEREADERCSTDIO_HPP
+#define MVFS_FILEREADERCSTDIO_HPP
 
 #include <cstdio>
 
@@ -20,6 +20,7 @@ namespace MVFS
 
         virtual void Skip(int size);
         virtual int GetOffset();
+        virtual void SetOffset(int offset);
 
         static FileReaderCstdio* Open(const char *pPath);
 

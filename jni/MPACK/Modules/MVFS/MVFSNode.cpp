@@ -69,6 +69,11 @@ namespace MVFS
         return m_type == Node::Type::FILE;
     }
 
+    Reader* Node::GetReader() const
+    {
+        return m_pReader;
+    }
+
     Node* Node::GetParent() const
     {
         return m_pParent;

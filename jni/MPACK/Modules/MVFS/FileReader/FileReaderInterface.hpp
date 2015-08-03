@@ -1,5 +1,5 @@
-#ifndef FILEREADERINTERFACE_HPP
-#define FILEREADERINTERFACE_HPP
+#ifndef MVFS_FILEREADERINTERFACE_HPP
+#define MVFS_FILEREADERINTERFACE_HPP
 
 namespace MVFS
 {
@@ -16,6 +16,7 @@ namespace MVFS
 
         virtual void Skip(int size) = 0;
         virtual int GetOffset() = 0;
+        virtual void SetOffset(int offset) = 0;
 
     protected:
         FileReaderInterface();

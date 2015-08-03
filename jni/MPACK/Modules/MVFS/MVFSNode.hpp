@@ -1,5 +1,5 @@
-#ifndef MVFSNODE_HPP
-#define MVFSNODE_HPP
+#ifndef MVFS_MVFSNODE_HPP
+#define MVFS_MVFSNODE_HPP
 
 #include <unordered_map>
 #include <string>
@@ -33,6 +33,7 @@ namespace MVFS
         bool IsDirectory() const;
         bool IsFile() const;
 
+        Reader* GetReader() const;
         Node* GetParent() const;
         int GetFileSize() const;
         int GetFileOffset() const;
@@ -59,6 +60,7 @@ namespace MVFS
         friend class MVFS::Reader;
         friend class MVFS::V1::Reader;
         friend class MVFS::V1::FileReaderMVFS;
+        friend class MVFS::FileReaderInterface;
     };
 }
 

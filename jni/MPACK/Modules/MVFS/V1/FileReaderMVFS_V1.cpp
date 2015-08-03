@@ -70,8 +70,28 @@ namespace MVFS
             return m_offset;
         }
 
+        void FileReaderMVFS::SetOffset(int offset)
+        {
+            m_offset=offset;
+        }
+
         FileReaderMVFS* FileReaderMVFS::Open(MVFS::Node *pNode)
         {
+            if(pNode == NULL)
+            {
+                // Error: pNode is NULL
+                return NULL;
+            }
+            if(pNode == MVFS::Node::GetSentinel())
+            {
+                // Error: pNode is not valid (sentinel)
+                return NULL;
+            }
+            if(!pNode->IsFile())
+            {
+                // Error: pNode is not valid (not a file)
+                return NULL;
+            }
             FileReaderMVFS *pReader = new FileReaderMVFS();
             pReader->m_pNode=pNode;
             return pReader;

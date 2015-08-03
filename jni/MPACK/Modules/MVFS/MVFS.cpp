@@ -1,6 +1,7 @@
 #include "MVFS.hpp"
 
 #include <fstream>
+#include <string>
 
 #ifdef LINUX_PLATFORM
     #include <stdlib.h>
@@ -87,5 +88,67 @@ namespace MVFS
 
         delete pFileReaderItf;
         delete pReader;
+    }
+
+    FileReaderInterface* Open(Node *pNode)
+    {
+        if(pNode == NULL)
+        {
+            // Error: pNode is NULL
+            return NULL;
+        }
+        if(pNode == Node::GetSentinel())
+        {
+            // Error: pNode is not valid (sentinel)
+            return NULL;
+        }
+
+        unsigned char version = pNode->GetReader()->GetVersion();
+        if(version == 1)
+        {
+            return V1::FileReaderMVFS::Open(pNode);
+        }
+        else
+        {
+            // Error: pNode is not valid (pReader version is not valid)
+            return NULL;
+        }
+    }
+
+    Node* GetNode(Reader *pReader, const char *pPath)
+    {
+        if(pReader == NULL)
+        {
+            // Error: pReader is NULL
+            return NULL;
+        }
+        if(pPath == NULL)
+        {
+            // Error: pPath is NULL
+            return NULL;
+        }
+
+        Node *pNode = pReader->GetRoot();
+
+        while(*pPath)
+        {
+            while( (*pPath) == '/' || (*pPath) == '\\' )
+            {
+                ++pPath;
+            }
+            string token;
+            while( (*pPath) && (*pPath) != '/' && (*pPath) != '\\' )
+            {
+                token+=(*pPath);
+                ++pPath;
+            }
+            pNode = pNode->Get(token);
+        }
+        return pNode;
+    }
+
+    FileReaderInterface* Open(Reader *pReader, const char *pPath)
+    {
+        return Open(GetNode(pReader, pPath));
     }
 }

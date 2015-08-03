@@ -1,5 +1,5 @@
-#ifndef MVFSGLOBAL_HPP
-#define MVFSGLOBAL_HPP
+#ifndef MVFS_MVFSGLOBAL_HPP
+#define MVFS_MVFSGLOBAL_HPP
 
 #include <iostream>
 

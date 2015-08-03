@@ -65,6 +65,11 @@ namespace MVFS
         return m_offset;
     }
 
+    void FileReaderCstdio::SetOffset(int offset)
+    {
+        m_offset=offset;
+    }
+
     FileReaderCstdio* FileReaderCstdio::Open(const char *pPath)
     {
         return new FileReaderCstdio(pPath);
