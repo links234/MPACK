@@ -14,6 +14,7 @@ namespace MPACK
 	{
 		namespace MVFSDB
 		{
+			void Init();
 			void Load(int id, const char *pPath, std::vector<char> key=std::vector<char>());
 			MVFS::Reader* Get(int id);
 			void Delete(int id);

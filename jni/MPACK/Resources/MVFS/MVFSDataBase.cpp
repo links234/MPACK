@@ -1,5 +1,6 @@
 #include "MVFSDataBase.hpp"
 
+#include "Types.hpp"
 #include "MVFS.hpp"
 #include "FileReaderInterface.hpp"
 #include "FileReaderMPACK.hpp"
@@ -33,6 +34,7 @@ namespace MPACK
 				{
 					return;
 				}
+
 				if(g_pReader[id])
 				{
 					delete g_pReader[id];

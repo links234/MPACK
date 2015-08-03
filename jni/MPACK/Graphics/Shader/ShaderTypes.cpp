@@ -112,26 +112,26 @@ namespace MPACK
 		AbstractShaderType* FXAAI_Shader;
 
 		#ifdef ANDROID_PLATFORM
-		#define		VERTEXSHADER_SPRITE		"@Shaders/OpenGLES2/Sprite.vert"
-		#define		FRAGMENTSHADER_SPRITE	"@Shaders/OpenGLES2/Sprite.frag"
-		#define		VERTEXSHADER_FXAAI		"@Shaders/OpenGLES2/PostFX/FXAAI.vert"
-		#define		FRAGMENTSHADER_FXAAI	"@Shaders/OpenGLES2/PostFX/FXAAI.frag"
-		#define		VERTEXSHADER_FXAAII		"@Shaders/OpenGLES2/PostFX/FXAAII.vert"
-		#define		FRAGMENTSHADER_FXAAII	"@Shaders/OpenGLES2/PostFX/FXAAII.frag"
+		#define		VERTEXSHADER_SPRITE		"[12]/OpenGLES2/Sprite.vert"
+		#define		FRAGMENTSHADER_SPRITE	"[12]/OpenGLES2/Sprite.frag"
+		#define		VERTEXSHADER_FXAAI		"[12]/OpenGLES2/PostFX/FXAAI.vert"
+		#define		FRAGMENTSHADER_FXAAI	"[12]/OpenGLES2/PostFX/FXAAI.frag"
+		#define		VERTEXSHADER_FXAAII		"[12]/OpenGLES2/PostFX/FXAAII.vert"
+		#define		FRAGMENTSHADER_FXAAII	"[12]/OpenGLES2/PostFX/FXAAII.frag"
 		#elif	defined(WINDOWS_PLATFORM)
-		#define		VERTEXSHADER_SPRITE		"@Shaders/OpenGL2/Sprite.vert"
-		#define		FRAGMENTSHADER_SPRITE	"@Shaders/OpenGL2/Sprite.frag"
-		#define		VERTEXSHADER_FXAAI		"@Shaders/OpenGL2/PostFX/FXAAI.vert"
-		#define		FRAGMENTSHADER_FXAAI	"@Shaders/OpenGL2/PostFX/FXAAI.frag"
-		#define		VERTEXSHADER_FXAAII		"@Shaders/OpenGL2/PostFX/FXAAII.vert"
-		#define		FRAGMENTSHADER_FXAAII	"@Shaders/OpenGL2/PostFX/FXAAII.frag"
+		#define		VERTEXSHADER_SPRITE		"[12]/OpenGL2/Sprite.vert"
+		#define		FRAGMENTSHADER_SPRITE	"[12]/OpenGL2/Sprite.frag"
+		#define		VERTEXSHADER_FXAAI		"[12]/OpenGL2/PostFX/FXAAI.vert"
+		#define		FRAGMENTSHADER_FXAAI	"[12]/OpenGL2/PostFX/FXAAI.frag"
+		#define		VERTEXSHADER_FXAAII		"[12]/OpenGL2/PostFX/FXAAII.vert"
+		#define		FRAGMENTSHADER_FXAAII	"[12]/OpenGL2/PostFX/FXAAII.frag"
 		#elif	defined(LINUX_PLATFORM)
-		#define		VERTEXSHADER_SPRITE		"@Shaders/OpenGL2/Sprite.vert"
-		#define		FRAGMENTSHADER_SPRITE	"@Shaders/OpenGL2/Sprite.frag"
-		#define		VERTEXSHADER_FXAAI		"@Shaders/OpenGL2/PostFX/FXAAI.vert"
-		#define		FRAGMENTSHADER_FXAAI	"@Shaders/OpenGL2/PostFX/FXAAI.frag"
-		#define		VERTEXSHADER_FXAAII		"@Shaders/OpenGL2/PostFX/FXAAII.vert"
-		#define		FRAGMENTSHADER_FXAAII	"@Shaders/OpenGL2/PostFX/FXAAII.frag"
+		#define		VERTEXSHADER_SPRITE		"[12]/OpenGL2/Sprite.vert"
+		#define		FRAGMENTSHADER_SPRITE	"[12]/OpenGL2/Sprite.frag"
+		#define		VERTEXSHADER_FXAAI		"[12]/OpenGL2/PostFX/FXAAI.vert"
+		#define		FRAGMENTSHADER_FXAAI	"[12]/OpenGL2/PostFX/FXAAI.frag"
+		#define		VERTEXSHADER_FXAAII		"[12]/OpenGL2/PostFX/FXAAII.vert"
+		#define		FRAGMENTSHADER_FXAAII	"[12]/OpenGL2/PostFX/FXAAII.frag"
 		#endif
 
 		bool LoadShaders()

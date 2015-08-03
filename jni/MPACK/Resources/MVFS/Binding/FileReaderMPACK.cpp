@@ -7,6 +7,7 @@ namespace MVFS
 	FileReaderMPACK::FileReaderMPACK(const char *pPath)
 	{
 		m_pResource = MPACK::Core::LoadResource(pPath);
+		m_pResource->Open();
 	}
 
 	FileReaderMPACK::~FileReaderMPACK()

@@ -1,5 +1,7 @@
 #include "MVFSInputFile.hpp"
 
+#include "Types.hpp"
+
 #include "FileReaderInterface.hpp"
 
 namespace MPACK
@@ -24,6 +26,7 @@ namespace MPACK
 
 		ReturnValue MVFSInputFile::Open()
 		{
+			return RETURN_VALUE_OK;
 		}
 
 		void MVFSInputFile::Close()
@@ -60,11 +63,11 @@ namespace MPACK
 				LOGI("Already bufferized");
 				return m_pBuffer;
 			}
+
 			m_pBuffer = new char[size+1];
-
 			m_pFileReader->ReadFrom(0,m_pBuffer,size);
-
 			m_pBuffer[size]=0;
+
 			return m_pBuffer;
 		}
 

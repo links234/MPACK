@@ -24,7 +24,6 @@ namespace MVFS
     Reader* Reader::Open(FileReaderInterface *pFileReaderItf, std::vector<char> key)
     {
         unsigned char version = ReadVersion(pFileReaderItf);
-
         if(version == 1)
         {
             pFileReaderItf->Reset();
