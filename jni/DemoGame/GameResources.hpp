@@ -5,6 +5,7 @@
 
 namespace GameResources
 {
+	void InitMVFS();
 	void Init();
 	void Uninit();
 

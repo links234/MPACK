@@ -39,6 +39,9 @@ namespace Game
 	MPACK::Core::ReturnValue DemoApplication::onActivate()
     {
 		LOGI("DemoApplication::onActivate()");
+
+		GameResources::InitMVFS();
+
         // Starts services.
 		if (Global::pContext->pGraphicsService->Start() != Core::RETURN_VALUE_OK)
 		{
@@ -58,8 +61,10 @@ namespace Game
 
 		Global::pContext->pTimeService->Reset();
 
+		GameResources::Init();
+
 		m_pCursorTex = new Texture2D();
-		m_pCursorTex->Load("@Sprites/Cursor.png",Bilinear);
+		m_pCursorTex->Load("[0]/Cursor.png",Bilinear);
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		Global::pEventLoop->HideCursor();
@@ -68,8 +73,6 @@ namespace Game
 		CursorDrawer::GetInstance()->Show();
 		CursorDrawer::GetInstance()->EnableAutohide();
 #endif
-
-		GameResources::Init();
 
 		m_pGameState = new MainMenu;
 

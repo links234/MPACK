@@ -26,7 +26,7 @@ namespace Game
 	MainMenu::MainMenu(bool isGamePaused)
 	{
 		m_pButtonTexture=new Texture2D();
-		m_pButtonTexture->Load("@Sprites/GUI_Button.tga",Bilinear);
+		m_pButtonTexture->Load("[0]/GUI_Button.tga",Bilinear);
 
 		m_pBackgroundTexture=new Texture2D();
 		m_pBackgroundTexture->Load("@Backgrounds/background.tga",Bilinear);

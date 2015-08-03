@@ -37,7 +37,7 @@ namespace Game
 		m_background->EnableCamera();
 
 		m_particleTex = new Texture2D;
-		m_particleTex->Load("@Sprites/GUI_Button.tga");
+		m_particleTex->Load("[0]/GUI_Button.tga");
 
 		m_pEmitter = new ParticleEmitterCircle;
 
@@ -55,8 +55,8 @@ namespace Game
 		m_enemyTexture=new Texture2D;
 		m_playerTexture=new Texture2D;
 
-		m_enemyTexture->Load("@Sprites/Ships/enemy1.png");
-		m_playerTexture->Load("@Sprites/Ships/Player.png");
+		m_enemyTexture->Load("[0]/Ships/enemy1.png");
+		m_playerTexture->Load("[0]/Ships/Player.png");
 
 		//Player sprite setup
 		m_playerSprite=new Sprite;
@@ -86,7 +86,7 @@ namespace Game
 
 		//should be deleted in final version
 		m_testTexture=new Texture2D();
-		m_testTexture->Load("@Sprites/Animations/explosion.png");
+		m_testTexture->Load("[0]/Animations/explosion.png");
 
 		m_testSprite=new AnimatedSprite();
 		m_testSprite->m_position=Vector2f(Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5);
