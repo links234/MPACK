@@ -1,36 +1,91 @@
-#ifndef MPACK_MVFSINPUTFILE_HPP
-#define MPACK_MVFSINPUTFILE_HPP
+#include "MVFSInputFile.hpp"
 
-#include "Resource.hpp"
-#include "Types.hpp"
+#include "FileReaderInterface.hpp"
 
 namespace MPACK
 {
 	namespace Core
 	{
-		class MVFSInputFile : public Resource
+		MVFSInputFile::MVFSInputFile(MVFS::FileReaderInterface *pFileReader, bool autoDeletePointers)
+			: Resource("File is inside MVFS"), m_pFileReader(pFileReader),
+			  m_autoDeletePointers(autoDeletePointers), m_pBuffer(NULL)
 		{
-		public:
-			MVFSInputFile(const char* pPath);
+		}
 
-			virtual ReturnValue Open();
-			virtual void Close();
+		MVFSInputFile::~MVFSInputFile()
+		{
+			Close();
 
-			virtual ReturnValue Read(void* pBuffer, size_t count);
-			virtual ReturnValue ReadFrom(int offset, void* pBuffer, size_t count);
-			virtual const void* Bufferize();
+			if(m_autoDeletePointers)
+			{
+				delete m_pFileReader;
+			}
+		}
 
-			virtual int GetOffset();
-			virtual void SetOffset(int offset);
-			virtual void Skip(int bytes);
+		ReturnValue MVFSInputFile::Open()
+		{
+		}
 
-			virtual int GetLength();
+		void MVFSInputFile::Close()
+		{
+			if(m_pBuffer)
+			{
+				delete[] m_pBuffer;
+				m_pBuffer = NULL;
+			}
+		}
 
-			virtual ~MVFSInputFile();
-		protected:
+		ReturnValue MVFSInputFile::Read(void* pBuffer, size_t count)
+		{
+			m_pFileReader->Read((char*)pBuffer,count);
+			return RETURN_VALUE_OK;
+		}
 
-		};
+		ReturnValue MVFSInputFile::ReadFrom(int offset, void* pBuffer, size_t count)
+		{
+			m_pFileReader->ReadFrom(offset, (char*)pBuffer, count);
+			return RETURN_VALUE_OK;
+		}
+
+		const void* MVFSInputFile::Bufferize()
+		{
+			int size = GetLength();
+			if (size <= 0)
+			{
+				return NULL;
+			}
+
+			if(m_pBuffer != NULL)
+			{
+				LOGI("Already bufferized");
+				return m_pBuffer;
+			}
+			m_pBuffer = new char[size+1];
+
+			m_pFileReader->ReadFrom(0,m_pBuffer,size);
+
+			m_pBuffer[size]=0;
+			return m_pBuffer;
+		}
+
+		int MVFSInputFile::GetOffset()
+		{
+			return m_pFileReader->GetOffset();
+		}
+
+		void MVFSInputFile::SetOffset(int offset)
+		{
+			m_pFileReader->SetOffset(offset);
+		}
+
+		void MVFSInputFile::Skip(int bytes)
+		{
+			m_pFileReader->Skip(bytes);
+		}
+
+		int MVFSInputFile::GetLength()
+		{
+			return m_pFileReader->Size();
+		}
 	}
 }
-
-#endif

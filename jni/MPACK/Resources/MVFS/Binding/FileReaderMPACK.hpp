@@ -26,13 +26,14 @@ namespace MVFS
 
 		virtual void Skip(int size);
 		virtual int GetOffset();
+		virtual void SetOffset(int offset);
 
 		static FileReaderMPACK* Open(const char *pPath);
 
 	protected:
 		FileReaderMPACK(const char *pPath);
 
-		MPACK::Core::Resource m_pResource;
+		MPACK::Core::Resource *m_pResource;
 	};
 }
 

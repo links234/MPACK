@@ -45,8 +45,8 @@ namespace MPACK
 
 		ReturnValue Asset::Read(void* pBuffer, size_t count)
 		{
-			int32_t lReadCount = AAsset_read(mAsset, pBuffer, pCount);
-			return (lReadCount == pCount) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
+			int32_t lReadCount = AAsset_read(mAsset, pBuffer, count);
+			return (lReadCount == count) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
 		ReturnValue Asset::ReadFrom(int offset, void* pBuffer, size_t count)
@@ -71,7 +71,7 @@ namespace MPACK
 			return mBuffer;
 		}
 
-		virtual int Asset::GetOffset()
+		int Asset::GetOffset()
 		{
 			if(!mAsset)
 			{
@@ -83,7 +83,7 @@ namespace MPACK
 			}
 		}
 
-		virtual void Asset::SetOffset(int offset)
+		void Asset::SetOffset(int offset)
 		{
 			if(mAsset)
 			{
@@ -91,7 +91,7 @@ namespace MPACK
 			}
 		}
 
-		virtual void Asset::Skip(int bytes)
+		void Asset::Skip(int bytes)
 		{
 			if(mAsset)
 			{

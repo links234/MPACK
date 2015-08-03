@@ -1,10 +1,12 @@
 #include "FileReaderMPACK.hpp"
 
+#include "Resource.hpp"
+
 namespace MVFS
 {
 	FileReaderMPACK::FileReaderMPACK(const char *pPath)
 	{
-		m_pResource = new MPACK::Core::Resource(pPath);
+		m_pResource = MPACK::Core::LoadResource(pPath);
 	}
 
 	FileReaderMPACK::~FileReaderMPACK()
@@ -40,6 +42,11 @@ namespace MVFS
 	int FileReaderMPACK::GetOffset()
 	{
 		return m_pResource->GetOffset();
+	}
+
+	void FileReaderMPACK::SetOffset(int offset)
+	{
+		m_pResource->SetOffset(offset);
 	}
 
 	FileReaderMPACK* FileReaderMPACK::Open(const char *pPath)

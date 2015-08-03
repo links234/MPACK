@@ -31,7 +31,7 @@ namespace MPACK
 
 		ReturnValue SDInputFile::Read(void* pBuffer, size_t count)
 		{
-			mInputStream.read((char*)pBuffer, pCount);
+			mInputStream.read((char*)pBuffer, count);
 			return (!mInputStream.fail()) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
@@ -100,7 +100,7 @@ namespace MPACK
 		{
 			if(mInputStream.is_open())
 			{
-				mInputStream.seekg(offset, mInputStream.beg());
+				mInputStream.seekg(offset, mInputStream.beg);
 			}
 		}
 
