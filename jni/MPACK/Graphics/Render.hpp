@@ -37,6 +37,9 @@ namespace MPACK
 			static GLint GetScreenWidth();
 			static GLint GetScreenHeight();
 
+			static bool IsPortrait();
+			static bool IsLandscape();
+
 			static Math::AABB2Df GetUISpace();
 
 		private:

@@ -111,6 +111,16 @@ namespace MPACK
 			return s_screenHeight;
 		}
 
+		bool Render::IsPortrait()
+		{
+			return s_screenWidth<s_screenHeight;
+		}
+
+		bool Render::IsLandscape()
+		{
+			return s_screenWidth>s_screenHeight;
+		}
+
 		AABB2Df Render::GetUISpace()
 		{
 			return AABB2Df(0.0f,(float)(s_screenWidth),0.0f,(float)(s_screenHeight));
