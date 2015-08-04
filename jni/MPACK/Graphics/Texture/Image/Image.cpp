@@ -55,16 +55,15 @@ namespace MPACK
 				image=new PNGImage;
 			}
 
-			if(!image)
-			{
-				LOGE("LoadImage: invalid format %s (%s)",pPath,ext.c_str());
-			}
-
 			if(image->Load(pPath)==RETURN_VALUE_KO)
 			{
 				LOGE("LoadImage: Failed to load");
 				delete image;
 				image=NULL;
+			}
+			if(!image)
+			{
+				LOGE("LoadImage: invalid format %s",pPath);
 			}
 			return image;
 		}

@@ -30,7 +30,7 @@ namespace MPACK
 		class Texture2D : public Uncopyable
 		{
 		public:
-			Texture2D();
+			Texture2D(bool needUpdate=true);
 			~Texture2D();
 
 			bool Load(std::string path, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
@@ -58,6 +58,7 @@ namespace MPACK
 		};
 	
 		void BindTextureSlot(GLenum TEXTURE);
+		void BindTextureToSlot(int textureId, GLenum TEXTURE);
 	}
 }
 

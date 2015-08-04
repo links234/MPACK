@@ -79,6 +79,11 @@ namespace MPACK
 					x-=m_fontSize*m_cellSpacing[chX][chY].left;
 				}
 
+				if(m_formatType == FormatType::ALPHA)
+				{
+					LOGD("str[i]=%c top=%f   bottom=%f",char(ch),m_cellSpacing[chX][chY].top,m_cellSpacing[chX][chY].bottom);
+				}
+
 				////////////////////////////////////
 				vertex.x=x;
 				vertex.y=y+m_fontSize;

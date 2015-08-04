@@ -20,9 +20,9 @@ namespace MPACK
 	{
 		GLuint	textureBinded[MAX_TEXTURES];
 
-		Texture2D::Texture2D()
+		Texture2D::Texture2D(bool needUpdate)
 			: m_texId(0), m_sWrapMode(GL_REPEAT), m_tWrapMode(GL_REPEAT), m_filteringType(Trilinear),
-			  m_needUpdate(true), m_width(0), m_height(0)
+			  m_needUpdate(needUpdate), m_width(0), m_height(0)
 		{
 		}
 
@@ -171,6 +171,17 @@ namespace MPACK
 			{
 				GL_CHECK( glActiveTexture(TEXTURE) );
 				currentTEXTURE=TEXTURE;
+			}
+		}
+
+		void BindTextureToSlot(int textureId, GLenum TEXTURE)
+		{
+			int textureIndex=TEXTURE-GL_TEXTURE0;
+			BindTextureSlot(TEXTURE);
+			if(textureBinded[textureIndex]!=textureId)
+			{
+				textureBinded[textureIndex]=textureId;
+				GL_CHECK( glBindTexture(GL_TEXTURE_2D, textureId) );
 			}
 		}
 	}

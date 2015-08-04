@@ -40,16 +40,15 @@ namespace MPACK
 				delete m_colorTex;
 				m_colorTex = 0;
 			}
-			m_colorTex=new Texture2D();
+			m_colorTex=new Texture2D(false);
 			GL_CHECK( glGenTextures(1, &m_colorTex->m_texId) );
-			GL_CHECK( glBindTexture(GL_TEXTURE_2D, m_colorTex->m_texId) );
+			BindTextureToSlot(m_colorTex->m_texId,GL_TEXTURE0);
 			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
 			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR) );
 			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE) );
 			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE) );
 			GL_CHECK( glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
 						 GL_RGBA, GL_UNSIGNED_BYTE, 0) );
-			GL_CHECK( glBindTexture(GL_TEXTURE_2D, 0) );
 
 			if(m_depthRBOId)
 			{
@@ -61,6 +60,11 @@ namespace MPACK
 			GL_CHECK( glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height) );
 
 
+			if(m_FBOId)
+			{
+				GL_CHECK( glDeleteFramebuffers(1,&m_FBOId) );
+				m_FBOId = 0;
+			}
 			GL_CHECK( glGenFramebuffers(1, &m_FBOId) );
 			GL_CHECK( glBindFramebuffer(GL_FRAMEBUFFER, m_FBOId) );
 

@@ -35,8 +35,7 @@ namespace MPACK
 			m_shader->BindShader();
 			m_shader->UpdateFrameUniforms();
 
-			BindTextureSlot(GL_TEXTURE0);
-			GL_CHECK( glBindTexture(GL_TEXTURE_2D, s_renderTexture1->m_colorTex->m_texId) );
+			BindTextureToSlot(s_renderTexture1->m_colorTex->m_texId,GL_TEXTURE0);
 
 			m_shader->EnableVertexAttributes();
 
