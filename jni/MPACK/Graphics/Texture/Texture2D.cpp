@@ -51,7 +51,7 @@ namespace MPACK
 			LOGI("Texture2D::Load - load image to texture");
 			GL_CHECK( glDeleteTextures(1, &m_texId) );
 			GL_CHECK( glGenTextures(1, &m_texId) );
-			GL_CHECK( glBindTexture(GL_TEXTURE_2D, m_texId) );
+			BindTextureToSlot(m_texId,GL_TEXTURE0);
 
 			GLenum internalFormat;
 			GLenum format;
@@ -78,7 +78,7 @@ namespace MPACK
 
 			GL_CHECK( glDeleteTextures(1, &m_texId) );
 			GL_CHECK( glGenTextures(1, &m_texId) );
-			GL_CHECK( glBindTexture(GL_TEXTURE_2D, m_texId) );
+			BindTextureToSlot(m_texId,GL_TEXTURE0);
 			GL_CHECK( glTexImage2D(GL_TEXTURE_2D, 0, colorAttachmentInternalFormat, width, height, 0,
 							 GL_RGBA, colorAttachmentType, 0) );
 
@@ -93,13 +93,7 @@ namespace MPACK
 
 		void Texture2D::Bind(GLenum TEXTURE)
 		{
-			int textureIndex=TEXTURE-GL_TEXTURE0;
-			BindTextureSlot(TEXTURE);
-			if(textureBinded[textureIndex]!=m_texId)
-			{
-				textureBinded[textureIndex]=m_texId;
-				GL_CHECK( glBindTexture(GL_TEXTURE_2D, m_texId) );
-			}
+			BindTextureToSlot(m_texId,TEXTURE);
 
 			if(m_needUpdate)
 			{
@@ -164,6 +158,11 @@ namespace MPACK
 			return m_height;
 		}
 
+		void InitTextureSlots()
+		{
+			memset(textureBinded,0,sizeof(textureBinded));
+		}
+
 		void BindTextureSlot(GLenum TEXTURE)
 		{
 			static GLenum currentTEXTURE=0;
@@ -178,6 +177,7 @@ namespace MPACK
 		{
 			int textureIndex=TEXTURE-GL_TEXTURE0;
 			BindTextureSlot(TEXTURE);
+			LOGD("textureId = %d      textureBinded[textureIndex] = %d",textureId,textureBinded[textureIndex]);
 			if(textureBinded[textureIndex]!=textureId)
 			{
 				textureBinded[textureIndex]=textureId;

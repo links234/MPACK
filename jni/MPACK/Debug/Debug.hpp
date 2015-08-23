@@ -82,6 +82,7 @@ namespace MPACK
 			void CheckErrorMacro(const char* pContent, const char* pFilename, int line);
 		}
 
+#ifdef ANDROID_PLATFORM
 		namespace EGL
 		{
 			EGLint GetError();
@@ -96,6 +97,7 @@ namespace MPACK
 
 			void CheckErrorMacro(const char* pContent, const char* pFilename, int line);
 		}
+#endif
 	}
 }
 

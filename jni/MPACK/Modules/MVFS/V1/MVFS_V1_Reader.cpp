@@ -19,7 +19,7 @@ namespace MVFS
             m_pFileReaderItf->Read((char*)&m_version,1);
 
             string name="";
-            Node *cursor = m_pRoot = new Node(this, MVFS::Node::Type::DIR);
+            Node *cursor = m_pRoot = new Node(this, MVFS::Node::DIR);
             Node *fileNode = MVFS::Node::GetSentinel();
             cursor->SetParent(cursor);
             Node *lastMkDir = NULL;
@@ -35,7 +35,7 @@ namespace MVFS
                 {
                     case MKDIR:
                         name = ReadString(m_pFileReaderItf);
-                        lastMkDir = cursor->m_directories[name] = new Node(this, MVFS::Node::Type::DIR);
+                        lastMkDir = cursor->m_directories[name] = new Node(this, MVFS::Node::DIR);
                         lastMkDir->SetParent(cursor);
                     break;
                     case OPENDIR:
@@ -51,7 +51,7 @@ namespace MVFS
                     break;
                     case NEWFILE:
                         name = ReadString(m_pFileReaderItf);
-                        fileNode = new Node(this, MVFS::Node::Type::FILE);
+                        fileNode = new Node(this, MVFS::Node::FILE);
                         fileNode->SetParent(cursor);
                         cursor->m_files[name]=fileNode;
                         m_pFileReaderItf->Read((char*)(&fileSize),sizeof(fileSize));

@@ -1,3 +1,5 @@
+#ifdef ANDROID_PLATFORM
+
 #include "EGLWindow.hpp"
 
 namespace MPACK
@@ -167,3 +169,5 @@ namespace MPACK
 		}
 	}
 }
+
+#endif

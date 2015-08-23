@@ -108,7 +108,7 @@ void GUIMenu::Render()
 	for(vector<GUIMenuButton*>::iterator it=m_button.begin();it!=m_button.end();++it)
 	{
 		Vector2f &pos=(*it)->m_pos;
-		Global::pFont->SendString((*it)->m_text,pos.x,pos.y,TextureMappedFont::AlignType::ALIGN_CENTER);
+		Global::pFont->SendString((*it)->m_text,pos.x,pos.y,TextureMappedFont::ALIGN_CENTER);
 	}
 }
 

@@ -33,10 +33,10 @@ namespace MPACK
 		{
 			switch(m_caseType)
 			{
-				case CaseType::LOWERCASE:
+				case LOWERCASE:
 					str=StringEx::ToLower(str);
 				break;
-				case CaseType::UPPERCASE:
+				case UPPERCASE:
 					str=StringEx::ToUpper(str);
 				break;
 			}
@@ -54,7 +54,7 @@ namespace MPACK
 
 			vector<SpriteVertex> quadData;
 			SpriteVertex vertex;
-			if(m_formatType == FormatType::RGB_MAGNITUDE)
+			if(m_formatType == RGB_MAGNITUDE)
 			{
 				vertex.stype=SpriteVertex::ALPHA_TEST;
 			}
@@ -77,11 +77,6 @@ namespace MPACK
 				if(!m_monospaced)
 				{
 					x-=m_fontSize*m_cellSpacing[chX][chY].left;
-				}
-
-				if(m_formatType == FormatType::ALPHA)
-				{
-					LOGD("str[i]=%c top=%f   bottom=%f",char(ch),m_cellSpacing[chX][chY].top,m_cellSpacing[chX][chY].bottom);
 				}
 
 				////////////////////////////////////
@@ -213,7 +208,7 @@ namespace MPACK
 
 		void TextureMappedFont::AutoCalibrate()
 		{
-			if(m_formatType == FormatType::RGB_MAGNITUDE)
+			if(m_formatType == RGB_MAGNITUDE)
 			{
 				m_charPadding = 0.0f;
 			}
@@ -242,7 +237,7 @@ namespace MPACK
 				return false;
 			}
 
-			if(format == FormatType::ALPHA && pFontImage->GetBytesPerPixel()!=4)
+			if(format == ALPHA && pFontImage->GetBytesPerPixel()!=4)
 			{
 				LOGE("TextureMappedFont::Load() format is set to ALPHA but font image does not have alpha channel!");
 				return false;
@@ -252,11 +247,11 @@ namespace MPACK
 
 			pFontImage->FlipVertical();
 
-			if(format == FormatType::ALPHA)
+			if(format == ALPHA)
 			{
 				BuildCellSpacing_ALPHA(pFontImage);
 			}
-			else if(format == FormatType::RGB_MAGNITUDE)
+			else if(format == RGB_MAGNITUDE)
 			{
 				BuildCellSpacing_RGB_MAGNITUDE(pFontImage);
 			}

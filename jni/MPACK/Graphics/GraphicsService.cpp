@@ -27,6 +27,8 @@ namespace MPACK
 
 		ReturnValue GraphicsService::Start()
 		{
+			InitTextureSlots();
+
 			Render::Init();
 			Render::SetOrthoMode();
 			Render::EnableOrthoMode();
@@ -76,7 +78,7 @@ namespace MPACK
 		ReturnValue GraphicsService::LoadResources()
 		{
 			Global::pFont=new TextureMappedFont;
-			Global::pFont->Load("@Fonts/Font.tga",TextureMappedFont::FormatType::RGB_MAGNITUDE);
+			Global::pFont->Load("@Fonts/Font.tga",TextureMappedFont::RGB_MAGNITUDE);
 
 			if(!LoadShaders())
 			{

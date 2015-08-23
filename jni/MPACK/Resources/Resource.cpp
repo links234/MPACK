@@ -96,11 +96,11 @@ namespace MPACK
 				return StringEx::Substring(path,1);
 			}
 	#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-			if(pPath[0]=='@')
+			if(path[0]=='@')
 			{
 				return string("assets/")+StringEx::Substring(path,1);
 			}
-			if(pPath[0]=='&')
+			if(path[0]=='&')
 			{
 				return StringEx::Substring(path,1);
 			}

@@ -177,7 +177,7 @@ namespace MPACK
 		{
 			CompleteSpriteBatch();
 
-			m_batches.push_back(Batch(Batch::Type::CustomRenderCall,new CustomRenderCall(Core::Param1PtrCallbackStruct(func,param1))));
+			m_batches.push_back(Batch(Batch::CustomRenderCall,new CustomRenderCall(Core::Param1PtrCallbackStruct(func,param1))));
 		}
 
 		void Batcher::SendSpriteVertexQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, IndexData::Type type)
@@ -233,7 +233,7 @@ namespace MPACK
 
 			for(vector<Batch>::iterator it=m_batches.begin();it!=m_batches.end();++it)
 			{
-				if(it->m_type==Batch::Type::SpriteBatch)
+				if(it->m_type==Batch::SpriteBatch)
 				{
 					if(!isSpriteShaderEnabled)
 					{
@@ -260,7 +260,7 @@ namespace MPACK
 
 					delete batch;
 				}
-				else if(it->m_type==Batch::Type::CustomRenderCall)
+				else if(it->m_type==Batch::CustomRenderCall)
 				{
 					if(isSpriteShaderEnabled)
 					{
@@ -292,7 +292,7 @@ namespace MPACK
 		{
 			if(m_currentIndexBatchSize)
 			{
-				m_batches.push_back(Batch(Batch::Type::SpriteBatch, new SpriteBatch(m_currentIndexBatchSize,m_lastTexture,m_lastType)));
+				m_batches.push_back(Batch(Batch::SpriteBatch, new SpriteBatch(m_currentIndexBatchSize,m_lastTexture,m_lastType)));
 				m_currentIndexBatchSize=0;
 			}
 		}

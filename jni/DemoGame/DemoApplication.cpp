@@ -1,7 +1,7 @@
 #include "DemoApplication.hpp"
 #include "GraphicsService.hpp"
 #include "PhysicsService.hpp"
-#include "SoundService.hpp"
+#include "Sound.hpp"
 #include "TimeService.hpp"
 #include "Context.hpp"
 #include "Global.hpp"
@@ -18,7 +18,7 @@ using namespace MPACK;
 using namespace MPACK::Core;
 using namespace MPACK::Graphics;
 
-MPACK::ADS::GoogleAds *test;
+//MPACK::ADS::GoogleAds *test;
 
 #define MPACK_TESTING
 
@@ -76,22 +76,7 @@ namespace Game
 
 		m_pGameState = new MainMenu;
 
-		IniFile ini;
-		ini.Load("@local/menu.ini");
-
-		LOGD("::key = <%s>",ini.GetObject("key")->GetValue().c_str());
-
-		LOGD("Section1::some_path = <%s>",ini.GetSection("Section1")->GetObject("some_path")->GetValue().c_str());
-		LOGD("Section1::var1 = <%s>",ini.GetSection("Section1")->GetObject("var1")->GetValue().c_str());
-		LOGD("Section1::var2 = <%s>",ini.GetSection("Section1")->GetObject("var2")->GetValue().c_str());
-		LOGD("Section2::nr_of_enemies = <%s>",ini.GetSection("Section2")->GetObject("nr_of_enemies")->GetValue().c_str());
-
-		JSONParser json;
-		DOM *dom=json.Load("@local/test.json");
-		LOGD("%s",dom->Child("bla")->GetValue().c_str());
-		delete dom;
-
-		test = new MPACK::ADS::GoogleAds();
+		//test = new MPACK::ADS::GoogleAds();
 
 		return Core::RETURN_VALUE_OK;
     }
@@ -192,7 +177,7 @@ namespace Game
     	{
     		case EVENT_MAINMENU_CONTINUE:
     			delete m_pGameState;
-    			test->showSmartBanner();
+    			//test->showSmartBanner();
     			m_pGameState=m_pSavedGameState;
     			m_pGameState->Continue();
     			m_pGameState->Update();
@@ -205,16 +190,16 @@ namespace Game
     				m_pSavedGameState=NULL;
     			}
     			delete m_pGameState;
-    			test->hideSmartBanner();
-    			test->hideLargeBanner();
+    			//test->hideSmartBanner();
+    			//test->hideLargeBanner();
     			m_pGameState=new PlayGame();
     			m_pGameState->Update();
     		break;
     		case EVENT_MAINMENU_HIGHSCORE:
-    			test->showLargeBanner();
+    			//test->showLargeBanner();
     		break;
     		case EVENT_MAINMENU_CREDITS:
-    			test->showTextImageVideoInterstitial();
+    			//test->showTextImageVideoInterstitial();
     		break;
     		case EVENT_MAINMENU_EXIT:
     			return RETURN_VALUE_KO;
@@ -306,10 +291,12 @@ namespace Game
     void DemoApplication::onGainFocus()
     {
     	LOGI("Application::onGainFocus");
+    	//onActivate();
     }
 
     void DemoApplication::onLostFocus()
     {
     	LOGI("Application::onLostFocus");
+    	//onDeactivate();
     }
 }

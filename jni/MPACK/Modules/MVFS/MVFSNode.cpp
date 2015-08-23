@@ -8,7 +8,7 @@ using namespace std;
 
 namespace MVFS
 {
-    Node Node::s_sentinel(NULL, Node::Type::DIR);
+    Node Node::s_sentinel(NULL, Node::DIR);
 
     Node::Node(Reader *reader, Node::Type type)
         : m_type(type), m_fileOffset(0), m_fileSize(0), m_pReader(reader), m_pParent(&s_sentinel)
@@ -61,12 +61,12 @@ namespace MVFS
 
     bool Node::IsDirectory() const
     {
-        return m_type == Node::Type::DIR;
+        return m_type == Node::DIR;
     }
 
     bool Node::IsFile() const
     {
-        return m_type == Node::Type::FILE;
+        return m_type == Node::FILE;
     }
 
     Reader* Node::GetReader() const

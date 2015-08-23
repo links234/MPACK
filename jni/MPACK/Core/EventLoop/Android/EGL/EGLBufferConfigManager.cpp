@@ -1,3 +1,5 @@
+#ifdef ANDROID_PLATFORM
+
 #include "EGLBufferConfigManager.hpp"
 
 #include "EGLBufferConfig.hpp"
@@ -145,3 +147,5 @@ namespace MPACK
 		}
 	}
 }
+
+#endif

@@ -1,3 +1,5 @@
+#ifdef ANDROID_PLATFORM
+
 #ifndef MPACK_EGLWINDOW_HPP
 #define MPACK_EGLWINDOW_HPP
 
@@ -46,5 +48,7 @@ namespace MPACK
 		};
 	}
 }
+
+#endif
 
 #endif

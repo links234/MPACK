@@ -27,6 +27,8 @@
 
 #ifdef LINUX_PLATFORM
 	#include <stdint.h>
+
+	typedef int		EGLint;
 #elif	defined(ANDROID_PLATFORM)
 	//#define	intptr_t int
 #elif	defined(WINDOWS_PLATFORM)

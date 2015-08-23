@@ -136,6 +136,7 @@ namespace MPACK
 			}
 		}
 
+#ifdef ANDROID_PLAFORM
 		namespace EGL
 		{
 			int	i_errorCounter = 0;
@@ -227,5 +228,6 @@ namespace MPACK
 				}
 			}
 		}
+#endif
 	}
 }

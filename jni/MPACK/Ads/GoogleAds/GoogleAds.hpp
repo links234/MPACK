@@ -1,3 +1,5 @@
+#ifdef ANDROID_PLATFORM
+
 #ifndef GOOGLEADS_H
 #define GOOGLEADS_H
 
@@ -44,12 +46,6 @@ namespace MPACK
 	}
 }
 
-
-
-
-
-
-
-
+#endif
 
 #endif

@@ -1,7 +1,8 @@
 #ifndef MVFS_MVFSNODE_HPP
 #define MVFS_MVFSNODE_HPP
 
-#include <unordered_map>
+#include "Types.hpp"
+
 #include <string>
 
 namespace MVFS

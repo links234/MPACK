@@ -1,3 +1,5 @@
+#ifdef ANDROID_PLATFORM
+
 #include "GoogleAds.hpp"
 #include "Global.hpp"
 
@@ -178,4 +180,7 @@ extern "C"
 			 LOGW("NativeGoogleAds : negative status !!!!!!!!!!!!!!!!!!!! %d ",status);
 	}
 }
+
+#endif
+
 

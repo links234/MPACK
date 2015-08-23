@@ -57,6 +57,7 @@ namespace MPACK
 			FilteringType	m_filteringType;
 		};
 	
+		void InitTextureSlots();
 		void BindTextureSlot(GLenum TEXTURE);
 		void BindTextureToSlot(int textureId, GLenum TEXTURE);
 	}

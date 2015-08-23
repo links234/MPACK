@@ -35,7 +35,7 @@ namespace MPACK
 			m_shader->BindShader();
 			m_shader->UpdateFrameUniforms();
 
-			BindTextureToSlot(s_renderTexture1->m_colorTex->m_texId,GL_TEXTURE0);
+			BindTextureToSlot(s_renderTexture1->m_texId,GL_TEXTURE0);
 
 			m_shader->EnableVertexAttributes();
 
@@ -103,6 +103,9 @@ namespace MPACK
 		}
 		void PostEffect::SetScreenSize(GLuint width, GLuint height)
 		{
+			LOGD("SetScreenSize()");
+			LOGD("s_renderTexture1 = %d",s_renderTexture1);
+			LOGD("s_renderTexture2 = %d",s_renderTexture2);
 			if(!s_renderTexture1)
 			{
 				s_renderTexture1=new RenderTexture();
@@ -111,8 +114,11 @@ namespace MPACK
 			{
 				s_renderTexture2=new RenderTexture();
 			}
+			LOGD("Init0");
 			s_renderTexture1->Init(width,height);
+			LOGD("Init1");
 			s_renderTexture2->Init(width,height);
+			LOGD("Init2");
 		}
 		void PostEffect::Shutdown()
 		{
@@ -128,6 +134,11 @@ namespace MPACK
 			}
 			GL_CHECK( glDeleteBuffers(1,&s_screenVertexBuffer) );
 			GL_CHECK( glDeleteBuffers(1,&s_screenIndexBuffer) );
+
+			delete FXAAII;
+			FXAAII = NULL;
+			delete FXAAI;
+			FXAAI = NULL;
 		}
 		void PostEffect::Begin()
 		{

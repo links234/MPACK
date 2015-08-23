@@ -82,6 +82,7 @@ namespace MPACK
 
 		void AndroidEventLoop::Activate()
 		{
+			LOGD("AndroidEventLoop::Activate() enter");
 			// Enables activity only if a window is available.
 			if ((!m_enabled) && (Global::pAndroidApp->window != NULL))
 			{
@@ -101,6 +102,7 @@ namespace MPACK
 					ANativeActivity_finish(Global::pAndroidApp->activity);
 				}
 			}
+			LOGD("AndroidEventLoop::Activate() exit");
 		}
 
 		void AndroidEventLoop::Deactivate()
