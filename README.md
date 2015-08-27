@@ -104,3 +104,6 @@ Windows and Linux features:
 	- Keyboard input
 	- Mouse input
 
+
+
+[![Join the chat at https://gitter.im/links234/MPACK](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/links234/MPACK?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
