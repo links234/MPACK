@@ -46,8 +46,6 @@ namespace MPACK
 				m_FBOId = 0;
 			}
 
-
-			LOGD("width = %d height = %d",width,height);
 			GL_CHECK( glGenTextures(1, &m_texId) );
 			BindTextureToSlot(m_texId,GL_TEXTURE0);
 			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
@@ -64,10 +62,6 @@ namespace MPACK
 
 			GL_CHECK( glGenFramebuffers(1, &m_FBOId) );
 			GL_CHECK( glBindFramebuffer(GL_FRAMEBUFFER, m_FBOId) );
-
-			LOGD("m_FBOId = %d",m_FBOId);
-			LOGD("m_texId = %d",m_texId);
-			LOGD("m_depthRBOId = %d",m_depthRBOId);
 
 			GL_CHECK( glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRBOId) );
 
