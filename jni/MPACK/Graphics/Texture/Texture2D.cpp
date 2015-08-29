@@ -177,7 +177,6 @@ namespace MPACK
 		{
 			int textureIndex=TEXTURE-GL_TEXTURE0;
 			BindTextureSlot(TEXTURE);
-			LOGD("textureId = %d      textureBinded[textureIndex] = %d",textureId,textureBinded[textureIndex]);
 			if(textureBinded[textureIndex]!=textureId)
 			{
 				textureBinded[textureIndex]=textureId;

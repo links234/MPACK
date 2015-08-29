@@ -45,7 +45,7 @@ namespace MPACK
 			PitchController* 		Pitch() const;
 			SeekController* 		Seek() const;
 
-			static void DestroyAll();
+			static void Cleanup();
 		private:
 			Core::ReturnValue LoadControllers();
 

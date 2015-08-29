@@ -207,7 +207,7 @@ namespace MPACK
 			return m_pSeekController;
 		}
 
-		void AudioPlayer::DestroyAll()
+		void AudioPlayer::Cleanup()
 		{
 			vector<AudioPlayer*> allObjects;
 			for(unordered_set<AudioPlayer*>::iterator it=s_objects.begin();it!=s_objects.end();++it)

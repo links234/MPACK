@@ -239,64 +239,62 @@ namespace Game
 
     void DemoApplication::onStart()
     {
-    	LOGI("Application::onStart");
+    	LOGI("DemoApplication::onStart");
     }
 
     void DemoApplication::onResume()
     {
-    	LOGI("Application::onResume");
+    	LOGI("DemoApplication::onResume");
     }
 
     void DemoApplication::onPause()
     {
-    	LOGI("Application::onPause");
+    	LOGI("DemoApplication::onPause");
     }
 
     void DemoApplication::onStop()
     {
-    	LOGI("Application::onStop");
+    	LOGI("DemoApplication::onStop");
     }
 
     void DemoApplication::onDestroy()
     {
-    	LOGI("Application::onDestroy");
+    	LOGI("DemoApplication::onDestroy");
     }
 
     void DemoApplication::onSaveState(void** pData, size_t* pSize)
     {
-    	LOGI("Application::onSaveInstanceState");
+    	LOGI("DemoApplication::onSaveInstanceState");
     }
 
     void DemoApplication::onConfigurationChanged()
     {
-    	LOGI("Application::onConfigurationChanged");
+    	LOGI("DemoApplication::onConfigurationChanged");
     }
 
     void DemoApplication::onLowMemory()
     {
-    	LOGI("Application::onLowMemory");
+    	LOGI("DemoApplication::onLowMemory");
     	LOGW("Please buy a better device!");
     }
 
     void DemoApplication::onCreateWindow()
     {
-    	LOGI("Application::onCreateWindow");
+    	LOGI("DemoApplication::onCreateWindow");
     }
 
     void DemoApplication::onDestroyWindow()
     {
-    	LOGI("Application::onDestroyWindow");
+    	LOGI("DemoApplication::onDestroyWindow");
     }
 
     void DemoApplication::onGainFocus()
     {
-    	LOGI("Application::onGainFocus");
-    	//onActivate();
+    	LOGI("DemoApplication::onGainFocus");
     }
 
     void DemoApplication::onLostFocus()
     {
-    	LOGI("Application::onLostFocus");
-    	//onDeactivate();
+    	LOGI("DemoApplication::onLostFocus");
     }
 }

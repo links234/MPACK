@@ -136,7 +136,7 @@ namespace MPACK
 			}
 		}
 
-#ifdef ANDROID_PLAFORM
+#ifdef ANDROID_PLATFORM
 		namespace EGL
 		{
 			int	i_errorCounter = 0;
