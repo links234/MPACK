@@ -27,6 +27,8 @@ namespace MPACK
 
 			void Match(EGLint &redSize, EGLint &greenSize, EGLint &blueSize, EGLint &depthSize) const;
 
+			void SafeGetConfigAttrib(EGLConfig config, EGLint attribute, EGLint *value);
+
 		private:
 			std::vector<EGLBufferConfig> m_config;
 
