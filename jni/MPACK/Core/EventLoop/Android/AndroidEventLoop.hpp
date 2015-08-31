@@ -44,10 +44,9 @@ namespace MPACK
 			static int32_t callback_input(android_app* pApplication, AInputEvent* pEvent);
 
 		private:
-			// Saves application state when application is active/paused.
 			bool m_enabled;
-			// Indicates if the event handler wants to exit.
 			bool m_quit;
+			bool m_paused;
 
 			EGLint		m_width, m_height;
 			EGLWindow 	m_window;

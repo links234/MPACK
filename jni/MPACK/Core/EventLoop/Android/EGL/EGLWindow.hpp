@@ -27,8 +27,16 @@ namespace MPACK
 			ReturnValue ChooseConfig(EGLint redSize=8, EGLint greenSize=8, EGLint blueSize=8, EGLint depthSize=24);
 			ReturnValue GetFormat(EGLint &format) const;
 			ReturnValue CreateSurface(NativeWindowType &window);
+			ReturnValue CreateContext();
 			ReturnValue Bind(EGLint &width, EGLint &height);
 			void Destroy();
+
+			bool IsContextBound();
+			bool IsSurfaceCreated();
+			bool IsContextCreated();
+
+			void InvalidateSurface();
+			void InvalidateContext();
 
 			ReturnValue SwapBuffers();
 
@@ -43,6 +51,10 @@ namespace MPACK
 			EGLConfig 	m_config;
 
 			EGLint 		m_majorVersion, m_minorVersion;
+
+			bool 		m_isContextBound;
+			bool		m_haveSurface;
+			bool		m_haveContext;
 
 			friend class EGLBufferConfigManager;
 		};

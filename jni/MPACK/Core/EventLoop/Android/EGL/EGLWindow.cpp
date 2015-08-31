@@ -8,7 +8,8 @@ namespace MPACK
 	{
 		EGLWindow::EGLWindow()
 			: m_display(EGL_NO_DISPLAY), m_surface(EGL_NO_CONTEXT), m_context(EGL_NO_SURFACE),
-			  m_config(0), m_majorVersion(0), m_minorVersion(0)
+			  m_config(0), m_majorVersion(0), m_minorVersion(0),
+			  m_isContextBound(false), m_haveSurface(false), m_haveContext(false)
 		{
 		}
 
@@ -27,6 +28,7 @@ namespace MPACK
 			}
 			EGLint result = 0;
 			EGL_CHECK( result = eglInitialize(m_display, &m_majorVersion, &m_minorVersion) );
+			LOGI("EGL version: %d.%d", m_majorVersion, m_minorVersion);
 			if (!result)
 			{
 				LOGE("EGLDisplay::Init() unable to initialize display");
@@ -79,7 +81,12 @@ namespace MPACK
 				LOGE("EGLDisplay::CreateSurface() failed to create surface");
 				return RETURN_VALUE_KO;
 			}
+			m_haveSurface = true;
+			return RETURN_VALUE_OK;
+		}
 
+		ReturnValue EGLWindow::CreateContext()
+		{
 			const EGLint contextAttrib[] =
 			{
 				EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE
@@ -88,9 +95,11 @@ namespace MPACK
 			EGL_CHECK( m_context = eglCreateContext(m_display, m_config, EGL_NO_CONTEXT, contextAttrib) );
 			if (m_context == EGL_NO_CONTEXT)
 			{
-				LOGE("EGLDisplay::CreateSurface() failed to create context");
+				LOGE("EGLDisplay::CreateContext() failed to create context");
 				return RETURN_VALUE_KO;
 			}
+
+			m_haveContext = true;
 			return RETURN_VALUE_OK;
 		}
 
@@ -121,11 +130,17 @@ namespace MPACK
 				LOGE("EGLDisplay::Bind() failed to get display height");
 				return RETURN_VALUE_KO;
 			}
+
+			m_isContextBound = true;
 			return RETURN_VALUE_OK;
 		}
 
 		void EGLWindow::Destroy()
 		{
+			m_isContextBound = false;
+			m_haveSurface = false;
+			m_haveContext = false;
+
 			m_majorVersion = 0;
 			m_minorVersion = 0;
 			if (m_display != EGL_NO_DISPLAY)
@@ -144,6 +159,33 @@ namespace MPACK
 				EGL_CHECK( eglTerminate(m_display) );
 				m_display = EGL_NO_DISPLAY;
 			}
+		}
+
+		bool EGLWindow::IsContextBound()
+		{
+			return m_isContextBound;
+		}
+
+		bool EGLWindow::IsSurfaceCreated()
+		{
+			return m_haveSurface;
+		}
+
+		bool EGLWindow::IsContextCreated()
+		{
+			return m_haveContext;
+		}
+
+		void EGLWindow::InvalidateSurface()
+		{
+			LOGD("SURFACE INVALIDATED");
+			m_isContextBound = false;
+			m_haveSurface = false;
+		}
+
+		void EGLWindow::InvalidateContext()
+		{
+			m_haveContext=false;
 		}
 
 		ReturnValue EGLWindow::SwapBuffers()
