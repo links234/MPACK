@@ -47,10 +47,10 @@ namespace MPACK
 			int	i_errorCounter = 0;
 			int i_maxErrorCounter = 10;
 
-			GLenum GetError()
+			GLenum GetError(bool countError)
 			{
 				GLenum error = glGetError();
-				if(error)
+				if(error && countError)
 				{
 					++i_errorCounter;
 					if(i_errorCounter>i_maxErrorCounter)
@@ -142,10 +142,10 @@ namespace MPACK
 			int	i_errorCounter = 0;
 			int i_maxErrorCounter = 1;
 
-			EGLint GetError()
+			EGLint GetError(bool countError)
 			{
 				GLenum error = eglGetError();
-				if(error != EGL_SUCCESS)
+				if(error != EGL_SUCCESS && countError)
 				{
 					++i_errorCounter;
 					if(i_errorCounter>i_maxErrorCounter)

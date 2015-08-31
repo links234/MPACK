@@ -68,7 +68,7 @@ namespace MPACK
 
 		namespace OpenGL
 		{
-			GLenum GetError();
+			GLenum GetError(bool countError = true);
 			const char* GetErrorString(const GLenum &error);
 
 			void SetMaxErrorCounter(int number);
@@ -85,7 +85,7 @@ namespace MPACK
 #ifdef ANDROID_PLATFORM
 		namespace EGL
 		{
-			EGLint GetError();
+			EGLint GetError(bool countError = true);
 			const char* GetErrorString(const EGLint &error);
 
 			void SetMaxErrorCounter(int number);
