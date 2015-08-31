@@ -18,7 +18,9 @@ using namespace MPACK;
 using namespace MPACK::Core;
 using namespace MPACK::Graphics;
 
-//MPACK::ADS::GoogleAds *test;
+#ifdef ANDROID_PLATFORM
+MPACK::ADS::GoogleAds *test;
+#endif
 
 #define MPACK_TESTING
 
@@ -76,7 +78,7 @@ namespace Game
 
 		m_pGameState = new MainMenu;
 
-		//test = new MPACK::ADS::GoogleAds();
+		test = new MPACK::ADS::GoogleAds();
 
 		return Core::RETURN_VALUE_OK;
     }
@@ -120,6 +122,7 @@ namespace Game
 
     		Sound::GroupController::Get("background")->Play()->Start();
 
+    		/*
     		IniFile ini;
 			ini.Load("@local/menu.ini");
 
@@ -131,6 +134,7 @@ namespace Game
 			LOGD("Section2::nr_of_enemies = <%s>",ini.GetSection("Section2")->GetObject("nr_of_enemies")->GetValue().c_str());
 
 			message = ini.GetSection("ModifyHere")->GetObject("ThisKey")->GetValue();
+			*/
     	}
     	static int state=0;
     	if(timer->Time()>10.0f && state==0)
@@ -177,7 +181,9 @@ namespace Game
     	{
     		case EVENT_MAINMENU_CONTINUE:
     			delete m_pGameState;
-    			//test->showSmartBanner();
+#ifdef ANDROID_PLATFORM
+    			test->showSmartBanner();
+#endif
     			m_pGameState=m_pSavedGameState;
     			m_pGameState->Continue();
     			m_pGameState->Update();
@@ -190,16 +196,22 @@ namespace Game
     				m_pSavedGameState=NULL;
     			}
     			delete m_pGameState;
-    			//test->hideSmartBanner();
-    			//test->hideLargeBanner();
+#ifdef ANDROID_PLATFORM
+    			test->hideSmartBanner();
+    			test->hideLargeBanner();
+#endif
     			m_pGameState=new PlayGame();
     			m_pGameState->Update();
     		break;
     		case EVENT_MAINMENU_HIGHSCORE:
-    			//test->showLargeBanner();
+#ifdef ANDROID_PLATFORM
+    			test->showLargeBanner();
+#endif
     		break;
     		case EVENT_MAINMENU_CREDITS:
-    			//test->showTextImageVideoInterstitial();
+#ifdef ANDROID_PLATFORM
+    			test->showTextImageVideoInterstitial();
+#endif
     		break;
     		case EVENT_MAINMENU_EXIT:
     			return RETURN_VALUE_KO;
