@@ -10,6 +10,7 @@ before_install:
   - echo $LANG
   - echo $LC_ALL
   - ./scripts/config_linux.sh
+  - g++ --version
 
 script: make -f "jni/Linux.mk"
 
