@@ -78,7 +78,9 @@ namespace Game
 
 		m_pGameState = new MainMenu;
 
+#ifdef ANDROID_PLATFORM
 		test = new MPACK::ADS::GoogleAds();
+#endif
 
 		return Core::RETURN_VALUE_OK;
     }
