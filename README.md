@@ -7,6 +7,28 @@ MPACK is intended to be a cross-platform starting point for 2D games running on 
 
 Full feature list can be found [here][1].
 
+## Getting started
+
+#### Linux
+
+##### Setup
+```bash
+cd path/to/workspace
+git clone https://github.com/links234/MPACK.git
+cd MPACK
+sudo sh scripts/config_linux.sh
+```
+
+##### Build
+```bash
+make -f "jni/Linux.mk"
+```
+
+##### Run
+```bash
+./game
+```
+
 ## License
 
 [Apache License 2.0][2]
