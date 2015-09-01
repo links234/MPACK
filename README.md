@@ -7,7 +7,12 @@ MPACK is intended to be a cross-platform starting point for 2D games running on 
 
 Full feature list can be found [here][1].
 
+## License
+
+[Apache License 2.0][2]
+
 [1]: FEATURES.md
+[2]: http://www.apache.org/licenses/LICENSE-2.0
 
 [logo]: logo30x30.png "MPACK"
 [travis-ci-link]: https://travis-ci.org/links234/MPACK
