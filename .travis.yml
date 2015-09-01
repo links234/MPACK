@@ -6,11 +6,10 @@ compiler:
   - gcc
 
 before_install:
-  - g++ --version
   - echo $LANG
   - echo $LC_ALL
   - ./scripts/config_linux.sh
-  - g++ --version
+  - export CXX="g++-4.8"
 
 script: make -f "jni/Linux.mk"
 

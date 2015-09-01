@@ -2,8 +2,8 @@
 OUT = game
 
 #Compiler (i.e. g++ for C++, or gcc for C)
-CXX = g++
-CC  = g++
+#CXX = g++
+#CC  = g++
 
 #Directory for includes (headers, etc.)
 IDIR = jni
