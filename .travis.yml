@@ -1,0 +1,32 @@
+language: cpp
+
+sudo: required
+
+compiler:
+  - gcc
+
+before_install:
+  - echo $LANG
+  - echo $LC_ALL
+  - ./scripts/config_linux.sh
+
+script: make -f "jni/Linux.mk"
+
+branches:
+  only:
+    - master
+
+notifications:
+  email: false
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/b48dff8a2779d8681f21
+    on_success: always
+    on_failure: always
+    on_start: always
+
+env:
+  - LANG="en_US.UTF-8"
+
+os:
+  - linux
