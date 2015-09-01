@@ -9,7 +9,7 @@ before_install:
   - echo $LANG
   - echo $LC_ALL
   - ./scripts/config_linux.sh
-  - export CXX="g++-4.8"
+  - export CXX="g++-4.7"
 
 script: make -f "jni/Linux.mk"
 
