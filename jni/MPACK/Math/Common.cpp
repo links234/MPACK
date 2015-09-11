@@ -41,5 +41,11 @@ namespace MPACK
 
 		template<> const float	Misc<float>::c_Max			= static_cast<float>	( 1.0e32 );
 		template<> const double	Misc<double>::c_Max			= static_cast<double>	( 1.0e64 );
+
+		template<> const float	Misc<float>::c_BiasRelative		= static_cast<float>	( 0.95 );
+		template<> const double	Misc<double>::c_BiasRelative	= static_cast<double>	( 0.95 );
+
+		template<> const float	Misc<float>::c_BiasAbsolute		= static_cast<float>	( 0.01 );
+		template<> const double	Misc<double>::c_BiasAbsolute	= static_cast<double>	( 0.01 );
 	}
 }
