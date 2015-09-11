@@ -24,6 +24,7 @@ namespace MPACK
 		{
 		public:
 			Body(Shape *shape);
+			~Body();
 
 			void ApplyForce(const MPACK::Math::Vector2f& force);
 			void ApplyImpulse(const MPACK::Math::Vector2f& impulse, const MPACK::Math::Vector2f& contactVector);

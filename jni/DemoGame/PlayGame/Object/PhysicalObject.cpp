@@ -31,7 +31,7 @@ void PhysicalObject::Render()
 			color=RED;
 		}
 
-		TransformState2f transformState=TransformState2f(m_body->GetPosition(),MPACK::Math::Misc<float>::RadToDeg(m_body->GetOrientation()),1.0f);
+		TransformState2f transformState=TransformState2f(m_body->GetPosition(),m_body->GetOrientation(),1.0f);
 		if(m_shape->GetType()==Shape::ePoly)
 		{
 			PolygonShape *poly=(PolygonShape*)(m_shape);

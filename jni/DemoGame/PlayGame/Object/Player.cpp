@@ -10,12 +10,14 @@ Player::Player(MPACK::Physics::World *world)
 
 Player::~Player()
 {
+	delete m_shape;
+	delete m_body;
 }
 
 bool Player::Update(GLfloat delta)
 {
 	m_sprite->m_position=m_body->GetPosition();
-	m_sprite->SetAngle(MPACK::Math::Misc<float>::RadToDeg(m_body->GetOrientation())+270.0f);
+	m_sprite->SetAngle(m_body->GetOrientation()+270.0f);
 	return true;
 }
 

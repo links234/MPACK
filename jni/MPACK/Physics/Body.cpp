@@ -35,6 +35,11 @@ namespace MPACK
 			m_tempInverseMass=m_inverseMass;
 		}
 
+		Body::~Body()
+		{
+			delete m_shape;
+		}
+
 		void Body::ApplyForce(const Vector2f& force)
 		{
 			m_force+=force;
@@ -52,12 +57,14 @@ namespace MPACK
 			m_inverseMomentOfInertia=0.0f;
 			m_mass=0.0f;
 			m_inverseMass=0.0f;
+			m_velocity=Vector2f();
 		}
 
 		void Body::LockOrientation()
 		{
 			m_momentOfInertia=0.0f;
 			m_inverseMomentOfInertia=0.0f;
+			m_angularVelocity=0.0f;
 		}
 
 		void Body::UnlockOrientation()
@@ -68,6 +75,7 @@ namespace MPACK
 
 		void Body::SetOrientation(float orientation)
 		{
+			orientation=MPACK::Math::Misc<float>::DegToRad(orientation);
 			m_orientation=orientation;
 			m_shape->SetOrientation(orientation);
 		}
@@ -79,7 +87,7 @@ namespace MPACK
 
 		float Body::GetOrientation() const
 		{
-			return m_orientation;
+			return MPACK::Math::Misc<float>::RadToDeg(m_orientation);
 		}
 
 		MPACK::Math::Vector2f Body::GetPosition() const
@@ -114,7 +122,7 @@ namespace MPACK
 
 			m_position += m_velocity*delta;
 			m_orientation += m_angularVelocity*delta;
-			SetOrientation(m_orientation);
+			m_shape->SetOrientation(m_orientation);
 			IntegrateForces(delta);
 		}
 

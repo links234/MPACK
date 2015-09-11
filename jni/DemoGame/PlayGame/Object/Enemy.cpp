@@ -24,19 +24,18 @@ Enemy::Enemy(MPACK::Physics::World *world)
 	m_body = m_world->Add(m_shape,0,0);
 
 	m_body->SetOrientation(0.0f);
-	/*m_body->restitution = 0.2f;
-	m_body->dynamicFriction = 0.2f;
-	m_body->staticFriction = 0.4f;*/
 }
 
 Enemy::~Enemy()
 {
+	delete m_shape;
+	delete m_body;
 }
 
 bool Enemy::Update(GLfloat delta)
 {
 	m_position = m_body->GetPosition();
-	m_angle = MPACK::Math::Misc<float>::RadToDeg(m_body->GetOrientation());
+	m_angle = m_body->GetOrientation();
 	return true;
 }
 
