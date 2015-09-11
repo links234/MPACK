@@ -51,6 +51,11 @@ namespace MPACK
 			m_angularVelocity += m_inverseMomentOfInertia*Cross(contactVector,m_inverseMasspulse);
 		}
 
+		void Body::ApplyTorque(const float torque)
+		{
+			m_torque+=MPACK::Math::Misc<float>::DegToRad(torque);
+		}
+
 		void Body::SetStatic()
 		{
 			m_momentOfInertia=0.0f;
