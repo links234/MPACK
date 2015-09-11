@@ -3,7 +3,6 @@
 #include "Render.hpp"
 #include "InputService.hpp"
 #include "TimeService.hpp"
-#include "PhysicsService.hpp"
 #include "DemoApplication.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"

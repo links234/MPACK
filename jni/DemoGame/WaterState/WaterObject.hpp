@@ -37,7 +37,7 @@ private:
 
 	void 							CreateWavesVertices();
 	void 							CreateSprings();
-	vector <WaterSpring>			m_springs;
+	std::vector <WaterSpring>			m_springs;
 
 	static WaterObject*				g_water;
 	static const int 				m_springsCount;

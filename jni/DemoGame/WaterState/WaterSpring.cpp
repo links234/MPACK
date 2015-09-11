@@ -6,8 +6,8 @@
 using namespace MPACK;
 
 WaterSpring::WaterSpring()
-	: m_springConstant(0.50)
-	, m_springMass(2.f)
+	: m_springConstant(0.25f)
+	, m_springMass(10.f)
 	, m_dampening(0.1f)
 	, m_position(WaterObject::s_targetHeight)
 {
