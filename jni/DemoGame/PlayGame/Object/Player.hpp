@@ -11,7 +11,7 @@ using namespace MPACK::Math;
 class Player : public SpriteObject, public PhysicalObject
 {
 public:
-	Player();
+	Player(MPACK::Physics::World *world);
 	virtual ~Player();
 
 	virtual bool Update(GLfloat delta);

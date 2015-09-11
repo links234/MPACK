@@ -2,7 +2,8 @@
 
 using namespace MPACK::Physics;
 
-Enemy::Enemy()
+Enemy::Enemy(MPACK::Physics::World *world)
+	: PhysicalObject(world), m_angle(0.0f)
 {
 
 	vector<Vector2f> vertices;
@@ -16,8 +17,16 @@ Enemy::Enemy()
 	vertices.push_back(Vector2f(-30.0f,20.0f));
 
 
-	PPoly *poly=(PPoly*)m_shape;
+	PolygonShape *poly = new PolygonShape;
 	poly->Set(&vertices[0],vertices.size());
+
+	m_shape = poly;
+	m_body = m_world->Add(m_shape,0,0);
+
+	m_body->SetOrientation(0.0f);
+	/*m_body->restitution = 0.2f;
+	m_body->dynamicFriction = 0.2f;
+	m_body->staticFriction = 0.4f;*/
 }
 
 Enemy::~Enemy()
@@ -26,14 +35,15 @@ Enemy::~Enemy()
 
 bool Enemy::Update(GLfloat delta)
 {
-	m_angle=m_linearVelocity.Angle();
-	m_sprite->m_position=m_position;
-	m_sprite->SetAngle(m_angle);
+	m_position = m_body->GetPosition();
+	m_angle = MPACK::Math::Misc<float>::RadToDeg(m_body->GetOrientation());
 	return true;
 }
 
 void Enemy::Render()
 {
+	m_sprite->m_position = m_position;
+	m_sprite->SetAngle(m_angle);
 	SpriteObject::Render();
 	PhysicalObject::Render();
 }

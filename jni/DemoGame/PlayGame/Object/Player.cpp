@@ -3,7 +3,8 @@
 using namespace MPACK;
 using namespace MPACK::Physics;
 
-Player::Player()
+Player::Player(MPACK::Physics::World *world)
+	: PhysicalObject(world)
 {
 }
 
@@ -13,9 +14,8 @@ Player::~Player()
 
 bool Player::Update(GLfloat delta)
 {
-	m_angle=m_linearVelocity.Angle();
-	m_sprite->m_position=m_position;
-	m_sprite->SetAngle(m_angle);
+	m_sprite->m_position=m_body->GetPosition();
+	m_sprite->SetAngle(MPACK::Math::Misc<float>::RadToDeg(m_body->GetOrientation())+270.0f);
 	return true;
 }
 
@@ -33,8 +33,15 @@ Vector2f Player::GetCameraPosition() const
 void Player::SetSprite(Sprite *pSprite)
 {
 	m_sprite=pSprite;
-	PPoly *poly=(PPoly*)(m_shape);
+
+	PolygonShape *poly = new PolygonShape;
 	poly->SetAsBox(m_sprite->GetWidth()*0.5f,m_sprite->GetHeight()*0.5f);
+
+	m_shape = poly;
+	m_body = m_world->Add(m_shape,0,0);
+
+	m_body->SetOrientation(0.0f);
+	m_body->LockOrientation();
 }
 
 void Player::Shoot(Vector2f direction)

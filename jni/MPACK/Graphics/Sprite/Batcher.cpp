@@ -13,6 +13,8 @@
 #include "Camera2D.hpp"
 #include "Debug.hpp"
 
+using namespace std;
+
 using namespace MPACK::Core;
 using namespace MPACK::Math;
 
