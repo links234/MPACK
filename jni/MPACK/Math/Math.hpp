@@ -11,6 +11,7 @@
 
 #include "Common.hpp"
 #include "TransformState2.hpp"
+#include "Matrix2.hpp"
 #include "Matrix3.hpp"
 #include "Matrix4.hpp"
 #include "Vector2.hpp"
@@ -31,6 +32,7 @@ namespace MPACK
 		typedef Vector3<float> 				Vector3f;
 		typedef Vector4<float> 				Vector4f;
 
+		typedef Matrix2<float>				Matrix2f;
 		typedef Matrix3<float> 				Matrix3f;
 		typedef Matrix4<float> 				Matrix4f;
 
@@ -46,6 +48,7 @@ namespace MPACK
 		typedef Vector3<double> 			Vector3d;
 		typedef Vector4<double> 			Vector4d;
 
+		typedef Matrix2<double>				Matrix2d;
 		typedef Matrix3<double> 			Matrix3d;
 		typedef Matrix4<double> 			Matrix4d;
 

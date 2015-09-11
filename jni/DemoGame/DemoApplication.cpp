@@ -1,6 +1,5 @@
 #include "DemoApplication.hpp"
 #include "GraphicsService.hpp"
-#include "PhysicsService.hpp"
 #include "Sound.hpp"
 #include "TimeService.hpp"
 #include "Context.hpp"
@@ -171,11 +170,6 @@ namespace Game
     	// Update per-frame debug messages
     	Debug::InitFrame();
 
-    	// Updates services
-    	if(!m_pSavedGameState)
-    	{
-    		Global::pContext->pPhysicsService->Update(delta);
-    	}
     	Global::pContext->pGraphicsService->Update(delta);
 
     	// Event dispatcher

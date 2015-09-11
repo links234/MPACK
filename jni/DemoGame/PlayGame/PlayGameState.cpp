@@ -3,7 +3,7 @@
 #include "Render.hpp"
 #include "InputService.hpp"
 #include "TimeService.hpp"
-#include "PhysicsService.hpp"
+#include "Physics.hpp"
 #include "DemoApplication.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
@@ -20,10 +20,10 @@ namespace Game
 {
 	PlayGame::PlayGame()
 	{
+		m_pWorld = new World(1/60.0f,15);
+
 		m_pPGInputController = PGInputController::Initialize();
 		m_pPGInputController->SetMaxAcceleration(500.0f);
-
-		Global::pContext->pPhysicsService->callback=Physics_callback;
 
 		m_backgroundTexture = new Texture2D;
 		m_backgroundTexture->Load("@Backgrounds/spacebk1.png");
@@ -65,7 +65,7 @@ namespace Game
 		m_playerSprite->SetShading(SpriteVertex::ALPHA_BLEND);
 
 		//Player setup
-		m_playerObject=new Player;
+		m_playerObject=new Player(m_pWorld);
 		m_playerObject->SetSprite(m_playerSprite);
 		m_playerObject->SetPosition(Vector2f(Render::GetScreenWidth()*0.5,Render::GetScreenHeight()*0.5));
 
@@ -76,7 +76,22 @@ namespace Game
 		m_enemySprite->SetShading(SpriteVertex::ALPHA_BLEND);
 
 		//Enemy setup
-		m_enemyObject=new Enemy;
+		m_enemyObject=new Enemy(m_pWorld);
+		m_enemyObject->SetSprite(m_enemySprite);
+		m_enemyObject->SetPosition(Vector2f(50.0f,450.0f));
+
+		//Enemy setup
+		m_enemyObject=new Enemy(m_pWorld);
+		m_enemyObject->SetSprite(m_enemySprite);
+		m_enemyObject->SetPosition(Vector2f(450.0f,50.0f));
+
+		//Enemy setup
+		m_enemyObject=new Enemy(m_pWorld);
+		m_enemyObject->SetSprite(m_enemySprite);
+		m_enemyObject->SetPosition(Vector2f(450.0f,450.0f));
+
+		//Enemy setup
+		m_enemyObject=new Enemy(m_pWorld);
 		m_enemyObject->SetSprite(m_enemySprite);
 		m_enemyObject->SetPosition(Vector2f(50.0f,50.0f));
 
@@ -139,6 +154,8 @@ namespace Game
 
 		m_playerObject->SetLinearAcceleration(m_pPGInputController->GetMovementDirection());
 
+		m_pWorld->Update(delta);
+
 		Object::UpdateAll(delta);
 		ParticleEmitter::UpdateAll(delta);
 		Particle::UpdateAll(delta);
@@ -156,11 +173,14 @@ namespace Game
 		//Debug::Print(Global::pFont,"X = %lf  Y = %lf",m_playerObject->GetLinearAcceleration().x,m_playerObject->GetLinearAcceleration().y);
 
 		m_background->Render();
-		m_testSprite->Render();
+		//m_testSprite->Render();
+
+		/*
 		m_UIMatch1Sprite->Render();
 		m_UIMatch2Sprite->Render();
 		m_UIMatch3Sprite->Render();
 		m_UIMatch4Sprite->Render();
+		*/
 
 		Batcher::EnableCamera();
 		Object::RenderAll();
@@ -172,13 +192,11 @@ namespace Game
 
 	void PlayGame::Pause()
 	{
-		Global::pContext->pPhysicsService->callback=NULL;
 		m_pPGInputController->Pause();
 	}
 
 	void PlayGame::Continue()
 	{
-		Global::pContext->pPhysicsService->callback=Physics_callback;
 		m_pPGInputController->Continue();
 	}
 
@@ -214,29 +232,7 @@ namespace Game
 		delete m_UIMatch4Sprite;
 
 		Particle::Clear();
-	}
 
-	void PlayGame::Physics_callback(void *param1, void *param2)
-	{
-		/* 		This  piece of code is here to show you how NOT to cast pointer in diamond-structure inheritance
-		 * Object *pobj1p=(Object*)param1;
-		 * Object *pobj2p=(Object*)param2;
- 	 	 *
-		 * PObject *pobj1=(PObject*)param1;
-		 * PObject *pobj2=(PObject*)param2;
-		 * Object *obj1=(Object*)pobj1->GetUserData();
-		 * Object *obj2=(Object*)pobj2->GetUserData();
-		 */
-
-		//ALLWAYS use dynamic_cast properly in situations like this!!
-		PObject *pobj1=(PObject*)param1;
-		PObject *pobj2=(PObject*)param2;
-		PhysicalObject *tobj1=(PhysicalObject*)pobj1->GetUserData();
-		PhysicalObject *tobj2=(PhysicalObject*)pobj2->GetUserData();
-		Object *obj1=dynamic_cast<Object*>(tobj1);
-		Object *obj2=dynamic_cast<Object*>(tobj2);
-
-		obj1->m_debugInCollision=true;
-		obj2->m_debugInCollision=true;
+		delete m_pWorld;
 	}
 }

@@ -3,20 +3,10 @@
 
 #include "Types.hpp"
 
-#include "PMath.hpp"
-
-#include "PShape.hpp"
-#include "PPoly.hpp"
-#include "PCircle.hpp"
-
-#include "PObject.hpp"
-#include "PCollide.hpp"
-#include "PhysicsService.hpp"
-
-
-
-#include <list>
-
-
+#include "World.hpp"
+#include "Body.hpp"
+#include "Shapes.hpp"
+#include "Manifold.hpp"
+#include "Collider.hpp"
 
 #endif

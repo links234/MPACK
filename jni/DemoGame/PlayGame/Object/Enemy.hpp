@@ -7,13 +7,17 @@
 class Enemy : public SpriteObject, public PhysicalObject
 {
 public:
-	Enemy();
+	Enemy(MPACK::Physics::World *world);
 	virtual ~Enemy();
 
 	virtual bool Update(GLfloat delta);
 	virtual void Render();
 
 	virtual Vector2f GetCameraPosition() const;
+
+private:
+	MPACK::Math::Vector2f m_position;
+	float m_angle;
 };
 
 #endif

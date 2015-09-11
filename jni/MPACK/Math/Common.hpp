@@ -27,11 +27,14 @@ namespace MPACK
 									c_RadToDeg,
 									c_Epsilon,
 									c_Min,
-									c_Max;
+									c_Max,
+									c_BiasRelative,
+									c_BiasAbsolute;
 
 			static T Sin(const T);
 			static T Cos(const T);
 			static T Tan(const T);
+			static T Sqr(const T);
 			static T Sqrt(const T);
 			static T InvSqrt(const T);
 
@@ -49,6 +52,8 @@ namespace MPACK
 			static T Mod(const T, const T);
 
 			static T Interpolate(const T, const T, const double);
+
+			static bool BiasGreaterThan(T a, T b);
 		};
 
 		template<> inline float		Misc<float>::Sin(const float v)			{ return sinf(v);			}
@@ -61,6 +66,11 @@ namespace MPACK
 		template<> inline double	Misc<double>::Sqrt(const double v)		{ return sqrt(v);			}
 		template<> inline float		Misc<float>::InvSqrt(const float v)		{ return 1.0f / sqrtf(v);	}
 		template<> inline double	Misc<double>::InvSqrt(const double v)	{ return 1.0 / sqrt(v);	}
+
+		template<class T> inline T Misc<T>::Sqr(const T v)
+		{
+			return v*v;
+		}
 
 		template<class T> inline bool Misc<T>::Equal(const T a, const T b)
 		{
@@ -130,12 +140,24 @@ namespace MPACK
 			return a;
 		}
 
-		template<> inline float		Misc<float>::Mod(const float a, const float b)			{ return (float)fmod((double)(a),(double)(b));		}
-		template<> inline double	Misc<double>::Mod(const double a, const double b)		{ return fmod(a,b);	}
+		template<> inline float		Misc<float>::Mod(const float a, const float b)
+		{
+			return (float)fmod((double)(a),(double)(b));
+		}
+
+		template<> inline double	Misc<double>::Mod(const double a, const double b)
+		{
+			return fmod(a,b);
+		}
 
 		template<class T> inline T Misc<T>::Interpolate(const T from, const T to, const double coeff)
 		{
 			return from*(1.0-coeff)+to*coeff;
+		}
+
+		template<class T> inline bool Misc<T>::BiasGreaterThan(T a, T b)
+		{
+			return a>=b*Misc<T>::c_BiasRelative+a*Misc<T>::c_BiasAbsolute;
 		}
 	}
 }

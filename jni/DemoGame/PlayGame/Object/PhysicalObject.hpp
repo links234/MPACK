@@ -7,16 +7,24 @@
 
 using namespace MPACK::Core;
 
-class PhysicalObject : virtual public Object, virtual public MPACK::Physics::PObject
+class PhysicalObject : virtual public Object
 {
 public:
-	PhysicalObject();
+	PhysicalObject(MPACK::Physics::World *world);
 	virtual ~PhysicalObject();
 
 	virtual bool Update(GLfloat delta);
 	virtual void Render();
 
 	virtual Vector2f GetCameraPosition() const;
+
+	void SetPosition(Vector2f pos);
+	void SetLinearAcceleration(Vector2f force);
+
+protected:
+	MPACK::Physics::Shape *m_shape;
+	MPACK::Physics::Body *m_body;
+	MPACK::Physics::World *m_world;
 };
 
 #endif
