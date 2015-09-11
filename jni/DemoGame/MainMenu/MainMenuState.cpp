@@ -18,6 +18,7 @@ namespace Game
 		GUIMENU_NOTHING,
 		GUIMENU_BUTTON_CONTINUE,
 		GUIMENU_BUTTON_NEWGAME,
+		GUIMENU_BUTTON_WATER,
 		GUIMENU_BUTTON_HIGHSCORE,
 		GUIMENU_BUTTON_CREDITS,
 		GUIMENU_BUTTON_EXIT
@@ -48,6 +49,7 @@ namespace Game
 			m_pMenuGUI->AddButton("Continue",GUIMENU_BUTTON_CONTINUE);
 		}
 		m_pMenuGUI->AddButton("New Game",GUIMENU_BUTTON_NEWGAME);
+		m_pMenuGUI->AddButton("Water", GUIMENU_BUTTON_WATER);
 		m_pMenuGUI->AddButton("Highscore",GUIMENU_BUTTON_HIGHSCORE);
 		m_pMenuGUI->AddButton("Credits",GUIMENU_BUTTON_CREDITS);
 		m_pMenuGUI->AddButton("Exit",GUIMENU_BUTTON_EXIT);
@@ -66,6 +68,9 @@ namespace Game
 			break;
 			case GUIMENU_BUTTON_NEWGAME:
 				return EVENT_MAINMENU_NEWGAME;
+			break;
+			case GUIMENU_BUTTON_WATER:
+				return EVENT_MAINMENU_WATER;
 			break;
 			case GUIMENU_BUTTON_HIGHSCORE:
 				return EVENT_MAINMENU_HIGHSCORE;

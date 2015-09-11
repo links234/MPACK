@@ -12,6 +12,7 @@
 #include "GameResources.hpp"
 #include "MainMenuState.hpp"
 #include "PlayGameState.hpp"
+#include "WaterState.hpp"
 #include "Log.hpp"
 
 using namespace MPACK;
@@ -205,6 +206,12 @@ namespace Game
     			m_pGameState=new PlayGame();
     			m_pGameState->Update();
     		break;
+
+    		case EVENT_MAINMENU_WATER:
+    			if (m_pGameState != NULL)
+    				delete m_pGameState;
+    			m_pGameState = new WaterState;
+    		break;
     		case EVENT_MAINMENU_HIGHSCORE:
 #ifdef ANDROID_PLATFORM
     			test->showLargeBanner();
@@ -229,6 +236,11 @@ namespace Game
 				m_pGameState=new MainMenu();
 				m_pGameState->Update();
 			break;
+    		case EVENT_WATER_EXIT:
+    			delete m_pGameState;
+    			m_pGameState = new MainMenu();
+    			m_pGameState->Update();
+    		break;
     	}
 
     	// Render current game state
