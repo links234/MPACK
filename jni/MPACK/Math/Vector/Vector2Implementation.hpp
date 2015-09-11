@@ -3,6 +3,66 @@
 
 namespace MPACK
 {
+	template<class T> inline Math::Vector2<T> Math::operator*(T s, const Math::Vector2<T> &v)
+	{
+		return Math::Vector2<T>(v.x*s,v.y*s);
+	}
+
+	template<class T> inline Math::Vector2<T> Math::Cross(const Math::Vector2<T> &v, T a)
+	{
+		return Math::Vector2<T>(a*v.y,-a*v.x);
+	}
+
+	template<class T> inline Math::Vector2<T> Math::Cross(T a, const Math::Vector2<T> &v)
+	{
+		return Math::Vector2<T>(-a*v.y,a*v.x);
+	}
+
+	template<class T> inline T Math::Cross(const Math::Vector2<T> &a, const Math::Vector2<T> &b )
+	{
+		return a.x*b.y-a.y*b.x;
+	}
+
+	template<class T> inline Math::Vector2<T> Math::Dot(const Math::Vector2<T> &v, T s)
+	{
+		return Math::Vector2<T>(v.x*s,v.y*s);
+	}
+
+	template<class T> inline Math::Vector2<T> Math::Dot(T s, const Math::Vector2<T> &v)
+	{
+		return Math::Vector2<T>(v.x*s,v.y*s);
+	}
+
+	template<class T> inline T Math::Dot(const Math::Vector2<T> &a, const Math::Vector2<T> &b)
+	{
+		return a.x*b.x+a.y*b.y;
+	}
+
+	template<class T> inline T Math::Distance(const Math::Vector2<T> &a, const Math::Vector2<T> &b)
+	{
+		T dx = a.x-b.x;
+		T dy = a.y-b.y;
+		return Math::Misc<T>::Sqrt(dx*dx+dy*dy);
+	}
+
+	template<class T> inline T Math::SquareDistance(const Math::Vector2<T> &a, const Math::Vector2<T> &b)
+	{
+		T dx = a.x-b.x;
+		T dy = a.y-b.y;
+		return dx*dx+dy*dy;
+	}
+
+	template<class T> inline void Math::Vector2<T>::Set(T x, T y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+
+	template<class T> inline T Math::Vector2<T>::SquareLength() const
+	{
+		return x*x+y*y;
+	}
+
 	template<class T> inline T Math::Vector2<T>::Length() const
 	{
 		return Misc<T>::Sqrt(x*x+y*y);
@@ -24,6 +84,13 @@ namespace MPACK
 		T dx=x-point.x;
 		T dy=y-point.y;
 		return Misc<T>::Sqrt(dx*dx+dy*dy);
+	}
+
+	template<class T> inline T Math::Vector2<T>::SquareDistance(const Math::Vector2<T> &point)const
+	{
+		T dx=x-point.x;
+		T dy=y-point.y;
+		return dx*dx+dy*dy;
 	}
 
 	template<class T> inline T Math::Vector2<T>::Dot(const Math::Vector2<T> &v) const
@@ -147,9 +214,19 @@ namespace MPACK
 		return Vector2<T>(x+v.x,y+v.y);
 	}
 
+	template<class T> inline Math::Vector2<T> Math::Vector2<T>::operator+  () const
+	{
+		return *this;
+	}
+
 	template<class T> inline Math::Vector2<T> Math::Vector2<T>::operator-  (const Math::Vector2<T> &v) const
 	{
 		return Vector2<T>(x-v.x,y-v.y);
+	}
+
+	template<class T> inline Math::Vector2<T> Math::Vector2<T>::operator-  () const
+	{
+		return Vector2<T>(-x,-y);
 	}
 
 	template<class T> inline bool Math::Vector2<T>::operator!= (const Math::Vector2<T> &v)const
