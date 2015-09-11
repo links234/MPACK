@@ -15,7 +15,7 @@ namespace MPACK
 
 		void PolygonShape::Initialize()
 		{
-			ComputeMass(1.0f);
+			ComputeMass(body->m_material.density);
 		}
 
 		Shape* PolygonShape::Clone() const

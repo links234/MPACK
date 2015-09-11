@@ -23,10 +23,10 @@ namespace MPACK
 
 		void Manifold::Initialize()
 		{
-			m_restitution=Misc<float>::Min(m_A->m_restitution,m_B->m_restitution);
+			m_restitution=Misc<float>::Min(m_A->m_material.restitution,m_B->m_material.restitution);
 
-			m_staticFriction=Misc<float>::Sqrt(m_A->m_staticFriction*m_B->m_staticFriction);
-			m_dynamicFriction=Misc<float>::Sqrt(m_A->m_dynamicFriction*m_B->m_dynamicFriction);
+			m_staticFriction=Misc<float>::Sqrt(m_A->m_material.staticFriction*m_B->m_material.staticFriction);
+			m_dynamicFriction=Misc<float>::Sqrt(m_A->m_material.dynamicFriction*m_B->m_material.dynamicFriction);
 
 			for(int i=0;i<m_contactCount;++i)
 			{

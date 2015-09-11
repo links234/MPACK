@@ -20,7 +20,7 @@ namespace MPACK
 
 		void CircleShape::Initialize()
 		{
-			ComputeMass(1.0f);
+			ComputeMass(body->m_material.density);
 		}
 
 		void CircleShape::ComputeMass(float density)

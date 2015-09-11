@@ -2,6 +2,7 @@
 #define MPACK_BODY_HPP
 
 #include "Math.hpp"
+#include "Material.hpp"
 
 namespace MPACK
 {
@@ -13,6 +14,7 @@ namespace MPACK
 		class Shape;
 		class CircleShape;
 		class PolygonShape;
+		class Material;
 	}
 }
 
@@ -43,6 +45,8 @@ namespace MPACK
 
 			float GetMass() const;
 
+			Material& GetMaterial();
+
 		private:
 			void IntegrateForces(float delta);
 			void IntegrateVelocity(float delta);
@@ -68,9 +72,7 @@ namespace MPACK
 			float m_tempMass;
 			float m_tempInverseMass;
 
-			float m_staticFriction;
-			float m_dynamicFriction;
-			float m_restitution;
+			Material m_material;
 
 			Shape *m_shape;
 

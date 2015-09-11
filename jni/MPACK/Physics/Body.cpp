@@ -18,9 +18,6 @@ namespace MPACK
 			m_torque=0;
 			m_orientation=0.0f;
 			m_force.Set(0,0);
-			m_staticFriction=0.5f;
-			m_dynamicFriction=0.3f;
-			m_restitution=0.2f;
 
 			m_momentOfInertia=0.0f;
 			m_inverseMomentOfInertia=0.0f;
