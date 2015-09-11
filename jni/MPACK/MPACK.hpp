@@ -43,8 +43,7 @@
     MPACK::Graphics::GraphicsService 	MPACK_lGraphicsService; \
     MPACK::Sound::SoundService 			MPACK_lSoundService; \
     MPACK::Input::InputService 			MPACK_lInputService; \
-    MPACK::Physics::PhysicsService 		MPACK_lPhysicsService; \
-    MPACK::Core::Context MPACK_lContext={&MPACK_lGraphicsService, &MPACK_lInputService, &MPACK_lSoundService, MPACK_pTimeService, &MPACK_lPhysicsService}; \
+    MPACK::Core::Context MPACK_lContext={&MPACK_lGraphicsService, &MPACK_lInputService, &MPACK_lSoundService, MPACK_pTimeService}; \
     MPACK::Global::pContext = &MPACK_lContext
 
 #ifdef ANDROID_PLATFORM

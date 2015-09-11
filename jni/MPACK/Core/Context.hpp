@@ -11,11 +11,6 @@ namespace MPACK
 		class GraphicsService;
 	}
 
-	namespace Physics
-	{
-		class PhysicsService;
-	}
-
 	namespace Sound
 	{
 		class SoundService;
@@ -38,7 +33,6 @@ namespace MPACK
 			Input::InputService*			pInputService;
 			Sound::SoundService*			pSoundService;
 			Time::TimeService* 				pTimeService;
-			Physics::PhysicsService* 		pPhysicsService;
 		};
 	}
 }
