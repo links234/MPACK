@@ -37,11 +37,15 @@ namespace MPACK
 			void LockOrientation();
 			void UnlockOrientation();
 
-			void SetOrientation(float orientation);
 			void SetPosition(MPACK::Math::Vector2f position);
+			void SetOrientation(float orientation);
+			void SetLinearVelocity(MPACK::Math::Vector2f velocity);
+			void SetAngularVelocity(float angularVelocity);
 
-			float GetOrientation() const;
 			MPACK::Math::Vector2f GetPosition() const;
+			float GetOrientation() const;
+			MPACK::Math::Vector2f GetLinearVelocity() const;
+			float GetAngularVelocity() const;
 
 			float GetMass() const;
 

@@ -78,6 +78,11 @@ namespace MPACK
 			m_inverseMomentOfInertia=m_tempInverseMomentOfInertia;
 		}
 
+		void Body::SetPosition(Vector2f position)
+		{
+			m_position=position;
+		}
+
 		void Body::SetOrientation(float orientation)
 		{
 			orientation=MPACK::Math::Misc<float>::DegToRad(orientation);
@@ -85,9 +90,19 @@ namespace MPACK
 			m_shape->SetOrientation(orientation);
 		}
 
-		void Body::SetPosition(Vector2f position)
+		void Body::SetLinearVelocity(Vector2f velocity)
 		{
-			m_position=position;
+			m_velocity=velocity;
+		}
+
+		void Body::SetAngularVelocity(float angularVelocity)
+		{
+			m_angularVelocity=MPACK::Math::Misc<float>::DegToRad(angularVelocity);
+		}
+
+		MPACK::Math::Vector2f Body::GetPosition() const
+		{
+			return m_position;
 		}
 
 		float Body::GetOrientation() const
@@ -95,9 +110,14 @@ namespace MPACK
 			return MPACK::Math::Misc<float>::RadToDeg(m_orientation);
 		}
 
-		MPACK::Math::Vector2f Body::GetPosition() const
+		Vector2f Body::GetLinearVelocity() const
 		{
-			return m_position;
+			return m_velocity;
+		}
+
+		float Body::GetAngularVelocity() const
+		{
+			return MPACK::Math::Misc<float>::RadToDeg(m_angularVelocity);
 		}
 
 		float Body::GetMass() const
