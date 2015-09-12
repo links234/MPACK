@@ -126,8 +126,21 @@ int WaterObject::GetSpringsCount()
 
 void WaterObject::Splash(int index, Vector2f velocity)
 {
-	assert(0 <= index && index < m_springs.size());
+	if (!(0 <= index && index < m_springs.size()))
+		return ;
 	m_springs[index].m_velocity = velocity;
+}
+
+void WaterObject::ClickSplash(Vector2f pos)
+{
+	int index;
+	if (pos.x < 0.f) index = 0;
+	else if (pos.x > Render::GetScreenWidth()) index = m_springsCount;
+	else
+	{
+		index = pos.x * m_springsCount / Render::GetScreenWidth();
+	}
+	Splash(index, Vector2f(0.f, 500.f));
 }
 
 WaterObject::~WaterObject()

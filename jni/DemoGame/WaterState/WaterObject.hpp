@@ -20,6 +20,7 @@ public:
 	void 							Render();
 	int 							GetSpringsCount();
 	void 							Splash(int index, Vector2f velocity);
+	void							ClickSplash(Vector2f pos);
 
 									~WaterObject();
 

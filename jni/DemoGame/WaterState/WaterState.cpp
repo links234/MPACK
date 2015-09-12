@@ -54,11 +54,12 @@ namespace Game
 
 		Camera2D::UpdateAll(dtime);
 
-		if (m_pWSInputController->GetClickedLeftMouseButton())
+		if (m_pWSInputController->GetLeftMouseButtonPressed())
 		{
-			m_water.Splash(Random::Int(0, m_water.GetSpringsCount()), Vector2f(0.f, Random::Double(-2000.f, 2000.f)));
-			LOGI("Width: %d", Render::GetScreenWidth());
-			LOGI("Height: %d", Render::GetScreenHeight());
+			Vector2f pos = m_pWSInputController->GetMousePosition();
+			//m_water.Splash(Random::Int(0, m_water.GetSpringsCount()), Vector2f(0.f, Random::Double(-2000.f, 2000.f)));//
+			m_water.ClickSplash(pos);
+			LOGI("(%f, %f)", pos.x, pos.y);
 		}
 		if (m_pWSInputController->IsUserRequestingExit())
 		{
