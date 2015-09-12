@@ -46,11 +46,19 @@ namespace MPACK
 					{
 						continue;
 					}
-					Manifold m(A,B);
-					m.Solve();
-					if(m.m_contactCount)
+
+					bool collide =
+					          (A->maskBits & B->categoryBits) != 0 &&
+					          (A->categoryBits & B->maskBits) != 0;
+
+					if(collide)
 					{
-						m_contacts.emplace_back(m);
+						Manifold m(A,B);
+						m.Solve();
+						if(m.m_contactCount)
+						{
+							m_contacts.emplace_back(m);
+						}
 					}
 				}
 			}

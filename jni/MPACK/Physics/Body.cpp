@@ -11,6 +11,9 @@ namespace MPACK
 		Body::Body(Shape *shape)
 		  : m_shape(shape->Clone())
 		{
+			maskBits=1;
+			categoryBits=1;
+
 			m_shape->body = this;
 			m_position.Set(0,0);
 			m_velocity.Set(0,0);

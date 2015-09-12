@@ -47,6 +47,9 @@ namespace MPACK
 
 			Material& GetMaterial();
 
+			int maskBits;
+			int categoryBits;
+
 		private:
 			void IntegrateForces(float delta);
 			void IntegrateVelocity(float delta);
