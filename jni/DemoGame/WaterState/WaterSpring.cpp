@@ -20,6 +20,6 @@ void WaterSpring::Update(float dtime)
 	Vector2f acceleration = Vector2f(0.f, diffHeight.y * k);
 	acceleration -= m_velocity * WaterObject::s_dampening;
 
-	m_position += m_velocity * dtime * 4;
-	m_velocity += acceleration * dtime * 4;
+	m_position += m_velocity * dtime * 6;
+	m_velocity += acceleration * dtime * 6;
 }
