@@ -29,6 +29,11 @@ namespace Game
 		m_pBackgroundTexture->Load("@Backgrounds/skybk1.png");
 		m_pBackgroundTexture->SetWrapMode(GL_REPEAT, GL_REPEAT);
 
+		m_pWhiteTexture = new Texture2D();
+		m_pWhiteTexture->Load("@Backgrounds/whitetexture.png");
+		m_pWhiteTexture->SetWrapMode(GL_REPEAT, GL_REPEAT);
+
+
 		m_pBackgroundSprite = new Sprite();
 		m_pBackgroundSprite->SetTexture(m_pBackgroundTexture);
 		m_pBackgroundSprite->SetColor(Vector4f(1.f, 1.f, 1.f, 1.f));
@@ -51,7 +56,7 @@ namespace Game
 
 		if (m_pWSInputController->GetClickedLeftMouseButton())
 		{
-			m_water.Splash(Random::Int(0, m_water.GetSpringsCount()), Vector2f(0.f, 1000.f));
+			m_water.Splash(Random::Int(0, m_water.GetSpringsCount()), Vector2f(0.f, Random::Double(-2000.f, 2000.f)));
 			LOGI("Width: %d", Render::GetScreenWidth());
 			LOGI("Height: %d", Render::GetScreenHeight());
 		}
@@ -95,6 +100,10 @@ namespace Game
 
 	WaterState::~WaterState()
 	{
-
+		delete Global::pActiveCamera;
+		delete m_pBackgroundSprite;
+		delete m_pBackgroundTexture;
+		delete m_pWhiteTexture;
+		delete m_pWSInputController;
 	}
 }

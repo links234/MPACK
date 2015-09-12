@@ -10,16 +10,15 @@ using namespace MPACK;
 using namespace MPACK::Math;
 using namespace MPACK::Graphics;
 
-const Vector2f WaterObject::s_targetHeight = Vector2f(0.f, 400.f);
+const Vector2f WaterObject::s_targetHeight = Vector2f(0.f, 300.f);
+const float	WaterObject::s_dampening = 0.1f;
 const int WaterObject::m_springsCount = 201;
 WaterObject* WaterObject::g_water = nullptr;
 
 WaterObject::WaterObject()
 	: m_spread(0.25f)
 {
-	assert(g_water == nullptr);
 
-	g_water = this;
 	CreateSprings();
 
 	m_pWhiteTexture = new Texture2D;
@@ -47,8 +46,8 @@ void WaterObject::CreateWavesVertices()
 {
 	for (int i = 1; i < m_springs.size(); ++ i)
 	{
-		SpriteVertex* vertices = new SpriteVertex[3];
-		GLushort* indices = new GLushort[3];
+		SpriteVertex vertices[3];
+		GLushort indices[3];
 
 		for (int j = 0; j < 3; ++ j) indices[j] = j;
 
@@ -63,15 +62,15 @@ void WaterObject::CreateWavesVertices()
 		//LOGI("%f", downCoord);
 
 
-		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
-		vertices[1] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
-		vertices[2] = SpriteVertex(x1, downCoord - y1, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
+		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
+		vertices[1] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
+		vertices[2] = SpriteVertex(x1, downCoord - y1, 0.f, 1.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
 
 		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 0.f);
 
-		vertices[2] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
-		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
-		vertices[1] = SpriteVertex(x2, downCoord, 0.f, 1.f, 0.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
+		vertices[2] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
+		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
+		vertices[1] = SpriteVertex(x2, downCoord, 0.f, 1.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
 
 		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 0.f);
 	}
@@ -83,8 +82,8 @@ void WaterObject::Update(float dtime)
 	for (auto &spring : m_springs)
 		spring.Update(dtime);
 
-	Vector2f* leftDeltas = new Vector2f[m_springs.size()];
-	Vector2f* rightDeltas = new Vector2f[m_springs.size()];
+	Vector2f leftDeltas[m_springs.size()];
+	Vector2f rightDeltas[m_springs.size()];
 
 	for (int i = 0; i < m_springs.size(); ++ i)
 		leftDeltas[i] = rightDeltas[i] = Vector2f(0.f, 0.f);
@@ -133,6 +132,7 @@ void WaterObject::Splash(int index, Vector2f velocity)
 
 WaterObject::~WaterObject()
 {
-	assert(g_water);
-	delete g_water;
+
+	delete m_pWhiteTexture;
+
 }

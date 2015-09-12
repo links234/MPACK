@@ -27,6 +27,8 @@ public:
 	static const Vector2f 			s_targetHeight;
 	const float 					m_spread;
 
+	static const float				s_dampening;
+
 
 
 
@@ -37,7 +39,7 @@ private:
 
 	void 							CreateWavesVertices();
 	void 							CreateSprings();
-	std::vector <WaterSpring>			m_springs;
+	std::vector <WaterSpring>		m_springs;
 
 	static WaterObject*				g_water;
 	static const int 				m_springsCount;
