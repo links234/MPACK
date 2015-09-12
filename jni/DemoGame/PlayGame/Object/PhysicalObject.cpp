@@ -12,6 +12,15 @@ PhysicalObject::PhysicalObject(MPACK::Physics::World *world)
 
 PhysicalObject::~PhysicalObject()
 {
+	LOGD("~PO");
+	if(m_shape)
+	{
+		//delete m_shape;
+	}
+	if(m_body)
+	{
+		//m_world->Destroy(m_body);
+	}
 }
 
 bool PhysicalObject::Update(GLfloat delta)

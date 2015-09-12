@@ -37,13 +37,16 @@ namespace MPACK
 		void World::Step(float delta)
 		{
 			m_contacts.clear();
-			for(int i=0;i<m_bodies.size();++i)
+			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
 			{
-				Body *A=m_bodies[i];
+				Body *A=*it;
 
-				for(int j=i+1;j<m_bodies.size();++j)
+				unordered_set<Body*>::iterator it2Start=it;
+				++it2Start;
+
+				for(unordered_set<Body*>::iterator it2=it2Start;it2!=m_bodies.end();++it2)
 				{
-					Body *B=m_bodies[j];
+					Body *B=*it2;
 					if(A->m_inverseMass==0 && B->m_inverseMass==0)
 					{
 						continue;
@@ -65,9 +68,9 @@ namespace MPACK
 				}
 			}
 
-			for(int i=0;i<m_bodies.size();++i)
+			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
 			{
-				m_bodies[i]->IntegrateForces(delta);
+				(*it)->IntegrateForces(delta);
 			}
 
 			for(int i=0;i<m_contacts.size();++i)
@@ -83,9 +86,9 @@ namespace MPACK
 				}
 			}
 
-			for(int i=0;i<m_bodies.size();++i)
+			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
 			{
-				m_bodies[i]->IntegrateVelocity(delta);
+				(*it)->IntegrateVelocity(delta);
 			}
 
 			for(int i=0;i<m_contacts.size();++i)
@@ -93,9 +96,9 @@ namespace MPACK
 				m_contacts[i].PositionalCorrection();
 			}
 
-			for(int i=0;i<m_bodies.size();++i)
+			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
 			{
-				m_bodies[i]->ResetForces();
+				(*it)->ResetForces();
 			}
 
 			CollisionInfo collisionInfo;
@@ -117,19 +120,21 @@ namespace MPACK
 		{
 			Body *b = new Body(shape);
 			b->m_position = Vector2f(x,y);
-			m_bodies.push_back(b);
+			m_bodies.insert(b);
 			return b;
 		}
 
 		void World::Destroy(Body *body)
 		{
+			delete body;
+			m_bodies.erase(body);
 		}
 
 		void World::Clear()
 		{
-			for(int i=0;i<m_bodies.size();++i)
+			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
 			{
-				delete m_bodies[i];
+				delete *it;
 			}
 			m_bodies.clear();
 		}

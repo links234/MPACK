@@ -77,24 +77,24 @@ namespace Game
 		m_enemySprite->SetShading(SpriteVertex::ALPHA_BLEND);
 
 		//Enemy setup
-		m_enemyObject=new Enemy(m_pWorld);
-		m_enemyObject->SetSprite(m_enemySprite);
-		m_enemyObject->SetPosition(Vector2f(50.0f,450.0f));
+		m_enemyObject[0]=new Enemy(m_pWorld);
+		m_enemyObject[0]->SetSprite(m_enemySprite);
+		m_enemyObject[0]->SetPosition(Vector2f(50.0f,450.0f));
 
 		//Enemy setup
-		m_enemyObject=new Enemy(m_pWorld);
-		m_enemyObject->SetSprite(m_enemySprite);
-		m_enemyObject->SetPosition(Vector2f(450.0f,50.0f));
+		m_enemyObject[1]=new Enemy(m_pWorld);
+		m_enemyObject[1]->SetSprite(m_enemySprite);
+		m_enemyObject[1]->SetPosition(Vector2f(450.0f,50.0f));
 
 		//Enemy setup
-		m_enemyObject=new Enemy(m_pWorld);
-		m_enemyObject->SetSprite(m_enemySprite);
-		m_enemyObject->SetPosition(Vector2f(450.0f,450.0f));
+		m_enemyObject[2]=new Enemy(m_pWorld);
+		m_enemyObject[2]->SetSprite(m_enemySprite);
+		m_enemyObject[2]->SetPosition(Vector2f(450.0f,450.0f));
 
 		//Enemy setup
-		m_enemyObject=new Enemy(m_pWorld);
-		m_enemyObject->SetSprite(m_enemySprite);
-		m_enemyObject->SetPosition(Vector2f(50.0f,50.0f));
+		m_enemyObject[3]=new Enemy(m_pWorld);
+		m_enemyObject[3]->SetSprite(m_enemySprite);
+		m_enemyObject[3]->SetPosition(Vector2f(50.0f,50.0f));
 
 		//Camera setup
 		Global::pActiveCamera=new Camera2D();
@@ -213,10 +213,13 @@ namespace Game
 		delete m_enemyTexture;
 		delete m_playerTexture;
 
-		delete m_enemySprite;
-		delete m_playerSprite;
+		//delete m_enemySprite;
+		//delete m_playerSprite;
 
-		delete m_enemyObject;
+		for(int i=0;i<4;++i)
+		{
+			delete m_enemyObject[i];
+		}
 		delete m_playerObject;
 
 		delete m_backgroundTexture;
@@ -242,15 +245,6 @@ namespace Game
 	void PlayGame::Physics_collisionCallback(void *userData, MPACK::Physics::Body *first, MPACK::Physics::Body *second, MPACK::Physics::CollisionInfo *collisionInfo)
 	{
 		PlayGame *state = (PlayGame*)(userData);
-
-		LOGD("%d",first->userData);
-		LOGD("%d",second->userData);
-
-		LOGD("%d",Core::TypeId<int>());
-		LOGD("%d",Core::TypeId<Enemy>());
-		LOGD("%d",Core::TypeId<Enemy*>());
-		LOGD("%d",Core::TypeId<Player>());
-		LOGD("%d",Core::TypeId<Player*>());
 
 		VoidPointer *ptr1=static_cast<VoidPointer*>(first->userData);
 		VoidPointer *ptr2=static_cast<VoidPointer*>(second->userData);

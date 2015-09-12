@@ -13,8 +13,7 @@ Player::Player(MPACK::Physics::World *world)
 
 Player::~Player()
 {
-	delete m_shape;
-	delete m_body;
+	LOGD("TEST");
 }
 
 bool Player::Update(GLfloat delta)
@@ -42,6 +41,15 @@ void Player::SetSprite(Sprite *pSprite)
 	PolygonShape *poly = new PolygonShape;
 	poly->SetAsBox(m_sprite->GetWidth()*0.5f,m_sprite->GetHeight()*0.5f);
 
+	if(m_shape)
+	{
+		delete m_shape;
+	}
+	if(m_body)
+	{
+		m_world->Destroy(m_body);
+	}
+
 	m_shape = poly;
 	m_body = m_world->Add(m_shape,0,0);
 
@@ -49,7 +57,6 @@ void Player::SetSprite(Sprite *pSprite)
 	m_body->LockOrientation();
 
 	m_body->userData = (void*)&m_thisPointer;
-	LOGD("USERDATA = %d",m_body->userData);
 }
 
 void Player::Shoot(Vector2f direction)

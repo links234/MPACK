@@ -34,8 +34,6 @@ Enemy::Enemy(MPACK::Physics::World *world)
 
 Enemy::~Enemy()
 {
-	delete m_shape;
-	delete m_body;
 }
 
 bool Enemy::Update(GLfloat delta)

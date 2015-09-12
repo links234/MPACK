@@ -21,8 +21,6 @@ namespace MPACK
 
 			void Update(float delta);
 
-			void Step(float delta);
-
 			Body* Add(Shape *shape, float x, float y);
 			void Destroy(Body *body);
 
@@ -32,9 +30,11 @@ namespace MPACK
 			void UnLinkCollisionCallback(const CollisionCallbackStruct &link);
 
 		private:
+			void Step(float delta);
+
 			float m_stepDelta, m_accumulator;
 			int m_iterations;
-			std::vector<Body*> m_bodies;
+			std::unordered_set<Body*> m_bodies;
 			std::vector<Manifold> m_contacts;
 
 			std::vector<CollisionCallbackStruct> m_collisionCallbackFunc;

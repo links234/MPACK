@@ -40,7 +40,7 @@ namespace Game
 
 		MPACK::Graphics::Texture2D 		*m_enemyTexture;
 		MPACK::Graphics::Sprite			*m_enemySprite;
-		Enemy							*m_enemyObject;
+		Enemy							*m_enemyObject[4];
 
 		MPACK::Graphics::Texture2D				*m_particleTex;
 		MPACK::Graphics::ParticleEmitterCircle 	*m_pEmitter;
