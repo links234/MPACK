@@ -9,7 +9,7 @@ namespace MPACK
 	namespace Physics
 	{
 		Body::Body(Shape *shape)
-		  : m_shape(shape->Clone())
+		  : m_shape(shape->Clone()), userData(0)
 		{
 			maskBits=1;
 			categoryBits=1;

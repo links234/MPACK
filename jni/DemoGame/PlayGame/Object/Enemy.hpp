@@ -16,6 +16,8 @@ public:
 	virtual Vector2f GetCameraPosition() const;
 
 private:
+	MPACK::Core::VoidPointer m_thisPointer;
+
 	MPACK::Math::Vector2f m_position;
 	float m_angle;
 };

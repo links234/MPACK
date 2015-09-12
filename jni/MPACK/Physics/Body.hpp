@@ -50,6 +50,8 @@ namespace MPACK
 			int maskBits;
 			int categoryBits;
 
+			void *userData;
+
 		private:
 			void IntegrateForces(float delta);
 			void IntegrateVelocity(float delta);

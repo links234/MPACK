@@ -1,11 +1,14 @@
 #include "Player.hpp"
 
 using namespace MPACK;
+using namespace MPACK::Core;
+using namespace MPACK::Math;
 using namespace MPACK::Physics;
 
 Player::Player(MPACK::Physics::World *world)
 	: PhysicalObject(world)
 {
+	m_thisPointer = ToVoidPointer(this);
 }
 
 Player::~Player()
@@ -44,6 +47,9 @@ void Player::SetSprite(Sprite *pSprite)
 
 	m_body->SetOrientation(0.0f);
 	m_body->LockOrientation();
+
+	m_body->userData = (void*)&m_thisPointer;
+	LOGD("USERDATA = %d",m_body->userData);
 }
 
 void Player::Shoot(Vector2f direction)

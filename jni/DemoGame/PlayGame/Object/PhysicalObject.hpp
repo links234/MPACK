@@ -21,6 +21,8 @@ public:
 	void SetPosition(Vector2f pos);
 	void SetLinearAcceleration(Vector2f force);
 
+	bool inCollision;
+
 protected:
 	MPACK::Physics::Shape *m_shape;
 	MPACK::Physics::Body *m_body;

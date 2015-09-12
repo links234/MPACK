@@ -1,7 +1,9 @@
 #include "World.hpp"
 
+#include "CollisionInfo.hpp"
 #include "Global.hpp"
 
+using namespace std;
 using namespace MPACK::Math;
 
 namespace MPACK
@@ -95,6 +97,20 @@ namespace MPACK
 			{
 				m_bodies[i]->ResetForces();
 			}
+
+			CollisionInfo collisionInfo;
+			for(int i=0;i<m_contacts.size();++i)
+			{
+				for(vector<CollisionCallbackStruct>::iterator it=m_collisionCallbackFunc.begin();it!=m_collisionCallbackFunc.end();++it)
+				{
+					collisionInfo.contactCount=m_contacts[i].m_contactCount;
+					collisionInfo.penetration=m_contacts[i].m_penetration;
+					collisionInfo.normal=m_contacts[i].m_normal;
+					collisionInfo.contacts[0]=m_contacts[i].m_contacts[0];
+					collisionInfo.contacts[1]=m_contacts[i].m_contacts[1];
+					it->function(it->param1, m_contacts[i].m_A, m_contacts[i].m_B, &collisionInfo);
+				}
+			}
 		}
 
 		Body* World::Add( Shape *shape, float x, float y )
@@ -111,11 +127,28 @@ namespace MPACK
 
 		void World::Clear()
 		{
-			for(int i = 0; i < m_bodies.size( ); ++i)
+			for(int i=0;i<m_bodies.size();++i)
 			{
 				delete m_bodies[i];
 			}
 			m_bodies.clear();
+		}
+
+		void World::LinkCollisionCallback(const CollisionCallbackStruct &link)
+		{
+			m_collisionCallbackFunc.push_back(link);
+		}
+
+		void World::UnLinkCollisionCallback(const CollisionCallbackStruct &link)
+		{
+			for(vector<CollisionCallbackStruct>::iterator it=m_collisionCallbackFunc.begin();it!=m_collisionCallbackFunc.end();++it)
+			{
+				if(*it==link)
+				{
+					m_collisionCallbackFunc.erase(it);
+					return;
+				}
+			}
 		}
 	}
 }

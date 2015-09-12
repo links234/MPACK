@@ -12,6 +12,7 @@
 #include "Camera2D.hpp"
 
 using namespace MPACK;
+using namespace MPACK::Core;
 using namespace MPACK::Physics;
 using namespace MPACK::Graphics;
 using namespace MPACK::UI;
@@ -141,6 +142,8 @@ namespace Game
 		m_UIMatch4Sprite->UIMatch(Anchor(Anchor::Get(Anchor::BottomRight)),Anchor(Anchor::Get(Anchor::BottomRight)));
 		m_UIMatch4Sprite->SetLayer(FRONT_LAYER);
 		m_UIMatch4Sprite->SetShading(SpriteVertex::ALPHA_BLEND);
+
+		m_pWorld->LinkCollisionCallback(CollisionCallbackStruct(Physics_collisionCallback, this));
 	}
 
 	int PlayGame::Update()
@@ -234,5 +237,44 @@ namespace Game
 		Particle::Clear();
 
 		delete m_pWorld;
+	}
+
+	void PlayGame::Physics_collisionCallback(void *userData, MPACK::Physics::Body *first, MPACK::Physics::Body *second, MPACK::Physics::CollisionInfo *collisionInfo)
+	{
+		PlayGame *state = (PlayGame*)(userData);
+
+		LOGD("%d",first->userData);
+		LOGD("%d",second->userData);
+
+		LOGD("%d",Core::TypeId<int>());
+		LOGD("%d",Core::TypeId<Enemy>());
+		LOGD("%d",Core::TypeId<Enemy*>());
+		LOGD("%d",Core::TypeId<Player>());
+		LOGD("%d",Core::TypeId<Player*>());
+
+		VoidPointer *ptr1=static_cast<VoidPointer*>(first->userData);
+		VoidPointer *ptr2=static_cast<VoidPointer*>(second->userData);
+
+		if(ptr1->typeId==TypeId<Enemy*>())
+		{
+			Enemy *enemy=static_cast<Enemy*>(ptr1->pointer);
+			enemy->inCollision=true;
+		}
+		if(ptr1->typeId==TypeId<Player*>())
+		{
+			Player *player=static_cast<Player*>(ptr1->pointer);
+			player->inCollision=true;
+		}
+
+		if(ptr2->typeId==TypeId<Enemy*>())
+		{
+			Enemy *enemy=static_cast<Enemy*>(ptr2->pointer);
+			enemy->inCollision=true;
+		}
+		if(ptr2->typeId==TypeId<Player*>())
+		{
+			Player *player=static_cast<Player*>(ptr2->pointer);
+			player->inCollision=true;
+		}
 	}
 }

@@ -6,7 +6,7 @@ using namespace MPACK;
 using namespace MPACK::Physics;
 
 PhysicalObject::PhysicalObject(MPACK::Physics::World *world)
-	: m_body(NULL), m_world(world), m_shape(NULL)
+	: m_body(NULL), m_world(world), m_shape(NULL), inCollision(false)
 {
 }
 
@@ -26,9 +26,10 @@ void PhysicalObject::Render()
 		Vector4f GREEN=Vector4f(0.0f,1.0f,0.0f,1.0f);
 		Vector4f RED=Vector4f(1.0f,0.0f,0.0f,1.0f);
 		Vector4f color=GREEN;
-		if(m_debugInCollision)
+		if(inCollision)
 		{
 			color=RED;
+			inCollision=false;
 		}
 
 		TransformState2f transformState=TransformState2f(m_body->GetPosition(),m_body->GetOrientation(),1.0f);

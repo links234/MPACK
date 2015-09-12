@@ -1,10 +1,14 @@
 #include "Enemy.hpp"
 
+#include "MPACK.hpp"
+
+using namespace MPACK::Core;
 using namespace MPACK::Physics;
 
 Enemy::Enemy(MPACK::Physics::World *world)
 	: PhysicalObject(world), m_angle(0.0f)
 {
+	m_thisPointer = ToVoidPointer(this);
 
 	vector<Vector2f> vertices;
 	vertices.push_back(Vector2f(0.0f,30.0f));
@@ -24,6 +28,8 @@ Enemy::Enemy(MPACK::Physics::World *world)
 	m_body = m_world->Add(m_shape,0,0);
 
 	m_body->SetOrientation(0.0f);
+
+	m_body->userData=(void*)&m_thisPointer;
 }
 
 Enemy::~Enemy()

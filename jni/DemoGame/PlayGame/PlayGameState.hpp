@@ -27,7 +27,7 @@ namespace Game
 		~PlayGame();
 
 	private:
-		static void Physics_callback(void *param1, void *param2);
+		static void Physics_collisionCallback(void *userData, MPACK::Physics::Body *first, MPACK::Physics::Body *second, MPACK::Physics::CollisionInfo *collisionInfo);
 
 		PGInputController		*m_pPGInputController;
 

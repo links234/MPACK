@@ -3,8 +3,6 @@
 
 #include "MPACK.hpp"
 
-using namespace MPACK::Math;
-
 #include "PhysicalObject.hpp"
 #include "SpriteObject.hpp"
 
@@ -22,6 +20,9 @@ public:
 	virtual void SetSprite(MPACK::Graphics::Sprite *pSprite);
 
 	void Shoot(MPACK::Math::Vector2f direction);
+
+protected:
+	MPACK::Core::VoidPointer m_thisPointer;
 };
 
 #endif

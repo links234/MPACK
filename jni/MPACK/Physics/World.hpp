@@ -3,6 +3,8 @@
 
 #include "Types.hpp"
 
+#include "CollisionCallback.hpp"
+
 #include "Body.hpp"
 #include "Shape.hpp"
 #include "Manifold.hpp"
@@ -26,11 +28,16 @@ namespace MPACK
 
 			void Clear();
 
+			void LinkCollisionCallback(const CollisionCallbackStruct &link);
+			void UnLinkCollisionCallback(const CollisionCallbackStruct &link);
+
 		private:
 			float m_stepDelta, m_accumulator;
 			int m_iterations;
 			std::vector<Body*> m_bodies;
 			std::vector<Manifold> m_contacts;
+
+			std::vector<CollisionCallbackStruct> m_collisionCallbackFunc;
 		};
 	}
 }

@@ -32,15 +32,16 @@ namespace MPACK
 			Body *m_A;
 			Body *m_B;
 
-			float m_penetration;
-			MPACK::Math::Vector2f m_normal;
-			MPACK::Math::Vector2f m_contacts[2];
-			int m_contactCount;
 			float m_restitution;
 			float m_dynamicFriction;
 			float m_staticFriction;
 
-			friend class MPACK::Physics::World;
+			float m_penetration;
+			MPACK::Math::Vector2f m_normal;
+			MPACK::Math::Vector2f m_contacts[2];
+			int m_contactCount;
+
+			friend class World;
 			friend class Collider;
 		};
 	}
