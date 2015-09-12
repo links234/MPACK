@@ -16,7 +16,7 @@ const int WaterObject::m_springsCount = 201;
 WaterObject* WaterObject::g_water = nullptr;
 
 WaterObject::WaterObject()
-	: m_spread(0.25f)
+	: m_spread(0.4f)
 {
 
 	CreateSprings();
