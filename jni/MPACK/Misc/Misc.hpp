@@ -14,4 +14,7 @@
 
 #include "StringEx.hpp"
 
+#include "VoidPointer.hpp"
+#include "RTTI.hpp"
+
 #endif
