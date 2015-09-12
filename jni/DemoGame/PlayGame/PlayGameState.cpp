@@ -22,6 +22,7 @@ namespace Game
 	PlayGame::PlayGame()
 	{
 		m_pWorld = new World(1/60.0f,15);
+		m_pWorld->EnableDebugDraw();
 
 		m_pPGInputController = PGInputController::Initialize();
 		m_pPGInputController->SetMaxAcceleration(500.0f);
@@ -188,6 +189,7 @@ namespace Game
 		Batcher::EnableCamera();
 		Object::RenderAll();
 		Particle::RenderAll();
+		m_pWorld->DebugDraw();
 		Batcher::DisableCamera();
 
 		m_pPGInputController->Render();

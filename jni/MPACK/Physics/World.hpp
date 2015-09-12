@@ -29,8 +29,15 @@ namespace MPACK
 			void LinkCollisionCallback(const CollisionCallbackStruct &link);
 			void UnLinkCollisionCallback(const CollisionCallbackStruct &link);
 
+			void DebugDraw();
+
+			void EnableDebugDraw();
+			void DisableDebugDraw();
+
 		private:
 			void Step(float delta);
+
+			bool m_debugDraw;
 
 			float m_stepDelta, m_accumulator;
 			int m_iterations;

@@ -1,17 +1,20 @@
 #include "World.hpp"
 
 #include "CollisionInfo.hpp"
+
+#include "Graphics.hpp"
 #include "Global.hpp"
 
 using namespace std;
 using namespace MPACK::Math;
+using namespace MPACK::Graphics;
 
 namespace MPACK
 {
 	namespace Physics
 	{
 		World::World( float delta, int iterations )
-			: m_stepDelta(delta), m_accumulator(0.0f), m_iterations(iterations)
+			: m_stepDelta(delta), m_accumulator(0.0f), m_iterations(iterations), m_debugDraw(false)
 		{
 		}
 
@@ -154,6 +157,46 @@ namespace MPACK
 					return;
 				}
 			}
+		}
+
+		void World::DebugDraw()
+		{
+			if(!m_debugDraw)
+			{
+				return;
+			}
+
+			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
+			{
+				Body *body=*it;
+				Shape *shape=body->m_shape;
+				Vector4f GREEN=Vector4f(0.0f,1.0f,0.0f,1.0f);
+				Vector4f RED=Vector4f(1.0f,0.0f,0.0f,1.0f);
+				Vector4f color=GREEN;
+
+				TransformState2f transformState=TransformState2f(body->GetPosition(),body->GetOrientation(),1.0f);
+				if(shape->GetType()==Shape::ePoly)
+				{
+					PolygonShape *poly=(PolygonShape*)(shape);
+					Batcher::SendDebugPolygon((Vector2f*)poly->m_vertices,poly->m_vertexCount,color,transformState);
+				}
+				else if(shape->GetType()==Shape::eCircle)
+				{
+					CircleShape *circle=(CircleShape*)(shape);
+					transformState.SetScale(circle->radius);
+					Batcher::SendDebugCircle(Debug::circlePoints,color,transformState);
+				}
+			}
+		}
+
+		void World::EnableDebugDraw()
+		{
+			m_debugDraw = true;
+		}
+
+		void World::DisableDebugDraw()
+		{
+			m_debugDraw = false;
 		}
 	}
 }
