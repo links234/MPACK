@@ -126,6 +126,45 @@ namespace MPACK
 			return m_mass;
 		}
 
+		Material Body::GetMaterial() const
+		{
+			return m_material;
+		}
+
+		void Body::SetMaterial(const Material &material)
+		{
+			m_material=material;
+
+			bool noInertia=false;
+			if(m_momentOfInertia==0.0f && m_inverseMomentOfInertia==0.0f)
+			{
+				noInertia=true;
+			}
+			bool noMass=false;
+			if(m_mass==0.0f && m_inverseMass==0.0f)
+			{
+				noMass=true;
+			}
+
+			m_shape->Initialize();
+
+			m_tempMomentOfInertia=m_momentOfInertia;
+			m_tempInverseMomentOfInertia=m_inverseMomentOfInertia;
+			m_tempMass=m_mass;
+			m_tempInverseMass=m_inverseMass;
+
+			if(noInertia)
+			{
+				m_momentOfInertia=0.0f;
+				m_inverseMomentOfInertia=0.0f;
+			}
+			if(noMass)
+			{
+				m_mass=0.0f;
+				m_inverseMass=0.0f;
+			}
+		}
+
 		void Body::IntegrateForces(float delta)
 		{
 			if(m_inverseMass == 0.0f)

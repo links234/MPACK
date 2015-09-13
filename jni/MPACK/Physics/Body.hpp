@@ -49,7 +49,8 @@ namespace MPACK
 
 			float GetMass() const;
 
-			Material& GetMaterial();
+			Material GetMaterial() const;
+			void SetMaterial(const Material &material);
 
 			int maskBits;
 			int categoryBits;
