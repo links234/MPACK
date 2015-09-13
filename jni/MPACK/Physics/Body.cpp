@@ -28,6 +28,7 @@ namespace MPACK
 			m_inverseMass=0.0f;
 
 			m_shape->Initialize();
+			m_shape->SetOrientation(m_orientation);
 
 			m_tempMomentOfInertia=m_momentOfInertia;
 			m_tempInverseMomentOfInertia=m_inverseMomentOfInertia;
