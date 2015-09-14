@@ -1,10 +1,8 @@
-#ifdef ANDROID_PLATFORM
-
 #include "GoogleAds.hpp"
 #include "Global.hpp"
 
-static JavaVM* GoogleAdsJvm;
-static jobject GoogleAdsJobject;
+JavaVM* GoogleAdsJvm;
+jobject GoogleAdsJobject;
 
 
 namespace MPACK
@@ -16,65 +14,63 @@ namespace MPACK
 
 			mActivity = MPACK::Global::pAndroidApp->activity;
 			mJvm = MPACK::Global::pAndroidApp->activity->vm;
-			callMainActivityJavaFunction("sendGoogleAdsJavaVmToCpp",(char*)("()V"));
+			callMainActivityJavaFunction("sendGoogleAdsJavaVmToCpp");
 
 		}
 
 
-
-		void GoogleAds::getGoogleAdsJavaReff()
+		void GoogleAds::showBanner(bool top)
 		{
-			//mGoogleAdsJvm = GoogleAdsJvm;
-			//mGoogleAdsJobject = GoogleAdsJobject;
+			jboolean param = top;
+
+			callGoogleAdsVoidJavaFunctionBool("showBanner",param);
 		}
 
-
-		void GoogleAds::showBanner()
+		void GoogleAds::showSmartBanner(bool top)
 		{
-			callGoogleAdsJavaFunction("showBanner","()V");
+			jboolean param = top;
+
+			callGoogleAdsVoidJavaFunctionBool("showSmartBanner",param);
 		}
 
-		void GoogleAds::showSmartBanner()
+		void GoogleAds::showLargeBanner(bool top)
 		{
-			callGoogleAdsJavaFunction("showSmartBanner","()V");
-		}
+			jboolean param = top;
 
-		void GoogleAds::showLargeBanner()
-		{
-			callGoogleAdsJavaFunction("showLargeBanner","()V");
+			callGoogleAdsVoidJavaFunctionBool("showLargeBanner",param);
 		}
 
 		void GoogleAds::hideBanner()
 		{
-			callGoogleAdsJavaFunction("hideBanner","()V");
+			callGoogleAdsVoidJavaFunctionWithoutParams("hideBanner");
 		}
 
 		void GoogleAds::hideSmartBanner()
 		{
-			callGoogleAdsJavaFunction("hideSmartBanner","()V");
+			callGoogleAdsVoidJavaFunctionWithoutParams("hideSmartBanner");
 		}
 
 		void GoogleAds::hideLargeBanner()
 		{
-			callGoogleAdsJavaFunction("hideLargeBanner","()V");
+			callGoogleAdsVoidJavaFunctionWithoutParams("hideLargeBanner");
 		}
 
 		void GoogleAds::showTextImageInterstitial()
 		{
-			callGoogleAdsJavaFunction("showTextImageInterstitial","()V");
+			callGoogleAdsVoidJavaFunctionWithoutParams("showTextImageInterstitial");
 		}
 
 		void GoogleAds::showTextImageVideoInterstitial()
 		{
-			callGoogleAdsJavaFunction("showTextImageVideoInterstitial","()V");
+			callGoogleAdsVoidJavaFunctionWithoutParams("showTextImageVideoInterstitial");
 		}
 
 		void GoogleAds::showVideoInterstitial()
 		{
-			callGoogleAdsJavaFunction("showVideoInterstitial","()V");
+			callGoogleAdsVoidJavaFunctionWithoutParams("showVideoInterstitial");
 		}
 
-		void GoogleAds::callMainActivityJavaFunction(const char *name ,const char *param)
+		void GoogleAds::callMainActivityJavaFunction(const char *name )
 		{
 			JNIEnv* env = NULL;
 
@@ -84,7 +80,7 @@ namespace MPACK
 
 			jclass clazz = env->GetObjectClass( mActivity->clazz);
 
-			jmethodID methodID = env->GetMethodID(clazz, name, param);
+			jmethodID methodID = env->GetMethodID(clazz, name, "()V");
 
 			env ->CallVoidMethod(mActivity->clazz, methodID);
 
@@ -93,13 +89,9 @@ namespace MPACK
 		}
 
 
-		void GoogleAds::callGoogleAdsJavaFunction(const char * name,const char * param)
+		void GoogleAds::callGoogleAdsVoidJavaFunctionWithoutParams(const char * name)
 		{
-
-
 			JNIEnv* env = NULL;
-
-
 
 			if (GoogleAdsJvm == NULL)
 			{
@@ -110,17 +102,12 @@ namespace MPACK
 
 			GoogleAdsJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
 
-			LOGI("CallGoogleAdsJavaFunction 2");
-
 			int res = GoogleAdsJvm->AttachCurrentThread(&env, NULL);
 
 			if (res == 0)
 				LOGI("jint is ok");
 			else
 				LOGI("jint is not ok %d",res);
-
-
-			LOGI("CallGoogleAdsJavaFunction 3");
 
 			if (GoogleAdsJobject == NULL)
 			{
@@ -130,20 +117,45 @@ namespace MPACK
 				LOGI("CallGoogleAdsJavaFunction GoogleAdsJobject isn't null");
 
 			jclass cls = env->GetObjectClass(GoogleAdsJobject);
-
-			LOGI("CallGoogleAdsJavaFunction 4");
-
-			jmethodID methodID =  env ->GetMethodID(cls, name , param);
-
-			LOGI("CallGoogleAdsJavaFunction 5");
-
+			jmethodID methodID =  env ->GetMethodID(cls, name , "()V");
 			env ->CallVoidMethod(GoogleAdsJobject, methodID);
-
-			LOGI("CallGoogleAdsJavaFunction 6");
-
 			GoogleAdsJvm->DetachCurrentThread();
 
-			LOGI("CallGoogleAdsJavaFunction 7");
+		}
+
+
+		void GoogleAds::callGoogleAdsVoidJavaFunctionBool(const char * name,jboolean boolParam)
+		{
+			JNIEnv* env = NULL;
+
+			if (GoogleAdsJvm == NULL)
+			{
+				LOGW("CallGoogleAdsJavaFunction GoogleAdsJvm null");
+			}
+			else
+				LOGW("CallGoogleAdsJavaFunction GoogleAdsJvm isn't null");
+
+			GoogleAdsJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
+
+			int res = GoogleAdsJvm->AttachCurrentThread(&env, NULL);
+
+			if (res == 0)
+				LOGI("jint is ok");
+			else
+				LOGI("jint is not ok %d",res);
+
+			if (GoogleAdsJobject == NULL)
+			{
+				LOGI("CallGoogleAdsJavaFunction GoogleAdsJobject is null");
+			}
+			else
+				LOGI("CallGoogleAdsJavaFunction GoogleAdsJobject isn't null");
+
+			jclass cls = env->GetObjectClass(GoogleAdsJobject);
+			jmethodID methodID =  env ->GetMethodID(cls, name , "(Z)V");
+			env ->CallVoidMethod(GoogleAdsJobject, methodID, boolParam);
+			GoogleAdsJvm->DetachCurrentThread();
+
 		}
 
 	}
@@ -180,7 +192,4 @@ extern "C"
 			 LOGW("NativeGoogleAds : negative status !!!!!!!!!!!!!!!!!!!! %d ",status);
 	}
 }
-
-#endif
-
 

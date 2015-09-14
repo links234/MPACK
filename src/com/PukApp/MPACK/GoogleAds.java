@@ -1,6 +1,7 @@
 package com.PukApp.MPACK;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,13 +31,13 @@ class GoogleAds
 	boolean mShowBanner = false, mShowLargeBanner = false, mShowSmartBanner = false;
 	boolean mIsLoadedBanner = false, mIsLoadedLargeBanner = false, mIsLoadedSmartBanner = false;
 	boolean mIsShowedBanner = false, mIsShowedLargeBanner = false, mIsShowedSmartBanner = false;
+	boolean mBannerTop, mLargeBannerTop, mSmartBannerTop;
 	
 	AdListener mBannerListener;
 	
 
 	public GoogleAds(MainActivity mainActivity) 
 	{
-		System.loadLibrary("MPACK");
 		mContext = mainActivity;
 		GoogleAdsInit();
 	}
@@ -78,6 +79,8 @@ class GoogleAds
 	 
 		 mAdRequest = new AdRequest.Builder().build();
 		 
+	
+		 
 		 mBanner.loadAd(mAdRequest);
 		 mLargeBanner.loadAd(mAdRequest);
 		 mSmartBanner.loadAd(mAdRequest);
@@ -86,19 +89,25 @@ class GoogleAds
 		 mTIVInterstitial.loadAd(mAdRequest);
 		 mVInterstitial.loadAd(mAdRequest);
 		 
+		
 		 mPopUpBanner = new PopupWindow(mContext);
+		 mPopUpBanner.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		 mPopUpBanner.setWidth(320);
 		 mPopUpBanner.setHeight(50);
-		 mPopUpBanner.setWindowLayoutMode(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		 mPopUpBanner.setWindowLayoutMode(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		 mPopUpBanner.setClippingEnabled(false);
 		 
+		 
 		 mPopUpLargeBanner = new PopupWindow(mContext);
+		 mPopUpLargeBanner.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		 mPopUpLargeBanner.setWidth(320);
 		 mPopUpLargeBanner.setHeight(50);
-		 mPopUpLargeBanner.setWindowLayoutMode(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		 mPopUpLargeBanner.setWindowLayoutMode(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		 mPopUpLargeBanner.setClippingEnabled(false);
 		 
+		 
 		 mPopUpSmartBanner = new PopupWindow(mContext);
+		 mPopUpSmartBanner.setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 		 mPopUpSmartBanner.setWidth(320);
 		 mPopUpSmartBanner.setHeight(50);
 		 mPopUpSmartBanner.setWindowLayoutMode(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -134,7 +143,7 @@ class GoogleAds
 			 {
 				mIsLoadedBanner = true;
 				if (mShowBanner)
-					showBanner();
+					showBanner(mBannerTop);
 			 }
 			 public void onAdClosed()
 			 {
@@ -153,7 +162,7 @@ class GoogleAds
 			 {
 				mIsLoadedLargeBanner = true;
 				if (mShowLargeBanner)
-					showLargeBanner();
+					showLargeBanner(mLargeBannerTop);
 			 }
 			 public void onAdClosed()
 			 {
@@ -172,7 +181,7 @@ class GoogleAds
 			 {
 				mIsLoadedSmartBanner = true;
 				if (mShowSmartBanner)
-					showSmartBanner();
+					showSmartBanner(mSmartBannerTop);
 			 }
 			 public void onAdClosed()
 			 {
@@ -230,41 +239,42 @@ class GoogleAds
 	 
 	 
 	 
-	 public void showBanner()
+	 public void showBanner(boolean top)
 	 {
+		mBannerTop = top;
 		mShowBanner = true;
 		if (mIsShowedBanner == true) return;
 		
 		if (mIsLoadedBanner == true)
 		{
 			mIsShowedBanner = true;		
-			showAdPopup(mPopUpBanner,mBanner);
+			showAdPopup(mPopUpBanner,mBanner,mBannerTop);
 		}
 	 }
 	 
-	 public void showLargeBanner()
+	 public void showLargeBanner(boolean top)
 	 {
+		mLargeBannerTop = top;
 		mShowLargeBanner = true;
 		if (mIsShowedLargeBanner == true) return;
 		
 		if (mIsLoadedLargeBanner == true)
 		{
 			mIsShowedLargeBanner = true;
-			showAdPopup(mPopUpLargeBanner,mLargeBanner);
+			showAdPopup(mPopUpLargeBanner,mLargeBanner,mLargeBannerTop);
 		}
 	 }
 	 
-	 public void showSmartBanner()
+	 public void showSmartBanner(boolean top)
 	 {
-		 Log.w("ads","ShowSmartBanner!!!!!!!!!!1");
-		 
+		mSmartBannerTop = top;
 		mShowSmartBanner = true;
 		if (mIsShowedSmartBanner == true) return;
 		
 		if (mIsLoadedSmartBanner == true)
 		{
 			mIsShowedSmartBanner = true;
-			showAdPopup(mPopUpSmartBanner,mSmartBanner);
+			showAdPopup(mPopUpSmartBanner,mSmartBanner,mSmartBannerTop);
 		}
 	 }
 	 
@@ -318,8 +328,10 @@ class GoogleAds
 		 });	
 	}
 	 
-	 public void showAdPopup(final PopupWindow popUp, final AdView adView)
+	 public void showAdPopup(final PopupWindow popUp, final AdView adView, final boolean top)
 	 {
+		
+		 
 		 mContext.runOnUiThread(new Runnable()  
 			{
 			
@@ -327,15 +339,18 @@ class GoogleAds
 				{	
 					layout = new LinearLayout(mContext);
 					mainLayout = new LinearLayout(mContext);
-					layout.setPadding(-12, 0, -12, 0);
+					layout.setPadding(0, 0, 0, 0);
 					//layout.setPadding(0, 0, 0, 0);
-					MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+					MarginLayoutParams params = new MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 					params.setMargins(0, 0, 0, 0);
 					layout.setOrientation(LinearLayout.VERTICAL);
 					layout.addView(adView, params);
 					popUp.setContentView(layout);
 					mContext.setContentView(mainLayout, params);
-					popUp.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+					if (top)
+						popUp.showAtLocation(mainLayout, Gravity.TOP | Gravity.CENTER  , 0, 0);
+					else
+						popUp.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER, 0, 0);
 					popUp.update();
 				}
 			});	

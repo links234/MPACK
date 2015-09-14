@@ -1,11 +1,11 @@
-#ifdef ANDROID_PLATFORM
-
 #ifndef GOOGLEADS_H
 #define GOOGLEADS_H
 
 #include <jni.h>
 #include <android_native_app_glue.h>
 
+#include <vector>
+using namespace std;
 
 
 namespace MPACK
@@ -22,16 +22,17 @@ namespace MPACK
 			//	jobject mGoogleAdsJobject;
 
 			public:
-				void callMainActivityJavaFunction(const char * ,const char *);
-				void getGoogleAdsJavaReff();
-				void callGoogleAdsJavaFunction(const char * , const char *);
+				void callMainActivityJavaFunction(const char *);
+				void callGoogleAdsVoidJavaFunctionWithoutParams(const char * );
+				void callGoogleAdsVoidJavaFunctionBool(const char *,jboolean);
+				//Ordinea : int, bool, float, string
 
 			public:
-				GoogleAds();
 
-				void showBanner();
-				void showSmartBanner();
-				void showLargeBanner();
+				GoogleAds();
+				void showBanner(bool top);
+				void showSmartBanner(bool top);
+				void showLargeBanner(bool top);
 
 				void hideBanner();
 				void hideSmartBanner();
@@ -46,6 +47,12 @@ namespace MPACK
 	}
 }
 
-#endif
+
+
+
+
+
+
+
 
 #endif
