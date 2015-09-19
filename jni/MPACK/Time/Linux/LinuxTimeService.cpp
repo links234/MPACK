@@ -33,12 +33,9 @@ namespace MPACK
 
 		double LinuxTimeService::Now()
 		{
-			struct timeval t;
-			gettimeofday(&t, NULL);
-
-			unsigned long secs = t.tv_sec * 1000;
-			secs += (t.tv_usec / 1000);
-			return double(secs) / 1000.0;
+			timespec lTimeVal;
+			clock_gettime(CLOCK_MONOTONIC, &lTimeVal);
+			return lTimeVal.tv_sec + (lTimeVal.tv_nsec * 1.0e-9);
 		}
 
 		float LinuxTimeService::Elapsed()

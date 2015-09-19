@@ -2,26 +2,14 @@
 
 #include "LinuxTimer.hpp"
 
-#include <sys/time.h>
-
-#define NULL 0
+#include "Types.hpp"
 
 namespace MPACK
 {
 	namespace Time
 	{
-		unsigned int GetTicksCount()
-		{
-			struct timeval t;
-			gettimeofday(&t, NULL);
-
-			unsigned long secs = t.tv_sec * 1000;
-			secs += (t.tv_usec / 1000);
-			return secs;
-		}
-
 		LinuxTimer::LinuxTimer()
-			: m_currClock(0)
+			: m_lastTime(0)
 		{
 		}
 
@@ -31,12 +19,17 @@ namespace MPACK
 
 		void LinuxTimer::Start()
 		{
-			m_currClock=GetTicksCount();
+			timespec lTimeVal;
+			clock_gettime(CLOCK_MONOTONIC, &lTimeVal);
+			m_lastTime = lTimeVal.tv_sec + (lTimeVal.tv_nsec * 1.0e-9);
 		}
 
 		double LinuxTimer::Time() const
 		{
-			return (double)(GetTicksCount()-m_currClock)/1000.0;
+			timespec lTimeVal;
+			clock_gettime(CLOCK_MONOTONIC, &lTimeVal);
+			double currTime = lTimeVal.tv_sec + (lTimeVal.tv_nsec * 1.0e-9);
+			return currTime-m_lastTime;
 		}
 	}
 }

@@ -23,6 +23,7 @@
 	#include "glxext.h"
 	#include <cstdarg>
 	#include <cstdio>
+	#include <time.h>
 #endif
 
 #ifdef LINUX_PLATFORM
