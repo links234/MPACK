@@ -29,6 +29,11 @@ namespace MPACK
 		{
 		}
 
+		void TextureMappedFont::SetMonospaced(bool monospaced)
+		{
+			m_monospaced = monospaced;
+		}
+
 		void TextureMappedFont::SendString(string str, GLfloat x, GLfloat y, AlignType alignType, vector<Math::Vector4f> *colorPattern)
 		{
 			switch(m_caseType)
