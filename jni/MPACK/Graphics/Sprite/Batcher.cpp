@@ -12,6 +12,7 @@
 #include "Render.hpp"
 #include "Camera2D.hpp"
 #include "Debug.hpp"
+#include "Profiler.hpp"
 
 using namespace std;
 
@@ -161,7 +162,9 @@ namespace MPACK
 		{
 			for(map<GLfloat,Batcher*>::iterator it=s_batcher.begin();it!=s_batcher.end();++it)
 			{
+				Profiler::Begin("Flush");
 				(*it).second->Flush();
+				Profiler::End();
 			}
 		}
 
@@ -237,6 +240,7 @@ namespace MPACK
 			{
 				if(it->m_type==Batch::SpriteBatch)
 				{
+					Profiler::Begin("shader bind");
 					if(!isSpriteShaderEnabled)
 					{
 						VertexBufferObject::UnbindCurrentBuffer();
@@ -249,14 +253,19 @@ namespace MPACK
 						Sprite_Shader->SendVertexBuffer((GLfloat*)(&m_vertexData[0]));
 						isSpriteShaderEnabled = true;
 					}
+					Profiler::End();
 
 					SpriteBatch *batch = reinterpret_cast<SpriteBatch*>(it->m_pointer);
+					Profiler::Begin("tex bind");
 					if(batch->m_texture)
 					{
 						batch->m_texture->Bind(GL_TEXTURE0);
 					}
+					Profiler::End();
 
+					Profiler::Begin("glDrawElements");
 					GL_CHECK( glDrawElements(GetGLType(batch->m_type),batch->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]) );
+					Profiler::End();
 
 					firstIndex+=batch->m_indexSize;
 

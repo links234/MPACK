@@ -13,6 +13,7 @@
 #include "AnimatedSprite.hpp"
 #include "ShaderTypes.hpp"
 #include "PostEffect.hpp"
+#include "Profiler.hpp"
 
 using namespace MPACK::Core;
 
@@ -67,7 +68,10 @@ namespace MPACK
 			Render::EnableAlphaBlend();
 
 			GL_CHECK( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
+
+			Profiler::Begin("Batcher");
 			Batcher::FlushAll();
+			Profiler::End();
 
 			PostEffect::End();
 
