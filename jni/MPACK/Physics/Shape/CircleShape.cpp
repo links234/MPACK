@@ -39,5 +39,13 @@ namespace MPACK
 		{
 			return eCircle;
 		}
+
+		void CircleShape::ComputeAABB()
+		{
+			m_aabb.m_xmax=body->m_position.x+radius;
+			m_aabb.m_xmin=body->m_position.x-radius;
+			m_aabb.m_ymax=body->m_position.y+radius;
+			m_aabb.m_ymin=body->m_position.y-radius;
+		}
 	}
 }

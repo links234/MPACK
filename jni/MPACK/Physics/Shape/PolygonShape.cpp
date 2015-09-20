@@ -79,6 +79,15 @@ namespace MPACK
 			return ePoly;
 		}
 
+		void PolygonShape::ComputeAABB()
+		{
+			m_aabb.Clear();
+			for(int index=0;index<m_vertexCount;++index)
+			{
+				m_aabb.AddPoint(body->m_position+u*m_vertices[index]);
+			}
+		}
+
 		void PolygonShape::SetAsBox(float hw,float hh)
 		{
 			m_vertexCount=4;

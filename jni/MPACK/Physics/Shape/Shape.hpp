@@ -32,8 +32,10 @@ namespace MPACK
 			virtual void ComputeMass(float density) = 0;
 			virtual void SetOrientation(float radians) = 0;
 			virtual Type GetType() const = 0;
+			virtual void ComputeAABB() = 0;
 
 			Body *body;
+			Math::AABB2Df m_aabb;
 		};
 	}
 }

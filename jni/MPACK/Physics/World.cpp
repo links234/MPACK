@@ -39,6 +39,11 @@ namespace MPACK
 
 		void World::Step(float delta)
 		{
+			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
+			{
+				(*it)->m_shape->ComputeAABB();
+			}
+
 			m_contacts.clear();
 			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
 			{
@@ -59,14 +64,22 @@ namespace MPACK
 					          (A->maskBits & B->categoryBits) != 0 &&
 					          (A->categoryBits & B->maskBits) != 0;
 
-					if(collide)
+					if(!collide)
 					{
-						Manifold m(A,B);
-						m.Solve();
-						if(m.m_contactCount)
-						{
-							m_contacts.emplace_back(m);
-						}
+						continue;
+					}
+
+					if(!A->m_shape->m_aabb.Intersect(B->m_shape->m_aabb))
+					{
+						continue;
+					}
+
+
+					Manifold m(A,B);
+					m.Solve();
+					if(m.m_contactCount)
+					{
+						m_contacts.emplace_back(m);
 					}
 				}
 			}
