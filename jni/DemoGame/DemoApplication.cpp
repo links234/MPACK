@@ -42,6 +42,8 @@ namespace Game
     {
 		LOGI("DemoApplication::onActivate()");
 
+		Profiler::Init();
+
 		GameResources::InitMVFS();
 
         // Starts services.
@@ -101,11 +103,14 @@ namespace Game
     	}
 
     	delete m_pCursorTex;
+
+    	Profiler::Cleanup();
     }
 
     Core::ReturnValue DemoApplication::onStep()
     {
     	//test->showVideoInterstitial();
+    	Profiler::Begin("onStep");
 
 #ifdef MPACK_TESTING
     	static bool started=false;
@@ -173,7 +178,9 @@ namespace Game
     	Global::pContext->pGraphicsService->Update(delta);
 
     	// Event dispatcher
+    	Profiler::Begin("State Update");
     	int action=m_pGameState->Update();
+    	Profiler::End();
     	switch(action)
     	{
     		case EVENT_MAINMENU_CONTINUE:
@@ -183,7 +190,6 @@ namespace Game
 #endif
     			m_pGameState=m_pSavedGameState;
     			m_pGameState->Continue();
-    			m_pGameState->Update();
     			m_pSavedGameState=NULL;
     		break;
     		case EVENT_MAINMENU_NEWGAME:
@@ -198,7 +204,6 @@ namespace Game
     			test->hideLargeBanner();
 #endif
     			m_pGameState=new PlayGame();
-    			m_pGameState->Update();
     		break;
 
     		case EVENT_MAINMENU_WATER:
@@ -223,36 +228,52 @@ namespace Game
     			m_pGameState->Pause();
     			m_pSavedGameState=m_pGameState;
     			m_pGameState=new MainMenu(true);
-    			m_pGameState->Update();
     		break;
     		case EVENT_PLAYGAME_EXIT:
 				delete m_pGameState;
 				m_pGameState=new MainMenu();
-				m_pGameState->Update();
 			break;
     		case EVENT_WATER_EXIT:
     			delete m_pGameState;
     			m_pGameState = new MainMenu();
-    			m_pGameState->Update();
     		break;
     	}
 
     	// Render current game state
+    	Profiler::Begin("State Render");
     	m_pGameState->Render();
+    	Profiler::End();
 
 #ifdef MPACK_TESTING
-    	Debug::Print(Global::pFont,"%s",message.c_str());
+    	//Debug::Print(Global::pFont,"%s",message.c_str());
 #endif
+
+    	vector< pair<string, double> > sortedData = Profiler::GetTime();
+    	//Global::pFont->SetMonospaced();
+		float prevFontSize = Global::pFont->GetFontSize();
+		Global::pFont->SetFontSize(5.0f);
+
+		for(vector< pair<string, double> >::iterator it=sortedData.begin();it!=sortedData.end();++it)
+		{
+			Debug::Print(Global::pFont,"%s = %.0lf us",it->first.c_str(),it->second*1000.0*1000.0);
+		}
+
+		Global::pFont->SetFontSize(prevFontSize);
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	CursorDrawer::GetInstance()->Update();
     	CursorDrawer::GetInstance()->Render();
 #endif
 
+    	Profiler::Begin("GraphicsService");
     	// Render current scene and swap buffers
 		if (Global::pContext->pGraphicsService->Render() != Core::RETURN_VALUE_OK) {
 			return Core::RETURN_VALUE_KO;
 		}
+		Profiler::End();
+
+		Profiler::End();
+		Profiler::Step();
 
 		return Core::RETURN_VALUE_OK;
     }
