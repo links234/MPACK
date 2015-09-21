@@ -110,7 +110,7 @@ namespace Game
     Core::ReturnValue DemoApplication::onStep()
     {
     	//test->showVideoInterstitial();
-    	Profiler::Begin("onStep");
+    	PROFILE_BEGIN("onStep");
 
 #ifdef MPACK_TESTING
     	static bool started=false;
@@ -178,9 +178,10 @@ namespace Game
     	Global::pContext->pGraphicsService->Update(delta);
 
     	// Event dispatcher
-    	Profiler::Begin("State Update");
+    	PROFILE_BEGIN("State Update");
     	int action=m_pGameState->Update();
-    	Profiler::End();
+    	PROFILE_END();
+
     	switch(action)
     	{
     		case EVENT_MAINMENU_CONTINUE:
@@ -240,40 +241,31 @@ namespace Game
     	}
 
     	// Render current game state
-    	Profiler::Begin("State Render");
+    	PROFILE_BEGIN("State Render");
     	m_pGameState->Render();
-    	Profiler::End();
+    	PROFILE_END();
 
 #ifdef MPACK_TESTING
     	//Debug::Print(Global::pFont,"%s",message.c_str());
 #endif
 
-    	vector< pair<string, double> > sortedData = Profiler::GetTime();
-    	//Global::pFont->SetMonospaced();
-		float prevFontSize = Global::pFont->GetFontSize();
-		Global::pFont->SetFontSize(5.0f);
-
-		for(vector< pair<string, double> >::iterator it=sortedData.begin();it!=sortedData.end();++it)
-		{
-			Debug::Print(Global::pFont,"%s = %.0lf us",it->first.c_str(),it->second*1000.0*1000.0);
-		}
-
-		Global::pFont->SetFontSize(prevFontSize);
+    	PROFILE_PRINT();
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	CursorDrawer::GetInstance()->Update();
     	CursorDrawer::GetInstance()->Render();
 #endif
 
-    	Profiler::Begin("GraphicsService");
+    	PROFILE_BEGIN("GraphicsService");
     	// Render current scene and swap buffers
 		if (Global::pContext->pGraphicsService->Render() != Core::RETURN_VALUE_OK) {
 			return Core::RETURN_VALUE_KO;
 		}
-		Profiler::End();
+		PROFILE_END();
 
-		Profiler::End();
-		Profiler::Step();
+		PROFILE_END();
+
+		PROFILE_STEP();
 
 		return Core::RETURN_VALUE_OK;
     }

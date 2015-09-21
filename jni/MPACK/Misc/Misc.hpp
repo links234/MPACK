@@ -17,6 +17,4 @@
 #include "VoidPointer.hpp"
 #include "RTTI.hpp"
 
-#include "Profiler.hpp"
-
 #endif
