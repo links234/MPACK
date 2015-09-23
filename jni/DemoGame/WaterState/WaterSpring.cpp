@@ -2,6 +2,7 @@
 #include "WaterObject.hpp"
 
 #include "MPACK.hpp"
+#include <cmath>
 
 using namespace MPACK;
 

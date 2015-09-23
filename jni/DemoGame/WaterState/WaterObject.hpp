@@ -30,11 +30,8 @@ public:
 
 	static const float				s_dampening;
 
-
-
-
-
 private:
+	Vector2f 						test;
 
 	Texture2D*						m_pWhiteTexture;
 

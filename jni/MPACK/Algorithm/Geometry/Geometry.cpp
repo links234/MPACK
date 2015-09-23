@@ -1,4 +1,5 @@
 #include "Geometry.hpp"
+#include <cassert>
 
 using namespace std;
 using namespace MPACK::Math;
@@ -47,6 +48,21 @@ namespace MPACK
 
 			hull.resize(k);
 			return hull;
+		}
+
+		std::vector<Math::Vector2f>& ClipPolygon(const std::vector<Math::Vector2f>& clip, std::vector<Math::Vector2f> polygon, std::vector<Math::Vector2f>& result)
+		{
+			// we suppose that the given clip polygon is a convex polygon
+
+			int clipSize = clip.size();
+			assert(clipSize >= 3);
+			int intoarcere = 0;
+			for (int i = 0; i < (int)clip.size(); ++ i)
+			{
+				if (Cross())
+			}
+
+			// we sort the vertices in trigonometric order
 		}
 	}
 }

@@ -13,11 +13,14 @@ using namespace MPACK::Graphics;
 const Vector2f WaterObject::s_targetHeight = Vector2f(0.f, 300.f);
 const float	WaterObject::s_dampening = 0.1f;
 const int WaterObject::m_springsCount = 201;
+
 WaterObject* WaterObject::g_water = nullptr;
 
 WaterObject::WaterObject()
 	: m_spread(0.4f)
 {
+	assert(g_water == nullptr);
+	g_water = this;
 
 	CreateSprings();
 
@@ -66,13 +69,13 @@ void WaterObject::CreateWavesVertices()
 		vertices[1] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
 		vertices[2] = SpriteVertex(x1, downCoord - y1, 0.f, 1.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
 
-		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 0.f);
+		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 10000.f);
 
 		vertices[2] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
 		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
 		vertices[1] = SpriteVertex(x2, downCoord, 0.f, 1.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
 
-		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 0.f);
+		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 10000.f);
 	}
 
 }
@@ -119,7 +122,7 @@ void WaterObject::Render()
 	CreateWavesVertices();
 }
 
-int WaterObject::GetSpringsCount()
+ int WaterObject::GetSpringsCount()
 {
 	return m_springsCount;
 }
@@ -140,11 +143,13 @@ void WaterObject::ClickSplash(Vector2f pos)
 	{
 		index = pos.x * m_springsCount / Render::GetScreenWidth();
 	}
-	Splash(index, Vector2f(0.f, 500.f));
+	Splash(index, Vector2f(0.f, 100.f));
 }
 
 WaterObject::~WaterObject()
 {
+	assert(g_water != nullptr);
+	g_water = nullptr;
 
 	delete m_pWhiteTexture;
 
