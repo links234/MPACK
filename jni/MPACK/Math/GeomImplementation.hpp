@@ -1,6 +1,8 @@
 #ifndef MPACK_GEOMIMPLEMENTATION_HPP
 #define MPACK_GEOMIMPLEMENTATION_HPP
 
+#include "AABB2D.hpp"
+
 namespace MPACK
 {
 	template<class T> inline void Math::Geom<T>::CalculateTangentBitangent(const Math::Vector3<T> &P1, const Math::Vector3<T> &P2, const Math::Vector3<T> &P3, const Math::Vector2<T> &UV1, const Math::Vector2<T> &UV2, const Math::Vector2<T> &UV3, Math::Vector3<T> &tangent, Math::Vector3<T> &bitangent )
@@ -50,7 +52,7 @@ namespace MPACK
 		{
 			return false;
 		}
-		if(!AABB2D(A1,B1).Intersect(AABB2D(A2,B2)))
+		if(!AABB2D<T>(A1,B1).Intersect(AABB2D<T>(A2,B2)))
 		{
 			return false;
 		}

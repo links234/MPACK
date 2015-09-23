@@ -1,4 +1,6 @@
 #include "Geometry.hpp"
+#include "math.h"
+#include "Geom.hpp"
 #include <cassert>
 
 using namespace std;
@@ -52,17 +54,112 @@ namespace MPACK
 
 		std::vector<Math::Vector2f>& ClipPolygon(const std::vector<Math::Vector2f>& clip, std::vector<Math::Vector2f> polygon, std::vector<Math::Vector2f>& result)
 		{
-			// we suppose that the given clip polygon is a convex polygon
+			// we assume that the points in the given clip polygon are already sorted in trigonometric order
+			// we also assume that the given polygon to be clipped has vertices in a correct order
+			// the given polygon to be clipped may not be necessary a convex one
 
+			// verifying that we have a polygon
 			int clipSize = clip.size();
 			assert(clipSize >= 3);
-			int intoarcere = 0;
+
+			int turning = 0;
+			auto moduloFunc = [](int x, int modValue) mutable -> int
+					{
+						while (x < 0) x += modValue;
+						while (x >= modValue) x-= modValue;
+					};
 			for (int i = 0; i < (int)clip.size(); ++ i)
 			{
-				if (Cross())
+				int pozx, pozy, pozz;
+				pozx = moduloFunc(i-1, clipSize);
+				pozy = moduloFunc(i, clipSize);
+				pozz = moduloFunc(i+1, clipSize);
+				float det = Cross(clip[pozx], clip[pozy], clip[pozz]);
+				assert(!(det < 0.f)); // pozx, pozy, pozz form a turning in reverse trigonometric order
+
+				if (turning == 0)
+				{
+					if (det > 0.f)
+					{
+						turning = 1;
+					}
+				}
+				else
+				{
+					assert(!(det < 0.f));
+				}
 			}
 
-			// we sort the vertices in trigonometric order
+			assert(turning != 0);
+
+			// now we are sure that the clipPolygon respects the constraints
+
+			result = polygon;
+
+			for (int i = 0; i < clipSize; ++ i)
+			{
+				// ( clip[pozx], clip[pozy] ) the line that cuts the polygon
+				int pozx = moduloFunc(i-1, clipSize);
+				int pozy = moduloFunc(i, clipSize);
+				int polygonSize = polygon.size();
+
+				int lastPoz = polygonSize - 1;
+
+				polygon = result;
+				result.clear();
+
+				for (int j = 0; j < polygonSize; ++ j)
+				{
+					int signLast = 0, signNow = 0;
+					float detLast = Cross(clip[pozx], clip[pozy], polygon[lastPoz]);
+					float detNow = Cross(clip[pozx], clip[pozy], polygon[j]);
+
+					if (detLast < 0.f) signLast = -1;
+					if (detLast > 0.f) signLast = 1;
+
+					if (detNow < 0.f) signNow = -1;
+					if (detNow > 0.f) signNow = 1;
+
+					// sign == 1 means that the vertex is on the correct side of the line
+
+					if (signNow == 1)
+					{
+						if (signLast == -1)
+						{
+							Vector2f intersection;
+							Geom<float>::LineIntersect(clip[pozx], clip[pozy], polygon[lastPoz], polygon[j], intersection);
+							result.push_back(intersection);
+						}
+						else
+						{
+							result.push_back(polygon[lastPoz]);
+						}
+					}
+					else if (signNow == 0)
+					{
+						if (signLast == 0 || signLast == 1)
+						{
+							result.push_back(polygon[lastPoz]);
+						}
+					}
+					else
+					{
+						if (signLast == 0)
+						{
+							result.push_back(polygon[lastPoz]);
+						}
+						else if (signLast == 1)
+						{
+							Vector2f intersection;
+							Geom<float>::LineIntersect(clip[pozx], clip[pozy], polygon[lastPoz], polygon[j], intersection);
+							result.push_back(intersection);
+						}
+					}
+
+					lastPoz = j;
+				}
+			}
+			return result;
 		}
 	}
 }
