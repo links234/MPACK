@@ -161,5 +161,20 @@ namespace MPACK
 			}
 			return result;
 		}
+
+		float PolygonArea (const std::vector <Math::Vector2f> & polygon)
+		{
+			float sum = 0.f;
+			auto moduloFunc = [](int x, int modValue) mutable -> int
+								{
+									while (x < 0) x += modValue;
+									while (x >= modValue) x-= modValue;
+								};
+			for (int i = 0; i < (int)polygon.size(); ++ i)
+			{
+				sum += (polygon[i].x * polygon[moduloFunc(i+1, polygon.size())].y - polygon[moduloFunc(i+1, polygon.size())].x * polygon[i].y);
+			}
+			return sum;
+		}
 	}
 }
