@@ -54,35 +54,7 @@ namespace Game
 		m_world = new World(1.f/60.f, 10);
 
 
-		/////////////////////debug///////////////////
 
-		ifstream f("debug_points.in");
-		vector <Vector2f> clip, polygon, result;
-		int N;
-		f >> N;
-		for (int i = 1; i <= N; ++ i)
-		{
-			Vector2f now; f >> now.x >> now.y;
-			clip.push_back(now);
-		}
-
-		f >> N;
-		for (int i = 1; i <= N; ++ i)
-		{
-			Vector2f now; f >> now.x >> now.y;
-			polygon.push_back(now);
-		}
-
-		ClipPolygon(clip, polygon, result);
-
-		for (auto &vertex : result)
-		{
-			LOGI("%f, %f", vertex.x, vertex.y);
-		}
-
-		LOGI("%f", PolygonArea(result));
-
-		/////////////////////debug///////////////////
 	}
 
 	int WaterState::Update()
