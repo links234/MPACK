@@ -46,6 +46,7 @@ namespace MPACK
 			float GetMass() const;
 
 			Material& GetMaterial();
+			Shape* GetShape() const;
 
 		private:
 			void IntegrateForces(float delta);

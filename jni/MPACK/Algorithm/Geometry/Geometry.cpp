@@ -96,7 +96,7 @@ namespace MPACK
 				}
 			}
 
-			assert(turning != 0);
+			assert(turning == 1);
 
 			// now we are sure that the clipPolygon respects the constraints
 
@@ -107,12 +107,13 @@ namespace MPACK
 				// ( clip[pozx], clip[pozy] ) the line that cuts the polygon
 				int pozx = moduloFunc(i-1, clipSize);
 				int pozy = moduloFunc(i, clipSize);
-				int polygonSize = polygon.size();
 
-				int lastPoz = polygonSize - 1;
 
 				polygon = result;
 				result.clear();
+
+				int polygonSize = polygon.size();
+				int lastPoz = polygonSize - 1;
 
 				for (int j = 0; j < polygonSize; ++ j)
 				{
@@ -143,9 +144,21 @@ namespace MPACK
 					}
 					else if (signNow == 0)
 					{
-						if (signLast == 0 || signLast == 1)
+						if (signLast == 1)
 						{
 							result.push_back(polygon[lastPoz]);
+						}
+						else if (signLast == 0)
+						{
+							result.push_back(polygon[lastPoz]);
+							/*if (PointOnSegment(clip[pozx], clip[pozy], polyon[lastPoz]))
+							{
+								result.push_back(polygon[lastPoz]);
+							}
+							else
+							{
+								// TODO: unul dintre clip[pozx], clip[pozy] CAREEE?
+							}*/
 						}
 					}
 					else
@@ -156,6 +169,7 @@ namespace MPACK
 						}
 						else if (signLast == 1)
 						{
+							result.push_back(polygon[lastPoz]);
 							Vector2f intersection;
 							Geom<float>::LineIntersect(clip[pozx], clip[pozy], polygon[lastPoz], polygon[j], intersection);
 							result.push_back(intersection);
@@ -170,6 +184,10 @@ namespace MPACK
 
 		float PolygonArea (const std::vector <Math::Vector2f> & polygon)
 		{
+			int polygonSize = polygon.size();
+
+			if (polygonSize < 3)
+				return 0.f;
 			float sum = 0.f;
 			auto moduloFunc = [](int x, int modValue) mutable -> int
 								{
@@ -177,11 +195,11 @@ namespace MPACK
 									while (x >= modValue) x-= modValue;
 									return x;
 								};
-			for (int i = 0; i < (int)polygon.size(); ++ i)
+			for (int i = 0; i < polygonSize; ++ i)
 			{
-				sum += (polygon[i].x * polygon[moduloFunc(i+1, polygon.size())].y - polygon[moduloFunc(i+1, polygon.size())].x * polygon[i].y);
+				sum += (polygon[i].x * polygon[moduloFunc(i+1, polygonSize)].y - polygon[moduloFunc(i+1, polygonSize)].x * polygon[i].y);
 			}
-			return sum;
+			return sum / 2.f;
 		}
 	}
 }

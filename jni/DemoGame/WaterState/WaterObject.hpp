@@ -31,6 +31,7 @@ public:
 	Vector2f 						**m_springsVertices;
 
 	static const float				s_dampening;
+	static const float				s_waterDensity;
 
 private:
 	Vector2f 						test;

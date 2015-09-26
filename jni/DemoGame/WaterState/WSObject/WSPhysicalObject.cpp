@@ -63,5 +63,5 @@ Body* WSPhysicalObject::GetBody() const
 
 PolygonShape* WSPhysicalObject::GetShape() const
 {
-	return m_shape;
+	return (PolygonShape*)m_body->GetShape();
 }

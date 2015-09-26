@@ -52,6 +52,37 @@ namespace Game
 		m_pBackgroundSprite->SetSize(Render::GetScreenWidth(), Render::GetScreenHeight());
 
 		m_world = new World(1.f/60.f, 10);
+
+
+		/////////////////////debug///////////////////
+
+		ifstream f("debug_points.in");
+		vector <Vector2f> clip, polygon, result;
+		int N;
+		f >> N;
+		for (int i = 1; i <= N; ++ i)
+		{
+			Vector2f now; f >> now.x >> now.y;
+			clip.push_back(now);
+		}
+
+		f >> N;
+		for (int i = 1; i <= N; ++ i)
+		{
+			Vector2f now; f >> now.x >> now.y;
+			polygon.push_back(now);
+		}
+
+		ClipPolygon(clip, polygon, result);
+
+		for (auto &vertex : result)
+		{
+			LOGI("%f, %f", vertex.x, vertex.y);
+		}
+
+		LOGI("%f", PolygonArea(result));
+
+		/////////////////////debug///////////////////
 	}
 
 	int WaterState::Update()
@@ -77,7 +108,7 @@ namespace Game
 		{
 			Vector2f pos = m_pWSInputController->GetMousePosition();
 			m_water.ClickSplash(pos);
-			LOGI("(%f, %f)", pos.x, pos.y);
+			//LOGI("(%f, %f)", pos.x, pos.y);
 		}
 
 		if (m_pWSInputController->GetLeftMouseButtonUp())
@@ -85,31 +116,46 @@ namespace Game
 			CreateRockObject(m_pWSInputController->GetMousePosition());
 		}
 
+
 		for (auto &rock : m_rockObjects)
 		{
 			rock->Update(dtime);
+
 			float totalCoveredArea = 0.f;
 
 			vector <Vector2f> springTriangle;
 			springTriangle.resize(3);
 
 			vector <Vector2f> rockPolygon;
-			rockPolygon = vector <Vector2f>(rock->GetShape()->m_vertices, rock->GetShape()->m_vertices + rock->GetShape()->m_vertexCount);
+			for (int i = 0; i < rock->GetShape()->m_vertexCount; ++ i)
+				rockPolygon.push_back(rock->GetShape()->m_vertices[i] + rock->GetBody()->GetPosition());
 
 			vector <Vector2f> result;
 
 			for (int i = 1; i < m_water.GetSpringsCount(); ++ i)
 			{
-				float currentArea;
-
+				float currentSpringIntersectionArea = 0.f;
 				for (int j = 0; j < 3; ++ j)
 					springTriangle[j] = m_water.m_springsVertices[i][j];
 
 				ClipPolygon(springTriangle, rockPolygon, result);
+				currentSpringIntersectionArea += PolygonArea(result);
+
+				for (int j = 0; j < 3; ++ j)
+					springTriangle[j] = m_water.m_springsVertices[i][j+3];
+
+				ClipPolygon(springTriangle, rockPolygon, result);
+				currentSpringIntersectionArea += PolygonArea(result);
+
+				totalCoveredArea += currentSpringIntersectionArea;
 			}
 
+			float waterWeight = m_water.s_waterDensity * totalCoveredArea * 98.f;
+
 			rock->SetLinearAcceleration(Vector2f(0.f, 150.f));
+			rock->SetLinearAcceleration(Vector2f(0.f, -waterWeight));
 		}
+
 
 		m_world->Update(dtime);
 

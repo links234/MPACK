@@ -102,6 +102,11 @@ namespace MPACK
 			return m_mass;
 		}
 
+		Shape* Body::GetShape() const
+		{
+			return m_shape;
+		}
+
 		void Body::IntegrateForces(float delta)
 		{
 			if(m_inverseMass == 0.0f)

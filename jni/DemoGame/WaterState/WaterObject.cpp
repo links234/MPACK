@@ -12,6 +12,9 @@ using namespace MPACK::Graphics;
 
 const Vector2f WaterObject::s_targetHeight = Vector2f(0.f, 300.f);
 const float	WaterObject::s_dampening = 0.1f;
+const float WaterObject::s_waterDensity = 0.00055f;
+
+//const float WaterObject::s_waterDensity = 0.00052008571f; // the exact value to keep the rocks in balance
 const int WaterObject::m_springsCount = 201;
 
 WaterObject* WaterObject::g_water = nullptr;
@@ -157,7 +160,7 @@ void WaterObject::ClickSplash(Vector2f pos)
 	{
 		index = pos.x * m_springsCount / Render::GetScreenWidth();
 	}
-	Splash(index, Vector2f(0.f, 100.f));
+	Splash(index, Vector2f(0.f, 200.f));
 }
 
 WaterObject::~WaterObject()
