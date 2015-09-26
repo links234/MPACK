@@ -42,7 +42,7 @@ void WSPhysicalObject::SetLinearAcceleration(Vector2f force)
 	m_body->ApplyForce(force * m_body->GetMass());
 }
 
-void WSPhysicalObject::SetShape(Shape * shape, Vector2f pos)
+void WSPhysicalObject::SetShape(PolygonShape * shape, Vector2f pos)
 {
 	assert(shape);
 	m_shape = shape;
@@ -59,4 +59,9 @@ Vector2f WSPhysicalObject::GetCameraPosition() const
 Body* WSPhysicalObject::GetBody() const
 {
 	return m_body;
+}
+
+PolygonShape* WSPhysicalObject::GetShape() const
+{
+	return m_shape;
 }

@@ -36,7 +36,7 @@ void WSRockObject::SetSprite(Sprite * sprite)
 	m_sprite = sprite;
 }
 
-void WSRockObject::SetShape(Shape * shape, Vector2f pos)
+void WSRockObject::SetShape(PolygonShape * shape, Vector2f pos)
 {
 	assert(shape);
 	m_shape = shape;

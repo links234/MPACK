@@ -22,7 +22,7 @@ public:
 	virtual void 				Render();
 
 	virtual void 				SetSprite(Sprite * sprite);
-	virtual void 				SetShape(Shape * shape, Vector2f pos);
+	virtual void 				SetShape(PolygonShape * shape, Vector2f pos);
 
 	virtual Vector2f			GetCameraPosition() const;
 	virtual Body*				GetBody() const;

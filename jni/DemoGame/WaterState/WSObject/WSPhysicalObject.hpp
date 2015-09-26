@@ -21,14 +21,15 @@ public:
 	void 							SetPosition(Vector2f pos);
 	void 							SetLinearAcceleration(Vector2f force);
 
-	virtual void 					SetShape(Shape * shape, Vector2f pos);
+	virtual void 					SetShape(PolygonShape * shape, Vector2f pos);
 
 	virtual Vector2f				GetCameraPosition() const;
 	virtual Body* 					GetBody() const;
+	virtual PolygonShape* 			GetShape() const;
 
 
 protected:
-	Shape							*m_shape;
+	PolygonShape					*m_shape;
 	Body							*m_body;
 	World							*m_world;
 };

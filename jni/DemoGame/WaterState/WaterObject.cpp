@@ -28,6 +28,12 @@ WaterObject::WaterObject()
 	m_pWhiteTexture->Load("@Backgrounds/whitetexture.png");
 	m_pWhiteTexture->SetWrapMode(GL_REPEAT, GL_REPEAT);
 
+	m_springsVertices = new Vector2f* [m_springsCount];
+	for (int i = 0; i < m_springsCount; ++ i)
+	{
+		m_springsVertices[i] = new Vector2f [6];
+	}
+
 	/// create dem positions regarding to screen width
 }
 
@@ -64,6 +70,14 @@ void WaterObject::CreateWavesVertices()
 
 		//LOGI("%f", downCoord);
 
+		m_springsVertices[i][0] = Vector2f (x1, downCoord);
+		m_springsVertices[i][2] = Vector2f (x2, downCoord - y2);
+		m_springsVertices[i][1] = Vector2f (x1, downCoord - y1);
+
+		m_springsVertices[i][3] = Vector2f (x1, downCoord);
+		m_springsVertices[i][5] = Vector2f (x2, downCoord);
+		m_springsVertices[i][4] = Vector2f (x2, downCoord - y2);
+
 
 		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
 		vertices[1] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
@@ -71,9 +85,9 @@ void WaterObject::CreateWavesVertices()
 
 		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 10000.f);
 
-		vertices[2] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
 		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
 		vertices[1] = SpriteVertex(x2, downCoord, 0.f, 1.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
+		vertices[2] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
 
 		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 10000.f);
 	}
@@ -150,6 +164,13 @@ WaterObject::~WaterObject()
 {
 	assert(g_water != nullptr);
 	g_water = nullptr;
+
+	for (int i = 0; i < m_springsCount; ++ i)
+	{
+		delete[] m_springsVertices[i];
+	}
+
+	delete[] m_springsVertices;
 
 	delete m_pWhiteTexture;
 

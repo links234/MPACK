@@ -67,7 +67,10 @@ namespace MPACK
 					{
 						while (x < 0) x += modValue;
 						while (x >= modValue) x-= modValue;
+						return x;
 					};
+
+
 			for (int i = 0; i < (int)clip.size(); ++ i)
 			{
 				int pozx, pozy, pozz;
@@ -75,7 +78,10 @@ namespace MPACK
 				pozy = moduloFunc(i, clipSize);
 				pozz = moduloFunc(i+1, clipSize);
 				float det = Cross(clip[pozx], clip[pozy], clip[pozz]);
+
 				assert(!(det < 0.f)); // pozx, pozy, pozz form a turning in reverse trigonometric order
+
+
 
 				if (turning == 0)
 				{
@@ -169,6 +175,7 @@ namespace MPACK
 								{
 									while (x < 0) x += modValue;
 									while (x >= modValue) x-= modValue;
+									return x;
 								};
 			for (int i = 0; i < (int)polygon.size(); ++ i)
 			{

@@ -28,6 +28,8 @@ public:
 	static const Vector2f 			s_targetHeight;
 	const float 					m_spread;
 
+	Vector2f 						**m_springsVertices;
+
 	static const float				s_dampening;
 
 private:

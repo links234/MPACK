@@ -14,6 +14,7 @@
 #include <fstream>
 
 using namespace MPACK;
+using namespace MPACK::Algorithm;
 using namespace MPACK::Math;
 using namespace MPACK::Core;
 using namespace MPACK::Global;
@@ -87,6 +88,26 @@ namespace Game
 		for (auto &rock : m_rockObjects)
 		{
 			rock->Update(dtime);
+			float totalCoveredArea = 0.f;
+
+			vector <Vector2f> springTriangle;
+			springTriangle.resize(3);
+
+			vector <Vector2f> rockPolygon;
+			rockPolygon = vector <Vector2f>(rock->GetShape()->m_vertices, rock->GetShape()->m_vertices + rock->GetShape()->m_vertexCount);
+
+			vector <Vector2f> result;
+
+			for (int i = 1; i < m_water.GetSpringsCount(); ++ i)
+			{
+				float currentArea;
+
+				for (int j = 0; j < 3; ++ j)
+					springTriangle[j] = m_water.m_springsVertices[i][j];
+
+				ClipPolygon(springTriangle, rockPolygon, result);
+			}
+
 			rock->SetLinearAcceleration(Vector2f(0.f, 150.f));
 		}
 
