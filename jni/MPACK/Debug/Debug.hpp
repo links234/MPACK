@@ -2,8 +2,10 @@
 #define MPACK_DEBUG_HPP
 
 #define DEBUG
+#define PROFILE
 
 #include "Types.hpp"
+#include "Profiler.hpp"
 #include "Helper.hpp"
 #include "Log.hpp"
 
@@ -12,7 +14,7 @@
     #define D if(0)
 #else
     #define PRINT(x) \
-		LOGD("%s\t%s\n",#x,x)
+		LOGD("%s\t = %s\n",#x,x)
     #define D if(1)
 #endif
 
@@ -44,6 +46,34 @@
             something; \
             MPACK::Debug::EGL::CheckErrorMacro(#something, __FILE__, __LINE__); \
         } while (0)
+#endif
+
+#ifndef PROFILE
+	#define PROFILE_BEGIN(x)
+	#define PROFILE_END()
+	#define PROFILE_PRINT()
+	#define PROFILE_STEP()
+#else
+	#define PROFILE_BEGIN(x) 	do { \
+			MPACK::Profiler::Begin(x); \
+		} while(0)
+	#define PROFILE_END()		do { \
+			MPACK::Profiler::End(); \
+		} while(0)
+	#define PROFILE_PRINT()	\
+		vector< pair<string, double> > sortedData = MPACK::Profiler::GetTime(); \
+		float prevFontSize = Global::pFont->GetFontSize(); \
+		MPACK::Global::pFont->SetFontSize(5.0f); \
+		\
+		for(vector< pair<string, double> >::iterator it=sortedData.begin();it!=sortedData.end();++it) \
+		{ \
+			MPACK::Debug::Print(Global::pFont,"%s = %.0lf us",it->first.c_str(),it->second*1000.0*1000.0); \
+		} \
+		\
+		MPACK::Global::pFont->SetFontSize(prevFontSize);
+	#define PROFILE_STEP()		do { \
+			MPACK::Profiler::Step(); \
+		} while(0)
 #endif
 
 namespace MPACK

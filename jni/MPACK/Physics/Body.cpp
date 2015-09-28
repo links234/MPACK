@@ -9,8 +9,11 @@ namespace MPACK
 	namespace Physics
 	{
 		Body::Body(Shape *shape)
-		  : m_shape(shape->Clone())
+		  : m_shape(shape->Clone()), userData(0)
 		{
+			maskBits=1;
+			categoryBits=1;
+
 			m_shape->body = this;
 			m_position.Set(0,0);
 			m_velocity.Set(0,0);
@@ -25,6 +28,7 @@ namespace MPACK
 			m_inverseMass=0.0f;
 
 			m_shape->Initialize();
+			m_shape->SetOrientation(m_orientation);
 
 			m_tempMomentOfInertia=m_momentOfInertia;
 			m_tempInverseMomentOfInertia=m_inverseMomentOfInertia;
@@ -75,6 +79,11 @@ namespace MPACK
 			m_inverseMomentOfInertia=m_tempInverseMomentOfInertia;
 		}
 
+		void Body::SetPosition(Vector2f position)
+		{
+			m_position=position;
+		}
+
 		void Body::SetOrientation(float orientation)
 		{
 			orientation=MPACK::Math::Misc<float>::DegToRad(orientation);
@@ -82,9 +91,19 @@ namespace MPACK
 			m_shape->SetOrientation(orientation);
 		}
 
-		void Body::SetPosition(Vector2f position)
+		void Body::SetLinearVelocity(Vector2f velocity)
 		{
-			m_position=position;
+			m_velocity=velocity;
+		}
+
+		void Body::SetAngularVelocity(float angularVelocity)
+		{
+			m_angularVelocity=MPACK::Math::Misc<float>::DegToRad(angularVelocity);
+		}
+
+		MPACK::Math::Vector2f Body::GetPosition() const
+		{
+			return m_position;
 		}
 
 		float Body::GetOrientation() const
@@ -92,9 +111,14 @@ namespace MPACK
 			return MPACK::Math::Misc<float>::RadToDeg(m_orientation);
 		}
 
-		MPACK::Math::Vector2f Body::GetPosition() const
+		Vector2f Body::GetLinearVelocity() const
 		{
-			return m_position;
+			return m_velocity;
+		}
+
+		float Body::GetAngularVelocity() const
+		{
+			return MPACK::Math::Misc<float>::RadToDeg(m_angularVelocity);
 		}
 
 		float Body::GetMass() const
@@ -105,6 +129,45 @@ namespace MPACK
 		Shape* Body::GetShape() const
 		{
 			return m_shape;
+		}
+
+		Material Body::GetMaterial() const
+		{
+			return m_material;
+		}
+
+		void Body::SetMaterial(const Material &material)
+		{
+			m_material=material;
+
+			bool noInertia=false;
+			if(m_momentOfInertia==0.0f && m_inverseMomentOfInertia==0.0f)
+			{
+				noInertia=true;
+			}
+			bool noMass=false;
+			if(m_mass==0.0f && m_inverseMass==0.0f)
+			{
+				noMass=true;
+			}
+
+			m_shape->Initialize();
+
+			m_tempMomentOfInertia=m_momentOfInertia;
+			m_tempInverseMomentOfInertia=m_inverseMomentOfInertia;
+			m_tempMass=m_mass;
+			m_tempInverseMass=m_inverseMass;
+
+			if(noInertia)
+			{
+				m_momentOfInertia=0.0f;
+				m_inverseMomentOfInertia=0.0f;
+			}
+			if(noMass)
+			{
+				m_mass=0.0f;
+				m_inverseMass=0.0f;
+			}
 		}
 
 		void Body::IntegrateForces(float delta)

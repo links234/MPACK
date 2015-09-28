@@ -19,7 +19,7 @@ namespace MPACK
 			virtual double Time() const;
 
 		private:
-			unsigned int	m_currClock;
+			double	m_lastTime;
 		};
 	}
 }

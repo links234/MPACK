@@ -7,6 +7,7 @@
 #include "InputService.hpp"
 #include "TimeService.hpp"
 #include "Global.hpp"
+#include "Profiler.hpp"
 #include "Render.hpp"
 #include "Log.hpp"
 
@@ -29,7 +30,11 @@ namespace MPACK
 			m_pActivityHandler = pActivityHandler;
 			m_isRunning=true;
 
-			InitializeDisplay();
+			if(InitializeDisplay() == RETURN_VALUE_KO)
+			{
+				LOGE("LinuxEventLoop::Run failed to InitializeDisplay()");
+				return RETURN_VALUE_KO;
+			}
 			m_pActivityHandler->onActivate();
 
 			// Global step loop.
@@ -194,7 +199,7 @@ namespace MPACK
 
 			m_GL3Supported = false; //we're not using GL3.0 here!
 
-			string title = "BOGLGP - Chapter 7 - Simple Textured Terrain";
+			string title = "MPACK";
 
 			if (fullscreen)
 			{
@@ -219,6 +224,17 @@ namespace MPACK
 
 			//Make the new context current
 			glXMakeCurrent(m_display, m_XWindow, m_glContext);
+
+			typedef int (*PFNGLXSWAPINTERVALMESA)(int interval);
+			PFNGLXSWAPINTERVALMESA glXSwapIntervalMESA = NULL;
+
+			glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESA)glXGetProcAddress((unsigned char*)"glXSwapIntervalMESA");
+			if( !glXSwapIntervalMESA )
+			{
+				 return RETURN_VALUE_KO;
+			}
+
+			glXSwapIntervalMESA(0);
 			return RETURN_VALUE_OK;
 		}
 
@@ -293,7 +309,9 @@ namespace MPACK
 
 		void LinuxEventLoop::SwapBuffers()
 		{
+			Profiler::Begin("SwapBuffers");
 			glXSwapBuffers(m_display, m_XWindow);
+			Profiler::End();
 		}
 	}
 }

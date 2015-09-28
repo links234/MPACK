@@ -9,4 +9,7 @@
 #include "Manifold.hpp"
 #include "Collider.hpp"
 
+#include "CollisionCallback.hpp"
+#include "CollisionInfo.hpp"
+
 #endif

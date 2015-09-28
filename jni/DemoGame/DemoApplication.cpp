@@ -42,6 +42,8 @@ namespace Game
     {
 		LOGI("DemoApplication::onActivate()");
 
+		Profiler::Init();
+
 		GameResources::InitMVFS();
 
         // Starts services.
@@ -101,11 +103,14 @@ namespace Game
     	}
 
     	delete m_pCursorTex;
+
+    	Profiler::Cleanup();
     }
 
     Core::ReturnValue DemoApplication::onStep()
     {
     	//test->showVideoInterstitial();
+    	PROFILE_BEGIN("onStep");
 
 #ifdef MPACK_TESTING
     	static bool started=false;
@@ -173,7 +178,10 @@ namespace Game
     	Global::pContext->pGraphicsService->Update(delta);
 
     	// Event dispatcher
+    	PROFILE_BEGIN("State Update");
     	int action=m_pGameState->Update();
+    	PROFILE_END();
+
     	switch(action)
     	{
     		case EVENT_MAINMENU_CONTINUE:
@@ -183,7 +191,6 @@ namespace Game
 #endif
     			m_pGameState=m_pSavedGameState;
     			m_pGameState->Continue();
-    			m_pGameState->Update();
     			m_pSavedGameState=NULL;
     		break;
     		case EVENT_MAINMENU_NEWGAME:
@@ -198,7 +205,6 @@ namespace Game
     			test->hideLargeBanner();
 #endif
     			m_pGameState=new PlayGame();
-    			m_pGameState->Update();
     		break;
 
     		case EVENT_MAINMENU_WATER:
@@ -223,36 +229,43 @@ namespace Game
     			m_pGameState->Pause();
     			m_pSavedGameState=m_pGameState;
     			m_pGameState=new MainMenu(true);
-    			m_pGameState->Update();
     		break;
     		case EVENT_PLAYGAME_EXIT:
 				delete m_pGameState;
 				m_pGameState=new MainMenu();
-				m_pGameState->Update();
 			break;
     		case EVENT_WATER_EXIT:
     			delete m_pGameState;
     			m_pGameState = new MainMenu();
-    			m_pGameState->Update();
     		break;
     	}
 
     	// Render current game state
+    	PROFILE_BEGIN("State Render");
     	m_pGameState->Render();
+    	PROFILE_END();
 
 #ifdef MPACK_TESTING
-    	Debug::Print(Global::pFont,"%s",message.c_str());
+    	//Debug::Print(Global::pFont,"%s",message.c_str());
 #endif
+
+    	PROFILE_PRINT();
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	CursorDrawer::GetInstance()->Update();
     	CursorDrawer::GetInstance()->Render();
 #endif
 
+    	PROFILE_BEGIN("GraphicsService");
     	// Render current scene and swap buffers
 		if (Global::pContext->pGraphicsService->Render() != Core::RETURN_VALUE_OK) {
 			return Core::RETURN_VALUE_KO;
 		}
+		PROFILE_END();
+
+		PROFILE_END();
+
+		PROFILE_STEP();
 
 		return Core::RETURN_VALUE_OK;
     }

@@ -12,6 +12,7 @@
 #include "Camera2D.hpp"
 
 using namespace MPACK;
+using namespace MPACK::Core;
 using namespace MPACK::Physics;
 using namespace MPACK::Graphics;
 using namespace MPACK::UI;
@@ -21,6 +22,7 @@ namespace Game
 	PlayGame::PlayGame()
 	{
 		m_pWorld = new World(1/60.0f,15);
+		m_pWorld->EnableDebugDraw();
 
 		m_pPGInputController = PGInputController::Initialize();
 		m_pPGInputController->SetMaxAcceleration(500.0f);
@@ -75,25 +77,29 @@ namespace Game
 		m_enemySprite->SetSize(100.0f,17.0f*4.0f);
 		m_enemySprite->SetShading(SpriteVertex::ALPHA_BLEND);
 
-		//Enemy setup
-		m_enemyObject=new Enemy(m_pWorld);
-		m_enemyObject->SetSprite(m_enemySprite);
-		m_enemyObject->SetPosition(Vector2f(50.0f,450.0f));
+		for(int i=0;i<=7;++i)
+		{
+			//Enemy setup
+			m_enemyObject[0]=new Enemy(m_pWorld);
+			m_enemyObject[0]->SetSprite(m_enemySprite);
+			m_enemyObject[0]->SetPosition(Vector2f(50.0f,450.0f));
 
-		//Enemy setup
-		m_enemyObject=new Enemy(m_pWorld);
-		m_enemyObject->SetSprite(m_enemySprite);
-		m_enemyObject->SetPosition(Vector2f(450.0f,50.0f));
+			//Enemy setup
+			m_enemyObject[1]=new Enemy(m_pWorld);
+			m_enemyObject[1]->SetSprite(m_enemySprite);
+			m_enemyObject[1]->SetPosition(Vector2f(450.0f,50.0f));
 
-		//Enemy setup
-		m_enemyObject=new Enemy(m_pWorld);
-		m_enemyObject->SetSprite(m_enemySprite);
-		m_enemyObject->SetPosition(Vector2f(450.0f,450.0f));
+			//Enemy setup
+			m_enemyObject[2]=new Enemy(m_pWorld);
+			m_enemyObject[2]->SetSprite(m_enemySprite);
+			m_enemyObject[2]->SetPosition(Vector2f(450.0f,450.0f));
 
-		//Enemy setup
-		m_enemyObject=new Enemy(m_pWorld);
-		m_enemyObject->SetSprite(m_enemySprite);
-		m_enemyObject->SetPosition(Vector2f(50.0f,50.0f));
+
+			//Enemy setup
+			m_enemyObject[3]=new Enemy(m_pWorld);
+			m_enemyObject[3]->SetSprite(m_enemySprite);
+			m_enemyObject[3]->SetPosition(Vector2f(50.0f,50.0f));
+		}
 
 		//Camera setup
 		Global::pActiveCamera=new Camera2D();
@@ -141,6 +147,8 @@ namespace Game
 		m_UIMatch4Sprite->UIMatch(Anchor(Anchor::Get(Anchor::BottomRight)),Anchor(Anchor::Get(Anchor::BottomRight)));
 		m_UIMatch4Sprite->SetLayer(FRONT_LAYER);
 		m_UIMatch4Sprite->SetShading(SpriteVertex::ALPHA_BLEND);
+
+		m_pWorld->LinkCollisionCallback(CollisionCallbackStruct(Physics_collisionCallback, this));
 	}
 
 	int PlayGame::Update()
@@ -185,6 +193,7 @@ namespace Game
 		Batcher::EnableCamera();
 		Object::RenderAll();
 		Particle::RenderAll();
+		m_pWorld->DebugDraw();
 		Batcher::DisableCamera();
 
 		m_pPGInputController->Render();
@@ -210,10 +219,13 @@ namespace Game
 		delete m_enemyTexture;
 		delete m_playerTexture;
 
-		delete m_enemySprite;
-		delete m_playerSprite;
+		//delete m_enemySprite;
+		//delete m_playerSprite;
 
-		delete m_enemyObject;
+		for(int i=0;i<4;++i)
+		{
+			delete m_enemyObject[i];
+		}
 		delete m_playerObject;
 
 		delete m_backgroundTexture;
@@ -234,5 +246,35 @@ namespace Game
 		Particle::Clear();
 
 		delete m_pWorld;
+	}
+
+	void PlayGame::Physics_collisionCallback(void *userData, MPACK::Physics::Body *first, MPACK::Physics::Body *second, MPACK::Physics::CollisionInfo *collisionInfo)
+	{
+		PlayGame *state = (PlayGame*)(userData);
+
+		VoidPointer *ptr1=static_cast<VoidPointer*>(first->userData);
+		VoidPointer *ptr2=static_cast<VoidPointer*>(second->userData);
+
+		if(ptr1->typeId==TypeId<Enemy*>())
+		{
+			Enemy *enemy=static_cast<Enemy*>(ptr1->pointer);
+			enemy->inCollision=true;
+		}
+		if(ptr1->typeId==TypeId<Player*>())
+		{
+			Player *player=static_cast<Player*>(ptr1->pointer);
+			player->inCollision=true;
+		}
+
+		if(ptr2->typeId==TypeId<Enemy*>())
+		{
+			Enemy *enemy=static_cast<Enemy*>(ptr2->pointer);
+			enemy->inCollision=true;
+		}
+		if(ptr2->typeId==TypeId<Player*>())
+		{
+			Player *player=static_cast<Player*>(ptr2->pointer);
+			player->inCollision=true;
+		}
 	}
 }

@@ -6,6 +6,7 @@
 #include "Context.hpp"
 #include "InputService.hpp"
 
+using namespace std;
 using namespace MPACK;
 using namespace MPACK::Core;
 

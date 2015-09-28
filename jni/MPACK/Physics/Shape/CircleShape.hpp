@@ -17,6 +17,7 @@ namespace MPACK
 			void ComputeMass(float density);
 			void SetOrientation(float radians);
 			Type GetType() const;
+			void ComputeAABB();
 
 			float radius;
 		};

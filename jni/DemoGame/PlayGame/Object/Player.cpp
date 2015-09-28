@@ -1,17 +1,19 @@
 #include "Player.hpp"
 
 using namespace MPACK;
+using namespace MPACK::Core;
+using namespace MPACK::Math;
 using namespace MPACK::Physics;
 
 Player::Player(MPACK::Physics::World *world)
 	: PhysicalObject(world)
 {
+	m_thisPointer = ToVoidPointer(this);
 }
 
 Player::~Player()
 {
-	delete m_shape;
-	delete m_body;
+	LOGD("TEST");
 }
 
 bool Player::Update(GLfloat delta)
@@ -39,11 +41,22 @@ void Player::SetSprite(Sprite *pSprite)
 	PolygonShape *poly = new PolygonShape;
 	poly->SetAsBox(m_sprite->GetWidth()*0.5f,m_sprite->GetHeight()*0.5f);
 
+	if(m_shape)
+	{
+		delete m_shape;
+	}
+	if(m_body)
+	{
+		m_world->Destroy(m_body);
+	}
+
 	m_shape = poly;
 	m_body = m_world->Add(m_shape,0,0);
 
 	m_body->SetOrientation(0.0f);
 	m_body->LockOrientation();
+
+	m_body->userData = (void*)&m_thisPointer;
 }
 
 void Player::Shoot(Vector2f direction)
