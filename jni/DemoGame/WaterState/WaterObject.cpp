@@ -12,12 +12,12 @@ using namespace MPACK::Graphics;
 
 const Vector2f WaterObject::s_targetHeight = Vector2f(0.f, 300.f);
 const float	WaterObject::s_dampening = 0.1f;
-const float WaterObject::s_waterDensity = 0.00055f;
+const float WaterObject::s_waterDensity = 0.0017f;
 
 //const float WaterObject::s_waterDensity = 0.00052008571f; // the exact value to keep the rocks in balance
 const int WaterObject::m_springsCount = 201;
 
-WaterObject* WaterObject::g_water = nullptr;
+WaterObject* g_water = nullptr;
 
 WaterObject::WaterObject()
 	: m_spread(0.4f)

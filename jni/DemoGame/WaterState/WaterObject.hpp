@@ -42,9 +42,10 @@ private:
 	void 							CreateSprings();
 	std::vector <WaterSpring>		m_springs;
 
-	static WaterObject*				g_water;
 	static const int 				m_springsCount;
 
 };
+
+extern WaterObject	*g_water;
 
 #endif

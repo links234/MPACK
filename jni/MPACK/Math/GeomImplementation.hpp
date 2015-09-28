@@ -42,7 +42,7 @@ namespace MPACK
 		c=A.y*B.x-A.x*B.y;
 	}
 
-	template<class T> inline bool Math::Geom<T>::LineIntersect(const Math::Vector2<T> A1, const Math::Vector2<T> B1, const Math::Vector2<T> A2, const Math::Vector2<T> B2, Math::Vector2<T> &I)
+	template<class T> inline bool Math::Geom<T>::SegmentIntersect(const Math::Vector2<T> A1, const Math::Vector2<T> B1, const Math::Vector2<T> A2, const Math::Vector2<T> B2, Math::Vector2<T> &I)
 	{
 		if(Math::Misc<T>::Sign(TriangleDet2D(A1,B1,A2)) == Math::Misc<T>::Sign(TriangleDet2D(A1,B1,B2)))
 		{
@@ -53,6 +53,21 @@ namespace MPACK
 			return false;
 		}
 		if(!AABB2D<T>(A1,B1).Intersect(AABB2D<T>(A2,B2)))
+		{
+			return false;
+		}
+		T a1,b1,c1;
+		LineCoeff2D(A1,B1,a1,b1,c1);
+		T a2,b2,c2;
+		LineCoeff2D(A2,B2,a2,b2,c2);
+		I.x=(b1*c2-b2*c1)/(a1*b2-a2*b1);
+		I.y=(c1*a2-c2*a1)/(a1*b2-a2*b1);
+		return true;
+	}
+
+	template<class T> inline bool Math::Geom<T>::LineIntersect(const Vector2<T> &A1, const Vector2<T> &B1, const Vector2<T> &A2, const Vector2<T> &B2, Vector2<T> &I)
+	{
+		if ( (B1.y - A1.y) * (B2.x - A2.x) == (B2.y - A2.y) * (B1.x - A1.x) )
 		{
 			return false;
 		}

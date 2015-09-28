@@ -52,9 +52,6 @@ namespace Game
 		m_pBackgroundSprite->SetSize(Render::GetScreenWidth(), Render::GetScreenHeight());
 
 		m_world = new World(1.f/60.f, 10);
-
-
-
 	}
 
 	int WaterState::Update()
@@ -85,7 +82,8 @@ namespace Game
 
 		if (m_pWSInputController->GetLeftMouseButtonUp())
 		{
-			CreateRockObject(m_pWSInputController->GetMousePosition());
+			for (int i = 1; i <= 7; ++ i)
+				CreateRockObject(m_pWSInputController->GetMousePosition());
 		}
 
 
@@ -124,7 +122,7 @@ namespace Game
 
 			float waterWeight = m_water.s_waterDensity * totalCoveredArea * 98.f;
 
-			rock->SetLinearAcceleration(Vector2f(0.f, 150.f));
+			rock->SetLinearAcceleration(Vector2f(0.f, 98.f));
 			rock->SetLinearAcceleration(Vector2f(0.f, -waterWeight));
 		}
 
