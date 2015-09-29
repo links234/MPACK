@@ -82,8 +82,12 @@ namespace Game
 
 		if (m_pWSInputController->GetLeftMouseButtonUp())
 		{
-			for (int i = 1; i <= 7; ++ i)
-				CreateRockObject(m_pWSInputController->GetMousePosition());
+			for (int i = 1; i <= 5; ++ i)
+			{
+				Vector2f position = m_pWSInputController->GetMousePosition();
+				position += Vector2f(1.0f,0.0f).Rotated(Random::Double(0.0f,360.0f)) * Random::Double(0,50.0f);
+				CreateRockObject(position);
+			}
 		}
 
 
