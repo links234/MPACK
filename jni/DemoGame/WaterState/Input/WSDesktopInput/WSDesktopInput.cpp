@@ -24,6 +24,7 @@ void WSDesktopInput::Update(GLfloat delta)
 {
 	m_requestExit=false;
 	m_userPressedLeftClick = false;
+	m_userIsPressingLeftClick = false;
 	if(Global::pContext->pInputService->GetKeyboard()->KeyPressed(KC_ESCAPE))
 	{
 		m_requestExit=true;
@@ -32,6 +33,11 @@ void WSDesktopInput::Update(GLfloat delta)
 	if (Global::pContext->pInputService->GetMouse()->ButtonUp(MBC_LEFT))
 	{
 		m_userPressedLeftClick = true;
+	}
+
+	if (Global::pContext->pInputService->GetMouse()->ButtonPressed(MBC_LEFT))
+	{
+		m_userIsPressingLeftClick = true;
 	}
 
 	m_movementDirection=Vector2f();
@@ -83,9 +89,19 @@ bool WSDesktopInput::IsUserRequestingExit()
 	return m_requestExit;
 }
 
-bool WSDesktopInput::GetClickedLeftMouseButton()
+bool WSDesktopInput::GetLeftMouseButtonUp()
 {
 	return m_userPressedLeftClick;
+}
+
+bool WSDesktopInput::GetLeftMouseButtonPressed()
+{
+	return m_userIsPressingLeftClick;
+}
+
+Vector2f WSDesktopInput::GetMousePosition()
+{
+	return Global::pContext->pInputService->GetMouse()->GetPosition();
 }
 
 #endif

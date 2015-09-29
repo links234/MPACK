@@ -15,7 +15,9 @@ public:
 	virtual MPACK::Math::Vector2f 			GetMovementDirection() const = 0;
 	virtual MPACK::Math::Vector2f 			GetShootingDirection() const = 0;
 	virtual bool 							IsUserRequestingExit() = 0;
-	virtual bool							GetClickedLeftMouseButton() = 0;
+	virtual bool							GetLeftMouseButtonUp() = 0;
+	virtual bool							GetLeftMouseButtonPressed() = 0;
+	virtual MPACK::Math::Vector2f			GetMousePosition() = 0;
 
 	virtual void							Pause() = 0;
 	virtual void							Continue() = 0;

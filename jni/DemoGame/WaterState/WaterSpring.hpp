@@ -14,7 +14,6 @@ public:
 	Vector2f			m_velocity;
 	const float			m_springConstant;
 	const float			m_springMass;
-	const float			m_dampening;
 
 	void 				Update(float dtime);
 
