@@ -9,23 +9,6 @@ namespace MPACK
 		Anchor::Anchor(double x, double y)
 			: m_x(x), m_y(y)
 		{
-			if(m_x<0.0)
-			{
-				m_x=0.0;
-			}
-			else if(m_x>1.0)
-			{
-				m_x=1.0;
-			}
-
-			if(m_y<0.0)
-			{
-				m_y=0.0;
-			}
-			else if(m_y>1.0)
-			{
-				m_y=1.0;
-			}
 		}
 
 		double Anchor::GetX() const
