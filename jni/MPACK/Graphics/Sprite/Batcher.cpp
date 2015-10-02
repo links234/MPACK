@@ -263,9 +263,9 @@ namespace MPACK
 					}
 					PROFILE_END();
 
-					Profiler::Begin("glDrawElements");
+					PROFILE_BEGIN("glDrawElements");
 					GL_CHECK( glDrawElements(GetGLType(batch->m_type),batch->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]) );
-					Profiler::End();
+					PROFILE_END();
 
 					firstIndex+=batch->m_indexSize;
 
