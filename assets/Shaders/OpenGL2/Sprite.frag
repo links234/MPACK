@@ -1,7 +1,8 @@
-#define NONE 			0.0
-#define ALPHA_TEST 		1.0
-#define ALPHA_BLEND		2.0
-#define NOTEXTURE		3.0
+#define NONE 					0.0
+#define ALPHA_TEST 				1.0
+#define ALPHA_BLEND				2.0
+#define NOTEXTURE				3.0
+#define COLOR_SUM_ALPHA_BLEND	4.0
 
 #define EPS			1.0e-4;
 
@@ -27,6 +28,14 @@ void main(void)
 		outColor = outColor * texture2D(texture0, texCoord);
 	}
 	
+	if(equal(shadeType,COLOR_SUM_ALPHA_BLEND))
+	{
+		float sum = outColor.r + outColor.g + outColor.b;
+		outColor.r = sum;
+		outColor.g = sum;
+		outColor.b = sum;	
+	}
+	
 	if(equal(shadeType,ALPHA_TEST))
 	{
 		if (dot(outColor.rgb,vec3(0.35,0.35,0.35))<=0.1)
@@ -35,9 +44,9 @@ void main(void)
 		}
 	}
 	
-	if(!equal(shadeType,ALPHA_BLEND) && !equal(shadeType,NOTEXTURE))
+	if(!equal(shadeType,ALPHA_BLEND) && !equal(shadeType,NOTEXTURE)  && !equal(shadeType,COLOR_SUM_ALPHA_BLEND))
 	{
-		outColor.w=1.0;
+		outColor.a=1.0;
 	}
 	
 	gl_FragColor=outColor;

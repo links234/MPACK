@@ -1,7 +1,8 @@
-#define NONE 			0.0
-#define ALPHA_TEST 		1.0
-#define ALPHA_BLEND		2.0
-#define NOTEXTURE		3.0
+#define NONE 					0.0
+#define ALPHA_TEST 				1.0
+#define ALPHA_BLEND				2.0
+#define NOTEXTURE				3.0
+#define COLOR_SUM_ALPHA_BLEND	4.0
 
 uniform mat4 projection_matrix;
 

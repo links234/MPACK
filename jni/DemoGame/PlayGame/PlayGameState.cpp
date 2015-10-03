@@ -75,7 +75,8 @@ namespace Game
 		m_enemySprite=new Sprite;
 		m_enemySprite->SetTexture(m_enemyTexture);
 		m_enemySprite->SetSize(100.0f,17.0f*4.0f);
-		m_enemySprite->SetShading(SpriteVertex::ALPHA_BLEND);
+		m_enemySprite->SetShading(SpriteVertex::COLOR_SUM_ALPHA_BLEND);
+		m_enemySprite->SetColor(Vector4f(0.33f,0.33f,0.33f,1.0f));
 
 		for(int i=0;i<=7;++i)
 		{

@@ -23,7 +23,7 @@ namespace MPACK
 
 			GLfloat x,y,s,t,r,g,b,a,stype;
 
-			enum SpriteShadingMode{NONE, ALPHA_TEST, ALPHA_BLEND, NOTEXTURE};
+			enum SpriteShadingMode{NONE, ALPHA_TEST, ALPHA_BLEND, NOTEXTURE, COLOR_SUM_ALPHA_BLEND};
 		};
 	}
 }
