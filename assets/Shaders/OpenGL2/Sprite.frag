@@ -2,9 +2,9 @@
 #define ALPHA_TEST 				1.0
 #define ALPHA_BLEND				2.0
 #define NOTEXTURE				3.0
-#define COLOR_SUM_ALPHA_BLEND	4.0
+#define COLOR_SUM_ALPHA_BLEND			4.0
 
-#define EPS			1.0e-4;
+#define EPS					1.0e-4;
 
 uniform sampler2D texture0;
 
@@ -33,7 +33,7 @@ void main(void)
 		float sum = outColor.r + outColor.g + outColor.b;
 		outColor.r = sum;
 		outColor.g = sum;
-		outColor.b = sum;	
+		outColor.b = sum;
 	}
 	
 	if(equal(shadeType,ALPHA_TEST))
@@ -44,7 +44,7 @@ void main(void)
 		}
 	}
 	
-	if(!equal(shadeType,ALPHA_BLEND) && !equal(shadeType,NOTEXTURE)  && !equal(shadeType,COLOR_SUM_ALPHA_BLEND))
+	if(!equal(shadeType,ALPHA_BLEND) && !equal(shadeType,NOTEXTURE) && !equal(shadeType,COLOR_SUM_ALPHA_BLEND))
 	{
 		outColor.a=1.0;
 	}
