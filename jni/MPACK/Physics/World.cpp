@@ -74,12 +74,15 @@ namespace MPACK
 						continue;
 					}
 
-
 					Manifold m(A,B);
 					m.Solve();
 					if(m.m_contactCount)
 					{
+#if defined(WINDOWS_PLATFORM)
+						m_contacts.push_back(m);
+#else
 						m_contacts.emplace_back(m);
+#endif
 					}
 				}
 			}

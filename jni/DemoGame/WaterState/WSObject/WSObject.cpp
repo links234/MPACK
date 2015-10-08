@@ -43,8 +43,8 @@ bool WSObject::UpdateAll(float dtime)
 
 void WSObject::RenderAll()
 {
-	for (auto &currentObj : s_wsObjects)
+	for ( int i=0;i<s_wsObjects.size();++i)
 	{
-		currentObj->Render();
+		s_wsObjects[i]->Render();
 	}
 }

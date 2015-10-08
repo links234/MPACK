@@ -63,20 +63,13 @@ namespace MPACK
 			assert(clipSize >= 3);
 
 			int turning = 0;
-			auto moduloFunc = [](int x, int modValue) mutable -> int
-					{
-						while (x < 0) x += modValue;
-						while (x >= modValue) x-= modValue;
-						return x;
-					};
-
 
 			for (int i = 0; i < (int)clip.size(); ++ i)
 			{
 				int pozx, pozy, pozz;
-				pozx = moduloFunc(i-1, clipSize);
-				pozy = moduloFunc(i, clipSize);
-				pozz = moduloFunc(i+1, clipSize);
+				pozx=(i-1+clipSize)%clipSize;
+				pozy = i%clipSize;
+				pozz =(i+1)%clipSize;
 				float det = Cross(clip[pozx], clip[pozy], clip[pozz]);
 
 				assert(!(det < 0.f)); // pozx, pozy, pozz form a turning in reverse trigonometric order
@@ -105,9 +98,9 @@ namespace MPACK
 			for (int i = 0; i < clipSize; ++ i)
 			{
 				// ( clip[pozx], clip[pozy] ) the line that cuts the polygon
-				int pozx = moduloFunc(i-1, clipSize);
-				int pozy = moduloFunc(i, clipSize);
-
+				int pozx,pozy;
+				pozx=(i-1+clipSize)%clipSize;
+				pozy = i%clipSize;
 
 				polygon = result;
 				result.clear();
@@ -189,15 +182,15 @@ namespace MPACK
 			if (polygonSize < 3)
 				return 0.f;
 			float sum = 0.f;
-			auto moduloFunc = [](int x, int modValue) mutable -> int
-								{
-									while (x < 0) x += modValue;
-									while (x >= modValue) x-= modValue;
-									return x;
-								};
+
 			for (int i = 0; i < polygonSize; ++ i)
 			{
-				sum += (polygon[i].x * polygon[moduloFunc(i+1, polygonSize)].y - polygon[moduloFunc(i+1, polygonSize)].x * polygon[i].y);
+				int nextI = i+1;
+				if (nextI >= polygonSize)
+				{
+					nextI -= polygonSize;
+				}
+				sum += (polygon[i].x * polygon[nextI].y - polygon[nextI].x * polygon[i].y);
 			}
 			return sum / 2.f;
 		}

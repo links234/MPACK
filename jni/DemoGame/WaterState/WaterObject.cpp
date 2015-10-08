@@ -94,13 +94,14 @@ void WaterObject::CreateWavesVertices()
 
 		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 10000.f);
 	}
-
 }
 
 void WaterObject::Update(float dtime)
 {
-	for (auto &spring : m_springs)
-		spring.Update(dtime);
+	for (int i=0;i<m_springs.size();++i)
+	{
+		m_springs[i].Update(dtime);
+	}
 
 	Vector2f leftDeltas[m_springs.size()];
 	Vector2f rightDeltas[m_springs.size()];

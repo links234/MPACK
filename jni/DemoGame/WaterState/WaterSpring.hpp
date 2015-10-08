@@ -12,8 +12,8 @@ public:
 						WaterSpring();
 	Vector2f			m_position;
 	Vector2f			m_velocity;
-	const float			m_springConstant;
-	const float			m_springMass;
+	float				m_springConstant;
+	float				m_springMass;
 
 	void 				Update(float dtime);
 

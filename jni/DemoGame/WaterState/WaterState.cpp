@@ -91,9 +91,9 @@ namespace Game
 		}
 
 
-		for (auto &rock : m_rockObjects)
+		for (int r=0; r<m_rockObjects.size();++r)
 		{
-			rock->Update(dtime);
+			m_rockObjects[r]->Update(dtime);
 
 			float totalCoveredArea = 0.f;
 
@@ -101,8 +101,8 @@ namespace Game
 			springTriangle.resize(3);
 
 			vector <Vector2f> rockPolygon;
-			for (int i = 0; i < rock->GetShape()->m_vertexCount; ++ i)
-				rockPolygon.push_back(rock->GetShape()->m_vertices[i] + rock->GetBody()->GetPosition());
+			for (int i = 0; i < m_rockObjects[i]->GetShape()->m_vertexCount; ++ i)
+				rockPolygon.push_back(m_rockObjects[r]->GetShape()->m_vertices[i] + m_rockObjects[r]->GetBody()->GetPosition());
 
 			vector <Vector2f> result;
 
@@ -126,8 +126,8 @@ namespace Game
 
 			float waterWeight = m_water.s_waterDensity * totalCoveredArea * 98.f;
 
-			rock->SetLinearAcceleration(Vector2f(0.f, 98.f));
-			rock->SetLinearAcceleration(Vector2f(0.f, -waterWeight));
+			m_rockObjects[r]->SetLinearAcceleration(Vector2f(0.f, 98.f));
+			m_rockObjects[r]->SetLinearAcceleration(Vector2f(0.f, -waterWeight));
 		}
 
 
@@ -158,9 +158,9 @@ namespace Game
 
 		m_water.Render();
 
-		for (auto &rock : m_rockObjects)
+		for (int i=0;i<m_rockObjects.size();++i)
 		{
-			rock->Render();
+			m_rockObjects[i]->Render();
 		}
 
 		m_pWSInputController->Render();
