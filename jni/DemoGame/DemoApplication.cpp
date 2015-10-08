@@ -42,6 +42,12 @@ namespace Game
     {
 		LOGI("DemoApplication::onActivate()");
 
+		LOGI("Command line arguments: ");
+		for(int i=0;i<Global::arguments.size();++i)
+		{
+			LOGI("arguments[%d] = %s",i,Global::arguments[i].c_str());
+		}
+
 		Profiler::Init();
 
 		GameResources::InitMVFS();

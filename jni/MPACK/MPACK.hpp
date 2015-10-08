@@ -15,6 +15,12 @@
 #include "Time.hpp"
 #include "Misc.hpp"
 
+#define MPACK_FORCE_SEMICOLON \
+	do \
+	{ \
+		\
+	} while(0)
+
 #define MPACK_ANDROID_MAIN	void android_main(android_app* MPACK_pApplication)
 #define MPACK_ANDROID_RETURN(x)
 
@@ -24,7 +30,7 @@
                    int MPACK_cmdShow)
 #define MPACK_WINDOWS_RETURN(x)	return x
 
-#define MPACK_LINUX_MAIN	int main()
+#define MPACK_LINUX_MAIN	int main(int MPACK_argc, char *MPACK_argv[])
 #define MPACK_LINUX_RETURN(x)	return x
 
 #ifdef ANDROID_PLATFORM
@@ -67,7 +73,34 @@
 	MPACK::Global::pEventLoop=MPACK::Core::EventLoop::Initialize(MPACK_eventLoopData); \
     result = MPACK::Global::pEventLoop->Run(pApp)
 
+#if defined(ANDROID_PLATFORM)
+	#define MPACK_INIT_ARGV \
+		MPACK_FORCE_SEMICOLON
+#elif defined(LINUX_PLATFORM)
+	#define MPACK_INIT_ARGV \
+		for(int i=0;i<MPACK_argc;++i) \
+		{ \
+			MPACK::Global::arguments.push_back(std::string(MPACK_argv[i]));\
+		} \
+		MPACK_FORCE_SEMICOLON
+#elif defined(WINDOWS_PLATFORM)
+	#define MPACK_INIT_ARGV \
+		LPWSTR *MPACK_szArgList; \
+		int MPACK_argCount; \
+		MPACK_szArgList = CommandLineToArgvW(GetCommandLine(), &MPACK_argCount); \
+		if (MPACK_szArgList == NULL) \
+		{ \
+			return 1; \
+		} \
+		for(int i=0;i<MPACK_argCount;++i) \
+		{ \
+			MPACK::Global::arguments.push_back(std::string(MPACK_szArgList[i]));\
+		} \
+		LocalFree(MPACK_szArgList)
+#endif
+
 #define MPACK_INITIALIZE \
+		MPACK_INIT_ARGV; \
 		MPACK::Core::Log::Initialize(); \
 		MPACK::Core::Random::Init(); \
 		MPACK_FILLGLOBAL

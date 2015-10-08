@@ -28,6 +28,8 @@ namespace MPACK
 		extern AAssetManager 				*pAAssetManager;
 	#endif
 
+		extern std::vector<std::string>		arguments;
+
 		extern Core::Context				*pContext;
 		extern Core::EventLoop				*pEventLoop;
 
