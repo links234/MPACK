@@ -6,7 +6,6 @@
 static JavaVM* GoogleAdsJvm;
 static jobject GoogleAdsJobject;
 
-
 namespace MPACK
 {
 	namespace ADS
@@ -182,5 +181,3 @@ extern "C"
 }
 
 #endif
-
-
