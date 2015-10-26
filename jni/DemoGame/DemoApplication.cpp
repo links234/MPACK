@@ -120,15 +120,17 @@ namespace Game
 
 #ifdef MPACK_TESTING
     	static bool started=false;
-    	static Time::Timer *timer=Time::Timer::Create();
+    	static float time = 0.0;
     	static Sound::AudioPlayer *sound=new Sound::AudioPlayer();
     	static string message="";
+
+    	time += Global::pContext->pTimeService->Elapsed();
 
     	if(!started)
     	{
     		started=true;
 
-    		timer->Start();
+    		time = 0.0f;
 
     		sound->LoadFD("@Sounds/bgm.mp3");
     		sound->AddToGroup("background");
@@ -150,20 +152,20 @@ namespace Game
 			*/
     	}
     	static int state=0;
-    	if(timer->Time()>10.0f && state==0)
+    	if(time>10.0f && state==0)
     	{
     		LOGE("TOGGLE GROUPCONTROLLER MUTE");
     		++state;
     		Sound::GroupController::Get("background")->Volume()->ToggleMute();
     	}
-    	if(timer->Time()>15.0f && state==1)
+    	if(time>15.0f && state==1)
 		{
     		LOGE("TOGGLE GROUPCONTROLLER MUTE");
 			++state;
 			//Sound::OutputMixer::GetOutputMixer()->Volume()->ToggleMute();
     		Sound::GroupController::Get("background")->Volume()->ToggleMute();
 		}
-    	if(timer->Time()>20.0f && state==2)
+    	if(time>20.0f && state==2)
     	{
     		LOGE("Reset and 0.2 volume");
     		++state;
