@@ -38,19 +38,16 @@ namespace MPACK
 			// Opens and checks image signature (first 8 bytes).
 			if (pResource->Open() != RETURN_VALUE_OK)
 			{
-				return RETURN_VALUE_KO;
-				//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
 			if (pResource->Read(header, sizeof(header)) != RETURN_VALUE_OK)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			if (png_sig_cmp(header, 0, 8) != 0)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
 			// Creates required structures.
@@ -58,15 +55,13 @@ namespace MPACK
 			if (!pngPtr)
 			{
 				LOGE("PNGImage::Load failed to create read structure!");
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			infoPtr = png_create_info_struct(pngPtr);
 
 			if (!infoPtr)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
 			// Prepares reading operation by setting-up a read callback.
@@ -75,8 +70,7 @@ namespace MPACK
 			// code will come back here and jump
 			if (setjmp(png_jmpbuf(pngPtr)))
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
 			// Ignores first 8 bytes already read and processes header.
@@ -141,15 +135,13 @@ namespace MPACK
 			rowSize = png_get_rowbytes(pngPtr, infoPtr);
 			if (rowSize <= 0)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			// Ceates the image buffer that will be sent to OpenGL.
 			m_imageBuffer = new png_byte[rowSize * height];
 			if (!m_imageBuffer)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			// Pointers to each row of the image buffer. Row order is
 			// inverted because different coordinate systems are used by
@@ -157,8 +149,7 @@ namespace MPACK
 			rowPtrs = new png_bytep[height];
 			if (!rowPtrs)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			for (::int32_t i = 0; i < height; ++i)
 			{
@@ -169,11 +160,12 @@ namespace MPACK
 
 			// Frees memory and resources.
 			pResource->Close();
+			delete pResource;
 			png_destroy_read_struct(&pngPtr, &infoPtr, NULL);
 			delete[] rowPtrs;
 			return RETURN_VALUE_OK;
 
-	//ERROR_LABEL:
+	ERROR_LABEL:
 			LOGE("Error while reading PNG file");
 			pResource->Close();
 			delete pResource;
@@ -198,7 +190,7 @@ namespace MPACK
 			m_width=0;
 			m_height=0;
 			m_format=0;
-			delete m_imageBuffer;
+			delete[] m_imageBuffer;
 		}
 
 		const BYTE* PNGImage::GetImageData() const
