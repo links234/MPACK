@@ -218,7 +218,7 @@ namespace MPACK
 
 					if(m_bytesPerPixel == 4)
 					{
-						colorBuffer[4]=(unsigned char)(*pointer); ++pointer;
+						colorBuffer[3]=(unsigned char)(*pointer); ++pointer;
 					}
 
 					for(short counter = 0; counter < chunkheader; counter++)
