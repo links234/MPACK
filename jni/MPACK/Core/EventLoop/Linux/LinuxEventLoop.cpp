@@ -21,7 +21,8 @@ namespace MPACK
 
 
 		LinuxEventLoop::LinuxEventLoop(void *data)
-			: m_isFullscreen(false), m_isRunning(false), m_width(0), m_height(0), m_enabled(false)
+			: m_isFullscreen(false), m_isRunning(false), m_width(0), m_height(0),
+			  m_enabled(false), m_glContext(NULL)
 		{
 		}
 
@@ -252,6 +253,8 @@ namespace MPACK
 				XF86VidModeSwitchToMode(m_display, m_screenID, &m_XF86DeskMode);
 				XF86VidModeSetViewPort(m_display, m_screenID, 0, 0);
 			}
+
+			XCloseDisplay(m_display);
 		}
 
 		void LinuxEventLoop::ProcessEvents()
@@ -309,9 +312,9 @@ namespace MPACK
 
 		void LinuxEventLoop::SwapBuffers()
 		{
-			Profiler::Begin("SwapBuffers");
+			PROFILE_BEGIN("SwapBuffers");
 			glXSwapBuffers(m_display, m_XWindow);
-			Profiler::End();
+			PROFILE_END();
 		}
 	}
 }
