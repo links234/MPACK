@@ -1,3 +1,7 @@
+#Local dump files
+*.dump
+*.dmp
+
 #Local development assets
 assets/local/
 
