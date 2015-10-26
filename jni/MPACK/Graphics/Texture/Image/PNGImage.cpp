@@ -142,7 +142,6 @@ namespace MPACK
 			}
 			// Ceates the image buffer that will be sent to OpenGL.
 			m_imageBuffer = new png_byte[rowSize * height];
-			LOGD("rowSize * height = %d", rowSize * height);
 			if (!m_imageBuffer)
 			{
 				goto ERROR_LABEL;
