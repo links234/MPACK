@@ -137,6 +137,7 @@ namespace MPACK
 			{
 				allObjects.push_back(*it);
 			}
+			s_objects.clear();
 			for(vector<AudioPlayer*>::iterator it=allObjects.begin();it!=allObjects.end();++it)
 			{
 				delete (*it);
