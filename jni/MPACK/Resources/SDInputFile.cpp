@@ -22,7 +22,7 @@ namespace MPACK
 			{
 				mInputStream.close();
 			}
-			if(!mBuffer)
+			if(mBuffer)
 			{
 				delete[] mBuffer;
 				mBuffer = NULL;
