@@ -1,8 +1,11 @@
 #include "ParticleEmitterCircle.hpp"
 
+#include "Particle.hpp"
+#include "Texture2D.hpp"
 #include "Random.hpp"
 
 using namespace MPACK::Math;
+using namespace MPACK::Graphics;
 
 namespace MPACK
 {
@@ -69,7 +72,7 @@ namespace MPACK
 			m_spawnDelay=spawnDelay;
 		}
 
-		void ParticleEmitterCircle::SetTexture(Graphics::Texture2D *texture)
+		void ParticleEmitterCircle::SetTexture(Texture2D *texture)
 		{
 			m_texture=texture;
 		}
