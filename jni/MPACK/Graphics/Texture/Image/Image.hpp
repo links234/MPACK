@@ -3,6 +3,8 @@
 
 #include "Types.hpp"
 
+#include "Color.hpp"
+
 namespace MPACK
 {
 	namespace Graphics
@@ -22,8 +24,11 @@ namespace MPACK
 
 			GLint GetFormat() const;
 
+			bool HaveAlphaChannel() const;
+
 			virtual const BYTE* GetImageData() const = 0;
-			virtual const BYTE* GetPixel(GLushort x, GLushort y) const = 0;
+			virtual const BYTE* GetPixelPointer(GLushort x, GLushort y) const = 0;
+			virtual Color GetPixel(GLushort x, GLushort y) const = 0;
 
 			virtual void FlipVertical() = 0;
 			virtual void FlipHorizontal() = 0;
@@ -34,7 +39,7 @@ namespace MPACK
 			GLushort m_format;
 			GLushort m_bytesPerPixel;
 
-
+			bool m_alphaChannel;
 		};
 
 		Image* LoadImage(const char *pPath);

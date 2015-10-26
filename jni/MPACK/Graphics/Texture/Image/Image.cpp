@@ -12,7 +12,8 @@ namespace MPACK
 	namespace Graphics
 	{
 		Image::Image()
-			: m_width(0), m_height(0), m_format(0), m_bytesPerPixel(0)
+			: m_width(0), m_height(0), m_format(0), m_bytesPerPixel(0),
+			  m_alphaChannel(false)
 		{
 		}
 
@@ -38,6 +39,11 @@ namespace MPACK
 		GLint Image::GetFormat() const
 		{
 			return m_format;
+		}
+
+		bool Image::HaveAlphaChannel() const
+		{
+			return m_alphaChannel;
 		}
 
 		Image* LoadImage(const char *pPath)

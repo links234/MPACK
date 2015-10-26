@@ -69,10 +69,12 @@ namespace MPACK
 			if(m_bytesPerPixel==3)
 			{
 				m_format=GL_RGB;
+				m_alphaChannel=true;
 			}
 			else if(m_bytesPerPixel==4)
 			{
 				m_format=GL_RGBA;
+				m_alphaChannel=false;
 			}
 
 			unsigned int imageSize = m_width * m_height * m_bytesPerPixel;
@@ -118,11 +120,27 @@ namespace MPACK
 			return &m_imageData[0];
 		}
 
-		const BYTE* TargaImage::GetPixel(GLushort x, GLushort y) const
+		const BYTE* TargaImage::GetPixelPointer(GLushort x, GLushort y) const
 		{
 			int index=x*m_width+y;
 			index*=m_bytesPerPixel;
 			return &m_imageData[index];
+		}
+
+		Color TargaImage::GetPixel(GLushort x, GLushort y) const
+		{
+			int index=x*m_width+y;
+			index*=m_bytesPerPixel;
+			if (m_bytesPerPixel == 4)
+			{
+				return Color(m_imageData[index], m_imageData[index+1],
+						     m_imageData[index+2], m_imageData[index+3]);
+			}
+			else
+			{
+				return Color(m_imageData[index], m_imageData[index+1],
+						     m_imageData[index+2], 255);
+			}
 		}
 
 		void TargaImage::FlipVertical()

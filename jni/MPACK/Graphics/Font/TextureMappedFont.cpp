@@ -243,7 +243,7 @@ namespace MPACK
 				return false;
 			}
 
-			if(format == ALPHA && pFontImage->GetBytesPerPixel()!=4)
+			if(format == ALPHA && !pFontImage->HaveAlphaChannel())
 			{
 				LOGE("TextureMappedFont::Load() format is set to ALPHA but font image does not have alpha channel!");
 				delete pFontImage;
@@ -346,10 +346,10 @@ namespace MPACK
 						{
 							GLuint ri=i*cellWidth+ci;
 							GLuint rj=j*cellHeight+cj;
-							BYTE *p=(BYTE*)(pFontImage->GetPixel(ri,rj));
-							BYTE b=*p;
-							BYTE g=*(p+1);
-							BYTE r=*(p+2);
+							Color c=pFontImage->GetPixel(ri,rj);
+							BYTE b=c.b;
+							BYTE g=c.g;
+							BYTE r=c.r;
 							Math::Vector3f color((GLfloat)(r)*OneOver255,(GLfloat)(g)*OneOver255,(GLfloat)(b)*OneOver255);
 
 							if(color.Magnitude()>=FORMATTYPE_RGB_MAGNITUDE_THRESHOLD)
@@ -406,8 +406,8 @@ namespace MPACK
 						{
 							GLuint ri=i*cellWidth+ci;
 							GLuint rj=j*cellHeight+cj;
-							BYTE *p=(BYTE*)(pFontImage->GetPixel(ri,rj));
-							BYTE alpha=*(p+3);
+							Color c=pFontImage->GetPixel(ri,rj);
+							BYTE alpha=c.a;
 
 							if(alpha>=FORMATTYPE_ALPHA_THRESHOLD)
 							{

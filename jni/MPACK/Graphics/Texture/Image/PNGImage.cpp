@@ -105,6 +105,7 @@ namespace MPACK
 			}
 			// Indicates that image needs conversion to RGBA if needed.
 
+			m_alphaChannel = transparency;
 			switch (colorType)
 			{
 				case PNG_COLOR_TYPE_PALETTE:
@@ -116,14 +117,16 @@ namespace MPACK
 					break;
 				case PNG_COLOR_TYPE_RGBA:
 					m_format = GL_RGBA;
+					m_alphaChannel=true;
 					break;
 				case PNG_COLOR_TYPE_GRAY:
 					png_set_expand_gray_1_2_4_to_8(pngPtr);
 					m_format = transparency ? GL_LUMINANCE_ALPHA:GL_LUMINANCE;
 					break;
-				case PNG_COLOR_TYPE_GA:
+				case PNG_COLOR_TYPE_GRAY_ALPHA:
 					png_set_expand_gray_1_2_4_to_8(pngPtr);
 					m_format = GL_LUMINANCE_ALPHA;
+					m_alphaChannel=true;
 					break;
 			}
 			// Validates all tranformations.
@@ -139,6 +142,7 @@ namespace MPACK
 			}
 			// Ceates the image buffer that will be sent to OpenGL.
 			m_imageBuffer = new png_byte[rowSize * height];
+			LOGD("rowSize * height = %d", rowSize * height);
 			if (!m_imageBuffer)
 			{
 				goto ERROR_LABEL;
@@ -198,11 +202,37 @@ namespace MPACK
 			return m_imageBuffer;
 		}
 
-		const BYTE* PNGImage::GetPixel(GLushort x, GLushort y) const
+		const BYTE* PNGImage::GetPixelPointer(GLushort x, GLushort y) const
 		{
 			int index=x*m_width+y;
 			index*=m_bytesPerPixel;
 			return m_imageBuffer+index;
+		}
+
+		Color PNGImage::GetPixel(GLushort x, GLushort y) const
+		{
+			int index=x*m_width+y;
+			index*=m_bytesPerPixel;
+			if (m_bytesPerPixel == 4)
+			{
+				return Color(m_imageBuffer[index], m_imageBuffer[index+1],
+							 m_imageBuffer[index+2], m_imageBuffer[index+3]);
+			}
+			else if(m_bytesPerPixel == 3)
+			{
+				return Color(m_imageBuffer[index], m_imageBuffer[index+1],
+						     m_imageBuffer[index+2], 255);
+			}
+			else if(m_bytesPerPixel == 2)
+			{
+				return Color(m_imageBuffer[index], m_imageBuffer[index],
+						     m_imageBuffer[index], m_imageBuffer[index+1]);
+			}
+			else
+			{
+				return Color(m_imageBuffer[index], m_imageBuffer[index],
+						     m_imageBuffer[index], 255);
+			}
 		}
 
 		void PNGImage::FlipVertical()
