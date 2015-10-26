@@ -178,6 +178,15 @@ namespace MPACK
 			s_useCamera=false;
 		}
 
+		void Batcher::Cleanup()
+		{
+			for(map<GLfloat,Batcher*>::iterator it=s_batcher.begin();it!=s_batcher.end();++it)
+			{
+				delete (*it).second;
+			}
+			s_batcher.clear();
+		}
+
 		void Batcher::SendCustomRenderCall(Core::Param1PtrCallbackFunc func, void *param1)
 		{
 			CompleteSpriteBatch();

@@ -53,6 +53,8 @@ namespace MPACK
 			Render::DisableAlphaBlend();
 			Render::DisableOrthoMode();
 			Render::Uninit();
+
+			Batcher::Cleanup();
 		}
 
 		void GraphicsService::Update(GLfloat delta)
