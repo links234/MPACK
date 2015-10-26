@@ -15,10 +15,9 @@
 	MPACK::Core::Random::Init(); 											\
 	MPACK_FILLGLOBALCONTEXT
 
-#define MPACK_LINUX_RUN(pApp,result) 													\
-	void *MPACK_eventLoopData=NULL; 													\
-	MPACK::Global::pEventLoop=MPACK::Core::EventLoop::Initialize(MPACK_eventLoopData); 	\
-    result = MPACK::Global::pEventLoop->Run(pApp)
+#define MPACK_LINUX_RUN(UserApplication,result) 							\
+	void *MPACK_eventLoopData=NULL; 										\
+	MPACK_RUN_COMMON(UserApplication,result)
 
 #define MPACK_LINUX_RETURN(x)												\
 	return x

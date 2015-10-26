@@ -11,12 +11,11 @@
 	MPACK::Core::Random::Init();												\
 	MPACK::Global::pAndroidApp=MPACK_pApplication;								\
 	MPACK::Global::pAAssetManager=MPACK_pApplication->activity->assetManager; 	\
-	MPACK_FILLGLOBAL
+	MPACK_FILLGLOBALCONTEXT
 
-#define MPACK_ANDROID_RUN(pApp,result) 													\
-	void *MPACK_eventLoopData=NULL; 													\
-	MPACK::Global::pEventLoop=MPACK::Core::EventLoop::Initialize(MPACK_eventLoopData); 	\
-    result = MPACK::Global::pEventLoop->Run(pApp)
+#define MPACK_ANDROID_RUN(UserApplication,result) 								\
+	void *MPACK_eventLoopData=NULL; 											\
+	MPACK_RUN_COMMON(UserApplication,result)
 
 #define MPACK_ANDROID_RETURN(x)
 

@@ -21,15 +21,23 @@
 										\
 	} while(0)
 
+#define MPACK_RUN_COMMON(UserApplication,result) \
+	UserApplication *MPACK_pUserApplication = new UserApplication(); \
+	MPACK::Global::pEventLoop=MPACK::Core::EventLoop::Initialize(MPACK_eventLoopData); \
+    result = MPACK::Global::pEventLoop->Run(MPACK_pUserApplication); \
+    delete MPACK::Global::pEventLoop; \
+	delete MPACK_pUserApplication
+
 #define MPACK_FILLGLOBALCONTEXT																\
-	MPACK::Time::TimeService *MPACK_pTimeService = MPACK::Time::TimeService::Initialize();	\
-    MPACK::Graphics::GraphicsService 	MPACK_lGraphicsService; 							\
-    MPACK::Sound::SoundService 			MPACK_lSoundService; 								\
-    MPACK::Input::InputService 			MPACK_lInputService; 								\
-    MPACK::Core::Context MPACK_lContext = { &MPACK_lGraphicsService, 						\
-											&MPACK_lInputService, 							\
-											&MPACK_lSoundService, 							\
-											MPACK_pTimeService}; 							\
+	MPACK::Time::TimeService *MPACK_pTimeService = MPACK::Time::TimeService::Initialize(); 	\
+    MPACK::Graphics::GraphicsService 	*MPACK_pGraphicsService; 							\
+    MPACK_pGraphicsService = new MPACK::Graphics::GraphicsService(); 						\
+    MPACK::Sound::SoundService 			*MPACK_pSoundService; 								\
+    MPACK_pSoundService = new MPACK::Sound::SoundService(); 								\
+    MPACK::Input::InputService 			*MPACK_pInputService; 								\
+    MPACK_pInputService = new MPACK::Input::InputService(); 								\
+    MPACK::Core::Context MPACK_lContext={MPACK_pGraphicsService, MPACK_pInputService, 		\
+										 MPACK_pSoundService, MPACK_pTimeService}; 			\
     MPACK::Global::pContext = &MPACK_lContext
 
 #endif

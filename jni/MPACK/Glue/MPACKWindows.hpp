@@ -27,10 +27,9 @@
 	MPACK::Core::Random::Init();												\
 	MPACK_FILLGLOBALCONTEXT
 
-#define MPACK_WINDOWS_RUN(pApp,result) 													\
-	void *MPACK_eventLoopData=(void*)(&MPACK_hInstance); 								\
-	MPACK::Global::pEventLoop=MPACK::Core::EventLoop::Initialize(MPACK_eventLoopData); 	\
-    result = MPACK::Global::pEventLoop->Run(pApp)
+#define MPACK_WINDOWS_RUN(UserApplication,result) 								\
+	void *MPACK_eventLoopData=(void*)(&MPACK_hInstance); 						\
+	MPACK_RUN_COMMON(UserApplication,result)
 
 #define MPACK_WINDOWS_RETURN(x)													\
 	return x
