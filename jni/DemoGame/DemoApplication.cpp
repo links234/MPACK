@@ -107,6 +107,10 @@ namespace Game
     	{
     		delete m_pGameState;
     	}
+    	if(m_pSavedGameState)
+		{
+			delete m_pSavedGameState;
+		}
 
     	delete m_pCursorTex;
 

@@ -220,14 +220,14 @@ namespace Game
 		delete m_enemyTexture;
 		delete m_playerTexture;
 
-		//delete m_enemySprite;
-		//delete m_playerSprite;
-
+		delete m_enemySprite;
+		delete m_playerSprite;
+/*
 		for(int i=0;i<4;++i)
 		{
 			delete m_enemyObject[i];
 		}
-		delete m_playerObject;
+		delete m_playerObject;*/
 
 		delete m_backgroundTexture;
 		delete m_background;
@@ -244,7 +244,7 @@ namespace Game
 		delete m_UIMatch3Sprite;
 		delete m_UIMatch4Sprite;
 
-		Particle::Clear();
+		Particle::Cleanup();
 
 		delete m_pWorld;
 	}
