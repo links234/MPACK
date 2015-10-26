@@ -239,12 +239,14 @@ namespace MPACK
 			if(pFontImage->Load(textureName.c_str())==RETURN_VALUE_KO)
 			{
 				LOGE("TextureMappedFont::Load() could not load the font texture: %s",textureName.c_str());
+				delete pFontImage;
 				return false;
 			}
 
 			if(format == ALPHA && pFontImage->GetBytesPerPixel()!=4)
 			{
 				LOGE("TextureMappedFont::Load() format is set to ALPHA but font image does not have alpha channel!");
+				delete pFontImage;
 				return false;
 			}
 
