@@ -105,9 +105,6 @@ namespace MPACK
 			Window root = RootWindow(m_display, m_screenID);
 
 			int n = 0, modeNum = 0;
-			//Get a framebuffer config using the default attributes
-			GLXFBConfig framebufferConfig = (*glXChooseFBConfig(m_display, m_screenID, 0, &n));
-
 			XF86VidModeModeInfo **modes;
 			if (!XF86VidModeGetAllModeLines(m_display, m_screenID, &modeNum, &modes))
 			{
@@ -188,9 +185,9 @@ namespace MPACK
 				XSetNormalHints(m_display, m_XWindow, &sizehints);
 			}
 
-
 			//Create a GL 2.1 context
 			GLXContext m_glContext = glXCreateContext(m_display, vi, 0, GL_TRUE);
+			XFree(vi);
 
 			if (m_glContext == NULL)
 			{
