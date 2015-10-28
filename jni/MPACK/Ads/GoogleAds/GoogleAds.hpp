@@ -1,5 +1,8 @@
+#ifdef ANDROID_PLATFORM
+
 #ifndef GOOGLEADS_H
 #define GOOGLEADS_H
+
 
 #include <jni.h>
 #include <android_native_app_glue.h>
@@ -50,9 +53,5 @@ namespace MPACK
 
 
 
-
-
-
-
-
+#endif
 #endif

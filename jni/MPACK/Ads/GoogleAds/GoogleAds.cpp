@@ -1,3 +1,5 @@
+#ifdef ANDROID_PLATFORM
+
 #include "GoogleAds.hpp"
 #include "Global.hpp"
 
@@ -193,3 +195,4 @@ extern "C"
 	}
 }
 
+#endif
