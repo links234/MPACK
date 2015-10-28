@@ -1,3 +1,5 @@
+#ifdef ANDROID_PLATFORM
+
 #ifndef	RATEME_H
 #define RATEME_H
 
@@ -14,30 +16,35 @@ namespace MPACK
 		{
 			public:
 
-				const static bool VerticalOrientation = true;
-				const static bool HorizontalOrientation = false;
-				const static bool NeverButtonOn = true;
-				const static bool NeverButtonOff = false;
+				const static int OK = 1;
+				const static int NEVER_OPTION_TRIGGERED = 2;
+				const static int ALREADY_RATED = 3;
+				const static int TIME_OR_LAUNCHES_PROBLEM = 4;
 
 			public:
 				ANativeActivity* mActivity;
 				JavaVM* mJvm;
 
 			public:
-				RateMe(const string ,const string ,const int ,const int);
+				RateMe(const string,const int ,const int);
 
 			public:
-				void callMainActivityJavaFunction(const char * ,const string,const string,const int,const int);
-				void callRateMeVoidJavaFunctionString2Bool(const char *,const string , const bool,const bool);
-
+				void callMainActivityJavaFunction(const char * ,const string,const int,const int);
+				void callRateMeVoidJavaFunctionWithoutParams(const char *);
+				int callRateMeIntJavaFunctionWithoutParams(const char *);
 
 			public:
 
-				void rateMeNow(const string , const bool , const bool);
-				void automaticRateMe(const string, const bool,const bool);
+				void rate();
+				void rateNever();
+				void rateLater();
+				int check();
+				void update();
+				void reset();
 		};
 	}
 }
 
 
+#endif
 #endif
