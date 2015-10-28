@@ -1,3 +1,9 @@
+#Private keys
+res/values/private_key.xml
+
+#Appcomat gen file
+src/com/android/vending/billing/IInAppBillingService.aidl
+
 #Local development assets
 assets/local/
 
@@ -32,7 +38,7 @@ local.properties
 
 #Eclipse project folders
 #.externalToolBuilders/
-#.settings/
+.settings/
 
 #Files
 lint.xml
