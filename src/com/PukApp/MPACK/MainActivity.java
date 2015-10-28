@@ -24,7 +24,6 @@ public class MainActivity extends NativeActivity implements ConnectionCallbacks,
 	EasyShare mEasyShare;
 	RateMe mRateMe;
 	InAppPurchases mInAppPurchases;
-	GameServices mGameServices;
 	String TAG = "MainActivity";
 	
 	
@@ -51,7 +50,6 @@ public class MainActivity extends NativeActivity implements ConnectionCallbacks,
 		{
 			public void run()
 			{
-				mGameServices = new GameServices(_activity);
 				mInAppPurchases = new InAppPurchases(_activity);
 				mInAppPurchases.sendInAppPurchasesToCpp();
 				latch.countDown();
@@ -183,21 +181,18 @@ public class MainActivity extends NativeActivity implements ConnectionCallbacks,
 	public void onConnected(Bundle arg0) {
 		// TODO Auto-generated method stub
 		Log.w(TAG,"onConnected");
-		mGameServices.onConnected(arg0);
 	}
 
 	@Override
 	public void onConnectionSuspended(int arg0) {
 		// TODO Auto-generated method stub
 		Log.w(TAG,"onConnectionSuspended");
-		mGameServices.onConnectionSuspended(arg0);
 	}
 
 	@Override
 	public void onConnectionFailed(ConnectionResult arg0) {
 		// TODO Auto-generated method stub
 		Log.w(TAG,"onConnectionFailed "+arg0.toString());
-		mGameServices.onConnectionFailed(arg0);
 	}
 
 	public static native void nativeOnActivityResult(Activity activity,
