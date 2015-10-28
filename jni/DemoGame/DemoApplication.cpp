@@ -199,7 +199,7 @@ namespace Game
     		case EVENT_MAINMENU_CONTINUE:
     			delete m_pGameState;
 #ifdef ANDROID_PLATFORM
-    			test->showSmartBanner();
+    			test->showSmartBanner(false);
 #endif
     			m_pGameState=m_pSavedGameState;
     			m_pGameState->Continue();
@@ -213,8 +213,8 @@ namespace Game
     			}
     			delete m_pGameState;
 #ifdef ANDROID_PLATFORM
-    			test->hideSmartBanner();
-    			test->hideLargeBanner();
+    			//test->hideSmartBanner();
+    			//test->hideLargeBanner();
 #endif
     			m_pGameState=new PlayGame();
     		break;
@@ -226,7 +226,7 @@ namespace Game
     		break;
     		case EVENT_MAINMENU_HIGHSCORE:
 #ifdef ANDROID_PLATFORM
-    			test->showLargeBanner();
+    			test->showLargeBanner(false);
 #endif
     		break;
     		case EVENT_MAINMENU_CREDITS:
