@@ -2,6 +2,7 @@
 
 #include "Random.hpp"
 #include "Sprite.hpp"
+#include "ParticleEmitter.hpp"
 #include "ParticleEffector.hpp"
 #include "Debug.hpp"
 
@@ -90,13 +91,20 @@ namespace MPACK
 			}
 		}
 
-		void Particle::Clear()
+		void Particle::ClearAll()
 		{
 			for(vector<Particle*>::iterator it=m_particles.begin();it!=m_particles.end();++it)
 			{
 				delete *it;
 			}
 			m_particles.clear();
+		}
+
+		void Particle::Cleanup()
+		{
+			Particle::ClearAll();
+			ParticleEmitter::ClearAll();
+			ParticleEffector::ClearAll();
 		}
 	}
 }

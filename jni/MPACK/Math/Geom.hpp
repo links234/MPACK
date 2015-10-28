@@ -30,7 +30,9 @@ namespace MPACK
 
 			static void LineCoeff2D(const Vector2<T> A, const Vector2<T> B, T &a, T &b, T &c);
 
-			static bool LineIntersect(const Vector2<T> A1, const Vector2<T> B1, const Vector2<T> A2, const Vector2<T> B2, Vector2<T> &I);
+			static bool SegmentIntersect(const Vector2<T> A1, const Vector2<T> B1, const Vector2<T> A2, const Vector2<T> B2, Vector2<T> &I);
+
+			static bool LineIntersect (const Vector2<T> &A1, const Vector2<T> &B1, const Vector2<T> &A2, const Vector2<T> &B2, Vector2<T> &I);
 		};
 	}
 }

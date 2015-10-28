@@ -18,10 +18,8 @@ Object::~Object()
 	{
 		if(this==*it)
 		{
-			LOGD("DELETED_START");
 			*it=s_objects[s_objects.size()-1];
 			s_objects.pop_back();
-			LOGD("DELETED_END");
 			break;
 		}
 	}

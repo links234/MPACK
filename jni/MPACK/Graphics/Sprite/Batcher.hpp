@@ -100,6 +100,8 @@ namespace MPACK
 			static void EnableCamera();
 			static void DisableCamera();
 
+			static void Cleanup();
+
 		private:
 			Batcher();
 			~Batcher(){}

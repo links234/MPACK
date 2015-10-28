@@ -126,6 +126,11 @@ namespace MPACK
 			return m_mass;
 		}
 
+		Shape* Body::GetShape() const
+		{
+			return m_shape;
+		}
+
 		Material Body::GetMaterial() const
 		{
 			return m_material;

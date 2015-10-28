@@ -29,6 +29,11 @@ namespace MPACK
 		{
 		}
 
+		void TextureMappedFont::SetMonospaced(bool monospaced)
+		{
+			m_monospaced = monospaced;
+		}
+
 		void TextureMappedFont::SendString(string str, GLfloat x, GLfloat y, AlignType alignType, vector<Math::Vector4f> *colorPattern)
 		{
 			switch(m_caseType)
@@ -231,15 +236,17 @@ namespace MPACK
 		bool TextureMappedFont::Load(const string& textureName, FormatType format)
 		{
 			Image *pFontImage = LoadImage(textureName.c_str());
-			if(pFontImage->Load(textureName.c_str())==RETURN_VALUE_KO)
+			if(!pFontImage)
 			{
 				LOGE("TextureMappedFont::Load() could not load the font texture: %s",textureName.c_str());
+				delete pFontImage;
 				return false;
 			}
 
-			if(format == ALPHA && pFontImage->GetBytesPerPixel()!=4)
+			if(format == ALPHA && !pFontImage->HaveAlphaChannel())
 			{
 				LOGE("TextureMappedFont::Load() format is set to ALPHA but font image does not have alpha channel!");
+				delete pFontImage;
 				return false;
 			}
 
@@ -339,10 +346,10 @@ namespace MPACK
 						{
 							GLuint ri=i*cellWidth+ci;
 							GLuint rj=j*cellHeight+cj;
-							BYTE *p=(BYTE*)(pFontImage->GetPixel(ri,rj));
-							BYTE b=*p;
-							BYTE g=*(p+1);
-							BYTE r=*(p+2);
+							Color c=pFontImage->GetPixel(ri,rj);
+							BYTE b=c.b;
+							BYTE g=c.g;
+							BYTE r=c.r;
 							Math::Vector3f color((GLfloat)(r)*OneOver255,(GLfloat)(g)*OneOver255,(GLfloat)(b)*OneOver255);
 
 							if(color.Magnitude()>=FORMATTYPE_RGB_MAGNITUDE_THRESHOLD)
@@ -399,8 +406,8 @@ namespace MPACK
 						{
 							GLuint ri=i*cellWidth+ci;
 							GLuint rj=j*cellHeight+cj;
-							BYTE *p=(BYTE*)(pFontImage->GetPixel(ri,rj));
-							BYTE alpha=*(p+3);
+							Color c=pFontImage->GetPixel(ri,rj);
+							BYTE alpha=c.a;
 
 							if(alpha>=FORMATTYPE_ALPHA_THRESHOLD)
 							{

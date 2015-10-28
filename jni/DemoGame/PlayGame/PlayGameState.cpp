@@ -75,27 +75,32 @@ namespace Game
 		m_enemySprite=new Sprite;
 		m_enemySprite->SetTexture(m_enemyTexture);
 		m_enemySprite->SetSize(100.0f,17.0f*4.0f);
-		m_enemySprite->SetShading(SpriteVertex::ALPHA_BLEND);
+		m_enemySprite->SetShading(SpriteVertex::COLOR_SUM_ALPHA_BLEND);
+		m_enemySprite->SetColor(Vector4f(0.33f,0.33f,0.33f,1.0f));
 
-		//Enemy setup
-		m_enemyObject[0]=new Enemy(m_pWorld);
-		m_enemyObject[0]->SetSprite(m_enemySprite);
-		m_enemyObject[0]->SetPosition(Vector2f(50.0f,450.0f));
+		for(int i=0;i<=7;++i)
+		{
+			//Enemy setup
+			m_enemyObject[0]=new Enemy(m_pWorld);
+			m_enemyObject[0]->SetSprite(m_enemySprite);
+			m_enemyObject[0]->SetPosition(Vector2f(50.0f,450.0f));
 
-		//Enemy setup
-		m_enemyObject[1]=new Enemy(m_pWorld);
-		m_enemyObject[1]->SetSprite(m_enemySprite);
-		m_enemyObject[1]->SetPosition(Vector2f(450.0f,50.0f));
+			//Enemy setup
+			m_enemyObject[1]=new Enemy(m_pWorld);
+			m_enemyObject[1]->SetSprite(m_enemySprite);
+			m_enemyObject[1]->SetPosition(Vector2f(450.0f,50.0f));
 
-		//Enemy setup
-		m_enemyObject[2]=new Enemy(m_pWorld);
-		m_enemyObject[2]->SetSprite(m_enemySprite);
-		m_enemyObject[2]->SetPosition(Vector2f(450.0f,450.0f));
+			//Enemy setup
+			m_enemyObject[2]=new Enemy(m_pWorld);
+			m_enemyObject[2]->SetSprite(m_enemySprite);
+			m_enemyObject[2]->SetPosition(Vector2f(450.0f,450.0f));
 
-		//Enemy setup
-		m_enemyObject[3]=new Enemy(m_pWorld);
-		m_enemyObject[3]->SetSprite(m_enemySprite);
-		m_enemyObject[3]->SetPosition(Vector2f(50.0f,50.0f));
+
+			//Enemy setup
+			m_enemyObject[3]=new Enemy(m_pWorld);
+			m_enemyObject[3]->SetSprite(m_enemySprite);
+			m_enemyObject[3]->SetPosition(Vector2f(50.0f,50.0f));
+		}
 
 		//Camera setup
 		Global::pActiveCamera=new Camera2D();
@@ -215,14 +220,14 @@ namespace Game
 		delete m_enemyTexture;
 		delete m_playerTexture;
 
-		//delete m_enemySprite;
-		//delete m_playerSprite;
-
+		delete m_enemySprite;
+		delete m_playerSprite;
+/*
 		for(int i=0;i<4;++i)
 		{
 			delete m_enemyObject[i];
 		}
-		delete m_playerObject;
+		delete m_playerObject;*/
 
 		delete m_backgroundTexture;
 		delete m_background;
@@ -239,7 +244,7 @@ namespace Game
 		delete m_UIMatch3Sprite;
 		delete m_UIMatch4Sprite;
 
-		Particle::Clear();
+		Particle::Cleanup();
 
 		delete m_pWorld;
 	}

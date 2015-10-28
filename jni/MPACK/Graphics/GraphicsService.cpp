@@ -13,6 +13,7 @@
 #include "AnimatedSprite.hpp"
 #include "ShaderTypes.hpp"
 #include "PostEffect.hpp"
+#include "Profiler.hpp"
 
 using namespace MPACK::Core;
 
@@ -52,6 +53,8 @@ namespace MPACK
 			Render::DisableAlphaBlend();
 			Render::DisableOrthoMode();
 			Render::Uninit();
+
+			Batcher::Cleanup();
 		}
 
 		void GraphicsService::Update(GLfloat delta)
@@ -67,7 +70,10 @@ namespace MPACK
 			Render::EnableAlphaBlend();
 
 			GL_CHECK( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
+
+			PROFILE_BEGIN("Batcher");
 			Batcher::FlushAll();
+			PROFILE_END();
 
 			PostEffect::End();
 

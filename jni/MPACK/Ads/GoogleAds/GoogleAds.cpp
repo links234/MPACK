@@ -6,7 +6,6 @@
 JavaVM* GoogleAdsJvm;
 jobject GoogleAdsJobject;
 
-
 namespace MPACK
 {
 	namespace ADS

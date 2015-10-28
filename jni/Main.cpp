@@ -2,13 +2,12 @@
 #include "DemoApplication.hpp"
 
 int result = 0;
-Game::DemoApplication demoApplication;
 
 MPACK_MAIN
 {
 	MPACK_INITIALIZE;
 
-	MPACK_RUN(&demoApplication, result);
+	MPACK_RUN(Game::DemoApplication, result);
 
     MPACK_SHUTDOWN;
 

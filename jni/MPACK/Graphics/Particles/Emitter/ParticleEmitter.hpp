@@ -1,9 +1,15 @@
 #ifndef MPACK_PARTICLEEMITTER_HPP
 #define MPACK_PARTICLEEMITTER_HPP
 
-#include <set>
+#include "Types.hpp"
 
-#include "Particle.hpp"
+namespace MPACK
+{
+	namespace Graphics
+	{
+		class ParticleEffector;
+	}
+}
 
 namespace MPACK
 {
@@ -18,10 +24,11 @@ namespace MPACK
 			virtual void Update(GLfloat delta);
 
 			static void UpdateAll(GLfloat delta);
+			static void ClearAll();
 
 			std::vector<ParticleEffector*>	m_modifiers;
 		private:
-			static std::set<ParticleEmitter*> m_emitters;
+			static std::unordered_set<ParticleEmitter*> m_emitters;
 		};
 	}
 }

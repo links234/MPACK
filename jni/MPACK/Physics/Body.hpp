@@ -48,6 +48,7 @@ namespace MPACK
 			float GetAngularVelocity() const;
 
 			float GetMass() const;
+			Shape* GetShape() const;
 
 			Material GetMaterial() const;
 			void SetMaterial(const Material &material);

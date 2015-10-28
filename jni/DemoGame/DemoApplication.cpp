@@ -42,6 +42,14 @@ namespace Game
     {
 		LOGI("DemoApplication::onActivate()");
 
+		LOGI("Command line arguments: ");
+		for(int i=0;i<Global::arguments.size();++i)
+		{
+			LOGI("arguments[%d] = %s",i,Global::arguments[i].c_str());
+		}
+
+		Profiler::Init();
+
 		GameResources::InitMVFS();
 
         // Starts services.
@@ -99,25 +107,34 @@ namespace Game
     	{
     		delete m_pGameState;
     	}
+    	if(m_pSavedGameState)
+		{
+			delete m_pSavedGameState;
+		}
 
     	delete m_pCursorTex;
+
+    	Profiler::Cleanup();
     }
 
     Core::ReturnValue DemoApplication::onStep()
     {
     	//test->showVideoInterstitial();
+    	PROFILE_BEGIN("onStep");
 
 #ifdef MPACK_TESTING
     	static bool started=false;
-    	static Time::Timer *timer=Time::Timer::Create();
+    	static float time = 0.0;
     	static Sound::AudioPlayer *sound=new Sound::AudioPlayer();
     	static string message="";
+
+    	time += Global::pContext->pTimeService->Elapsed();
 
     	if(!started)
     	{
     		started=true;
 
-    		timer->Start();
+    		time = 0.0f;
 
     		sound->LoadFD("@Sounds/bgm.mp3");
     		sound->AddToGroup("background");
@@ -139,20 +156,20 @@ namespace Game
 			*/
     	}
     	static int state=0;
-    	if(timer->Time()>10.0f && state==0)
+    	if(time>10.0f && state==0)
     	{
     		LOGE("TOGGLE GROUPCONTROLLER MUTE");
     		++state;
     		Sound::GroupController::Get("background")->Volume()->ToggleMute();
     	}
-    	if(timer->Time()>15.0f && state==1)
+    	if(time>15.0f && state==1)
 		{
     		LOGE("TOGGLE GROUPCONTROLLER MUTE");
 			++state;
 			//Sound::OutputMixer::GetOutputMixer()->Volume()->ToggleMute();
     		Sound::GroupController::Get("background")->Volume()->ToggleMute();
 		}
-    	if(timer->Time()>20.0f && state==2)
+    	if(time>20.0f && state==2)
     	{
     		LOGE("Reset and 0.2 volume");
     		++state;
@@ -173,7 +190,10 @@ namespace Game
     	Global::pContext->pGraphicsService->Update(delta);
 
     	// Event dispatcher
+    	PROFILE_BEGIN("State Update");
     	int action=m_pGameState->Update();
+    	PROFILE_END();
+
     	switch(action)
     	{
     		case EVENT_MAINMENU_CONTINUE:
@@ -183,7 +203,6 @@ namespace Game
 #endif
     			m_pGameState=m_pSavedGameState;
     			m_pGameState->Continue();
-    			m_pGameState->Update();
     			m_pSavedGameState=NULL;
     		break;
     		case EVENT_MAINMENU_NEWGAME:
@@ -198,7 +217,6 @@ namespace Game
     			test->hideLargeBanner();
 #endif
     			m_pGameState=new PlayGame();
-    			m_pGameState->Update();
     		break;
 
     		case EVENT_MAINMENU_WATER:
@@ -223,36 +241,43 @@ namespace Game
     			m_pGameState->Pause();
     			m_pSavedGameState=m_pGameState;
     			m_pGameState=new MainMenu(true);
-    			m_pGameState->Update();
     		break;
     		case EVENT_PLAYGAME_EXIT:
 				delete m_pGameState;
 				m_pGameState=new MainMenu();
-				m_pGameState->Update();
 			break;
     		case EVENT_WATER_EXIT:
     			delete m_pGameState;
     			m_pGameState = new MainMenu();
-    			m_pGameState->Update();
     		break;
     	}
 
     	// Render current game state
+    	PROFILE_BEGIN("State Render");
     	m_pGameState->Render();
+    	PROFILE_END();
 
 #ifdef MPACK_TESTING
-    	Debug::Print(Global::pFont,"%s",message.c_str());
+    	//Debug::Print(Global::pFont,"%s",message.c_str());
 #endif
+
+    	PROFILE_PRINT();
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
     	CursorDrawer::GetInstance()->Update();
     	CursorDrawer::GetInstance()->Render();
 #endif
 
+    	PROFILE_BEGIN("GraphicsService");
     	// Render current scene and swap buffers
 		if (Global::pContext->pGraphicsService->Render() != Core::RETURN_VALUE_OK) {
 			return Core::RETURN_VALUE_KO;
 		}
+		PROFILE_END();
+
+		PROFILE_END();
+
+		PROFILE_STEP();
 
 		return Core::RETURN_VALUE_OK;
     }

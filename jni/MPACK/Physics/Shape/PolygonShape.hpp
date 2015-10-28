@@ -19,6 +19,7 @@ namespace MPACK
 			void ComputeMass(float density);
 			void SetOrientation(float radians);
 			Type GetType() const;
+			void ComputeAABB();
 
 			void SetAsBox(float hw,float hh);
 			void Set(MPACK::Math::Vector2f *vertices, int count);

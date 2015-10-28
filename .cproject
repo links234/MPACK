@@ -209,13 +209,13 @@
 	<storageModule moduleId="org.eclipse.cdt.core.pathentry"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Windows">
-			<resource resourceType="PROJECT" workspacePath="/Framework"/>
+			<resource resourceType="PROJECT" workspacePath="/MPACK"/>
 		</configuration>
 		<configuration configurationName="Linux">
-			<resource resourceType="PROJECT" workspacePath="/Framework"/>
+			<resource resourceType="PROJECT" workspacePath="/MPACK"/>
 		</configuration>
 		<configuration configurationName="Android">
-			<resource resourceType="PROJECT" workspacePath="/Framework"/>
+			<resource resourceType="PROJECT" workspacePath="/MPACK"/>
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="scannerConfiguration">
@@ -247,4 +247,5 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>

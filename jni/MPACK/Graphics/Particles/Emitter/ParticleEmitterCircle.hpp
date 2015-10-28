@@ -7,6 +7,14 @@ namespace MPACK
 {
 	namespace Graphics
 	{
+		class Texture2D;
+	}
+}
+
+namespace MPACK
+{
+	namespace Graphics
+	{
 		class ParticleEmitterCircle : public ParticleEmitter
 		{
 		public:

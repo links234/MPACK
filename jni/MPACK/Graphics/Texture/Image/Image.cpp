@@ -12,7 +12,8 @@ namespace MPACK
 	namespace Graphics
 	{
 		Image::Image()
-			: m_width(0), m_height(0), m_format(0), m_bytesPerPixel(0)
+			: m_width(0), m_height(0), m_format(0), m_bytesPerPixel(0),
+			  m_alphaChannel(false)
 		{
 		}
 
@@ -40,6 +41,11 @@ namespace MPACK
 			return m_format;
 		}
 
+		bool Image::HaveAlphaChannel() const
+		{
+			return m_alphaChannel;
+		}
+
 		Image* LoadImage(const char *pPath)
 		{
 			string ext;
@@ -55,15 +61,16 @@ namespace MPACK
 				image=new PNGImage;
 			}
 
+			if(!image)
+			{
+				LOGE("LoadImage: invalid format %s",pPath);
+				return NULL;
+			}
 			if(image->Load(pPath)==RETURN_VALUE_KO)
 			{
 				LOGE("LoadImage: Failed to load");
 				delete image;
 				image=NULL;
-			}
-			if(!image)
-			{
-				LOGE("LoadImage: invalid format %s",pPath);
 			}
 			return image;
 		}

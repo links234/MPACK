@@ -11,6 +11,8 @@ namespace MPACK
 		AAssetManager 					*pAAssetManager=NULL;
 	#endif
 
+		std::vector<std::string>		arguments;
+
 		Core::Context					*pContext=NULL;
 		Core::EventLoop					*pEventLoop;
 

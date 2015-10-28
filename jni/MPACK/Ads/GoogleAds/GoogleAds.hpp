@@ -1,3 +1,13 @@
+#if defined(LINUX_PLATFORM) || defined(WINDOWS_PLATFORM)
+namespace MPACK
+{
+	namespace ADS
+	{
+
+	}
+}
+#endif
+
 #ifdef ANDROID_PLATFORM
 
 #ifndef GOOGLEADS_H

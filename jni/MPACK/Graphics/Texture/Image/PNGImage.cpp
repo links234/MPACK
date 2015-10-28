@@ -38,19 +38,16 @@ namespace MPACK
 			// Opens and checks image signature (first 8 bytes).
 			if (pResource->Open() != RETURN_VALUE_OK)
 			{
-				return RETURN_VALUE_KO;
-				//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
 			if (pResource->Read(header, sizeof(header)) != RETURN_VALUE_OK)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			if (png_sig_cmp(header, 0, 8) != 0)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
 			// Creates required structures.
@@ -58,15 +55,13 @@ namespace MPACK
 			if (!pngPtr)
 			{
 				LOGE("PNGImage::Load failed to create read structure!");
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			infoPtr = png_create_info_struct(pngPtr);
 
 			if (!infoPtr)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
 			// Prepares reading operation by setting-up a read callback.
@@ -75,8 +70,7 @@ namespace MPACK
 			// code will come back here and jump
 			if (setjmp(png_jmpbuf(pngPtr)))
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
 			// Ignores first 8 bytes already read and processes header.
@@ -111,6 +105,7 @@ namespace MPACK
 			}
 			// Indicates that image needs conversion to RGBA if needed.
 
+			m_alphaChannel = transparency;
 			switch (colorType)
 			{
 				case PNG_COLOR_TYPE_PALETTE:
@@ -122,14 +117,16 @@ namespace MPACK
 					break;
 				case PNG_COLOR_TYPE_RGBA:
 					m_format = GL_RGBA;
+					m_alphaChannel=true;
 					break;
 				case PNG_COLOR_TYPE_GRAY:
 					png_set_expand_gray_1_2_4_to_8(pngPtr);
 					m_format = transparency ? GL_LUMINANCE_ALPHA:GL_LUMINANCE;
 					break;
-				case PNG_COLOR_TYPE_GA:
+				case PNG_COLOR_TYPE_GRAY_ALPHA:
 					png_set_expand_gray_1_2_4_to_8(pngPtr);
 					m_format = GL_LUMINANCE_ALPHA;
+					m_alphaChannel=true;
 					break;
 			}
 			// Validates all tranformations.
@@ -141,15 +138,13 @@ namespace MPACK
 			rowSize = png_get_rowbytes(pngPtr, infoPtr);
 			if (rowSize <= 0)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			// Ceates the image buffer that will be sent to OpenGL.
 			m_imageBuffer = new png_byte[rowSize * height];
 			if (!m_imageBuffer)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			// Pointers to each row of the image buffer. Row order is
 			// inverted because different coordinate systems are used by
@@ -157,8 +152,7 @@ namespace MPACK
 			rowPtrs = new png_bytep[height];
 			if (!rowPtrs)
 			{
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 			for (::int32_t i = 0; i < height; ++i)
 			{
@@ -169,11 +163,12 @@ namespace MPACK
 
 			// Frees memory and resources.
 			pResource->Close();
+			delete pResource;
 			png_destroy_read_struct(&pngPtr, &infoPtr, NULL);
 			delete[] rowPtrs;
 			return RETURN_VALUE_OK;
 
-	//ERROR_LABEL:
+	ERROR_LABEL:
 			LOGE("Error while reading PNG file");
 			pResource->Close();
 			delete pResource;
@@ -198,7 +193,7 @@ namespace MPACK
 			m_width=0;
 			m_height=0;
 			m_format=0;
-			delete m_imageBuffer;
+			delete[] m_imageBuffer;
 		}
 
 		const BYTE* PNGImage::GetImageData() const
@@ -206,11 +201,37 @@ namespace MPACK
 			return m_imageBuffer;
 		}
 
-		const BYTE* PNGImage::GetPixel(GLushort x, GLushort y) const
+		const BYTE* PNGImage::GetPixelPointer(GLushort x, GLushort y) const
 		{
 			int index=x*m_width+y;
 			index*=m_bytesPerPixel;
 			return m_imageBuffer+index;
+		}
+
+		Color PNGImage::GetPixel(GLushort x, GLushort y) const
+		{
+			int index=x*m_width+y;
+			index*=m_bytesPerPixel;
+			if (m_bytesPerPixel == 4)
+			{
+				return Color(m_imageBuffer[index], m_imageBuffer[index+1],
+							 m_imageBuffer[index+2], m_imageBuffer[index+3]);
+			}
+			else if(m_bytesPerPixel == 3)
+			{
+				return Color(m_imageBuffer[index], m_imageBuffer[index+1],
+						     m_imageBuffer[index+2], 255);
+			}
+			else if(m_bytesPerPixel == 2)
+			{
+				return Color(m_imageBuffer[index], m_imageBuffer[index],
+						     m_imageBuffer[index], m_imageBuffer[index+1]);
+			}
+			else
+			{
+				return Color(m_imageBuffer[index], m_imageBuffer[index],
+						     m_imageBuffer[index], 255);
+			}
 		}
 
 		void PNGImage::FlipVertical()

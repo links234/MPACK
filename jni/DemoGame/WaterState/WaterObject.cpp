@@ -10,21 +10,32 @@ using namespace MPACK;
 using namespace MPACK::Math;
 using namespace MPACK::Graphics;
 
-const Vector2f WaterObject::s_targetHeight = Vector2f(0.f, 400.f);
+const Vector2f WaterObject::s_targetHeight = Vector2f(0.f, 300.f);
+const float	WaterObject::s_dampening = 0.1f;
+const float WaterObject::s_waterDensity = 0.0017f;
+
+//const float WaterObject::s_waterDensity = 0.00052008571f; // the exact value to keep the rocks in balance
 const int WaterObject::m_springsCount = 201;
-WaterObject* WaterObject::g_water = nullptr;
+
+WaterObject* g_water = nullptr;
 
 WaterObject::WaterObject()
-	: m_spread(0.25f)
+	: m_spread(0.4f)
 {
 	assert(g_water == nullptr);
-
 	g_water = this;
+
 	CreateSprings();
 
 	m_pWhiteTexture = new Texture2D;
 	m_pWhiteTexture->Load("@Backgrounds/whitetexture.png");
 	m_pWhiteTexture->SetWrapMode(GL_REPEAT, GL_REPEAT);
+
+	m_springsVertices = new Vector2f* [m_springsCount];
+	for (int i = 0; i < m_springsCount; ++ i)
+	{
+		m_springsVertices[i] = new Vector2f [6];
+	}
 
 	/// create dem positions regarding to screen width
 }
@@ -47,8 +58,8 @@ void WaterObject::CreateWavesVertices()
 {
 	for (int i = 1; i < m_springs.size(); ++ i)
 	{
-		SpriteVertex* vertices = new SpriteVertex[3];
-		GLushort* indices = new GLushort[3];
+		SpriteVertex vertices[3];
+		GLushort indices[3];
 
 		for (int j = 0; j < 3; ++ j) indices[j] = j;
 
@@ -62,29 +73,38 @@ void WaterObject::CreateWavesVertices()
 
 		//LOGI("%f", downCoord);
 
+		m_springsVertices[i][0] = Vector2f (x1, downCoord);
+		m_springsVertices[i][2] = Vector2f (x2, downCoord - y2);
+		m_springsVertices[i][1] = Vector2f (x1, downCoord - y1);
 
-		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
-		vertices[1] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
-		vertices[2] = SpriteVertex(x1, downCoord - y1, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
+		m_springsVertices[i][3] = Vector2f (x1, downCoord);
+		m_springsVertices[i][5] = Vector2f (x2, downCoord);
+		m_springsVertices[i][4] = Vector2f (x2, downCoord - y2);
 
-		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 0.f);
 
-		vertices[2] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
-		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
-		vertices[1] = SpriteVertex(x2, downCoord, 0.f, 1.f, 0.f, 0.f, 0.f, 1.f, SpriteVertex::NONE);
+		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
+		vertices[1] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
+		vertices[2] = SpriteVertex(x1, downCoord - y1, 0.f, 1.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
 
-		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 0.f);
+		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 10000.f);
+
+		vertices[0] = SpriteVertex(x1, downCoord, 0.f, 0.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
+		vertices[1] = SpriteVertex(x2, downCoord, 0.f, 1.f, 0.f, 0.f, 0.f, 0.7f, SpriteVertex::ALPHA_BLEND);
+		vertices[2] = SpriteVertex(x2, downCoord - y2, 1.f, 0.f, 0.f, 0.f, 1.f, 0.5f, SpriteVertex::ALPHA_BLEND);
+
+		Batcher::SendSpriteVertexData(vertices, 3, indices, 3, m_pWhiteTexture, IndexData::TRIANGLES, 10000.f);
 	}
-
 }
 
 void WaterObject::Update(float dtime)
 {
-	for (auto &spring : m_springs)
-		spring.Update(dtime);
+	for (int i=0;i<m_springs.size();++i)
+	{
+		m_springs[i].Update(dtime);
+	}
 
-	Vector2f* leftDeltas = new Vector2f[m_springs.size()];
-	Vector2f* rightDeltas = new Vector2f[m_springs.size()];
+	Vector2f leftDeltas[m_springs.size()];
+	Vector2f rightDeltas[m_springs.size()];
 
 	for (int i = 0; i < m_springs.size(); ++ i)
 		leftDeltas[i] = rightDeltas[i] = Vector2f(0.f, 0.f);
@@ -120,19 +140,42 @@ void WaterObject::Render()
 	CreateWavesVertices();
 }
 
-int WaterObject::GetSpringsCount()
+ int WaterObject::GetSpringsCount()
 {
 	return m_springsCount;
 }
 
 void WaterObject::Splash(int index, Vector2f velocity)
 {
-	assert(0 <= index && index < m_springs.size());
+	if (!(0 <= index && index < m_springs.size()))
+		return ;
 	m_springs[index].m_velocity = velocity;
+}
+
+void WaterObject::ClickSplash(Vector2f pos)
+{
+	int index;
+	if (pos.x < 0.f) index = 0;
+	else if (pos.x > Render::GetScreenWidth()) index = m_springsCount;
+	else
+	{
+		index = pos.x * m_springsCount / Render::GetScreenWidth();
+	}
+	Splash(index, Vector2f(0.f, 200.f));
 }
 
 WaterObject::~WaterObject()
 {
-	assert(g_water);
-	delete g_water;
+	assert(g_water != nullptr);
+	g_water = nullptr;
+
+	for (int i = 0; i < m_springsCount; ++ i)
+	{
+		delete[] m_springsVertices[i];
+	}
+
+	delete[] m_springsVertices;
+
+	delete m_pWhiteTexture;
+
 }

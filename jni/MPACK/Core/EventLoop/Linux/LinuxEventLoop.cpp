@@ -7,6 +7,7 @@
 #include "InputService.hpp"
 #include "TimeService.hpp"
 #include "Global.hpp"
+#include "Profiler.hpp"
 #include "Render.hpp"
 #include "Log.hpp"
 
@@ -20,7 +21,8 @@ namespace MPACK
 
 
 		LinuxEventLoop::LinuxEventLoop(void *data)
-			: m_isFullscreen(false), m_isRunning(false), m_width(0), m_height(0), m_enabled(false)
+			: m_isFullscreen(false), m_isRunning(false), m_width(0), m_height(0),
+			  m_enabled(false), m_glContext(NULL)
 		{
 		}
 
@@ -29,7 +31,11 @@ namespace MPACK
 			m_pActivityHandler = pActivityHandler;
 			m_isRunning=true;
 
-			InitializeDisplay();
+			if(InitializeDisplay() == RETURN_VALUE_KO)
+			{
+				LOGE("LinuxEventLoop::Run failed to InitializeDisplay()");
+				return RETURN_VALUE_KO;
+			}
 			m_pActivityHandler->onActivate();
 
 			// Global step loop.
@@ -99,9 +105,6 @@ namespace MPACK
 			Window root = RootWindow(m_display, m_screenID);
 
 			int n = 0, modeNum = 0;
-			//Get a framebuffer config using the default attributes
-			GLXFBConfig framebufferConfig = (*glXChooseFBConfig(m_display, m_screenID, 0, &n));
-
 			XF86VidModeModeInfo **modes;
 			if (!XF86VidModeGetAllModeLines(m_display, m_screenID, &modeNum, &modes))
 			{
@@ -182,9 +185,9 @@ namespace MPACK
 				XSetNormalHints(m_display, m_XWindow, &sizehints);
 			}
 
-
 			//Create a GL 2.1 context
 			GLXContext m_glContext = glXCreateContext(m_display, vi, 0, GL_TRUE);
+			XFree(vi);
 
 			if (m_glContext == NULL)
 			{
@@ -194,7 +197,7 @@ namespace MPACK
 
 			m_GL3Supported = false; //we're not using GL3.0 here!
 
-			string title = "BOGLGP - Chapter 7 - Simple Textured Terrain";
+			string title = "MPACK";
 
 			if (fullscreen)
 			{
@@ -219,6 +222,17 @@ namespace MPACK
 
 			//Make the new context current
 			glXMakeCurrent(m_display, m_XWindow, m_glContext);
+
+			typedef int (*PFNGLXSWAPINTERVALMESA)(int interval);
+			PFNGLXSWAPINTERVALMESA glXSwapIntervalMESA = NULL;
+
+			glXSwapIntervalMESA = (PFNGLXSWAPINTERVALMESA)glXGetProcAddress((unsigned char*)"glXSwapIntervalMESA");
+			if( !glXSwapIntervalMESA )
+			{
+				 return RETURN_VALUE_KO;
+			}
+
+			glXSwapIntervalMESA(0);
 			return RETURN_VALUE_OK;
 		}
 
@@ -236,6 +250,8 @@ namespace MPACK
 				XF86VidModeSwitchToMode(m_display, m_screenID, &m_XF86DeskMode);
 				XF86VidModeSetViewPort(m_display, m_screenID, 0, 0);
 			}
+
+			XCloseDisplay(m_display);
 		}
 
 		void LinuxEventLoop::ProcessEvents()
@@ -293,7 +309,9 @@ namespace MPACK
 
 		void LinuxEventLoop::SwapBuffers()
 		{
+			PROFILE_BEGIN("SwapBuffers");
 			glXSwapBuffers(m_display, m_XWindow);
+			PROFILE_END();
 		}
 	}
 }

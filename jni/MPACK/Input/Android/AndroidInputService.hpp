@@ -5,14 +5,18 @@
 
 #include "Types.hpp"
 
-#include <vector>
-
 namespace MPACK
 {
 	namespace Input
 	{
 		struct Finger;
+	}
+}
 
+namespace MPACK
+{
+	namespace Input
+	{
 		class AndroidInputService
 		{
 		public:

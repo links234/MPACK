@@ -12,6 +12,7 @@
 #include "Render.hpp"
 #include "Camera2D.hpp"
 #include "Debug.hpp"
+#include "Profiler.hpp"
 
 using namespace std;
 
@@ -161,7 +162,9 @@ namespace MPACK
 		{
 			for(map<GLfloat,Batcher*>::iterator it=s_batcher.begin();it!=s_batcher.end();++it)
 			{
+				PROFILE_BEGIN("Flush");
 				(*it).second->Flush();
+				PROFILE_END();
 			}
 		}
 
@@ -173,6 +176,15 @@ namespace MPACK
 		void Batcher::DisableCamera()
 		{
 			s_useCamera=false;
+		}
+
+		void Batcher::Cleanup()
+		{
+			for(map<GLfloat,Batcher*>::iterator it=s_batcher.begin();it!=s_batcher.end();++it)
+			{
+				delete (*it).second;
+			}
+			s_batcher.clear();
 		}
 
 		void Batcher::SendCustomRenderCall(Core::Param1PtrCallbackFunc func, void *param1)
@@ -237,6 +249,7 @@ namespace MPACK
 			{
 				if(it->m_type==Batch::SpriteBatch)
 				{
+					PROFILE_BEGIN("shader bind");
 					if(!isSpriteShaderEnabled)
 					{
 						VertexBufferObject::UnbindCurrentBuffer();
@@ -249,14 +262,19 @@ namespace MPACK
 						Sprite_Shader->SendVertexBuffer((GLfloat*)(&m_vertexData[0]));
 						isSpriteShaderEnabled = true;
 					}
+					PROFILE_END();
 
 					SpriteBatch *batch = reinterpret_cast<SpriteBatch*>(it->m_pointer);
+					PROFILE_BEGIN("tex bind");
 					if(batch->m_texture)
 					{
 						batch->m_texture->Bind(GL_TEXTURE0);
 					}
+					PROFILE_END();
 
+					PROFILE_BEGIN("glDrawElements");
 					GL_CHECK( glDrawElements(GetGLType(batch->m_type),batch->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]) );
+					PROFILE_END();
 
 					firstIndex+=batch->m_indexSize;
 

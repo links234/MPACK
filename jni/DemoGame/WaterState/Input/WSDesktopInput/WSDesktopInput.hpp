@@ -22,11 +22,14 @@ public:
 	virtual MPACK::Math::Vector2f 		GetMovementDirection() const;
 	virtual MPACK::Math::Vector2f 		GetShootingDirection() const;
 	virtual bool 						IsUserRequestingExit();
-	virtual bool 						GetClickedLeftMouseButton();
+	virtual bool 						GetLeftMouseButtonUp();
+	virtual bool						GetLeftMouseButtonPressed();
+	virtual MPACK::Math::Vector2f		GetMousePosition();
 
 protected:
 	bool								m_requestExit;
 	bool								m_userPressedLeftClick;
+	bool								m_userIsPressingLeftClick;
 
 
 	MPACK::Math::Vector2f	m_movementDirection;

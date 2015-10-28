@@ -4,6 +4,9 @@
 
 #include "Log.hpp"
 #include "Global.hpp"
+#include "ItfGroupControllers.hpp"
+#include "ItfOutputMixer.hpp"
+#include "ItfAudioPlayer.hpp"
 
 using namespace MPACK::Core;
 using namespace MPACK::Global;
@@ -31,6 +34,10 @@ namespace MPACK
 		void SoundService::Stop()
 		{
 			LOGI("Stopping SoundService.");
+
+			AudioPlayer::Cleanup();
+			OutputMixer::Cleanup();
+			GroupController::Cleanup();
 		}
 	}
 }

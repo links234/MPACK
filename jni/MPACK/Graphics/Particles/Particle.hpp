@@ -31,7 +31,9 @@ namespace MPACK
 
 			static void UpdateAll(GLfloat delta);
 			static void RenderAll();
-			static void Clear();
+			static void ClearAll();
+
+			static void Cleanup();
 
 			Math::Vector2f					m_position,m_velocity;
 			Math::Vector4f					m_color;

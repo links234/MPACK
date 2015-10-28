@@ -23,6 +23,7 @@
 	#include "glxext.h"
 	#include <cstdarg>
 	#include <cstdio>
+	#include <time.h>
 #endif
 
 #ifdef LINUX_PLATFORM
@@ -32,9 +33,12 @@
 #elif	defined(ANDROID_PLATFORM)
 	//#define	intptr_t int
 #elif	defined(WINDOWS_PLATFORM)
+	#define nullptr NULL
 	#define unordered_map map
 	#define unordered_set set
 #endif
+
+
 
 #include <cstdlib>
 #include <cstring>

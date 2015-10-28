@@ -20,7 +20,8 @@ namespace MPACK
 			void Unload();
 
 			const BYTE* GetImageData() const;
-			const BYTE* GetPixel(GLushort x, GLushort y) const;
+			const BYTE* GetPixelPointer(GLushort x, GLushort y) const;
+			Color GetPixel(GLushort x, GLushort y) const;
 
 			void FlipVertical();
 			void FlipHorizontal();
