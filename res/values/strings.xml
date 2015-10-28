@@ -3,9 +3,5 @@
 
     <string name="hello">Hello World!</string>
     <string name="app_name">MPACK</string>
-	<string name="StandardBanner">ca-app-pub-7095804707495495/7049285568</string>
-    <string name="TIInterstitial">ca-app-pub-7095804707495495/2479485163</string>
-    <string name="TIVInterstitial">ca-app-pub-7095804707495495/1002751968</string>
-    <string name="VInterstitial">ca-app-pub-7095804707495495/3956218368</string>
-    
+
 </resources>
