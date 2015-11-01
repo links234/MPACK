@@ -65,6 +65,7 @@ namespace MPACK
 			const BYTE* GetImageData() const;
 			const BYTE* GetPixelPointer(GLushort x, GLushort y) const;
 			Color GetPixel(GLushort x, GLushort y) const;
+			void SetPixel(GLushort x, GLushort y, Color c);
 
 			void FlipVertical();
 			void FlipHorizontal();

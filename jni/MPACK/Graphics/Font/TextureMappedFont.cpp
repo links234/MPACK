@@ -264,7 +264,7 @@ namespace MPACK
 			}
 
 			pFontImage->FlipVertical();
-			if (!m_texture.Load(pFontImage, Bilinear))
+			if (!m_texture.Load(pFontImage, FILTER_BILINEAR))
 			{
 				LOGE("Texture Mapped Font: Could not load font image to texture memory: %s",textureName.c_str());
 				delete pFontImage;

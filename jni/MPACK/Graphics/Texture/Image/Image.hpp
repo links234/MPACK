@@ -4,11 +4,14 @@
 #include "Types.hpp"
 
 #include "Color.hpp"
+#include "Rect.hpp"
 
 namespace MPACK
 {
 	namespace Graphics
 	{
+		typedef MPACK::Math::Vector2<int> Point;
+
 		class Image
 		{
 		public:
@@ -29,11 +32,18 @@ namespace MPACK
 			virtual const BYTE* GetImageData() const = 0;
 			virtual const BYTE* GetPixelPointer(GLushort x, GLushort y) const = 0;
 			virtual Color GetPixel(GLushort x, GLushort y) const = 0;
+			virtual void SetPixel(GLushort x, GLushort y, Color c) = 0;
 
 			virtual void FlipVertical() = 0;
 			virtual void FlipHorizontal() = 0;
 
+			void Blit(Image *image, GLushort x, GLushort y);
+			void Blit(Image *image, Point point);
+			void Blit(Image *image, Point point, Rect rect);
+
 		protected:
+			void BlitSafe(Image *image, Point point, Rect rect);
+
 			GLushort m_width;
 			GLushort m_height;
 			GLushort m_format;

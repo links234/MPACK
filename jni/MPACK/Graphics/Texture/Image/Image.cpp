@@ -94,5 +94,71 @@ namespace MPACK
 			}
 			return 0;
 		}
+
+		void Image::Blit(Image *image, GLushort x, GLushort y)
+		{
+			BlitSafe(image, Point(x,y), Rect(0,0,image->GetWidth(),image->GetHeight()));
+		}
+
+		void Image::Blit(Image *image, Point point)
+		{
+			BlitSafe(image, point, Rect(0,0,image->GetWidth(),image->GetHeight()));
+		}
+
+		void Image::Blit(Image *image, Point point, Rect rect)
+		{
+			BlitSafe(image, point, rect);
+		}
+
+		void Image::BlitSafe(Image *image, Point point, Rect rect)
+		{
+			GLushort width = image->GetWidth();
+			GLushort height = image->GetHeight();
+
+			if (point.x >= m_width || point.y >= m_height)
+			{
+				return;
+			}
+
+			if (rect.width <= 0 || rect.height <= 0)
+			{
+				return;
+			}
+
+			if (rect.x >= width || rect.y >= height)
+			{
+				return;
+			}
+
+			if (point.x < 0)
+			{
+				point.x = 0;
+			}
+
+			if (point.y < 0)
+			{
+				point.y = 0;
+			}
+
+			GLushort maxWidth = image->GetWidth() - point.x;
+			if (rect.width > maxWidth)
+			{
+				rect.width = maxWidth;
+			}
+
+			GLushort maxHeight = image->GetHeight() - point.y;
+			if (rect.height > maxHeight)
+			{
+				rect.height = maxHeight - point.y;
+			}
+
+			for (int i = 0; i < rect.width; ++i)
+			{
+				for (int j = 0; j < rect.height; ++j)
+				{
+					SetPixel(point.x + i, point.y + j, image->GetPixel(i + rect.x, j + rect.y));
+				}
+			}
+		}
 	}
 }

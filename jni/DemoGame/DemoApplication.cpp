@@ -74,7 +74,7 @@ namespace Game
 		GameResources::Init();
 
 		m_pCursorTex = new Texture2D();
-		m_pCursorTex->Load("[0]/Cursor.png",Bilinear);
+		m_pCursorTex->Load("[0]/Cursor.png",FILTER_BILINEAR);
 
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 		Global::pEventLoop->HideCursor();

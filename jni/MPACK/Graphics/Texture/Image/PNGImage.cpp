@@ -210,8 +210,8 @@ namespace MPACK
 
 		Color PNGImage::GetPixel(GLushort x, GLushort y) const
 		{
-			int index=x*m_width+y;
-			index*=m_bytesPerPixel;
+			int index=x * m_width + y;
+			index *= m_bytesPerPixel;
 			if (m_bytesPerPixel == 4)
 			{
 				return Color(m_imageBuffer[index], m_imageBuffer[index+1],
@@ -231,6 +231,36 @@ namespace MPACK
 			{
 				return Color(m_imageBuffer[index], m_imageBuffer[index],
 						     m_imageBuffer[index], 255);
+			}
+		}
+
+		void PNGImage::SetPixel(GLushort x, GLushort y, Color c)
+		{
+			int index=x * m_width + y;
+			index *= m_bytesPerPixel;
+			if (m_bytesPerPixel == 4)
+			{
+				m_imageBuffer[index] = c.r;
+				m_imageBuffer[index+1] = c.g;
+				m_imageBuffer[index+2] = c.b;
+				m_imageBuffer[index+3] = c.a;
+			}
+			else if(m_bytesPerPixel == 3)
+			{
+				m_imageBuffer[index] = c.r;
+				m_imageBuffer[index+1] = c.g;
+				m_imageBuffer[index+2] = c.b;
+			}
+			else if(m_bytesPerPixel == 2)
+			{
+				unsigned char gray = (c.r + c.g + c.b) / 3;
+				m_imageBuffer[index] = gray;
+				m_imageBuffer[index+1] = c.a;
+			}
+			else
+			{
+				unsigned char gray = (c.r + c.g + c.b) / 3;
+				m_imageBuffer[index] = gray;
 			}
 		}
 

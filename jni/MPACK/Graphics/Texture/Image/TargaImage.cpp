@@ -129,8 +129,8 @@ namespace MPACK
 
 		Color TargaImage::GetPixel(GLushort x, GLushort y) const
 		{
-			int index=x*m_width+y;
-			index*=m_bytesPerPixel;
+			int index = x * m_width + y;
+			index *= m_bytesPerPixel;
 			if (m_bytesPerPixel == 4)
 			{
 				return Color(m_imageData[index], m_imageData[index+1],
@@ -140,6 +140,25 @@ namespace MPACK
 			{
 				return Color(m_imageData[index], m_imageData[index+1],
 						     m_imageData[index+2], 255);
+			}
+		}
+
+		void TargaImage::SetPixel(GLushort x, GLushort y, Color c)
+		{
+			int index = x * m_width + y;
+			index *= m_bytesPerPixel;
+			if (m_bytesPerPixel == 4)
+			{
+				m_imageData[index] = c.r;
+				m_imageData[index + 1] = c.g;
+				m_imageData[index + 2] = c.b;
+				m_imageData[index + 3] = c.a;
+			}
+			else
+			{
+				m_imageData[index] = c.r;
+				m_imageData[index + 1] = c.g;
+				m_imageData[index + 2] = c.b;
 			}
 		}
 

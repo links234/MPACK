@@ -21,7 +21,7 @@ namespace MPACK
 		GLuint	textureBinded[MAX_TEXTURES];
 
 		Texture2D::Texture2D(bool needUpdate)
-			: m_texId(0), m_sWrapMode(GL_REPEAT), m_tWrapMode(GL_REPEAT), m_filteringType(Trilinear),
+			: m_texId(0), m_sWrapMode(GL_REPEAT), m_tWrapMode(GL_REPEAT), m_filteringType(FILTER_TRILINEAR),
 			  m_needUpdate(needUpdate), m_width(0), m_height(0)
 		{
 		}
@@ -126,17 +126,17 @@ namespace MPACK
 
 		void Texture2D::Init()
 		{
-			if(m_filteringType==Point)
+			if (m_filteringType == FILTER_POINT)
 			{
 				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST) );
 				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST) );
 			}
-			else if(m_filteringType==Bilinear)
+			else if (m_filteringType == FILTER_BILINEAR)
 			{
 				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
 				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR) );
 			}
-			else if(m_filteringType==Trilinear)
+			else if (m_filteringType == FILTER_TRILINEAR)
 			{
 				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR) );
 				GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR) );
@@ -145,7 +145,7 @@ namespace MPACK
 			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, m_sWrapMode) );
 			GL_CHECK( glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, m_sWrapMode) );
 
-			m_needUpdate=false;
+			m_needUpdate = false;
 		}
 
 		GLuint Texture2D::GetWidth() const

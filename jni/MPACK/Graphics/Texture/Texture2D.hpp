@@ -25,7 +25,7 @@ namespace MPACK
 	{
 		class Image;
 
-		enum FilteringType{Point,Bilinear,Trilinear};
+		enum FilteringType {FILTER_POINT, FILTER_BILINEAR, FILTER_TRILINEAR};
 
 		class Texture2D : public Uncopyable
 		{
@@ -33,10 +33,10 @@ namespace MPACK
 			Texture2D(bool needUpdate=true);
 			~Texture2D();
 
-			bool Load(std::string path, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
-			bool Load(const Image* image, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
+			bool Load(std::string path, FilteringType filtering = FILTER_POINT, GLenum s_mode = GL_REPEAT, GLenum t_mode = GL_REPEAT);
+			bool Load(const Image* image, FilteringType filtering = FILTER_POINT, GLenum s_mode = GL_REPEAT, GLenum t_mode = GL_REPEAT);
 
-			void Build(GLuint width, GLuint height, FilteringType filtering=Point, GLenum s_mode=GL_REPEAT, GLenum t_mode=GL_REPEAT);
+			void Build(GLuint width, GLuint height, FilteringType filtering = FILTER_POINT, GLenum s_mode = GL_REPEAT, GLenum t_mode = GL_REPEAT);
 			void Bind(GLenum TEXTURE);
 
 			void SetFilteringType(FilteringType filtering);
