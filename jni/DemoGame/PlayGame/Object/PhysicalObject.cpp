@@ -15,10 +15,12 @@ PhysicalObject::~PhysicalObject()
 	if(m_shape)
 	{
 		delete m_shape;
+		m_shape = NULL;
 	}
 	if(m_body)
 	{
 		m_world->Destroy(m_body);
+		m_body = NULL;
 	}
 }
 

@@ -27,19 +27,18 @@ Object::~Object()
 
 void Object::UpdateAll(GLfloat delta)
 {
-	vector<Object*> objects;
+	vector<Object*> whatDelete;
 	for(vector<Object*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
 	{
-		if((*it)->Update(delta))
+		if(!(*it)->Update(delta))
 		{
-			objects.push_back(*it);
-		}
-		else
-		{
-			delete *it;
+			whatDelete.push_back(*it);
 		}
 	}
-	s_objects=objects;
+	for(vector<Object*>::iterator it=whatDelete.begin();it!=whatDelete.end();++it)
+	{
+		delete *it;
+	}
 }
 
 void Object::RenderAll()
@@ -47,5 +46,18 @@ void Object::RenderAll()
 	for(vector<Object*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
 	{
 		(*it)->Render();
+	}
+}
+
+void Object::ClearAll()
+{
+	vector<Object*> whatDelete;
+	for(vector<Object*>::iterator it=s_objects.begin();it!=s_objects.end();++it)
+	{
+		whatDelete.push_back(*it);
+	}
+	for(vector<Object*>::iterator it=whatDelete.begin();it!=whatDelete.end();++it)
+	{
+		delete *it;
 	}
 }

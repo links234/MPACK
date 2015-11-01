@@ -20,6 +20,7 @@ public:
 
 	static void UpdateAll(GLfloat delta);
 	static void RenderAll();
+	static void ClearAll();
 
 	bool m_debugInCollision;
 

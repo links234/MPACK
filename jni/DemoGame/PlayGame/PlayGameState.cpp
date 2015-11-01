@@ -223,17 +223,16 @@ namespace Game
 		delete m_enemySprite;
 		delete m_playerSprite;
 
-		for(int i=0;i<4;++i)
-		{
-			delete m_enemyObject[i];
-		}
-		delete m_playerObject;
-
 		delete m_backgroundTexture;
 		delete m_background;
 
 		delete Global::pActiveCamera;
 		Global::pActiveCamera=NULL;
+
+		Object::ClearAll();
+		Particle::Cleanup();
+
+		delete m_pWorld;
 
 		//should be deleted in final version
 		delete m_testSprite;
@@ -243,10 +242,6 @@ namespace Game
 		delete m_UIMatch2Sprite;
 		delete m_UIMatch3Sprite;
 		delete m_UIMatch4Sprite;
-
-		Particle::Cleanup();
-
-		delete m_pWorld;
 	}
 
 	void PlayGame::Physics_collisionCallback(void *userData, MPACK::Physics::Body *first, MPACK::Physics::Body *second, MPACK::Physics::CollisionInfo *collisionInfo)

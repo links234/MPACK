@@ -26,7 +26,6 @@ Enemy::Enemy(MPACK::Physics::World *world)
 
 	m_shape = poly;
 	m_body = m_world->Add(m_shape,0,0);
-	delete m_shape;
 
 	Material mat=m_body->GetMaterial();
 	mat.density=50.0f;
@@ -38,7 +37,6 @@ Enemy::Enemy(MPACK::Physics::World *world)
 
 Enemy::~Enemy()
 {
-	m_world->Destroy(m_body);
 }
 
 bool Enemy::Update(GLfloat delta)
