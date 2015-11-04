@@ -16,13 +16,16 @@ namespace MPACK
 			PNGImage();
 			virtual ~PNGImage();
 
+			void Init(const int &width, const int &height);
 			Core::ReturnValue Load(const std::string& filename);
 			void Unload();
 
 			const BYTE* GetImageData() const;
-			const BYTE* GetPixelPointer(GLushort x, GLushort y) const;
-			Color GetPixel(GLushort x, GLushort y) const;
-			void SetPixel(GLushort x, GLushort y, Color c);
+			const BYTE* GetPixelPointer(const GLushort &x, const GLushort &y) const;
+			Color GetPixel(const GLushort &x, const GLushort &y) const;
+			void SetPixel(const GLushort &x, const GLushort &y, const Color &c);
+
+			Core::ReturnValue SavePNG(const std::string &path);
 
 			void FlipVertical();
 			void FlipHorizontal();

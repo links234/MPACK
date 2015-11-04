@@ -21,6 +21,23 @@ namespace MPACK
 		{
 		}
 
+		void Image::InitColor(const int &width, const int &height, const Color &c)
+		{
+			Init(width, height);
+			FillColor(Rect(0, 0, m_width, m_height), c);
+		}
+
+		void Image::FillColor(const Rect &rect, const Color &c)
+		{
+			for(int i = 0; i < m_height; ++i)
+			{
+				for(int j = 0; j < m_width; ++j)
+				{
+					SetPixel(rect.x + i, rect.y + j, c);
+				}
+			}
+		}
+
 		GLushort Image::GetWidth() const
 		{
 			return m_width;
@@ -95,17 +112,17 @@ namespace MPACK
 			return 0;
 		}
 
-		void Image::Blit(Image *image, GLushort x, GLushort y)
+		void Image::Blit(Image *image, const GLushort &x, const GLushort &y)
 		{
 			BlitSafe(image, Point(x,y), Rect(0,0,image->GetWidth(),image->GetHeight()));
 		}
 
-		void Image::Blit(Image *image, Point point)
+		void Image::Blit(Image *image, const Point &point)
 		{
 			BlitSafe(image, point, Rect(0,0,image->GetWidth(),image->GetHeight()));
 		}
 
-		void Image::Blit(Image *image, Point point, Rect rect)
+		void Image::Blit(Image *image, const Point &point, const Rect &rect)
 		{
 			BlitSafe(image, point, rect);
 		}
@@ -140,21 +157,21 @@ namespace MPACK
 				point.y = 0;
 			}
 
-			GLushort maxWidth = image->GetWidth() - point.x;
+			GLushort maxWidth = m_width - point.x;
 			if (rect.width > maxWidth)
 			{
 				rect.width = maxWidth;
 			}
 
-			GLushort maxHeight = image->GetHeight() - point.y;
+			GLushort maxHeight = m_height - point.y;
 			if (rect.height > maxHeight)
 			{
 				rect.height = maxHeight - point.y;
 			}
 
-			for (int i = 0; i < rect.width; ++i)
+			for (int i = 0; i < rect.height; ++i)
 			{
-				for (int j = 0; j < rect.height; ++j)
+				for (int j = 0; j < rect.width; ++j)
 				{
 					SetPixel(point.x + i, point.y + j, image->GetPixel(i + rect.x, j + rect.y));
 				}

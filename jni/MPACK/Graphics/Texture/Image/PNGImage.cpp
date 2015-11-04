@@ -22,6 +22,37 @@ namespace MPACK
 			Unload();
 		}
 
+		void PNGImage::Init(const int &width, const int &height)
+		{
+			Unload();
+
+			if (width < 0)
+			{
+				LOGW("PNGImage::Init() invalid width!");
+				m_width = 1;
+			}
+			else
+			{
+				m_width = width;
+			}
+
+			if (height < 0)
+			{
+				LOGW("PNGImage::Init() invalid height!");
+				m_height = 1;
+			}
+			else
+			{
+				m_height = height;
+			}
+
+			m_bytesPerPixel = 4;
+			m_format = GL_RGBA;
+			m_alphaChannel = true;
+
+			m_imageBuffer = new png_byte[m_width * m_height * m_bytesPerPixel];
+		}
+
 		ReturnValue PNGImage::Load(const std::string& filename)
 		{
 			LOGI("PNGImage::Load Loading texture %s", filename.c_str());
@@ -190,10 +221,14 @@ namespace MPACK
 
 		void PNGImage::Unload()
 		{
-			m_width=0;
-			m_height=0;
-			m_format=0;
-			delete[] m_imageBuffer;
+			if (m_imageBuffer)
+			{
+				m_width=0;
+				m_height=0;
+				m_format=0;
+				delete[] m_imageBuffer;
+				m_imageBuffer;
+			}
 		}
 
 		const BYTE* PNGImage::GetImageData() const
@@ -201,14 +236,14 @@ namespace MPACK
 			return m_imageBuffer;
 		}
 
-		const BYTE* PNGImage::GetPixelPointer(GLushort x, GLushort y) const
+		const BYTE* PNGImage::GetPixelPointer(const GLushort &x, const GLushort &y) const
 		{
-			int index=x*m_width+y;
-			index*=m_bytesPerPixel;
-			return m_imageBuffer+index;
+			int index=x * m_width + y;
+			index *= m_bytesPerPixel;
+			return m_imageBuffer + index;
 		}
 
-		Color PNGImage::GetPixel(GLushort x, GLushort y) const
+		Color PNGImage::GetPixel(const GLushort &x, const GLushort &y) const
 		{
 			int index=x * m_width + y;
 			index *= m_bytesPerPixel;
@@ -234,7 +269,7 @@ namespace MPACK
 			}
 		}
 
-		void PNGImage::SetPixel(GLushort x, GLushort y, Color c)
+		void PNGImage::SetPixel(const GLushort &x, const GLushort &y, const Color &c)
 		{
 			int index=x * m_width + y;
 			index *= m_bytesPerPixel;
@@ -311,6 +346,93 @@ namespace MPACK
 			{
 				lResource->Close();
 			}
+		}
+
+		ReturnValue PNGImage::SavePNG(const std::string &path)
+		{
+			ReturnValue returnValue = RETURN_VALUE_OK;
+			FILE *pFile = NULL;
+			png_structp pPng = NULL;
+			png_infop pPngInfo = NULL;
+			png_bytep pRow = NULL;
+
+			int colorType = PNG_COLOR_TYPE_RGB_ALPHA;
+
+			pFile = fopen(path.c_str(), "wb");
+			if (pFile == NULL)
+			{
+				LOGE("Image::SavePNG() Could not open file %s for writing", path.c_str());
+				returnValue = RETURN_VALUE_KO;
+				goto SAVEPNG_CLEANUP;
+			}
+
+			pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+			if (pPng == NULL)
+			{
+				LOGE("Image::SavePNG() Could not allocate write struct");
+				returnValue = RETURN_VALUE_KO;
+				goto SAVEPNG_CLEANUP;
+			}
+
+			pPngInfo = png_create_info_struct(pPng);
+			if (pPngInfo == NULL)
+			{
+				LOGE("Image::SavePNG() Could not allocate png info struct");
+				returnValue = RETURN_VALUE_KO;
+				goto SAVEPNG_CLEANUP;
+			}
+
+			if (setjmp(png_jmpbuf(pPng)))
+			{
+				LOGE("Image::SavePNG() Error during png creation");
+				returnValue = RETURN_VALUE_KO;
+				goto SAVEPNG_CLEANUP;
+			}
+
+			png_init_io(pPng, pFile);
+
+			if (m_bytesPerPixel == 1)
+			{
+				colorType = PNG_COLOR_TYPE_GRAY;
+			}
+			else if(m_bytesPerPixel == 2)
+			{
+				colorType = PNG_COLOR_TYPE_GRAY_ALPHA;
+			}
+			else if(m_bytesPerPixel == 3)
+			{
+				colorType = PNG_COLOR_TYPE_RGB;
+			}
+
+			png_set_IHDR(pPng, pPngInfo, m_width, m_height,
+						 8, colorType, PNG_INTERLACE_NONE,
+						 PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+
+			png_write_info(pPng, pPngInfo);
+
+			for (int y = 0 ; y < m_height ; ++y)
+			{
+				pRow = m_imageBuffer + m_width * y * m_bytesPerPixel;
+				png_write_row(pPng, pRow);
+			}
+
+			png_write_end(pPng, NULL);
+
+		SAVEPNG_CLEANUP:
+			if (pFile != NULL)
+			{
+				fclose(pFile);
+			}
+			if (pPngInfo != NULL)
+			{
+				png_free_data(pPng, pPngInfo, PNG_FREE_ALL, -1);
+			}
+			if (pPng != NULL)
+			{
+				png_destroy_write_struct(&pPng, (png_infopp)NULL);
+			}
+
+			return returnValue;
 		}
 	}
 }

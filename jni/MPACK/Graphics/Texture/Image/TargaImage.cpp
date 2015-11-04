@@ -30,8 +30,43 @@ namespace MPACK
 			Unload();
 		}
 
+		void TargaImage::Init(const int &width, const int &height)
+		{
+			Unload();
+
+			if (width < 0)
+			{
+				LOGW("TargaImage::Init() invalid width!");
+				m_width = 1;
+			}
+			else
+			{
+				m_width = width;
+			}
+
+			if (height < 0)
+			{
+				LOGW("TargaImage::Init() invalid height!");
+				m_height = 1;
+			}
+			else
+			{
+				m_height = height;
+			}
+
+			m_bytesPerPixel = 4;
+			m_format = GL_RGBA;
+			m_alphaChannel = true;
+
+			unsigned int imageSize = m_width * m_height * m_bytesPerPixel;
+
+			m_imageData.resize(imageSize);
+		}
+
 		Core::ReturnValue TargaImage::Load(const string& filename)
 		{
+			Unload();
+
 			Resource *resource=LoadResource(filename.c_str());
 
 			if (resource->Open()!=RETURN_VALUE_OK)
@@ -120,14 +155,14 @@ namespace MPACK
 			return &m_imageData[0];
 		}
 
-		const BYTE* TargaImage::GetPixelPointer(GLushort x, GLushort y) const
+		const BYTE* TargaImage::GetPixelPointer(const GLushort &x, const GLushort &y) const
 		{
-			int index=x*m_width+y;
-			index*=m_bytesPerPixel;
+			int index = x * m_width + y;
+			index *= m_bytesPerPixel;
 			return &m_imageData[index];
 		}
 
-		Color TargaImage::GetPixel(GLushort x, GLushort y) const
+		Color TargaImage::GetPixel(const GLushort &x, const GLushort &y) const
 		{
 			int index = x * m_width + y;
 			index *= m_bytesPerPixel;
@@ -143,7 +178,7 @@ namespace MPACK
 			}
 		}
 
-		void TargaImage::SetPixel(GLushort x, GLushort y, Color c)
+		void TargaImage::SetPixel(const GLushort &x, const GLushort &y, const Color &c)
 		{
 			int index = x * m_width + y;
 			index *= m_bytesPerPixel;

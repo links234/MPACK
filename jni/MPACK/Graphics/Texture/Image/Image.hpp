@@ -18,8 +18,12 @@ namespace MPACK
 			Image();
 			virtual ~Image();
 
+			virtual void Init(const int &width, const int &height) = 0;
 			virtual Core::ReturnValue Load(const std::string& filename) = 0;
 			virtual void Unload() = 0;
+
+			void InitColor(const int &width, const int &height, const Color &c);
+			void FillColor(const Rect &rect, const Color &c);
 
 			GLushort GetWidth() const;
 			GLushort GetHeight() const;
@@ -30,16 +34,16 @@ namespace MPACK
 			bool HaveAlphaChannel() const;
 
 			virtual const BYTE* GetImageData() const = 0;
-			virtual const BYTE* GetPixelPointer(GLushort x, GLushort y) const = 0;
-			virtual Color GetPixel(GLushort x, GLushort y) const = 0;
-			virtual void SetPixel(GLushort x, GLushort y, Color c) = 0;
+			virtual const BYTE* GetPixelPointer(const GLushort &x, const GLushort &y) const = 0;
+			virtual Color GetPixel(const GLushort &x, const GLushort &y) const = 0;
+			virtual void SetPixel(const GLushort &x, const GLushort &y, const Color &c) = 0;
 
 			virtual void FlipVertical() = 0;
 			virtual void FlipHorizontal() = 0;
 
-			void Blit(Image *image, GLushort x, GLushort y);
-			void Blit(Image *image, Point point);
-			void Blit(Image *image, Point point, Rect rect);
+			void Blit(Image *image, const GLushort &x, const GLushort &y);
+			void Blit(Image *image, const Point &point);
+			void Blit(Image *image, const Point &point, const Rect &rect);
 
 		protected:
 			void BlitSafe(Image *image, Point point, Rect rect);

@@ -9,6 +9,8 @@
 #include "Texture2D.hpp"
 #include "RenderTexture.hpp"
 #include "Image.hpp"
+#include "PNGImage.hpp"
+#include "TargaImage.hpp"
 
 #include "GLSLShader.hpp"
 #include "ShaderTypes.hpp"
