@@ -1,12 +1,6 @@
 #include "DemoApplication.hpp"
-#include "GraphicsService.hpp"
-#include "Sound.hpp"
-#include "TimeService.hpp"
-#include "Context.hpp"
-#include "Global.hpp"
-#include "EventLoop.hpp"
-#include "IniFile.hpp"
-#include "GoogleAds.hpp"
+
+#include "MPACK.hpp"
 
 #include "GameResources.hpp"
 #include "MainMenuState.hpp"
@@ -194,6 +188,10 @@ namespace Game
     	int action=m_pGameState->Update();
     	PROFILE_END();
 
+    	PNGImage *pImg = NULL;
+    	Image *img = NULL;
+    	int x,y;
+
     	switch(action)
     	{
     		case EVENT_MAINMENU_CONTINUE:
@@ -228,6 +226,22 @@ namespace Game
 #ifdef ANDROID_PLATFORM
     			test->showLargeBanner(false);
 #endif
+    			pImg = new PNGImage;
+    			pImg->InitColor(4096,4096,Color(255,255,0,255));
+
+    			img = LoadImage("@Sprites/Ships/enemy1.png");
+    			x=img->GetHeight();
+    			y=img->GetWidth();
+    			pImg->Blit(img,0,0);
+    			delete img;
+
+    			img = LoadImage("@Sprites/Ships/Player.png");
+    			pImg->Blit(img,x,y);
+    			delete img;
+
+    			pImg->SavePNG("TEST.PNG");
+    			delete pImg;
+    			pImg = NULL;
     		break;
     		case EVENT_MAINMENU_CREDITS:
 #ifdef ANDROID_PLATFORM
