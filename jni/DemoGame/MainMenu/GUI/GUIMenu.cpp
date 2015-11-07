@@ -8,7 +8,7 @@ using namespace MPACK::Graphics;
 GUIMenu::GUIMenu()
 	: action(0), m_sprite(NULL)
 {
-	m_pMMInputController=MMInputController::Initialize();
+	m_pMMInputController=new MMInputController();
 
 	m_pMMInputController->Link_FDOWN(Param2PtrCallbackStruct(GUIMenu::DOWNEvent,this));
 	m_pMMInputController->Link_FUP(Param2PtrCallbackStruct(GUIMenu::UPEvent,this));

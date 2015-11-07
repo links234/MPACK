@@ -11,14 +11,15 @@ public:
 	MMInputController();
 	virtual ~MMInputController();
 
-	virtual void Update(GLfloat delta) = 0;
+	void Update(GLfloat delta);
 
 	void Link_FUP(const MPACK::Core::Param2PtrCallbackStruct &link);
 	void Link_FDOWN(const MPACK::Core::Param2PtrCallbackStruct &link);
 
-	static MMInputController* Initialize();
-
 protected:
+	static void DOWNEvent(void *pointer1, void *pointer2);
+	static void UPEvent(void *pointer1, void *pointer2);
+
 	std::vector<MPACK::Core::Param2PtrCallbackStruct> m_callbackFunc_FUP;
 	std::vector<MPACK::Core::Param2PtrCallbackStruct> m_callbackFunc_FDOWN;
 };
