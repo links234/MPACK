@@ -15,48 +15,62 @@ namespace MPACK
 		class Image
 		{
 		public:
-			Image();
-			virtual ~Image();
+			enum InternalFormatType {NONE, GRAY, GRAY_ALPHA, RGB, RGBA};
+			enum FileFormatType {AUTO, PNG, TGA, PPM};
 
-			virtual void Init(const int &width, const int &height) = 0;
-			virtual Core::ReturnValue Load(const std::string& filename) = 0;
-			virtual void Unload() = 0;
+			Image();
+			~Image();
+
+			void Init(const int &width, const int &height);
+			Core::ReturnValue Load(const std::string& path, FileFormatType fileFormatType = AUTO);
+			Core::ReturnValue Save(const std::string& path, FileFormatType fileFormatType = AUTO);
+			void Unload();
 
 			void InitColor(const int &width, const int &height, const Color &c);
 			void FillColor(const Rect &rect, const Color &c);
+
+			void Blit(Image *image, const GLushort &x, const GLushort &y);
+			void Blit(Image *image, const Point &point);
+			void Blit(Image *image, const Point &point, const Rect &rect);
+
+			void FlipVertical();
+			void FlipHorizontal();
 
 			GLushort GetWidth() const;
 			GLushort GetHeight() const;
 			GLushort GetBytesPerPixel() const;
 
-			GLint GetFormat() const;
+			GLint GetGLFormat() const;
+			InternalFormatType GetFormat() const;
 
 			bool HaveAlphaChannel() const;
 
-			virtual const BYTE* GetImageData() const = 0;
-			virtual const BYTE* GetPixelPointer(const GLushort &x, const GLushort &y) const = 0;
-			virtual Color GetPixel(const GLushort &x, const GLushort &y) const = 0;
-			virtual void SetPixel(const GLushort &x, const GLushort &y, const Color &c) = 0;
-
-			virtual void FlipVertical() = 0;
-			virtual void FlipHorizontal() = 0;
-
-			void Blit(Image *image, const GLushort &x, const GLushort &y);
-			void Blit(Image *image, const Point &point);
-			void Blit(Image *image, const Point &point, const Rect &rect);
+			const BYTE* GetImageData() const;
+			const BYTE* GetPixelPointer(const GLushort &x, const GLushort &y) const;
+			Color GetPixel(const GLushort &x, const GLushort &y) const;
+			void SetPixel(const GLushort &x, const GLushort &y, const Color &c);
 
 		protected:
 			void BlitSafe(Image *image, Point point, Rect rect);
 
 			GLushort m_width;
 			GLushort m_height;
-			GLushort m_format;
+			GLushort m_GLFormatType;
 			GLushort m_bytesPerPixel;
 
-			bool m_alphaChannel;
-		};
+			InternalFormatType m_internalFormatType;
 
-		Image* LoadImage(const char *pPath);
+			BYTE *m_imageBuffer;
+
+			friend Core::ReturnValue LoadTGA(Image *image, const std::string &path);
+			friend Core::ReturnValue SaveTGA(Image *image, const std::string &path);
+
+			friend Core::ReturnValue LoadPNG(Image *image, const std::string &path);
+			friend Core::ReturnValue SavePNG(Image *image, const std::string &path);
+
+			friend Core::ReturnValue LoadPPM(Image *image, const std::string &path);
+			friend Core::ReturnValue SavePPM(Image *image, const std::string &path);
+		};
 
 		GLushort GetBPP(GLint format);
 	}

@@ -8,7 +8,7 @@
 
 #include "Texture2D.hpp"
 
-#include "TargaImage.hpp"
+#include "Image.hpp"
 #include "Math.hpp"
 #include "Misc.hpp"
 
@@ -34,7 +34,8 @@ namespace MPACK
 		bool Texture2D::Load(string path, FilteringType filtering, GLenum s_mode, GLenum t_mode)
 		{
 			//REPLACE
-			Image *image=LoadImage(path.c_str());
+			Image *image = new Image;
+			image->Load(path.c_str());
 			LOGI("Texture2D::Load - path = %s",path.c_str());
 			if(!image)
 			{
@@ -55,7 +56,7 @@ namespace MPACK
 
 			GLenum internalFormat;
 			GLenum format;
-			internalFormat=format=image->GetFormat();
+			internalFormat=format=image->GetGLFormat();
 
 			m_width=image->GetWidth();
 			m_height=image->GetHeight();

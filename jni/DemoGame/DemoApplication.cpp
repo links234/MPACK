@@ -188,7 +188,7 @@ namespace Game
     	int action=m_pGameState->Update();
     	PROFILE_END();
 
-    	PNGImage *pImg = NULL;
+    	Image *pImg = NULL;
     	Image *img = NULL;
     	int x,y;
 
@@ -226,20 +226,21 @@ namespace Game
 #ifdef ANDROID_PLATFORM
     			test->showLargeBanner(false);
 #endif
-    			pImg = new PNGImage;
+    			pImg = new Image;
     			pImg->InitColor(4096,4096,Color(255,255,0,255));
 
-    			img = LoadImage("@Sprites/Ships/enemy1.png");
+    			img = new Image;
+    			img->Load("@Sprites/Ships/enemy1.png");
     			x=img->GetHeight();
     			y=img->GetWidth();
     			pImg->Blit(img,0,0);
-    			delete img;
 
-    			img = LoadImage("@Sprites/Ships/Player.png");
+    			img->Load("@Sprites/Ships/Player.png");
     			pImg->Blit(img,x,y);
     			delete img;
 
-    			pImg->SavePNG("TEST.PNG");
+    			pImg->Save("TEST.PNG");
+
     			delete pImg;
     			pImg = NULL;
     		break;

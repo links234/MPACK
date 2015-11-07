@@ -235,7 +235,8 @@ namespace MPACK
 
 		bool TextureMappedFont::Load(const string& textureName, FormatType format)
 		{
-			Image *pFontImage = LoadImage(textureName.c_str());
+			Image *pFontImage = new Image;
+			pFontImage->Load(textureName.c_str());
 			if(!pFontImage)
 			{
 				LOGE("TextureMappedFont::Load() could not load the font texture: %s",textureName.c_str());

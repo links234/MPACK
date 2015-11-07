@@ -1,5 +1,8 @@
 #include "PNGImage.hpp"
 
+#include <png.h>
+
+#include "Image.hpp"
 #include "Resource.hpp"
 #include "SDInputFile.hpp"
 #include "Asset.hpp"
@@ -12,52 +15,22 @@ namespace MPACK
 {
 	namespace Graphics
 	{
-		PNGImage::PNGImage()
-			: m_imageBuffer(NULL)
+		void LoadPNG_CallbackRead(png_structp pStruct, png_bytep pData, png_size_t pSize)
 		{
+			Resource* lResource = ((Resource*) png_get_io_ptr(pStruct));
+			if (lResource->Read(pData, pSize) != RETURN_VALUE_OK)
+			{
+				lResource->Close();
+			}
 		}
 
-		PNGImage::~PNGImage()
+		ReturnValue LoadPNG(Image *image, const std::string &path)
 		{
-			Unload();
-		}
+			image->Unload();
 
-		void PNGImage::Init(const int &width, const int &height)
-		{
-			Unload();
+			LOGI("LoadPNG() loading image %s", path.c_str());
 
-			if (width < 0)
-			{
-				LOGW("PNGImage::Init() invalid width!");
-				m_width = 1;
-			}
-			else
-			{
-				m_width = width;
-			}
-
-			if (height < 0)
-			{
-				LOGW("PNGImage::Init() invalid height!");
-				m_height = 1;
-			}
-			else
-			{
-				m_height = height;
-			}
-
-			m_bytesPerPixel = 4;
-			m_format = GL_RGBA;
-			m_alphaChannel = true;
-
-			m_imageBuffer = new png_byte[m_width * m_height * m_bytesPerPixel];
-		}
-
-		ReturnValue PNGImage::Load(const std::string& filename)
-		{
-			LOGI("PNGImage::Load Loading texture %s", filename.c_str());
-
-			Resource *pResource=LoadResource(filename.c_str());
+			Resource *pResource = LoadResource(path.c_str());
 
 			png_byte header[8];
 			png_structp pngPtr = NULL;
@@ -66,7 +39,6 @@ namespace MPACK
 			png_int_32 rowSize;
 			bool transparency;
 
-			// Opens and checks image signature (first 8 bytes).
 			if (pResource->Open() != RETURN_VALUE_OK)
 			{
 				goto ERROR_LABEL;
@@ -85,7 +57,7 @@ namespace MPACK
 			pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 			if (!pngPtr)
 			{
-				LOGE("PNGImage::Load failed to create read structure!");
+				LOGE("LoadPNG() failed to create read structure!");
 				goto ERROR_LABEL;
 			}
 			infoPtr = png_create_info_struct(pngPtr);
@@ -95,10 +67,7 @@ namespace MPACK
 				goto ERROR_LABEL;
 			}
 
-			// Prepares reading operation by setting-up a read callback.
-			png_set_read_fn(pngPtr, pResource, callback_read);
-			// Set-up error management. If an error occurs while reading,
-			// code will come back here and jump
+			png_set_read_fn(pngPtr, pResource, LoadPNG_CallbackRead);
 			if (setjmp(png_jmpbuf(pngPtr)))
 			{
 				goto ERROR_LABEL;
@@ -111,7 +80,8 @@ namespace MPACK
 			int depth, colorType;
 			png_uint_32 width, height;
 			png_get_IHDR(pngPtr, infoPtr, &width, &height, &depth, &colorType, NULL, NULL, NULL);
-			m_width = width; m_height = height;
+			image->m_width = width;
+			image->m_height = height;
 
 			// Creates a full alpha channel if transparency is encoded as
 			// an array of palette entries or a single transparent color.
@@ -120,50 +90,49 @@ namespace MPACK
 			{
 				png_set_tRNS_to_alpha(pngPtr);
 				transparency = true;
-				return RETURN_VALUE_KO;
-							//goto ERROR_LABEL;
+				goto ERROR_LABEL;
 			}
 
-			// Expands PNG with less than 8bits per channel to 8bits.
 			if (depth < 8)
 			{
 				png_set_packing (pngPtr);
-			// Shrinks PNG with 16bits per color channel down to 8bits.
 			}
 			else if (depth == 16)
 			{
 				png_set_strip_16(pngPtr);
 			}
-			// Indicates that image needs conversion to RGBA if needed.
 
-			m_alphaChannel = transparency;
+			// Indicates that image needs conversion to RGBA if needed.
 			switch (colorType)
 			{
 				case PNG_COLOR_TYPE_PALETTE:
 					png_set_palette_to_rgb(pngPtr);
-					m_format = transparency ? GL_RGBA : GL_RGB;
-					break;
+					image->m_GLFormatType = transparency ? GL_RGBA : GL_RGB;
+					image->m_internalFormatType = transparency ? Image::InternalFormatType::RGBA : Image::InternalFormatType::RGB;
+				break;
 				case PNG_COLOR_TYPE_RGB:
-					m_format = transparency ? GL_RGBA : GL_RGB;
-					break;
+					image->m_GLFormatType = transparency ? GL_RGBA : GL_RGB;
+					image->m_internalFormatType = transparency ? Image::InternalFormatType::RGBA : Image::InternalFormatType::RGB;
+				break;
 				case PNG_COLOR_TYPE_RGBA:
-					m_format = GL_RGBA;
-					m_alphaChannel=true;
-					break;
+					image->m_GLFormatType = GL_RGBA;
+					image->m_internalFormatType = Image::InternalFormatType::RGBA;
+				break;
 				case PNG_COLOR_TYPE_GRAY:
 					png_set_expand_gray_1_2_4_to_8(pngPtr);
-					m_format = transparency ? GL_LUMINANCE_ALPHA:GL_LUMINANCE;
-					break;
+					image->m_GLFormatType = transparency ? GL_LUMINANCE_ALPHA : GL_LUMINANCE;
+					image->m_internalFormatType = transparency ? Image::InternalFormatType::GRAY_ALPHA : Image::InternalFormatType::GRAY;
+				break;
 				case PNG_COLOR_TYPE_GRAY_ALPHA:
 					png_set_expand_gray_1_2_4_to_8(pngPtr);
-					m_format = GL_LUMINANCE_ALPHA;
-					m_alphaChannel=true;
-					break;
+					image->m_GLFormatType = GL_LUMINANCE_ALPHA;
+					image->m_internalFormatType = Image::InternalFormatType::GRAY_ALPHA;
+				break;
 			}
 			// Validates all tranformations.
 			png_read_update_info(pngPtr, infoPtr);
 
-			m_bytesPerPixel=GetBPP(m_format);
+			image->m_bytesPerPixel=GetBPP(image->m_GLFormatType);
 
 			// Get row size in bytes.
 			rowSize = png_get_rowbytes(pngPtr, infoPtr);
@@ -172,8 +141,8 @@ namespace MPACK
 				goto ERROR_LABEL;
 			}
 			// Ceates the image buffer that will be sent to OpenGL.
-			m_imageBuffer = new png_byte[rowSize * height];
-			if (!m_imageBuffer)
+			image->m_imageBuffer = new png_byte[rowSize * height];
+			if (!image->m_imageBuffer)
 			{
 				goto ERROR_LABEL;
 			}
@@ -187,7 +156,7 @@ namespace MPACK
 			}
 			for (::int32_t i = 0; i < height; ++i)
 			{
-				rowPtrs[height - (i + 1)] = m_imageBuffer + i * rowSize;
+				rowPtrs[height - (i + 1)] = image->m_imageBuffer + i * rowSize;
 			}
 			// Reads image content.
 			png_read_image(pngPtr, rowPtrs);
@@ -200,155 +169,23 @@ namespace MPACK
 			return RETURN_VALUE_OK;
 
 	ERROR_LABEL:
-			LOGE("Error while reading PNG file");
+			LOGE("LoadPNG() error while reading PNG file");
 			pResource->Close();
 			delete pResource;
 			if(rowPtrs)
 			{
 				delete[] rowPtrs;
 			}
-			if(m_imageBuffer)
-			{
-				delete[] m_imageBuffer;
-			}
 			if(pngPtr)
 			{
 				png_infop* infoPtrP = infoPtr != NULL ? &infoPtr: NULL;
 				png_destroy_read_struct(&pngPtr, infoPtrP, NULL);
 			}
+			image->Unload();
 			return RETURN_VALUE_KO;
 		}
 
-		void PNGImage::Unload()
-		{
-			if (m_imageBuffer)
-			{
-				m_width=0;
-				m_height=0;
-				m_format=0;
-				delete[] m_imageBuffer;
-				m_imageBuffer;
-			}
-		}
-
-		const BYTE* PNGImage::GetImageData() const
-		{
-			return m_imageBuffer;
-		}
-
-		const BYTE* PNGImage::GetPixelPointer(const GLushort &x, const GLushort &y) const
-		{
-			int index=x * m_width + y;
-			index *= m_bytesPerPixel;
-			return m_imageBuffer + index;
-		}
-
-		Color PNGImage::GetPixel(const GLushort &x, const GLushort &y) const
-		{
-			int index=x * m_width + y;
-			index *= m_bytesPerPixel;
-			if (m_bytesPerPixel == 4)
-			{
-				return Color(m_imageBuffer[index], m_imageBuffer[index+1],
-							 m_imageBuffer[index+2], m_imageBuffer[index+3]);
-			}
-			else if(m_bytesPerPixel == 3)
-			{
-				return Color(m_imageBuffer[index], m_imageBuffer[index+1],
-						     m_imageBuffer[index+2], 255);
-			}
-			else if(m_bytesPerPixel == 2)
-			{
-				return Color(m_imageBuffer[index], m_imageBuffer[index],
-						     m_imageBuffer[index], m_imageBuffer[index+1]);
-			}
-			else
-			{
-				return Color(m_imageBuffer[index], m_imageBuffer[index],
-						     m_imageBuffer[index], 255);
-			}
-		}
-
-		void PNGImage::SetPixel(const GLushort &x, const GLushort &y, const Color &c)
-		{
-			int index=x * m_width + y;
-			index *= m_bytesPerPixel;
-			if (m_bytesPerPixel == 4)
-			{
-				m_imageBuffer[index] = c.r;
-				m_imageBuffer[index+1] = c.g;
-				m_imageBuffer[index+2] = c.b;
-				m_imageBuffer[index+3] = c.a;
-			}
-			else if(m_bytesPerPixel == 3)
-			{
-				m_imageBuffer[index] = c.r;
-				m_imageBuffer[index+1] = c.g;
-				m_imageBuffer[index+2] = c.b;
-			}
-			else if(m_bytesPerPixel == 2)
-			{
-				unsigned char gray = (c.r + c.g + c.b) / 3;
-				m_imageBuffer[index] = gray;
-				m_imageBuffer[index+1] = c.a;
-			}
-			else
-			{
-				unsigned char gray = (c.r + c.g + c.b) / 3;
-				m_imageBuffer[index] = gray;
-			}
-		}
-
-		void PNGImage::FlipVertical()
-		{
-			for(int i=0;i<(m_width>>1);++i)
-			{
-				for(int j=0;j<m_height;++j)
-				{
-					int offset1=i*m_width+j;
-					offset1*=m_bytesPerPixel;
-
-					int vi=m_width-i-1;
-					int vj=j;
-
-					int offset2=vi*m_width+vj;
-					offset2*=m_bytesPerPixel;
-
-					StringEx::MemSwap((char*)(m_imageBuffer+offset1),(char*)(m_imageBuffer+offset2),m_bytesPerPixel);
-				}
-			}
-		}
-
-		void PNGImage::FlipHorizontal()
-		{
-			for(int i=0;i<m_width;++i)
-			{
-				for(int j=0;j<(m_height>>1);++j)
-				{
-					int offset1=i*m_width+j;
-					offset1*=m_bytesPerPixel;
-
-					int vi=i;
-					int vj=m_height-j+1;
-
-					int offset2=vi*m_width+vj;
-					offset2*=m_bytesPerPixel;
-
-					StringEx::MemSwap((char*)(m_imageBuffer+offset1),(char*)(m_imageBuffer+offset2),m_bytesPerPixel);
-				}
-			}
-		}
-
-		void PNGImage::callback_read(png_structp pStruct, png_bytep pData, png_size_t pSize)
-		{
-			Resource* lResource = ((Resource*) png_get_io_ptr(pStruct));
-			if (lResource->Read(pData, pSize) != RETURN_VALUE_OK)
-			{
-				lResource->Close();
-			}
-		}
-
-		ReturnValue PNGImage::SavePNG(const std::string &path)
+		ReturnValue SavePNG(Image *image, const std::string &path)
 		{
 			ReturnValue returnValue = RETURN_VALUE_OK;
 			FILE *pFile = NULL;
@@ -361,7 +198,7 @@ namespace MPACK
 			pFile = fopen(path.c_str(), "wb");
 			if (pFile == NULL)
 			{
-				LOGE("Image::SavePNG() Could not open file %s for writing", path.c_str());
+				LOGE("SavePNG() could not open file %s for writing", path.c_str());
 				returnValue = RETURN_VALUE_KO;
 				goto SAVEPNG_CLEANUP;
 			}
@@ -369,7 +206,7 @@ namespace MPACK
 			pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 			if (pPng == NULL)
 			{
-				LOGE("Image::SavePNG() Could not allocate write struct");
+				LOGE("SavePNG() could not allocate write struct");
 				returnValue = RETURN_VALUE_KO;
 				goto SAVEPNG_CLEANUP;
 			}
@@ -377,42 +214,42 @@ namespace MPACK
 			pPngInfo = png_create_info_struct(pPng);
 			if (pPngInfo == NULL)
 			{
-				LOGE("Image::SavePNG() Could not allocate png info struct");
+				LOGE("SavePNG() could not allocate png info struct");
 				returnValue = RETURN_VALUE_KO;
 				goto SAVEPNG_CLEANUP;
 			}
 
 			if (setjmp(png_jmpbuf(pPng)))
 			{
-				LOGE("Image::SavePNG() Error during png creation");
+				LOGE("SavePNG() error during png creation");
 				returnValue = RETURN_VALUE_KO;
 				goto SAVEPNG_CLEANUP;
 			}
 
 			png_init_io(pPng, pFile);
 
-			if (m_bytesPerPixel == 1)
+			if (image->m_bytesPerPixel == 1)
 			{
 				colorType = PNG_COLOR_TYPE_GRAY;
 			}
-			else if(m_bytesPerPixel == 2)
+			else if(image->m_bytesPerPixel == 2)
 			{
 				colorType = PNG_COLOR_TYPE_GRAY_ALPHA;
 			}
-			else if(m_bytesPerPixel == 3)
+			else if(image->m_bytesPerPixel == 3)
 			{
 				colorType = PNG_COLOR_TYPE_RGB;
 			}
 
-			png_set_IHDR(pPng, pPngInfo, m_width, m_height,
+			png_set_IHDR(pPng, pPngInfo, image->m_width, image->m_height,
 						 8, colorType, PNG_INTERLACE_NONE,
 						 PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 
 			png_write_info(pPng, pPngInfo);
 
-			for (int y = 0 ; y < m_height ; ++y)
+			for (int y = 0 ; y < image->m_height ; ++y)
 			{
-				pRow = m_imageBuffer + m_width * y * m_bytesPerPixel;
+				pRow = image->m_imageBuffer + image->m_width * y * image->m_bytesPerPixel;
 				png_write_row(pPng, pRow);
 			}
 
