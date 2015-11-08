@@ -22,7 +22,8 @@ namespace MPACK
 
 		LinuxEventLoop::LinuxEventLoop(void *data)
 			: m_isFullscreen(false), m_isRunning(false), m_width(0), m_height(0),
-			  m_enabled(false), m_glContext(NULL)
+			  m_newWidth(0), m_newHeight(0), m_enabled(false), m_glContext(NULL),
+			  m_isResizing(false)
 		{
 		}
 
@@ -36,15 +37,19 @@ namespace MPACK
 				LOGE("LinuxEventLoop::Run failed to InitializeDisplay()");
 				return RETURN_VALUE_KO;
 			}
+			Graphics::Render::SetScreenSize(m_width,m_height);
 			m_pActivityHandler->onActivate();
 
 			// Global step loop.
 			while(m_isRunning)
 			{
 				ProcessEvents();
-				if(m_pActivityHandler->onStep() != RETURN_VALUE_OK)
+				if(!m_isResizing)
 				{
-					m_isRunning=false;
+					if(m_pActivityHandler->onStep() != RETURN_VALUE_OK)
+					{
+						m_isRunning=false;
+					}
 				}
 				SwapBuffers();
 			}
@@ -88,9 +93,13 @@ namespace MPACK
 
 		ReturnValue LinuxEventLoop::InitializeDisplay()
 		{
-			int width=800;
-			int height=600;
-			int bpp=32;
+			int width = 800;
+			int height = 600;
+			m_width = width;
+			m_height = height;
+			m_newWidth = width;
+			m_newHeight = height;
+			int bpp = 32;
 			bool fullscreen=false;
 
 			m_display = XOpenDisplay(0);
@@ -233,6 +242,7 @@ namespace MPACK
 			}
 
 			glXSwapIntervalMESA(0);
+
 			return RETURN_VALUE_OK;
 		}
 
@@ -261,48 +271,56 @@ namespace MPACK
 
 			XEvent event;
 
+			int width, height;
+
 			while (XPending(m_display) > 0)
 			{
 				XNextEvent(m_display, &event);
 				switch (event.type)
 				{
-				case Expose:
+					case Expose:
 					break;
-				case ConfigureNotify:
+					case ConfigureNotify:
+						width = event.xconfigure.width;
+						height = event.xconfigure.height;
+						if(width != m_newWidth || height != m_newHeight)
+						{
+							m_newWidth = width;
+							m_newHeight = height;
+							m_isResizing = true;
+						}
+					break;
+					case KeyPress:
+						Global::pContext->pInputService->GetKeyboard()->HandleKeyDown(Global::pContext->pInputService->GetKeyboard()->TranslateCode(XLookupKeysym(&event.xkey,0)));
+					break;
+					case KeyRelease:
+						Global::pContext->pInputService->GetKeyboard()->HandleKeyUp(Global::pContext->pInputService->GetKeyboard()->TranslateCode(XLookupKeysym(&event.xkey,0)));
+					break;
+					case ClientMessage:
+						if (string(XGetAtomName(m_display, event.xclient.message_type)) == string("WM_PROTOCOLS"))
+						{
+							m_isRunning = false;
+							return;
+						}
+					break;
+					default:
+					break;
+				}
+			}
+
+			if (Global::pContext->pInputService->GetMouse()->ButtonUp(Input::MouseButton::MBC_LEFT) == 1)
+			{
+				if(m_isResizing)
 				{
-					int width = event.xconfigure.width;
-					int height = event.xconfigure.height;
-					if(width!=m_width || height!=m_height)
+					if (m_newWidth != m_width || m_newHeight != m_height)
 					{
-						m_width=width;
-						m_height=height;
+						m_width = m_newWidth;
+						m_height = m_newHeight;
 						m_pActivityHandler->onDeactivate();
 						Graphics::Render::SetScreenSize(m_width,m_height);
 						m_pActivityHandler->onActivate();
 					}
-				}
-				break;
-				case KeyPress:
-				{
-					Global::pContext->pInputService->GetKeyboard()->HandleKeyDown(Global::pContext->pInputService->GetKeyboard()->TranslateCode(XLookupKeysym(&event.xkey,0)));
-				}
-				break;
-				case KeyRelease:
-				{
-					Global::pContext->pInputService->GetKeyboard()->HandleKeyUp(Global::pContext->pInputService->GetKeyboard()->TranslateCode(XLookupKeysym(&event.xkey,0)));
-				}
-				break;
-
-				case ClientMessage:
-					if (string(XGetAtomName(m_display, event.xclient.message_type)) == string("WM_PROTOCOLS"))
-					{
-						std::cout << "Closing the Window!" << std::endl;
-						m_isRunning = false;
-						return;
-					}
-					break;
-				default:
-					break;
+					m_isResizing = false;
 				}
 			}
 		}

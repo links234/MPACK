@@ -58,6 +58,10 @@ namespace MPACK
 			unsigned int m_height;
 			unsigned int m_bpp;
 
+			unsigned int m_newWidth;
+			unsigned int m_newHeight;
+
+			bool	m_isResizing;
 			bool	m_isRunning;
 			bool	m_isFullscreen;
 			bool	m_enabled;
