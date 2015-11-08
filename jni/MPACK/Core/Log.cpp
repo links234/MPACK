@@ -48,7 +48,7 @@ namespace MPACK
 			__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
 	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-			printf("Info: %s\n", buffer);
+			printf("[  INFO ]   %s\n", buffer);
 			pFileLogger->Print(FileLogger::Succes,std::string(buffer));
 	#endif
 		}
@@ -65,7 +65,7 @@ namespace MPACK
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "\n");
 	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-			printf("Error: %s\n", buffer);
+			printf("[ ERROR ]   %s\n", buffer);
 			pFileLogger->Print(FileLogger::CriticalFailure,"%s",buffer);
 	#endif
 		}
@@ -82,7 +82,7 @@ namespace MPACK
 			__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
 	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-			printf("Warning: %s\n", buffer);
+			printf("[WARNING]   %s\n", buffer);
 			pFileLogger->Print(FileLogger::Warning,"%s",buffer);
 	#endif
 		}
@@ -99,7 +99,7 @@ namespace MPACK
 			__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
 	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-			printf("Debug: %s\n", buffer);
+			printf("[ DEBUG ]   %s\n", buffer);
 			pFileLogger->Print(FileLogger::Information,"%s",buffer);
 	#endif
 		}
