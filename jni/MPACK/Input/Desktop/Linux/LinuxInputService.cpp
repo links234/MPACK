@@ -63,6 +63,7 @@ namespace MPACK
 			if(m_pMouse->ButtonDown(MBC_LEFT))
 			{
 				m_pFinger->m_flag = Finger::FREE;
+				m_pFinger->m_pos = m_pMouse->GetPosition();
 				for(vector<Param2PtrCallbackStruct>::iterator it=m_callbackFunc_FDOWN.begin();it!=m_callbackFunc_FDOWN.end();++it)
 				{
 					it->function(it->param1,(void*)(m_pFinger));
