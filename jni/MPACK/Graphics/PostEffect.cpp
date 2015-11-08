@@ -23,13 +23,16 @@ namespace MPACK
 			: m_shader(NULL)
 		{
 		}
+
 		PostEffect::PostEffect(AbstractShaderType* shader)
 			: m_shader(shader)
 		{
 		}
+
 		PostEffect::~PostEffect()
 		{
 		}
+
 		void PostEffect::Apply()
 		{
 			m_shader->BindShader();
@@ -50,6 +53,7 @@ namespace MPACK
 			GL_CHECK( glBindBuffer(GL_ARRAY_BUFFER,0) );
 			GL_CHECK( glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0) );
 		}
+
 		void PostEffect::Init(GLuint width, GLuint height)
 		{
 			ClearFX();
@@ -101,11 +105,9 @@ namespace MPACK
 			FXAAII = new PostEffect(FXAAII_Shader);
 			FXAAI = new PostEffect(FXAAI_Shader);
 		}
+
 		void PostEffect::SetScreenSize(GLuint width, GLuint height)
 		{
-			LOGD("SetScreenSize()");
-			LOGD("s_renderTexture1 = %d",s_renderTexture1);
-			LOGD("s_renderTexture2 = %d",s_renderTexture2);
 			if(!s_renderTexture1)
 			{
 				s_renderTexture1=new RenderTexture();
@@ -114,12 +116,10 @@ namespace MPACK
 			{
 				s_renderTexture2=new RenderTexture();
 			}
-			LOGD("Init0");
 			s_renderTexture1->Init(width,height);
-			LOGD("Init1");
 			s_renderTexture2->Init(width,height);
-			LOGD("Init2");
 		}
+
 		void PostEffect::Shutdown()
 		{
 			if(s_renderTexture1)
@@ -140,6 +140,7 @@ namespace MPACK
 			delete FXAAI;
 			FXAAI = NULL;
 		}
+
 		void PostEffect::Begin()
 		{
 			if(s_FXCount != -1)
@@ -147,6 +148,7 @@ namespace MPACK
 				s_renderTexture1->Bind();
 			}
 		}
+
 		void PostEffect::End()
 		{
 			if(s_FXCount != -1)
@@ -155,6 +157,7 @@ namespace MPACK
 				ApplyFX();
 			}
 		}
+
 		void PostEffect::PushFX(PostEffect* &FX)
 		{
 			s_FX[++s_FXCount]=FX;
@@ -166,18 +169,22 @@ namespace MPACK
 				--s_FXCount;
 			}
 		}
+
 		void PostEffect::ClearFX()
 		{
 			s_FXCount=-1;
 		}
+
 		GLuint PostEffect::GetSizeFX()
 		{
 			return MaxFXNumber;
 		}
+
 		GLuint PostEffect::GetCountFX()
 		{
 			return s_FXCount+1;
 		}
+
 		void PostEffect::ApplyFX()
 		{
 			if(s_FXCount != -1)
@@ -198,6 +205,7 @@ namespace MPACK
 				s_FX[indexFX]->Apply();
 			}
 		}
+
 		RenderTexture* PostEffect::GetRenderTexturePointer()
 		{
 			if(s_FXCount != -1)
