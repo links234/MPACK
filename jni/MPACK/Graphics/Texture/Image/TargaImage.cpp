@@ -126,7 +126,7 @@ namespace MPACK
 				pointer += header.idLength;
 			}
 
-			bool result = false;
+			bool result = true;
 
 			if (IsUncompressedTarga(header))
 			{
@@ -173,7 +173,8 @@ namespace MPACK
 
 							if(currentpixel > pixelcount)
 							{
-								return false;
+								result = false;
+								goto LOADTGA_ERROR;
 							}
 						}
 					}
@@ -206,7 +207,8 @@ namespace MPACK
 
 							if(currentpixel > pixelcount)
 							{
-								return false;
+								result = false;
+								goto LOADTGA_ERROR;
 							}
 						}
 					}
@@ -218,12 +220,14 @@ namespace MPACK
 				image->FlipVertical();
 			}
 
+		LOADTGA_ERROR:
 			delete resource;
-			if (result)
+			if (!result)
 			{
-				return RETURN_VALUE_OK;
+				LOGE("LoadTGA() fail: corrupt file");
+				return RETURN_VALUE_KO;
 			}
-			return RETURN_VALUE_KO;
+			return RETURN_VALUE_OK;
 		}
 
 		Core::ReturnValue SaveTGA(Image *image, const string& path)
