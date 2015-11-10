@@ -6,6 +6,7 @@ namespace MPACK
 	namespace Algorithm
 	{
 		template<class T> AVL<T>::Iterator::Iterator()
+			: m_avl(NULL), m_node(NULL), m_count(0)
 		{
 		}
 
