@@ -25,7 +25,7 @@ namespace MPACK
 
 		bool Texture2D::Load(string path, FilteringType filtering, GLenum s_mode, GLenum t_mode)
 		{
-			//REPLACE
+			m_path = path;
 			Image *image = new Image;
 			image->Load(path.c_str());
 			LOGI("Texture2D::Load - path = %s",path.c_str());
@@ -41,6 +41,8 @@ namespace MPACK
 
 		bool Texture2D::Load(const Image* image, FilteringType filtering, GLenum s_mode, GLenum t_mode)
 		{
+			m_path = "@TEX_LOAD_IMG";
+
 			LOGI("Texture2D::Load - load image to texture");
 			GL_CHECK( glDeleteTextures(1, &m_texId) );
 			GL_CHECK( glGenTextures(1, &m_texId) );
@@ -66,6 +68,8 @@ namespace MPACK
 
 		void Texture2D::Build(GLuint width, GLuint height, FilteringType filtering, GLenum s_mode, GLenum t_mode)
 		{
+			m_path = "@TEX_BUILD";
+
 			GLenum colorAttachmentInternalFormat = GL_RGBA;
 			GLenum colorAttachmentType = GL_UNSIGNED_BYTE;
 
@@ -149,6 +153,11 @@ namespace MPACK
 		GLuint Texture2D::GetHeight() const
 		{
 			return m_height;
+		}
+
+		string Texture2D::GetPath() const
+		{
+			return m_path;
 		}
 
 		void InitTextureSlots()

@@ -36,6 +36,7 @@ namespace MPACK
 
 			GLuint GetWidth() const;
 			GLuint GetHeight() const;
+			std::string GetPath() const;
 
 			GLuint			m_texId;
 
@@ -47,6 +48,8 @@ namespace MPACK
 			bool			m_needUpdate;
 			GLuint			m_width,m_height;
 			FilteringType	m_filteringType;
+
+			std::string		m_path;
 		};
 	
 		void InitTextureSlots();
