@@ -26,6 +26,11 @@ namespace MPACK
 			LOGI("Creating GraphicsService.");
 		}
 
+		GraphicsService::~GraphicsService()
+		{
+			LOGI("Destroying GraphicsService.");
+		}
+
 		ReturnValue GraphicsService::Start()
 		{
 			InitTextureSlots();
@@ -44,7 +49,7 @@ namespace MPACK
 
 		void GraphicsService::Stop()
 		{
-			LOGI("GraphicsService::Stop");
+			LOGI("Stopping GraphicsService.");
 
 			PostEffect::Shutdown();
 

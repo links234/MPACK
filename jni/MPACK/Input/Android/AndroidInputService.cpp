@@ -17,10 +17,12 @@ namespace MPACK
 	{
 		AndroidInputService::AndroidInputService()
 		{
+			LOGI("Creating InputService.");
 		}
 
 		AndroidInputService::~AndroidInputService()
 		{
+			LOGI("Destroying InputService.");
 			for(vector<Finger*>::iterator it=m_finger.begin();it!=m_finger.end();++it)
 			{
 				delete *it;

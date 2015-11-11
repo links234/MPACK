@@ -11,10 +11,12 @@ namespace MPACK
 	{
 		TimeService::TimeService()
 		{
+			LOGI("Creating TimeService.");
 		}
 
 		TimeService::~TimeService()
 		{
+			LOGI("Destroying TimeService.");
 		}
 
 		TimeService* TimeService::Initialize()

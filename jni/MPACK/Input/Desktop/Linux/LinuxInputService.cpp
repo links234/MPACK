@@ -16,6 +16,7 @@ namespace MPACK
 	{
 		LinuxInputService::LinuxInputService()
 		{
+			LOGI("Creating InputService.");
 			m_pFinger = new Finger;
 			m_pMouse = new LinuxMouseInterface;
 			m_pKeyboard = new LinuxKeyboardInterface;
@@ -24,6 +25,7 @@ namespace MPACK
 
 		LinuxInputService::~LinuxInputService()
 		{
+			LOGI("Destroying InputService.");
 			delete m_pFinger;
 			delete m_pMouse;
 			delete m_pKeyboard;

@@ -13,6 +13,7 @@ namespace MPACK
 		{
 		public:
 			GraphicsService();
+			~GraphicsService();
 
 			Core::ReturnValue Start();
 			void Stop();
