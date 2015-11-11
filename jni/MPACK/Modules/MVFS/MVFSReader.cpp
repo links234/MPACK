@@ -12,7 +12,7 @@ using namespace std;
 namespace MVFS
 {
     Reader::Reader(FileReaderInterface *pFileReaderItf, std::vector<char> key)
-        : m_pFileReaderItf(pFileReaderItf), m_version(0), m_key(key)
+        : m_pFileReaderItf(pFileReaderItf), m_version(0), m_key(key), m_pRoot(0)
     {
     }
 
