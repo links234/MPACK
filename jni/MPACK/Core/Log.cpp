@@ -4,6 +4,7 @@
 #include <cstdio>
 
 #include "FileLogger.hpp"
+#include "Console.hpp"
 
 #ifdef ANDROID_PLATFORM
 #include <android/log.h>
@@ -48,7 +49,9 @@ namespace MPACK
 			__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
 	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+			Console::SetFGColor(Console::FG_WHITE);
 			printf("[  INFO ]   %s\n", buffer);
+			Console::Reset();
 			pFileLogger->Print(FileLogger::Succes,std::string(buffer));
 	#endif
 		}
@@ -65,7 +68,9 @@ namespace MPACK
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "\n");
 	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+			Console::SetFGColor(Console::FG_RED);
 			printf("[ ERROR ]   %s\n", buffer);
+			Console::Reset();
 			pFileLogger->Print(FileLogger::CriticalFailure,"%s",buffer);
 	#endif
 		}
@@ -82,7 +87,9 @@ namespace MPACK
 			__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
 	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+			Console::SetFGColor(Console::FG_YELLOW);
 			printf("[WARNING]   %s\n", buffer);
+			Console::Reset();
 			pFileLogger->Print(FileLogger::Warning,"%s",buffer);
 	#endif
 		}
@@ -99,7 +106,9 @@ namespace MPACK
 			__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
 	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+			Console::SetFGColor(Console::FG_MAGENTA);
 			printf("[ DEBUG ]   %s\n", buffer);
+			Console::Reset();
 			pFileLogger->Print(FileLogger::Information,"%s",buffer);
 	#endif
 		}

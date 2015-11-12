@@ -12,15 +12,10 @@ namespace Demo
 
 	int ConsoleApplication::Main()
 	{
-
-		MPACK::Core::Console::SetBGColor(MPACK::Core::Console::BG_RED);
-
-		LOGD("TEST1");
-
-		MPACK::Core::Console::SetFGColor(MPACK::Core::Console::FG_BLUE);
-
-		LOGD("Demo::ConsoleApplication is working!!!");
-
+		LOGI("Demo::ConsoleApplication is working!!!");
+		LOGD("Demo::ConsoleApplication has a bug!");
+		LOGW("Demo::ConsoleApplication this should not be happening, falling back to older version!");
+		LOGE("Demo::ConsoleApplication error, could not recover");
 		return 0;
 	}
 }
