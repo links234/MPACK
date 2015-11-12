@@ -1,4 +1,4 @@
-#include "DemoApplication.hpp"
+#include "DemoAndroidApplication.hpp"
 
 #include "MPACK.hpp"
 
@@ -18,23 +18,23 @@ MPACK::ADS::GoogleAds *test;
 
 #define MPACK_TESTING
 
-namespace Game
+namespace Demo
 {
-	DemoApplication::DemoApplication()
+	AndroidApplication::AndroidApplication()
     {
 		m_pGameState = NULL;
 		m_pSavedGameState = NULL;
 		m_pCursorTex = NULL;
     }
 
-	DemoApplication::~DemoApplication()
+	AndroidApplication::~AndroidApplication()
     {
-		LOGI("DemoApplication::~DemoApplication()");
+		LOGI("Demo::AndroidApplication::~DemoApplication()");
     }
 
-	MPACK::Core::ReturnValue DemoApplication::onActivate()
+	MPACK::Core::ReturnValue AndroidApplication::onActivate()
     {
-		LOGI("DemoApplication::onActivate()");
+		LOGI("Demo::AndroidApplication::onActivate()");
 
 		LOGI("Command line arguments: ");
 		for(int i=0;i<Global::arguments.size();++i)
@@ -49,7 +49,7 @@ namespace Game
         // Starts services.
 		if (Global::pContext->pGraphicsService->Start() != Core::RETURN_VALUE_OK)
 		{
-			LOGE("DemoApplication::onActivate failed to start graphics service");
+			LOGE("Demo::AndroidApplication::onActivate failed to start graphics service");
 			return Core::RETURN_VALUE_KO;
 		}
 		PostEffect::ClearFX();
@@ -57,7 +57,7 @@ namespace Game
 
 		if (Global::pContext->pSoundService->Start() != Core::RETURN_VALUE_OK)
 		{
-			LOGE("DemoApplication::onActivate failed to start sound service");
+			LOGE("Demo::AndroidApplication::onActivate failed to start sound service");
 			return Core::RETURN_VALUE_KO;
 		}
 
@@ -87,11 +87,11 @@ namespace Game
 		return Core::RETURN_VALUE_OK;
     }
 
-    void DemoApplication::onDeactivate()
+    void AndroidApplication::onDeactivate()
     {
     	GameResources::Uninit();
 
-    	LOGI("DemoApplication::onDeactivate()");
+    	LOGI("Demo::AndroidApplication::onDeactivate()");
     	MPACK::Global::pContext->pGraphicsService->Stop();
     	MPACK::Global::pContext->pSoundService->Stop();
 
@@ -111,7 +111,7 @@ namespace Game
     	Profiler::Cleanup();
     }
 
-    Core::ReturnValue DemoApplication::onStep()
+    Core::ReturnValue AndroidApplication::onStep()
     {
     	//test->showVideoInterstitial();
     	PROFILE_BEGIN("onStep");
@@ -297,64 +297,63 @@ namespace Game
 		return Core::RETURN_VALUE_OK;
     }
 
-    void DemoApplication::onStart()
+    void AndroidApplication::onStart()
     {
-    	LOGI("DemoApplication::onStart");
+    	LOGI("Demo::AndroidApplication::onStart");
     }
 
-    void DemoApplication::onResume()
+    void AndroidApplication::onResume()
     {
-    	LOGI("DemoApplication::onResume");
+    	LOGI("Demo::AndroidApplication::onResume");
     }
 
-    void DemoApplication::onPause()
+    void AndroidApplication::onPause()
     {
-    	LOGI("DemoApplication::onPause");
+    	LOGI("Demo::AndroidApplication::onPause");
     }
 
-    void DemoApplication::onStop()
+    void AndroidApplication::onStop()
     {
-    	LOGI("DemoApplication::onStop");
+    	LOGI("Demo::AndroidApplication::onStop");
     }
 
-    void DemoApplication::onDestroy()
+    void AndroidApplication::onDestroy()
     {
-    	LOGI("DemoApplication::onDestroy");
+    	LOGI("Demo::AndroidApplication::onDestroy");
     }
 
-    void DemoApplication::onSaveState(void** pData, size_t* pSize)
+    void AndroidApplication::onSaveState(void** pData, size_t* pSize)
     {
-    	LOGI("DemoApplication::onSaveInstanceState");
+    	LOGI("Demo::AndroidApplication::onSaveInstanceState");
     }
 
-    void DemoApplication::onConfigurationChanged()
+    void AndroidApplication::onConfigurationChanged()
     {
-    	LOGI("DemoApplication::onConfigurationChanged");
+    	LOGI("Demo::AndroidApplication::onConfigurationChanged");
     }
 
-    void DemoApplication::onLowMemory()
+    void AndroidApplication::onLowMemory()
     {
-    	LOGI("DemoApplication::onLowMemory");
-    	LOGW("Please buy a better device!");
+    	LOGI("Demo::AndroidApplication::onLowMemory");
     }
 
-    void DemoApplication::onCreateWindow()
+    void AndroidApplication::onCreateWindow()
     {
-    	LOGI("DemoApplication::onCreateWindow");
+    	LOGI("Demo::AndroidApplication::onCreateWindow");
     }
 
-    void DemoApplication::onDestroyWindow()
+    void AndroidApplication::onDestroyWindow()
     {
-    	LOGI("DemoApplication::onDestroyWindow");
+    	LOGI("Demo::AndroidApplication::onDestroyWindow");
     }
 
-    void DemoApplication::onGainFocus()
+    void AndroidApplication::onGainFocus()
     {
-    	LOGI("DemoApplication::onGainFocus");
+    	LOGI("Demo::AndroidApplication::onGainFocus");
     }
 
-    void DemoApplication::onLostFocus()
+    void AndroidApplication::onLostFocus()
     {
-    	LOGI("DemoApplication::onLostFocus");
+    	LOGI("Demo::AndroidApplication::onLostFocus");
     }
 }

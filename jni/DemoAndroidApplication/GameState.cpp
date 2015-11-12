@@ -2,7 +2,7 @@
 
 #include "MPACK.hpp"
 
-namespace Game
+namespace Demo
 {
 	GameState::GameState()
 	{

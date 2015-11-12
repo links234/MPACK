@@ -12,7 +12,7 @@
 using namespace MPACK::Core;
 using namespace MPACK::Physics;
 
-namespace Game
+namespace Demo
 {
 	class WaterState: public GameState
 	{

@@ -1,21 +1,20 @@
 #include "DemoConsoleApplication.hpp"
 
-namespace Game
+namespace Demo
 {
-	DemoConsoleApplication::DemoConsoleApplication()
+	ConsoleApplication::ConsoleApplication()
 	{
 	}
 
-	DemoConsoleApplication::~DemoConsoleApplication()
+	ConsoleApplication::~ConsoleApplication()
 	{
 	}
 
-	int DemoConsoleApplication::Main()
+	int ConsoleApplication::Main()
 	{
 
-		LOGD("ConsoleApplication is working!!!");
+		LOGD("Demo::ConsoleApplication is working!!!");
 
 		return 0;
 	}
 }
-

@@ -3,12 +3,12 @@
 
 #include "MPACK.hpp"
 
-namespace Game
+namespace Demo
 {
 	class GameState;
 }
 
-namespace Game
+namespace Demo
 {
 	enum
 	{
@@ -25,11 +25,11 @@ namespace Game
 		EVENT_WATER_EXIT
 	};
 
-    class DemoApplication : public MPACK::Core::AndroidApplication
+    class AndroidApplication : public MPACK::Core::AndroidApplication
     {
     public:
-    	DemoApplication();
-    	~DemoApplication();
+    	AndroidApplication();
+    	~AndroidApplication();
 
 	protected:
         MPACK::Core::ReturnValue onActivate();

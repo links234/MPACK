@@ -5,7 +5,7 @@
 #include "WaterSpring.hpp"
 #include "WaterObject.hpp"
 
-#include "DemoApplication.hpp"
+#include "DemoAndroidApplication.hpp"
 #include "Context.hpp"
 
 using namespace MPACK;

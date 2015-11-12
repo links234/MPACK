@@ -3,13 +3,13 @@
 
 #include "MPACK.hpp"
 
-namespace Game
+namespace Demo
 {
-    class DemoConsoleApplication : public MPACK::Core::ConsoleApplication
+    class ConsoleApplication : public MPACK::Core::ConsoleApplication
     {
     public:
-    	DemoConsoleApplication();
-    	~DemoConsoleApplication();
+    	ConsoleApplication();
+    	~ConsoleApplication();
 
         int Main();
     };

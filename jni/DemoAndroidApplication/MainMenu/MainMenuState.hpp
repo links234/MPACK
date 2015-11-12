@@ -9,7 +9,7 @@ using namespace MPACK::Core;
 
 class GUIMenu;
 
-namespace Game
+namespace Demo
 {
 	class MainMenu : public GameState
 	{

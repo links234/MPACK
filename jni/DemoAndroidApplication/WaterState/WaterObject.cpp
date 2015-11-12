@@ -2,7 +2,7 @@
 
 #include "MPACK.hpp"
 #include "Render.hpp"
-#include "DemoApplication.hpp"
+#include "DemoAndroidApplication.hpp"
 #include "Context.hpp"
 #include <cassert>
 

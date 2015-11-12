@@ -1,7 +1,7 @@
 #ifndef GAMESTATE_HPP
 #define GAMESTATE_HPP
 
-namespace Game
+namespace Demo
 {
 	class GameState
 	{

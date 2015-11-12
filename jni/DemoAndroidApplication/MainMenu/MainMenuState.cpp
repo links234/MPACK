@@ -7,11 +7,11 @@ using namespace MPACK::Core;
 using namespace MPACK::Math;
 using namespace MPACK::Graphics;
 
-#include "DemoApplication.hpp"
+#include "DemoAndroidApplication.hpp"
 #include "GameResources.hpp"
 #include "GUIMenu.hpp"
 
-namespace Game
+namespace Demo
 {
 	enum
 	{

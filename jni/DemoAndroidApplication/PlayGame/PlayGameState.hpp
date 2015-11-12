@@ -11,7 +11,7 @@
 
 using namespace MPACK::Core;
 
-namespace Game
+namespace Demo
 {
 	class PlayGame: public GameState
 	{

@@ -3,7 +3,7 @@
 #include "Render.hpp"
 #include "InputService.hpp"
 #include "TimeService.hpp"
-#include "DemoApplication.hpp"
+#include "DemoAndroidApplication.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
 #include "Context.hpp"
@@ -22,7 +22,7 @@ using namespace MPACK::Graphics;
 using namespace MPACK::Physics;
 using namespace MPACK::UI;
 
-namespace Game
+namespace Demo
 {
 	WaterState::WaterState()
 	:m_timeBetweenWaves(0.3f)

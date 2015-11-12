@@ -4,7 +4,7 @@
 #include "InputService.hpp"
 #include "TimeService.hpp"
 #include "Physics.hpp"
-#include "DemoApplication.hpp"
+#include "DemoAndroidApplication.hpp"
 #include "TextureMappedFont.hpp"
 #include "Global.hpp"
 #include "Context.hpp"
@@ -17,7 +17,7 @@ using namespace MPACK::Physics;
 using namespace MPACK::Graphics;
 using namespace MPACK::UI;
 
-namespace Game
+namespace Demo
 {
 	PlayGame::PlayGame()
 	{
