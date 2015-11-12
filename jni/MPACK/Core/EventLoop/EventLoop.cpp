@@ -9,7 +9,7 @@ namespace MPACK
 	namespace Core
 	{
 		EventLoop::EventLoop()
-			: m_pActivityHandler(NULL)
+			: m_pApplication(NULL)
 		{
 		}
 

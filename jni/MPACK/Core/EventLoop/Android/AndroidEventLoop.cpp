@@ -24,7 +24,7 @@ namespace MPACK
 			Global::pAndroidApp->onInputEvent = callback_input;
 		}
 
-		ReturnValue AndroidEventLoop::Run(Application* pActivityHandler)
+		ReturnValue AndroidEventLoop::Run(Application* pApplication)
 		{
 			int32_t result;
 			int32_t events;
@@ -32,7 +32,7 @@ namespace MPACK
 
 			// Makes sure native glue is not stripped by the linker.
 			app_dummy();
-			m_pActivityHandler = pActivityHandler;
+			m_pApplication = pApplication;
 
 			// Global step loop.
 			LOGI("Starting event loop");
@@ -65,7 +65,7 @@ namespace MPACK
 				if ((m_enabled) && (!m_quit) && (m_window.IsContextBound()))
 				{
 					//LOGD("TESTING");
-					if (m_pActivityHandler->onStep() != RETURN_VALUE_OK)
+					if (m_pApplication->onStep() != RETURN_VALUE_OK)
 					{
 						m_quit = true;
 						ANativeActivity_finish(Global::pAndroidApp->activity);
@@ -176,7 +176,7 @@ namespace MPACK
 
 				if(haveToReload)
 				{
-					if (m_pActivityHandler->onActivate() != RETURN_VALUE_OK)
+					if (m_pApplication->onActivate() != RETURN_VALUE_OK)
 					{
 						m_quit = true;
 						Deactivate();
@@ -201,7 +201,7 @@ namespace MPACK
 
 			if (m_enabled)
 			{
-				m_pActivityHandler->onDeactivate();
+				m_pApplication->onDeactivate();
 				m_enabled = false;
 			}
 
@@ -217,7 +217,7 @@ namespace MPACK
 				case APP_CMD_CONFIG_CHANGED:
 					LOGD("APP_CMD_CONFIG_CHANGED");
 					Activate();
-					m_pActivityHandler->onConfigurationChanged();
+					m_pApplication->onConfigurationChanged();
 					break;
 				case APP_CMD_INIT_WINDOW:
 					LOGD("APP_CMD_INIT_WINDOW");
@@ -225,47 +225,47 @@ namespace MPACK
 					break;
 				case APP_CMD_DESTROY:
 					LOGD("APP_CMD_DESTROY");
-					m_pActivityHandler->onDestroy();
+					m_pApplication->onDestroy();
 					m_window.InvalidateSurface();
 					m_window.InvalidateContext();
 					m_enabled = false;
 					break;
 				case APP_CMD_GAINED_FOCUS:
 					LOGD("APP_CMD_GAINED_FOCUS");
-					m_pActivityHandler->onGainFocus();
+					m_pApplication->onGainFocus();
 					break;
 				case APP_CMD_LOST_FOCUS:
 					LOGD("APP_CMD_LOST_FOCUS");
-					m_pActivityHandler->onLostFocus();
+					m_pApplication->onLostFocus();
 					break;
 				case APP_CMD_LOW_MEMORY:
 					LOGD("APP_CMD_LOW_MEMORY");
-					m_pActivityHandler->onLowMemory();
+					m_pApplication->onLowMemory();
 					break;
 				case APP_CMD_PAUSE:
 					LOGD("APP_CMD_PAUSE");
-					m_pActivityHandler->onPause();
+					m_pApplication->onPause();
 					m_enabled = false;
 					//m_window.InvalidateSurface();
 					break;
 				case APP_CMD_RESUME:
 					LOGD("APP_CMD_RESUME");
 					Activate();
-					m_pActivityHandler->onResume();
+					m_pApplication->onResume();
 					break;
 				case APP_CMD_SAVE_STATE:
 					LOGD("APP_CMD_SAVE_STATE");
-					m_pActivityHandler->onSaveState(&Global::pAndroidApp->savedState,
+					m_pApplication->onSaveState(&Global::pAndroidApp->savedState,
 						&Global::pAndroidApp->savedStateSize);
 					break;
 				case APP_CMD_START:
 					LOGD("APP_CMD_START");
 					Activate();
-					m_pActivityHandler->onStart();
+					m_pApplication->onStart();
 					break;
 				case APP_CMD_STOP:
 					LOGD("APP_CMD_STOP");
-					m_pActivityHandler->onStop();
+					m_pApplication->onStop();
 					m_window.InvalidateSurface();
 					m_enabled = false;
 					break;
@@ -326,4 +326,3 @@ namespace MPACK
 }
 
 #endif
-

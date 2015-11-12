@@ -27,9 +27,9 @@ namespace MPACK
 		{
 		}
 
-		ReturnValue LinuxEventLoop::Run(Application* pActivityHandler)
+		ReturnValue LinuxEventLoop::Run(Application* pApplication)
 		{
-			m_pActivityHandler = pActivityHandler;
+			m_pApplication = pApplication;
 			m_isRunning=true;
 
 			if(InitializeDisplay() == RETURN_VALUE_KO)
@@ -38,7 +38,7 @@ namespace MPACK
 				return RETURN_VALUE_KO;
 			}
 			Graphics::Render::SetScreenSize(m_width,m_height);
-			m_pActivityHandler->onActivate();
+			m_pApplication->onActivate();
 
 			// Global step loop.
 			while(m_isRunning)
@@ -46,7 +46,7 @@ namespace MPACK
 				ProcessEvents();
 				if(!m_isResizing)
 				{
-					if(m_pActivityHandler->onStep() != RETURN_VALUE_OK)
+					if(m_pApplication->onStep() != RETURN_VALUE_OK)
 					{
 						m_isRunning=false;
 					}
@@ -54,7 +54,7 @@ namespace MPACK
 				SwapBuffers();
 			}
 
-			m_pActivityHandler->onDeactivate();
+			m_pApplication->onDeactivate();
 			DestroyDisplay();
 			return RETURN_VALUE_OK;
 		}
@@ -316,9 +316,9 @@ namespace MPACK
 					{
 						m_width = m_newWidth;
 						m_height = m_newHeight;
-						m_pActivityHandler->onDeactivate();
+						m_pApplication->onDeactivate();
 						Graphics::Render::SetScreenSize(m_width,m_height);
-						m_pActivityHandler->onActivate();
+						m_pApplication->onActivate();
 					}
 					m_isResizing = false;
 				}
@@ -335,5 +335,3 @@ namespace MPACK
 }
 
 #endif
-
-

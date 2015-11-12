@@ -23,7 +23,7 @@ namespace MPACK
 		{
 		public:
 			AndroidEventLoop(void *data);
-			ReturnValue Run(Application* pActivityHandler);
+			ReturnValue Run(Application* pApplication);
 
 			void* GetWindowHandle() const;
 
@@ -56,4 +56,3 @@ namespace MPACK
 #endif
 
 #endif
-

@@ -23,26 +23,26 @@ namespace MPACK
 		{
 		}
 
-		ReturnValue WindowsEventLoop::Run(Application* pActivityHandler)
+		ReturnValue WindowsEventLoop::Run(Application* pApplication)
 		{
-			m_pActivityHandler = pActivityHandler;
+			m_pApplication = pApplication;
 			m_isRunning=true;
 
 			InitializeDisplay();
-			m_pActivityHandler->onActivate();
+			m_pApplication->onActivate();
 
 			// Global step loop.
 			while(m_isRunning)
 			{
 				ProcessEvents();
-				if(m_pActivityHandler->onStep() != RETURN_VALUE_OK)
+				if(m_pApplication->onStep() != RETURN_VALUE_OK)
 				{
 					m_isRunning=false;
 				}
 				SwapBuffers();
 			}
 
-			m_pActivityHandler->onDeactivate();
+			m_pApplication->onDeactivate();
 			DestroyDisplay();
 			return RETURN_VALUE_OK;
 		}
@@ -265,9 +265,9 @@ namespace MPACK
 				{
 					m_height = HIWORD(lParam);
 					m_width = LOWORD(lParam);
-					m_pActivityHandler->onDeactivate();
+					m_pApplication->onDeactivate();
 					Render::SetScreenSize(m_width,m_height);
-					m_pActivityHandler->onActivate();
+					m_pApplication->onActivate();
 				}
 				break;
 				case WM_KEYDOWN:
@@ -318,4 +318,3 @@ namespace MPACK
 }
 
 #endif
-

@@ -22,7 +22,7 @@ namespace MPACK
 		{
 		public:
 			WindowsEventLoop(void *data);
-			ReturnValue Run(Application* pActivityHandler);
+			ReturnValue Run(Application* pApplication);
 
 			void ShowCursor();
 			void HideCursor();
@@ -59,4 +59,3 @@ namespace MPACK
 #endif
 
 #endif
-
