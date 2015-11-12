@@ -66,7 +66,7 @@ namespace MPACK
 
                 char Console::ReadKey()
                 {
-                        char getchar();
+                        return getchar();
                 }
 
                 string Console::ReadLine()

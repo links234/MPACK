@@ -1,4 +1,4 @@
-#ifdef ANDROID_MPACK
+#ifdef ANDROID_PLATFORM
 
 #include "AndroidConsole.hpp"
 
