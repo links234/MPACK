@@ -13,8 +13,8 @@ namespace MPACK
         {
                 LinuxConsole::LinuxConsole()
                 {
-                        m_BGColor = "30";
-                        m_FGColor = "47";
+                        m_BGColor = "39";
+                        m_FGColor = "49";
                 }
 
                 LinuxConsole::~LinuxConsole()
@@ -31,6 +31,9 @@ namespace MPACK
                         switch(color)
                         {
                                 default:
+                                case BG_DEFAULT:
+                                	m_BGColor = "39";
+                                break;
                                 case BG_BLACK:
                                         m_BGColor = "40";
                                 break;
@@ -56,13 +59,20 @@ namespace MPACK
                                         m_BGColor = "43";
                                 break;
                         }
-                        UpdateColor();
+                        string cmd = "\e[";
+						cmd += m_BGColor;
+						cmd += "m";
+						cout << cmd;
                 }
 
                 void LinuxConsole::SetFGColorImpl(const FGColor color)
                 {
                         switch(color)
                         {
+                        		default:
+                        		case FG_DEFAULT:
+                        				m_FGColor = "39";
+                        		break;
                                 case FG_BLACK:
                                         m_FGColor = "30";
                                 break;
@@ -81,7 +91,6 @@ namespace MPACK
                                 case FG_RED:
                                         m_FGColor = "31";
                                 break;
-                                default:
                                 case FG_WHITE:
                                         m_FGColor = "37";
                                 break;
@@ -89,7 +98,10 @@ namespace MPACK
                                         m_FGColor = "33";
                                 break;
                         }
-                        UpdateColor();
+                        string cmd = "\e[";
+                        cmd += m_FGColor;
+                        cmd += "m";
+                        cout << cmd;
                 }
 
                 void LinuxConsole::SetTitleImpl(const string str)
@@ -113,16 +125,6 @@ namespace MPACK
                 {
                 	string reset = "\e[0m";
                 	cout << reset;
-                }
-
-                void LinuxConsole::UpdateColor()
-                {
-                        string clr = "\033[";
-                        clr += m_BGColor;
-                        clr += ";";
-                        clr += m_FGColor;
-                        clr += "m";
-                        cout << clr;
                 }
         }
 }

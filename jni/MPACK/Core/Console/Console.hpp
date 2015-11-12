@@ -10,8 +10,10 @@ namespace MPACK
                 class Console
                 {
                 public:
-                        enum BGColor {BG_BLACK, BG_BLUE, BG_CYAN, BG_GREEN, BG_MAGENTA, BG_RED, BG_WHITE, BG_YELLOW};
-                        enum FGColor {FG_BLACK, FG_BLUE, FG_CYAN, FG_GREEN, FG_MAGENTA, FG_RED, FG_WHITE, FG_YELLOW};
+                        enum BGColor {	BG_DEFAULT, BG_BLACK, BG_BLUE, BG_CYAN, BG_GREEN,
+                        				BG_MAGENTA, BG_RED, BG_WHITE, BG_YELLOW };
+                        enum FGColor {	FG_DEFAULT, FG_BLACK, FG_BLUE, FG_CYAN, FG_GREEN,
+                        				FG_MAGENTA, FG_RED, FG_WHITE, FG_YELLOW };
 
                         static void Write(std::string str);
                         static void Write(int v);

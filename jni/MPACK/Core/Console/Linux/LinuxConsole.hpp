@@ -24,8 +24,6 @@ namespace MPACK
                         virtual void SetTitleImpl(const char str[]);
                         virtual void SetCursorPositionImpl(int x,int y);
                         virtual void ResetImpl();
-
-                        void UpdateColor();
                         
                         std::string m_FGColor;
                         std::string m_BGColor;
