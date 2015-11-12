@@ -14,7 +14,7 @@ namespace MPACK
                 public:
                         LinuxConsole();
                         virtual ~LinuxConsole();
-                        
+
                 protected:
                         virtual void ClearImpl();
 
@@ -23,6 +23,11 @@ namespace MPACK
                         virtual void SetTitleImpl(const std::string str);
                         virtual void SetTitleImpl(const char str[]);
                         virtual void SetCursorPositionImpl(int x,int y);
+
+                        void UpdateColor();
+                        
+                        std::string m_FGColor;
+                        std::string m_BGColor;
                 };
         }
 }
