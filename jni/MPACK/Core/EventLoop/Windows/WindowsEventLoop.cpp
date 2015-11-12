@@ -2,7 +2,7 @@
 
 #include "WindowsEventLoop.hpp"
 
-#include "ActivityHandler.hpp"
+#include "Application.hpp"
 #include "Context.hpp"
 #include "TimeService.hpp"
 #include "InputService.hpp"
@@ -23,7 +23,7 @@ namespace MPACK
 		{
 		}
 
-		ReturnValue WindowsEventLoop::Run(ActivityHandler* pActivityHandler)
+		ReturnValue WindowsEventLoop::Run(Application* pActivityHandler)
 		{
 			m_pActivityHandler = pActivityHandler;
 			m_isRunning=true;

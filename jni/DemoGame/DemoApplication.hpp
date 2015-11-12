@@ -1,22 +1,7 @@
 #ifndef DEMOAPPLICATION_HPP
 #define DEMOAPPLICATION_HPP
 
-#include "Types.hpp"
-#include "ActivityHandler.hpp"
-
-
-
-namespace MPACK
-{
-	namespace Core
-	{
-		class Context;
-	}
-	namespace Graphics
-	{
-		class Texture2D;
-	}
-}
+#include "MPACK.hpp"
 
 namespace Game
 {
@@ -40,7 +25,7 @@ namespace Game
 		EVENT_WATER_EXIT
 	};
 
-    class DemoApplication : public MPACK::Core::ActivityHandler
+    class DemoApplication : public MPACK::Core::AndroidApplication
     {
     public:
     	DemoApplication();

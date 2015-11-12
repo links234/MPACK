@@ -2,7 +2,7 @@
 
 #include "LinuxEventLoop.hpp"
 
-#include "ActivityHandler.hpp"
+#include "Application.hpp"
 #include "Context.hpp"
 #include "InputService.hpp"
 #include "TimeService.hpp"
@@ -27,7 +27,7 @@ namespace MPACK
 		{
 		}
 
-		ReturnValue LinuxEventLoop::Run(ActivityHandler* pActivityHandler)
+		ReturnValue LinuxEventLoop::Run(Application* pActivityHandler)
 		{
 			m_pActivityHandler = pActivityHandler;
 			m_isRunning=true;

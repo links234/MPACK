@@ -18,7 +18,7 @@ namespace MPACK
 {
 	namespace Core
 	{
-		class ActivityHandler;
+		class Application;
 	}
 }
 
@@ -30,7 +30,7 @@ namespace MPACK
 		{
 		public:
 			LinuxEventLoop(void *data);
-			ReturnValue Run(ActivityHandler* pActivityHandler);
+			ReturnValue Run(Application* pActivityHandler);
 
 			void ShowCursor();
 			void HideCursor();

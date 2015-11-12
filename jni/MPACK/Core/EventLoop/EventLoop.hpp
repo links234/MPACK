@@ -7,7 +7,7 @@ namespace MPACK
 {
 	namespace Core
 	{
-		class ActivityHandler;
+		class Application;
 	}
 }
 
@@ -21,7 +21,7 @@ namespace MPACK
 			EventLoop();
 			virtual ~EventLoop();
 
-			virtual ReturnValue Run(ActivityHandler *pActivityHandler)=0;
+			virtual ReturnValue Run(Application *pActivityHandler)=0;
 
 			virtual void ShowCursor();
 			virtual void HideCursor();
@@ -31,7 +31,7 @@ namespace MPACK
 			static EventLoop* Initialize(void *data);
 
 		protected:
-			ActivityHandler *m_pActivityHandler;
+			Application *m_pActivityHandler;
 		};
 	}
 }

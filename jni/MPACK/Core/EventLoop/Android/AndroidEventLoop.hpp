@@ -11,7 +11,7 @@ namespace MPACK
 {
 	namespace Core
 	{
-		class ActivityHandler;
+		class Application;
 	}
 }
 
@@ -23,7 +23,7 @@ namespace MPACK
 		{
 		public:
 			AndroidEventLoop(void *data);
-			ReturnValue Run(ActivityHandler* pActivityHandler);
+			ReturnValue Run(Application* pActivityHandler);
 
 			void* GetWindowHandle() const;
 

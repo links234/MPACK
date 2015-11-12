@@ -21,11 +21,19 @@
 										\
 	} while(0)
 
-#define MPACK_RUN_COMMON(UserApplication,result) \
-	UserApplication *MPACK_pUserApplication = new UserApplication(); \
-	MPACK::Global::pEventLoop=MPACK::Core::EventLoop::Initialize(MPACK_eventLoopData); \
-    result = MPACK::Global::pEventLoop->Run(MPACK_pUserApplication); \
-    delete MPACK::Global::pEventLoop; \
+#define MPACK_RUN_COMMON(UserApplication,result) 											\
+	UserApplication *MPACK_pUserApplication = new UserApplication(); 						\
+	if (MPACK_pUserApplication->GetType() == MPACK::Core::APP_ANDROID)						\
+	{																						\
+		MPACK::Global::pEventLoop=MPACK::Core::EventLoop::Initialize(MPACK_eventLoopData); 	\
+    	result = MPACK::Global::pEventLoop->Run(MPACK_pUserApplication); 					\
+    	delete MPACK::Global::pEventLoop; 													\
+	}																						\
+	else if (MPACK_pUserApplication->GetType() == MPACK::Core::APP_CONSOLE) 				\
+	{																						\
+		MPACK::Global::pEventLoop=NULL;														\
+		result = MPACK_pUserApplication->Main();											\
+	}																						\
 	delete MPACK_pUserApplication
 
 #define MPACK_FILLGLOBALCONTEXT																\

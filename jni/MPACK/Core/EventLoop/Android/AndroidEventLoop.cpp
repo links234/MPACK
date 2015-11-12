@@ -2,7 +2,7 @@
 
 #include "AndroidEventLoop.hpp"
 
-#include "ActivityHandler.hpp"
+#include "Application.hpp"
 #include "InputService.hpp"
 #include "TimeService.hpp"
 #include "EGLBufferConfigManager.hpp"
@@ -24,7 +24,7 @@ namespace MPACK
 			Global::pAndroidApp->onInputEvent = callback_input;
 		}
 
-		ReturnValue AndroidEventLoop::Run(ActivityHandler* pActivityHandler)
+		ReturnValue AndroidEventLoop::Run(Application* pActivityHandler)
 		{
 			int32_t result;
 			int32_t events;
