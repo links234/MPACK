@@ -127,6 +127,11 @@ namespace MPACK
                         GetConsole()->SetCursorPositionImpl(x, y);
                 }
 
+                void Console::Reset()
+                {
+                	GetConsole()->ResetImpl();
+                }
+
                 Console::Console()
                 {
                 }

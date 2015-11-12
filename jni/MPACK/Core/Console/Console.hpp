@@ -36,6 +36,7 @@ namespace MPACK
                         static void SetTitle(const std::string str);
                         static void SetTitle(const char str[]);
                         static void SetCursorPosition(int x,int y);
+                        static void Reset();
 
                 protected:
                         Console();
@@ -48,6 +49,7 @@ namespace MPACK
                         virtual void SetTitleImpl(const std::string str) = 0;
                         virtual void SetTitleImpl(const char str[]) = 0;
                         virtual void SetCursorPositionImpl(int x,int y) = 0;
+                        virtual void ResetImpl() = 0;
 
                         static Console *GetConsole();
 

@@ -37,5 +37,9 @@ namespace MPACK
                 void StubConsole::SetCursorPositionImpl(int x,int y)
                 {
                 }
+
+                void StubConsole::ResetImpl()
+                {
+                }
         }
 }

@@ -39,6 +39,10 @@ namespace MPACK
                 void WindowsConsole::SetCursorPositionImpl(int x,int y)
                 {
                 }
+
+                void WindowsConsole::ResetImpl()
+                {
+                }
         }
 }
 

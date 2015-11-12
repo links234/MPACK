@@ -22,11 +22,12 @@
 	#define MPACK_RETURN(x) MPACK_LINUX_RETURN(x)
 #endif
 
-#define MPACK_SHUTDOWN 						\
+#define MPACK_SHUTDOWN 							\
 		delete MPACK_pInputService; 			\
 		delete MPACK_pGraphicsService; 			\
 		delete MPACK_pSoundService; 			\
-		delete MPACK_pTimeService; 			\
+		delete MPACK_pTimeService; 				\
 		MPACK::Core::Log::Destroy();			\
+		MPACK::Core::Console::Reset();			\
 		MPACK::Core::Console::Cleanup()
 #endif

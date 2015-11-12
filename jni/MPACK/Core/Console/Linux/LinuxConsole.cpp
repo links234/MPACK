@@ -104,9 +104,15 @@ namespace MPACK
 
                 void LinuxConsole::SetCursorPositionImpl(int x,int y)
                 {
-                        stringstream str;
-                	str << "\033[" << x << ";" << y << "H";
-                	cout << str.str();
+                		stringstream str;
+                		str << "\033[" << x << ";" << y << "H";
+                		cout << str.str();
+                }
+
+                void LinuxConsole::ResetImpl()
+                {
+                	string reset = "\e[0m";
+                	cout << reset;
                 }
 
                 void LinuxConsole::UpdateColor()

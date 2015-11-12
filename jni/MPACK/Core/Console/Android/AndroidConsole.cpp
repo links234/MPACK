@@ -39,6 +39,10 @@ namespace MPACK
                 void AndroidConsole::SetCursorPositionImpl(int x,int y)
                 {
                 }
+
+                void AndroidConsole::ResetImpl()
+                {
+                }
         }
 }
 

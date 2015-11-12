@@ -21,6 +21,7 @@ namespace MPACK
                         virtual void SetTitleImpl(const std::string str);
                         virtual void SetTitleImpl(const char str[]);
                         virtual void SetCursorPositionImpl(int x,int y);
+                        virtual void ResetImpl();
                 };
         }
 }
