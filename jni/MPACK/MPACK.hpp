@@ -23,9 +23,10 @@
 #endif
 
 #define MPACK_SHUTDOWN 						\
-		delete MPACK_pInputService; 		\
-		delete MPACK_pGraphicsService; 		\
-		delete MPACK_pSoundService; 		\
+		delete MPACK_pInputService; 			\
+		delete MPACK_pGraphicsService; 			\
+		delete MPACK_pSoundService; 			\
 		delete MPACK_pTimeService; 			\
-		MPACK::Core::Log::Destroy()
+		MPACK::Core::Log::Destroy();			\
+		MPACK::Core::Console::Cleanup()
 #endif

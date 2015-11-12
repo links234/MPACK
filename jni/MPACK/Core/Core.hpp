@@ -9,4 +9,6 @@
 
 #include "EventLoop.hpp"
 
+#include "Console.hpp"
+
 #endif
