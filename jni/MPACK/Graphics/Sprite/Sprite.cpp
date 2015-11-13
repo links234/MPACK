@@ -51,6 +51,11 @@ namespace MPACK
 			swap(v[0],v[3]);
 			swap(v[1],v[2]);
 
+#ifdef PROFILE
+			Profiler::RegisterCall_SpriteRender(m_texture, m_position.x - m_width, m_position.y - m_height,
+												m_width * 2.0, m_height * 2.0, 0.0, 1.0, 0.0, 1.0);
+#endif
+
 			SpriteVertex vertexData[]={	SpriteVertex(v[0].x,v[0].y,	0,0,	m_color[0].x,m_color[0].y,m_color[0].z,m_color[0].w,	m_spriteShadingType),
 										SpriteVertex(v[1].x,v[1].y,	1,0,	m_color[1].x,m_color[1].y,m_color[1].z,m_color[1].w,	m_spriteShadingType),
 										SpriteVertex(v[2].x,v[2].y,	1,1,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),

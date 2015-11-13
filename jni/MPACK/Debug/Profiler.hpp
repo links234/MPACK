@@ -2,6 +2,7 @@
 #define MPACK_PROFILER_HPP
 
 #include "Types.hpp"
+#include "DataCollecter.hpp"
 
 namespace MPACK
 {

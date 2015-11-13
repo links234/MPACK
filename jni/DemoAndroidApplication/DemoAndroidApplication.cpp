@@ -89,6 +89,8 @@ namespace Demo
 
     void AndroidApplication::onDeactivate()
     {
+    	Profiler::GenerateMTexResizeJSON("MTexResize.json");
+
     	GameResources::Uninit();
 
     	LOGI("Demo::AndroidApplication::onDeactivate()");
