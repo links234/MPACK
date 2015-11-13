@@ -35,6 +35,7 @@ namespace MPACK
 				return false;
 			}
 			bool ret=Load((const Image*)(image),filtering,s_mode,t_mode);
+			m_path = path;
 			delete image;
 			return ret;
 		}
