@@ -327,9 +327,9 @@ namespace MPACK
 
 		void LinuxEventLoop::SwapBuffers()
 		{
-			PROFILE_BEGIN("SwapBuffers");
+			MPACK_DEV_PROFILE_BEGIN("SwapBuffers");
 			glXSwapBuffers(m_display, m_XWindow);
-			PROFILE_END();
+			MPACK_DEV_PROFILE_END();
 		}
 	}
 }

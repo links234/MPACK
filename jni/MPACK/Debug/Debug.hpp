@@ -4,6 +4,9 @@
 #define DEBUG
 #define PROFILE
 
+//#define MPACK_DEV_DEBUG
+//#define MPACK_DEV_PROFILE
+
 #include "Types.hpp"
 #include "Profiler.hpp"
 #include "Helper.hpp"
@@ -74,6 +77,14 @@
 	#define PROFILE_STEP()		do { \
 			MPACK::Profiler::Step(); \
 		} while(0)
+#endif
+
+#ifndef MPACK_DEV_PROFILE
+	#define MPACK_DEV_PROFILE_BEGIN(x)
+	#define MPACK_DEV_PROFILE_END()
+#else
+	#define MPACK_DEV_PROFILE_BEGIN(x) 	PROFILE_BEGIN(x)
+	#define MPACK_DEV_PROFILE_END()		PROFILE_END()
 #endif
 
 namespace MPACK

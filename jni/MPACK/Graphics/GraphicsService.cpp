@@ -76,9 +76,9 @@ namespace MPACK
 
 			GL_CHECK( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
 
-			PROFILE_BEGIN("Batcher");
+			MPACK_DEV_PROFILE_BEGIN("Batcher");
 			Batcher::FlushAll();
-			PROFILE_END();
+			MPACK_DEV_PROFILE_END();
 
 			PostEffect::End();
 

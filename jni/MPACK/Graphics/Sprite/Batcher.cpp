@@ -154,9 +154,9 @@ namespace MPACK
 		{
 			for(map<GLfloat,Batcher*>::iterator it=s_batcher.begin();it!=s_batcher.end();++it)
 			{
-				PROFILE_BEGIN("Flush");
+				MPACK_DEV_PROFILE_BEGIN("Flush");
 				(*it).second->Flush();
-				PROFILE_END();
+				MPACK_DEV_PROFILE_END();
 			}
 		}
 
@@ -241,7 +241,7 @@ namespace MPACK
 			{
 				if(it->m_type==Batch::SpriteBatch)
 				{
-					PROFILE_BEGIN("shader bind");
+					MPACK_DEV_PROFILE_BEGIN("shader bind");
 					if(!isSpriteShaderEnabled)
 					{
 						VertexBufferObject::UnbindCurrentBuffer();
@@ -254,19 +254,19 @@ namespace MPACK
 						Sprite_Shader->SendVertexBuffer((GLfloat*)(&m_vertexData[0]));
 						isSpriteShaderEnabled = true;
 					}
-					PROFILE_END();
+					MPACK_DEV_PROFILE_END();
 
 					SpriteBatch *batch = reinterpret_cast<SpriteBatch*>(it->m_pointer);
-					PROFILE_BEGIN("tex bind");
+					MPACK_DEV_PROFILE_BEGIN("tex bind");
 					if(batch->m_texture)
 					{
 						batch->m_texture->Bind(GL_TEXTURE0);
 					}
-					PROFILE_END();
+					MPACK_DEV_PROFILE_END();
 
-					PROFILE_BEGIN("glDrawElements");
+					MPACK_DEV_PROFILE_BEGIN("glDrawElements");
 					GL_CHECK( glDrawElements(GetGLType(batch->m_type),batch->m_indexSize,GL_UNSIGNED_SHORT,&m_indexData[firstIndex]) );
-					PROFILE_END();
+					MPACK_DEV_PROFILE_END();
 
 					firstIndex+=batch->m_indexSize;
 
