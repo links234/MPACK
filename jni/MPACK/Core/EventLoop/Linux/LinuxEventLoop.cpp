@@ -93,8 +93,8 @@ namespace MPACK
 
 		ReturnValue LinuxEventLoop::InitializeDisplay()
 		{
-			int width = 800;
-			int height = 600;
+			int width = 54*8;
+			int height = 95*8;
 			m_width = width;
 			m_height = height;
 			m_newWidth = width;
@@ -126,8 +126,9 @@ namespace MPACK
 			int bestMode = -1;
 			for (int i = 0; i < modeNum; i++)
 			{
-				if ((modes[i]->hdisplay == width) &&
-					(modes[i]->vdisplay == height))
+				// FIXME: More robust way of choosing XF86 mode
+				if ((modes[i]->hdisplay >= width) &&
+					(modes[i]->vdisplay >= height))
 				{
 					bestMode = i;
 				}
