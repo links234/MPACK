@@ -288,6 +288,15 @@ namespace MPACK
 							m_newWidth = width;
 							m_newHeight = height;
 							m_isResizing = true;
+							if (!Global::pContext->pInputService->GetMouse()->ButtonPressed(Input::MouseButton::MBC_LEFT))
+							{
+								m_width = m_newWidth;
+								m_height = m_newHeight;
+								m_pApplication->onDeactivate();
+								Graphics::Render::SetScreenSize(m_width,m_height);
+								m_pApplication->onActivate();
+								m_isResizing = false;
+							}
 						}
 					break;
 					case KeyPress:
