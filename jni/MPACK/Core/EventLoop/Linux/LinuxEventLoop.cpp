@@ -34,7 +34,7 @@ namespace MPACK
 
 			if(InitializeDisplay() == RETURN_VALUE_KO)
 			{
-				LOGE("LinuxEventLoop::Run failed to InitializeDisplay()");
+				LOGE("LinuxEventLoop::Run() failed to InitializeDisplay()");
 				return RETURN_VALUE_KO;
 			}
 			Graphics::Render::SetScreenSize(m_width,m_height);
@@ -106,7 +106,7 @@ namespace MPACK
 
 			if (m_display == NULL)
 			{
-				LOGE("Could not open the display");
+				LOGE("LinuxEventLoop::InitializeDisplay() could not open the display");
 				return RETURN_VALUE_KO;
 			}
 
@@ -117,7 +117,7 @@ namespace MPACK
 			XF86VidModeModeInfo **modes;
 			if (!XF86VidModeGetAllModeLines(m_display, m_screenID, &modeNum, &modes))
 			{
-				LOGE("Could not query the video modes");
+				LOGE("LinuxEventLoop::InitializeDisplay() could not query the video modes");
 				return RETURN_VALUE_KO;
 			}
 
@@ -135,7 +135,7 @@ namespace MPACK
 
 			if (bestMode == -1)
 			{
-				LOGE("Could not find a suitable graphics mode");
+				LOGE("LinuxEventLoop::InitializeDisplay() could not find a suitable graphics mode");
 				return RETURN_VALUE_KO;
 			}
 
@@ -156,7 +156,7 @@ namespace MPACK
 
 			if (vi == NULL)
 			{
-				LOGE("Could not create a double buffered window");
+				LOGE("LinuxEventLoop::InitializeDisplay() could not create a double buffered window");
 				return RETURN_VALUE_KO;
 			}
 
@@ -200,7 +200,7 @@ namespace MPACK
 
 			if (m_glContext == NULL)
 			{
-				LOGE("Could not create a GL 2.1 context, please check your graphics drivers");
+				LOGE("LinuxEventLoop::InitializeDisplay() could not create a GL 2.1 context, please check your graphics drivers");
 				return RETURN_VALUE_KO;
 			}
 
