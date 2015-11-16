@@ -77,6 +77,20 @@ namespace MPACK
 			return m_properties;
 		}
 
+		void DOM::AddString(std::string key, std::string value)
+		{
+			SearchList<string,DOM*>::Iterator it=m_childs.Find(key);
+			if(it != m_childs.End())
+			{
+				delete it->value;
+				it->value = new DOM(value, true);
+			}
+			else
+			{
+				m_childs.PushBack(key, new DOM(value, true) );
+			}
+		}
+
 		DOM* DOM::At(int index) const
 		{
 			if(index >= m_array.size())
