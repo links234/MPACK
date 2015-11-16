@@ -1,7 +1,7 @@
 #if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 
 #include "Types.hpp"
-#include "Resource.hpp"
+#include "Resources.hpp"
 #include "Log.hpp"
 
 #include "ItfAudioPlayer.hpp"
@@ -47,7 +47,7 @@ namespace MPACK
 		{
 			Unload();
 
-			string realPath=GetResourcePath(path);
+			string realPath=GetInputResourcePath(path);
 
 			LoadControllers();
 

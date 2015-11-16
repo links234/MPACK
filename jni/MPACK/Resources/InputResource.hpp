@@ -1,5 +1,5 @@
-#ifndef MPACK_RESOURCE_HPP
-#define MPACK_RESOURCE_HPP
+#ifndef MPACK_INPUTINPUTRESOURCE_HPP
+#define MPACK_INPUTINPUTRESOURCE_HPP
 
 #include "Types.hpp"
 
@@ -7,11 +7,11 @@ namespace MPACK
 {
 	namespace Core
 	{
-		class Resource
+		class InputResource
 		{
 		public:
-			Resource(const char* pPath);
-			virtual ~Resource();
+			InputResource(const char* pPath);
+			virtual ~InputResource();
 
 			const char* GetPath();
 
@@ -31,8 +31,8 @@ namespace MPACK
 			char* 	mPath;
 		};
 
-		Resource* LoadResource(const char* pPath);
-		std::string GetResourcePath(std::string path);
+		InputResource* GetInputResource(const char* pPath);
+		std::string GetInputResourcePath(std::string path);
 	}
 }
 

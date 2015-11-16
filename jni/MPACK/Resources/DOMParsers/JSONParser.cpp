@@ -2,7 +2,7 @@
 
 #include "DOM.hpp"
 #include "Log.hpp"
-#include "Resource.hpp"
+#include "InputResource.hpp"
 #include "StringEx.hpp"
 
 using namespace std;
@@ -25,7 +25,7 @@ namespace MPACK
 
 		DOM* JSONParser::Load(std::string path)
 		{
-			Resource *res=LoadResource(path.c_str());
+			InputResource *res=GetInputResource(path.c_str());
 			res->Open();
 			First((char*)res->Bufferize());
 			DOM *dom=ParseRValue();

@@ -1,7 +1,7 @@
 #include "TargaImage.hpp"
 
 #include "Image.hpp"
-#include "Resource.hpp"
+#include "Resources.hpp"
 
 using namespace std;
 using namespace MPACK::Core;
@@ -72,16 +72,16 @@ namespace MPACK
 		{
 			image->Unload();
 
-			Resource *resource=LoadResource(path.c_str());
+			InputResource *pInputResource=GetInputResource(path.c_str());
 
-			if (resource->Open()!=RETURN_VALUE_OK)
+			if (pInputResource->Open()!=RETURN_VALUE_OK)
 			{
 				LOGE("LoadTGA() Could not open the file for reading");
-				delete resource;
+				delete pInputResource;
 				return RETURN_VALUE_KO;
 			}
 
-			unsigned char* pointer = (unsigned char*)resource->Bufferize();
+			unsigned char* pointer = (unsigned char*)pInputResource->Bufferize();
 
 			TargaHeader header = *((TargaHeader*)(pointer));
 			pointer += sizeof(TargaHeader);
@@ -89,7 +89,7 @@ namespace MPACK
 			if (!IsImageTypeSupported(header))
 			{
 				LOGE("LoadTGA() This is not a supported image type");
-				delete resource;
+				delete pInputResource;
 				return RETURN_VALUE_KO;
 			}
 
@@ -102,7 +102,7 @@ namespace MPACK
 			if (image->m_bytesPerPixel < 3)
 			{
 				LOGE("LoadTGA() format unsupported (bytes per pixel: %d)", image->m_bytesPerPixel);
-				delete resource;
+				delete pInputResource;
 				return RETURN_VALUE_KO;
 			}
 
@@ -221,7 +221,7 @@ namespace MPACK
 			}
 
 		LOADTGA_ERROR:
-			delete resource;
+			delete pInputResource;
 			if (!result)
 			{
 				LOGE("LoadTGA() fail: corrupt file");

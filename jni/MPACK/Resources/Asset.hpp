@@ -3,7 +3,7 @@
 #ifndef MPACK_ASSET_HPP
 #define MPACK_ASSET_HPP
 
-#include "Resource.hpp"
+#include "InputResource.hpp"
 #include "Types.hpp"
 
 namespace MPACK
@@ -17,7 +17,7 @@ namespace MPACK
 			off_t mLength;
 		};
 
-		class Asset : public Resource
+		class Asset : public InputResource
 		{
 		public:
 			Asset(const char* pPath);

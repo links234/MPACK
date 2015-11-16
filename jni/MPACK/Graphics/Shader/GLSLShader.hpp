@@ -2,7 +2,7 @@
 #define MPACK_GLSLSHADER_HPP
 
 #include "Types.hpp"
-#include "Resource.hpp"
+#include "Resources.hpp"
 #include "Log.hpp"
 
 #include <map>

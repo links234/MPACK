@@ -1,16 +1,14 @@
 #ifndef MPACK_SDINPUTFILE_HPP
 #define MPACK_SDINPUTFILE_HPP
 
-#include "Resource.hpp"
+#include "InputResource.hpp"
 #include "Types.hpp"
-
-#include <fstream>
 
 namespace MPACK
 {
 	namespace Core
 	{
-		class SDInputFile : public Resource
+		class SDInputFile : public InputResource
 		{
 		public:
 			SDInputFile(const char* pPath);

@@ -6,7 +6,7 @@ namespace MPACK
 	namespace Core
 	{
 		SDInputFile::SDInputFile(const char* pPath):
-			Resource(pPath), mInputStream(), mBuffer(NULL)
+			InputResource(pPath), mInputStream(), mBuffer(NULL)
 		{
 		}
 

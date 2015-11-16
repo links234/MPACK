@@ -1,9 +1,6 @@
 #include "GLSLShader.hpp"
 
-using std::string;
-using std::ifstream;
-using std::map;
-using std::vector;
+using namespace std;
 using namespace MPACK::Core;
 
 namespace MPACK
@@ -19,17 +16,17 @@ namespace MPACK
 			{
 				m_header="";
 			}
-			Core::Resource *vertexShaderResourcePointer=Core::LoadResource(vertexShader);
-			vertexShaderResourcePointer->Open();
+			InputResource *pVertexShaderInputResource=GetInputResource(vertexShader);
+			pVertexShaderInputResource->Open();
 			m_vertexShader.path = vertexShader;
-			m_vertexShader.source=string((const char*)(vertexShaderResourcePointer->Bufferize()));
-			delete vertexShaderResourcePointer;
+			m_vertexShader.source=string((const char*)(pVertexShaderInputResource->Bufferize()));
+			delete pVertexShaderInputResource;
 
-			Core::Resource *fragmentShaderResourcePointer=Core::LoadResource(fragmentShader);
-			fragmentShaderResourcePointer->Open();
+			InputResource *pFragmentShaderResource=GetInputResource(fragmentShader);
+			pFragmentShaderResource->Open();
 			m_fragmentShader.path = fragmentShader;
-			m_fragmentShader.source=string((const char*)(fragmentShaderResourcePointer->Bufferize()));
-			delete fragmentShaderResourcePointer;
+			m_fragmentShader.source=string((const char*)(pFragmentShaderResource->Bufferize()));
+			delete pFragmentShaderResource;
 		}
 
 		GLSLProgram::~GLSLProgram()
