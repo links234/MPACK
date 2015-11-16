@@ -1,8 +1,8 @@
 #ifndef MPACK_MVFSINPUTFILE_HPP
 #define MPACK_MVFSINPUTFILE_HPP
 
-#include "Resource.hpp"
 #include "Types.hpp"
+#include "InputResource.hpp"
 
 namespace MVFS
 {
@@ -13,7 +13,7 @@ namespace MPACK
 {
 	namespace Core
 	{
-		class MVFSInputFile : public Resource
+		class MVFSInputFile : public InputResource
 		{
 		public:
 			MVFSInputFile(MVFS::FileReaderInterface *pFileReader, bool autoDeletePointers = false);

@@ -5,7 +5,7 @@ namespace MPACK
 {
 	namespace Core
 	{
-		class Resource;
+		class InputResource;
 	}
 }
 
@@ -16,10 +16,13 @@ namespace MPACK
 		class ResourceReader
 		{
 		public:
-			ResourceReader(Resource *resource, int bufferSize=DefaultBufferSize);
+			ResourceReader(InputResource *resource, int bufferSize = DefaultBufferSize);
 			~ResourceReader();
 
 			char Char();
+			char CharNext();
+
+			void Next();
 
 			bool EndOfFile();
 
@@ -27,7 +30,7 @@ namespace MPACK
 		private:
 			void NextChunk();
 
-			Resource *m_resource;
+			InputResource *m_resource;
 
 			int m_bufferIndex;
 			int m_bufferSize;

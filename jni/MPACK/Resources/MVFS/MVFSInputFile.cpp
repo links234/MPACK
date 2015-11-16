@@ -9,7 +9,7 @@ namespace MPACK
 	namespace Core
 	{
 		MVFSInputFile::MVFSInputFile(MVFS::FileReaderInterface *pFileReader, bool autoDeletePointers)
-			: Resource("File is inside MVFS"), m_pFileReader(pFileReader),
+			: InputResource("File is inside MVFS"), m_pFileReader(pFileReader),
 			  m_autoDeletePointers(autoDeletePointers), m_pBuffer(NULL)
 		{
 		}

@@ -25,7 +25,7 @@ namespace MPACK
 			return *m_it;
 		}
 
-		template<class TKey, class TValue> const typename SearchList<TKey,TValue>::Pair* SearchList<TKey,TValue>::Iterator::operator-> () const
+		template<class TKey, class TValue> typename SearchList<TKey,TValue>::Pair* SearchList<TKey,TValue>::Iterator::operator-> () const
 		{
 			return &(*m_it);
 		}

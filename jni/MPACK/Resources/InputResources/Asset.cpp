@@ -12,7 +12,7 @@ namespace MPACK
 	namespace Core
 	{
 		Asset::Asset(const char* pPath):
-			Resource(pPath),
+			InputResource(pPath),
 			mAsset(NULL),
 			mBuffer(NULL)
 		{

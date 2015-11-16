@@ -1,6 +1,6 @@
 #include "ResourceReader.hpp"
 
-#include "Resource.hpp"
+#include "InputResource.hpp"
 
 namespace MPACK
 {
@@ -8,7 +8,7 @@ namespace MPACK
 	{
 		const int ResourceReader::DefaultBufferSize = 64 * 1024;
 
-		ResourceReader::ResourceReader(Resource *resource, int bufferSize)
+		ResourceReader::ResourceReader(InputResource *resource, int bufferSize)
 			: m_resource(resource), m_bufferIndex(0), m_bufferSize(bufferSize),
 			  m_bytesLeft(resource->GetLength()), m_bytesLeftInBuffer(0)
 		{
@@ -22,7 +22,7 @@ namespace MPACK
 			delete[] m_buffer;
 		}
 
-		char ResourceReader::Char()
+		char ResourceReader::CharNext()
 		{
 			if(m_bytesLeftInBuffer <= 0)
 			{
@@ -30,6 +30,21 @@ namespace MPACK
 			}
 			--m_bytesLeftInBuffer;
 			return m_buffer[m_bufferIndex++];
+		}
+
+		char ResourceReader::Char()
+		{
+			return m_buffer[m_bufferIndex];
+		}
+
+		void ResourceReader::Next()
+		{
+			if(m_bytesLeftInBuffer <= 0)
+			{
+				NextChunk();
+			}
+			--m_bytesLeftInBuffer;
+			++m_bufferIndex;
 		}
 
 		bool ResourceReader::EndOfFile()

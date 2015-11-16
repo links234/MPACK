@@ -7,7 +7,7 @@ namespace MPACK
 {
 	namespace Core
 	{
-		class Resource;
+		class InputResource;
 	}
 }
 
@@ -33,7 +33,7 @@ namespace MVFS
 	protected:
 		FileReaderMPACK(const char *pPath);
 
-		MPACK::Core::Resource *m_pResource;
+		MPACK::Core::InputResource *m_pInputResource;
 	};
 }
 

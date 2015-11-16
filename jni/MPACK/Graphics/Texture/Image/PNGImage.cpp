@@ -3,9 +3,7 @@
 #include <png.h>
 
 #include "Image.hpp"
-#include "Resource.hpp"
-#include "SDInputFile.hpp"
-#include "Asset.hpp"
+#include "Resources.hpp"
 #include "Misc.hpp"
 #include "Log.hpp"
 
@@ -17,10 +15,10 @@ namespace MPACK
 	{
 		void LoadPNG_CallbackRead(png_structp pStruct, png_bytep pData, png_size_t pSize)
 		{
-			Resource* lResource = ((Resource*) png_get_io_ptr(pStruct));
-			if (lResource->Read(pData, pSize) != RETURN_VALUE_OK)
+			InputResource* pInputResource = ((InputResource*) png_get_io_ptr(pStruct));
+			if (pInputResource->Read(pData, pSize) != RETURN_VALUE_OK)
 			{
-				lResource->Close();
+				pInputResource->Close();
 			}
 		}
 
@@ -30,7 +28,7 @@ namespace MPACK
 
 			LOGI("LoadPNG() loading image %s", path.c_str());
 
-			Resource *pResource = LoadResource(path.c_str());
+			InputResource *pInputResource = GetInputResource(path.c_str());
 
 			png_byte header[8];
 			png_structp pngPtr = NULL;
@@ -39,12 +37,12 @@ namespace MPACK
 			png_int_32 rowSize;
 			bool transparency;
 
-			if (pResource->Open() != RETURN_VALUE_OK)
+			if (pInputResource->Open() != RETURN_VALUE_OK)
 			{
 				goto ERROR_LABEL;
 			}
 
-			if (pResource->Read(header, sizeof(header)) != RETURN_VALUE_OK)
+			if (pInputResource->Read(header, sizeof(header)) != RETURN_VALUE_OK)
 			{
 				goto ERROR_LABEL;
 			}
@@ -67,7 +65,7 @@ namespace MPACK
 				goto ERROR_LABEL;
 			}
 
-			png_set_read_fn(pngPtr, pResource, LoadPNG_CallbackRead);
+			png_set_read_fn(pngPtr, pInputResource, LoadPNG_CallbackRead);
 			if (setjmp(png_jmpbuf(pngPtr)))
 			{
 				goto ERROR_LABEL;
@@ -162,16 +160,16 @@ namespace MPACK
 			png_read_image(pngPtr, rowPtrs);
 
 			// Frees memory and resources.
-			pResource->Close();
-			delete pResource;
+			pInputResource->Close();
+			delete pInputResource;
 			png_destroy_read_struct(&pngPtr, &infoPtr, NULL);
 			delete[] rowPtrs;
 			return RETURN_VALUE_OK;
 
 	ERROR_LABEL:
 			LOGE("LoadPNG() error while reading PNG file");
-			pResource->Close();
-			delete pResource;
+			pInputResource->Close();
+			delete pInputResource;
 			if(rowPtrs)
 			{
 				delete[] rowPtrs;

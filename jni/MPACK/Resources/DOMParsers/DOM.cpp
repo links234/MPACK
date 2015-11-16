@@ -77,9 +77,23 @@ namespace MPACK
 			return m_properties;
 		}
 
+		void DOM::AddString(std::string key, std::string value)
+		{
+			SearchList<string,DOM*>::Iterator it=m_childs.Find(key);
+			if(it != m_childs.End())
+			{
+				delete it->value;
+				it->value = new DOM(value, true);
+			}
+			else
+			{
+				m_childs.PushBack(key, new DOM(value, true) );
+			}
+		}
+
 		DOM* DOM::At(int index) const
 		{
-			if(index>=m_array.size())
+			if(index >= m_array.size())
 			{
 				return &DOM::s_sentinel;
 			}
@@ -89,7 +103,7 @@ namespace MPACK
 		DOM* DOM::Child(string child)
 		{
 			SearchList<string,DOM*>::Iterator it=m_childs.Find(child);
-			if(it==m_childs.End())
+			if(it == m_childs.End())
 			{
 				return &DOM::s_sentinel;
 			}
@@ -99,7 +113,7 @@ namespace MPACK
 		DOM* DOM::Property(string property)
 		{
 			SearchList<string,DOM*>::Iterator it=m_properties.Find(property);
-			if(it==m_properties.End())
+			if(it == m_properties.End())
 			{
 				return &DOM::s_sentinel;
 			}
@@ -118,7 +132,7 @@ namespace MPACK
 
 		bool DOM::IsValid() const
 		{
-			return this!=&DOM::s_sentinel;
+			return this != &DOM::s_sentinel;
 		}
 
 		string DOM::GetValue() const
@@ -128,7 +142,8 @@ namespace MPACK
 
 		void DOM::SetValue(string value)
 		{
-			m_value=value;
+			m_isTerminal = true;
+			m_value = value;
 		}
 
 		DOM* DOM::GetSentinel()

@@ -1,4 +1,4 @@
-#include "Resource.hpp"
+#include "InputResource.hpp"
 
 #include "Asset.hpp"
 #include "SDInputFile.hpp"
@@ -15,23 +15,23 @@ namespace MPACK
 	{
 		const int PATH_BUFFER_SIZE=256;
 
-		Resource::Resource(const char* pPath)
+		InputResource::InputResource(const char* pPath)
 		{
 			mPath = new char[strlen(pPath)+2];
 			strcpy(mPath,pPath);
 		}
 
-		const char* Resource::GetPath()
+		const char* InputResource::GetPath()
 		{
 			return mPath;
 		}
 
-		Resource::~Resource()
+		InputResource::~InputResource()
 		{
 			delete[] mPath;
 		}
 
-		Resource* LoadResource(const char* pPath)
+		InputResource* GetInputResource(const char* pPath)
 		{
 			const char* temp = pPath;
 			if(pPath[0]=='[')
@@ -46,26 +46,26 @@ namespace MPACK
 				}
 				if((*pPath)!=']')
 				{
-					LOGE("LoadResource: invalid path %s",temp);
+					LOGE("LoadInputResource: invalid path %s",temp);
 					return NULL;
 				}
 				++pPath;
 				MVFS::Reader *pReader = MVFSDB::Get(id);
 				if(pReader == NULL)
 				{
-					LOGE("LoadResource: invalid path %s MVFS database with id=%d does not exists",temp,id);
+					LOGE("LoadInputResource: invalid path %s MVFS database with id=%d does not exists",temp,id);
 					return NULL;
 				}
-				return (Resource*)(new MVFSInputFile(MVFS::Open(pReader, pPath),true));
+				return (InputResource*)(new MVFSInputFile(MVFS::Open(pReader, pPath),true));
 			}
 	#ifdef ANDROID_PLATFORM
 			if(pPath[0]=='@')
 			{
-				return (Resource*)(new Asset(pPath+1));
+				return (InputResource*)(new Asset(pPath+1));
 			}
 			if(pPath[0]=='&')
 			{
-				return (Resource*)(new SDInputFile(pPath+1));
+				return (InputResource*)(new SDInputFile(pPath+1));
 			}
 	#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 			char pathBuffer[PATH_BUFFER_SIZE];
@@ -78,13 +78,13 @@ namespace MPACK
 			{
 				strcpy(pathBuffer,pPath+1);
 			}
-			return (Resource*)(new SDInputFile(pathBuffer));
+			return (InputResource*)(new SDInputFile(pathBuffer));
 	#endif
-			LOGE("LoadResource: invalid path %s",pPath);
+			LOGE("LoadInputResource: invalid path %s",pPath);
 			return NULL;
 		}
 
-		string GetResourcePath(string path)
+		string GetInputResourcePath(string path)
 		{
 	#ifdef ANDROID_PLATFORM
 			if(path[0]=='@')

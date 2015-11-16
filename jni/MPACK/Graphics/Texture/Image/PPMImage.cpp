@@ -3,9 +3,7 @@
 #include <png.h>
 
 #include "Image.hpp"
-#include "Resource.hpp"
-#include "SDInputFile.hpp"
-#include "Asset.hpp"
+#include "Resources.hpp"
 #include "Misc.hpp"
 #include "Log.hpp"
 

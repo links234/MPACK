@@ -3,7 +3,7 @@
 #include <fstream>
 
 #include "Misc.hpp"
-#include "Resource.hpp"
+#include "InputResource.hpp"
 #include "ResourceReader.hpp"
 
 using namespace std;
@@ -40,9 +40,9 @@ namespace MPACK
 		{
 			Clear();
 
-			Resource *pResource = LoadResource(pPath);
-			pResource->Open();
-			ResourceReader reader(pResource);
+			InputResource *pInputResource = GetInputResource(pPath);
+			pInputResource->Open();
+			ResourceReader reader(pInputResource);
 
 			enum ParserState{Default, InComment, Section, AfterSection, Backslash, LeftValue, RightValue};
 
@@ -56,7 +56,7 @@ namespace MPACK
 
 			while(!reader.EndOfFile())
 			{
-				char ch=reader.Char();
+				char ch=reader.CharNext();
 				switch(state)
 				{
 					case Default:
@@ -226,7 +226,7 @@ namespace MPACK
 				}
 			}
 
-			delete pResource;
+			delete pInputResource;
 		}
 
 		void IniFile::Save(const char *pPath)

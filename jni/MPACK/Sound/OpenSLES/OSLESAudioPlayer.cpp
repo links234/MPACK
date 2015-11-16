@@ -48,7 +48,7 @@ namespace MPACK
 		{
 			Unload();
 
-			string realPath=Core::GetResourcePath(path);
+			string realPath=GetInputResourcePath(path);
 
 			SLEngineItf &engine=Global::pContext->pSoundService->GetOpenSLEngine();
 

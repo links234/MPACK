@@ -30,7 +30,7 @@ namespace MPACK
 				const Iterator& operator= (const Iterator& other);
 
 				Pair operator* () const;
-				const Pair* operator-> () const;
+				Pair* operator-> () const;
 
 				Iterator& operator++ ();
 				Iterator operator++ (int);

@@ -31,6 +31,8 @@ namespace MPACK
 			Algorithm::SearchList<std::string,DOM*>& Childs();
 			Algorithm::SearchList<std::string,DOM*>& Properties();
 
+			void AddString(std::string value, std::string key = "");
+
 			DOM* At(int index) const;
 			DOM* Child(std::string child);
 			DOM* Property(std::string property);
