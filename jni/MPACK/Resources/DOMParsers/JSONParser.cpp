@@ -40,6 +40,7 @@ namespace MPACK
 			{
 				m_level = 0;
 				Save_Pretty(dom);
+				m_output << "\n";
 			}
 			else
 			{
