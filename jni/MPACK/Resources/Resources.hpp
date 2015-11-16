@@ -1,7 +1,7 @@
 #ifndef MPACK_RESOURCES_HPP
 #define MPACK_RESOURCES_HPP
 
-#include "InputResource.hpp"
+#include "InputResources.hpp"
 #include "ResourceReader.hpp"
 
 #include "IniFile.hpp"
