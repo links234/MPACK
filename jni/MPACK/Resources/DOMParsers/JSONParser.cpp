@@ -203,7 +203,28 @@ namespace MPACK
 
 		void JSONParser::Save_Minify(DOM *dom)
 		{
-			LOGI("JSONParser: Save_Minify() not implemented, falling back to Save_Pretty");
+			if (dom->IsTerminal())
+			{
+				m_output << "\"" << dom->GetValue() << "\"";
+			}
+			else
+			{
+				m_output << "{";
+				for (SearchList<string, DOM*>::Iterator it = dom->Childs().Begin(); it != dom->Childs().End(); ++it)
+				{
+					SearchList<string, DOM*>::Iterator itNext = it;
+					++itNext;
+
+					m_output << "\"" << it->key << "\":";
+					Save_Minify(it->value);
+					if (itNext != dom->Childs().End())
+					{
+						m_output << ",";
+					}
+				}
+				--m_level;
+				m_output << "}";
+			}
 		}
 
 		void JSONParser::Save_Pretty(DOM *dom)

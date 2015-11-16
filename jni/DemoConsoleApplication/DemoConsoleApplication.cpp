@@ -72,7 +72,8 @@ namespace Demo
 		dom->Childs().PushBack("targets", domTargets);
 
 		JSONParser jsonParser;
-		jsonParser.Save("assets/local/save_pretty.json", dom, JSONParser::STYLE_MINIFIY);
+		jsonParser.Save("assets/local/save_pretty.json", dom, JSONParser::STYLE_PRETTY);
+		jsonParser.Save("assets/local/save_minify.json", dom, JSONParser::STYLE_MINIFIY);
 
 		return 0;
 	}
