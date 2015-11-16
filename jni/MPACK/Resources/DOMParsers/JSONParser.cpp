@@ -6,13 +6,16 @@
 #include "StringEx.hpp"
 
 using namespace std;
+using namespace MPACK;
+using namespace MPACK::Algorithm;
 
 namespace MPACK
 {
 	namespace Core
 	{
 		JSONParser::JSONParser()
-		   : m_ptr(0), m_line(0), m_lastLine(0), m_ignoreWhitespace(true)
+		   : m_ptr(0), m_line(0), m_lastLine(0), m_ignoreWhitespace(true),
+		     m_level(0)
 		{
 		}
 
@@ -28,6 +31,22 @@ namespace MPACK
 			DOM *dom=ParseRValue();
 			delete res;
 			return dom;
+		}
+
+		void JSONParser::Save(std::string path, DOM* dom, Style style)
+		{
+			m_output.open(path);
+			if (style == STYLE_PRETTY)
+			{
+				m_level = 0;
+				Save_Pretty(dom);
+			}
+			else
+			{
+				Save_Minify(dom);
+			}
+
+			m_output.close();
 		}
 
 		DOM* JSONParser::ParseRValue()
@@ -180,6 +199,54 @@ namespace MPACK
 		char JSONParser::Char()
 		{
 			return *m_ptr;
+		}
+
+		void JSONParser::Save_Minify(DOM *dom)
+		{
+			LOGI("JSONParser: Save_Minify() not implemented, falling back to Save_Pretty");
+		}
+
+		void JSONParser::Save_Pretty(DOM *dom)
+		{
+			if (dom->IsTerminal())
+			{
+				m_output << "\"" << dom->GetValue() << "\"";
+			}
+			else
+			{
+				if (m_level)
+				{
+					m_output << "\n";
+				}
+				Save_PrettyPrefix();
+				m_output << "{\n";
+				++m_level;
+				for (SearchList<string, DOM*>::Iterator it = dom->Childs().Begin(); it != dom->Childs().End(); ++it)
+				{
+					SearchList<string, DOM*>::Iterator itNext = it;
+					++itNext;
+
+					Save_PrettyPrefix();
+					m_output << "\"" << it->key << "\" : ";
+					Save_Pretty(it->value);
+					if (itNext != dom->Childs().End())
+					{
+						m_output << ",";
+					}
+					m_output << "\n";
+				}
+				--m_level;
+				Save_PrettyPrefix();
+				m_output << "}";
+			}
+		}
+
+		void JSONParser::Save_PrettyPrefix()
+		{
+			for (int i = 0; i < m_level; ++i)
+			{
+				m_output << "\t";
+			}
 		}
 	}
 }
