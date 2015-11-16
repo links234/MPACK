@@ -20,6 +20,9 @@ namespace MPACK
 			~ResourceReader();
 
 			char Char();
+			char CharNext();
+
+			void Next();
 
 			bool EndOfFile();
 

@@ -22,7 +22,7 @@ namespace MPACK
 			delete[] m_buffer;
 		}
 
-		char ResourceReader::Char()
+		char ResourceReader::CharNext()
 		{
 			if(m_bytesLeftInBuffer <= 0)
 			{
@@ -30,6 +30,21 @@ namespace MPACK
 			}
 			--m_bytesLeftInBuffer;
 			return m_buffer[m_bufferIndex++];
+		}
+
+		char ResourceReader::Char()
+		{
+			return m_buffer[m_bufferIndex];
+		}
+
+		void ResourceReader::Next()
+		{
+			if(m_bytesLeftInBuffer <= 0)
+			{
+				NextChunk();
+			}
+			--m_bytesLeftInBuffer;
+			++m_bufferIndex;
 		}
 
 		bool ResourceReader::EndOfFile()

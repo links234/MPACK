@@ -56,7 +56,7 @@ namespace MPACK
 
 			while(!reader.EndOfFile())
 			{
-				char ch=reader.Char();
+				char ch=reader.CharNext();
 				switch(state)
 				{
 					case Default:
