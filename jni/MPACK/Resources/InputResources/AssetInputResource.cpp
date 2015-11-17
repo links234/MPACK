@@ -18,7 +18,7 @@ namespace MPACK
 		{
 		}
 
-		ReturnValue Asset::Open()
+		ReturnValue AssetInputResource::Open()
 		{
 			mAsset = AAssetManager_open(Global::pAAssetManager, mPath, AASSET_MODE_UNKNOWN);
 			if(mAsset == NULL)
@@ -115,7 +115,7 @@ namespace MPACK
 			Close();
 		}
 
-		AssetDescriptor AssetInputResource::Descript()
+		AssetInputResourceDescriptor AssetInputResource::Descript()
 		{
 			AssetInputResourceDescriptor lDescriptor = { -1, 0, 0 };
 			AAsset* lAsset = AAssetManager_open(Global::pAAssetManager, mPath, AASSET_MODE_UNKNOWN);

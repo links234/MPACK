@@ -2,7 +2,7 @@
 
 #include "GameServices.hpp"
 #include "Global.hpp"
-#include "Asset.hpp"
+#include "AssetInputResource.hpp"
 
 
 namespace MPACK
@@ -162,7 +162,7 @@ namespace MPACK
 
 		vector<unsigned char> GameServices::getImageBytes(const char* path)
 		{
-			MPACK::Core::Asset asset = MPACK::Core::Asset(path);
+			MPACK::Core::AssetInputResource asset = MPACK::Core::AssetInputResource(path);
 			asset.Open();
 			vector<unsigned char> res;
 			LOGI("path = %s",path);
