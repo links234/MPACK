@@ -17,12 +17,13 @@
 
 namespace MPACK
 {
-	#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
-	FileLogger *pFileLogger;
-	#endif
-
 	namespace Core
 	{
+		#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+		FileLogger *pFileLogger;
+		#endif
+
+
 		void Log::Initialize()
 		{
 	#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)

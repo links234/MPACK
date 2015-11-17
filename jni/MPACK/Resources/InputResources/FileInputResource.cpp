@@ -1,22 +1,22 @@
-#include "SDInputFile.hpp"
+#include "FileInputResource.hpp"
 #include "Log.hpp"
 
 namespace MPACK
 {
 	namespace Core
 	{
-		SDInputFile::SDInputFile(const char* pPath):
+		FileInputResource::FileInputResource(const char* pPath):
 			InputResource(pPath), mInputStream(), mBuffer(NULL)
 		{
 		}
 
-		ReturnValue SDInputFile::Open()
+		ReturnValue FileInputResource::Open()
 		{
 			mInputStream.open(mPath, std::ios::in | std::ios::binary);
 			return mInputStream ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
-		void SDInputFile::Close()
+		void FileInputResource::Close()
 		{
 			if(mInputStream.is_open())
 			{
@@ -29,13 +29,13 @@ namespace MPACK
 			}
 		}
 
-		ReturnValue SDInputFile::Read(void* pBuffer, size_t count)
+		ReturnValue FileInputResource::Read(void* pBuffer, size_t count)
 		{
 			mInputStream.read((char*)pBuffer, count);
 			return (!mInputStream.fail()) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
-		ReturnValue SDInputFile::ReadFrom(int offset, void* pBuffer, size_t count)
+		ReturnValue FileInputResource::ReadFrom(int offset, void* pBuffer, size_t count)
 		{
 			if(mInputStream.is_open())
 			{
@@ -46,7 +46,7 @@ namespace MPACK
 			}
 		}
 
-		const void* SDInputFile::Bufferize()
+		const void* FileInputResource::Bufferize()
 		{
 			int lSize = GetLength();
 			if (lSize <= 0)
@@ -74,19 +74,19 @@ namespace MPACK
 			}
 			else
 			{
-				LOGE("Bufferize failed for SDInputFile %s", mPath);
+				LOGE("Bufferize failed for FileInputResource %s", mPath);
 				return NULL;
 			}
 		}
 
-		int SDInputFile::GetOffset()
+		int FileInputResource::GetOffset()
 		{
 			if(mInputStream.is_open())
 			{
 				int offset=mInputStream.tellg();
 				if(offset < -1)
 				{
-					LOGE("SDInputFile::GetOffset error: tellg() returned -1 yet file is still opened!");
+					LOGE("FileInputResource::GetOffset error: tellg() returned -1 yet file is still opened!");
 				}
 				return offset;
 			}
@@ -96,7 +96,7 @@ namespace MPACK
 			}
 		}
 
-		void SDInputFile::SetOffset(int offset)
+		void FileInputResource::SetOffset(int offset)
 		{
 			if(mInputStream.is_open())
 			{
@@ -104,7 +104,7 @@ namespace MPACK
 			}
 		}
 
-		void SDInputFile::Skip(int bytes)
+		void FileInputResource::Skip(int bytes)
 		{
 			if(mInputStream.is_open())
 			{
@@ -113,7 +113,7 @@ namespace MPACK
 			}
 		}
 
-		int SDInputFile::GetLength()
+		int FileInputResource::GetLength()
 		{
 			int len;
 
@@ -134,7 +134,7 @@ namespace MPACK
 			return len;
 		}
 
-		SDInputFile::~SDInputFile()
+		FileInputResource::~FileInputResource()
 		{
 			Close();
 		}

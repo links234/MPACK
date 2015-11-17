@@ -1,7 +1,7 @@
 #include "InputResource.hpp"
 
-#include "Asset.hpp"
-#include "SDInputFile.hpp"
+#include "AssetInputResource.hpp"
+#include "FileInputResource.hpp"
 #include "MVFS.hpp"
 #include "MVFSInputFile.hpp"
 #include "MVFSDataBase.hpp"
@@ -61,11 +61,11 @@ namespace MPACK
 	#ifdef ANDROID_PLATFORM
 			if(pPath[0]=='@')
 			{
-				return (InputResource*)(new Asset(pPath+1));
+				return (InputResource*)(new AssetInputResource(pPath+1));
 			}
 			if(pPath[0]=='&')
 			{
-				return (InputResource*)(new SDInputFile(pPath+1));
+				return (InputResource*)(new FileInputResource(pPath+1));
 			}
 	#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
 			char pathBuffer[PATH_BUFFER_SIZE];
@@ -78,7 +78,7 @@ namespace MPACK
 			{
 				strcpy(pathBuffer,pPath+1);
 			}
-			return (InputResource*)(new SDInputFile(pathBuffer));
+			return (InputResource*)(new FileInputResource(pathBuffer));
 	#endif
 			LOGE("LoadInputResource: invalid path %s",pPath);
 			return NULL;

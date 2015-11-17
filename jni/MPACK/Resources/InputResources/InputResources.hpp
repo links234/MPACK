@@ -3,7 +3,7 @@
 
 #include "InputResource.hpp"
 
-#include "Asset.hpp"
-#include "SDInputFile.hpp"
+#include "AssetInputResource.hpp"
+#include "FileInputResource.hpp"
 
 #endif
