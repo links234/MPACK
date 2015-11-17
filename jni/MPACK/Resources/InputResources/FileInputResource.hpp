@@ -1,7 +1,5 @@
-#ifdef ANDROID_PLATFORM
-
-#ifndef MPACK_ASSET_HPP
-#define MPACK_ASSET_HPP
+#ifndef MPACK_FILEINPUTRESOURCE_HPP
+#define MPACK_FILEINPUTRESOURCE_HPP
 
 #include "InputResource.hpp"
 #include "Types.hpp"
@@ -10,17 +8,10 @@ namespace MPACK
 {
 	namespace Core
 	{
-		struct AssetDescriptor
-		{
-			int32_t mDescriptor;
-			off_t mStart;
-			off_t mLength;
-		};
-
-		class Asset : public InputResource
+		class FileInputResource : public InputResource
 		{
 		public:
-			Asset(const char* pPath);
+			FileInputResource(const char* pPath);
 
 			virtual ReturnValue Open();
 			virtual void Close();
@@ -35,16 +26,12 @@ namespace MPACK
 
 			virtual int GetLength();
 
-			virtual ~Asset();
-
-			AssetDescriptor Descript();
+			virtual ~FileInputResource();
 		protected:
-			AAsset* mAsset;
+			std::ifstream mInputStream;
 			char* mBuffer;
 		};
 	}
 }
-
-#endif
 
 #endif

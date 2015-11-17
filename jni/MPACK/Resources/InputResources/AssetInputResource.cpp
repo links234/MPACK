@@ -1,6 +1,6 @@
 #ifdef ANDROID_PLATFORM
 
-#include "Asset.hpp"
+#include "AssetInputResource.hpp"
 
 #include "Log.hpp"
 #include "Global.hpp"
@@ -11,7 +11,7 @@ namespace MPACK
 {
 	namespace Core
 	{
-		Asset::Asset(const char* pPath):
+		AssetInputResource::AssetInputResource(const char* pPath):
 			InputResource(pPath),
 			mAsset(NULL),
 			mBuffer(NULL)
@@ -28,7 +28,7 @@ namespace MPACK
 			return (mAsset != NULL) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
-		void Asset::Close()
+		void AssetInputResource::Close()
 		{
 			if (mAsset != NULL)
 			{
@@ -43,13 +43,13 @@ namespace MPACK
 			}
 		}
 
-		ReturnValue Asset::Read(void* pBuffer, size_t count)
+		ReturnValue AssetInputResource::Read(void* pBuffer, size_t count)
 		{
 			int32_t lReadCount = AAsset_read(mAsset, pBuffer, count);
 			return (lReadCount == count) ? RETURN_VALUE_OK : RETURN_VALUE_KO;
 		}
 
-		ReturnValue Asset::ReadFrom(int offset, void* pBuffer, size_t count)
+		ReturnValue AssetInputResource::ReadFrom(int offset, void* pBuffer, size_t count)
 		{
 			int oldOffset=GetOffset();
 			SetOffset(offset);
@@ -57,7 +57,7 @@ namespace MPACK
 			SetOffset(oldOffset);
 		}
 
-		const void* Asset::Bufferize()
+		const void* AssetInputResource::Bufferize()
 		{
 			if(!mAsset)
 			{
@@ -71,7 +71,7 @@ namespace MPACK
 			return mBuffer;
 		}
 
-		int Asset::GetOffset()
+		int AssetInputResource::GetOffset()
 		{
 			if(!mAsset)
 			{
@@ -83,7 +83,7 @@ namespace MPACK
 			}
 		}
 
-		void Asset::SetOffset(int offset)
+		void AssetInputResource::SetOffset(int offset)
 		{
 			if(mAsset)
 			{
@@ -91,7 +91,7 @@ namespace MPACK
 			}
 		}
 
-		void Asset::Skip(int bytes)
+		void AssetInputResource::Skip(int bytes)
 		{
 			if(mAsset)
 			{
@@ -100,7 +100,7 @@ namespace MPACK
 			}
 		}
 
-		int Asset::GetLength()
+		int AssetInputResource::GetLength()
 		{
 			if(!mAsset)
 			{
@@ -110,14 +110,14 @@ namespace MPACK
 			return AAsset_getLength(mAsset);
 		}
 
-		Asset::~Asset()
+		AssetInputResource::~AssetInputResource()
 		{
 			Close();
 		}
 
-		AssetDescriptor Asset::Descript()
+		AssetDescriptor AssetInputResource::Descript()
 		{
-			AssetDescriptor lDescriptor = { -1, 0, 0 };
+			AssetInputResourceDescriptor lDescriptor = { -1, 0, 0 };
 			AAsset* lAsset = AAssetManager_open(Global::pAAssetManager, mPath, AASSET_MODE_UNKNOWN);
 			if (lAsset != NULL)
 			{
