@@ -373,7 +373,7 @@ namespace MPACK
 			{
 				for (int j = 0; j < rect.width; ++j)
 				{
-					SetPixel(point.x + i, point.y + j, image->GetPixel(i + rect.x, j + rect.y));
+					SetPixel(point.y + i,point.x + j, image->GetPixel(i + rect.y, j + rect.x));
 				}
 			}
 		}
