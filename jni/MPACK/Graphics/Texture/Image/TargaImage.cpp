@@ -68,7 +68,7 @@ namespace MPACK
 					header.imageTypeCode == TFT_GRAYSCALE);
 		}
 
-		Core::ReturnValue LoadTGA(Image *image, const string& path)
+		Core::ReturnValue LoadTGA(Image *image, const string& path, bool flipForOpenGL)
 		{
 			image->Unload();
 
@@ -217,7 +217,17 @@ namespace MPACK
 
 			if ((header.imageDesc & TOP_LEFT) == TOP_LEFT)
 			{
-				image->FlipVertical();
+				if (flipForOpenGL)
+				{
+					image->FlipVertical();
+				}
+			}
+			else
+			{
+				if(!flipForOpenGL)
+				{
+					image->FlipVertical();
+				}
 			}
 
 		LOADTGA_ERROR:

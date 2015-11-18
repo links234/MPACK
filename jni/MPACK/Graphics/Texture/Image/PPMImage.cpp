@@ -13,7 +13,7 @@ namespace MPACK
 {
 	namespace Graphics
 	{
-		ReturnValue LoadPPM(Image *image, const std::string &path)
+		ReturnValue LoadPPM(Image *image, const std::string &path, bool flipForOpenGL)
 		{
 			LOGE("LoadPPM() error: not implemented");
 			return RETURN_VALUE_KO;

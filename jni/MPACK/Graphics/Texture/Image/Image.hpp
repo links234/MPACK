@@ -22,7 +22,7 @@ namespace MPACK
 			~Image();
 
 			void Init(const int &width, const int &height);
-			Core::ReturnValue Load(const std::string& path, FileFormatType fileFormatType = AUTO);
+			Core::ReturnValue Load(const std::string& path, bool flipForOpenGL = true, FileFormatType fileFormatType = AUTO);
 			Core::ReturnValue Save(const std::string& path, FileFormatType fileFormatType = AUTO);
 			void Unload();
 
@@ -62,13 +62,13 @@ namespace MPACK
 
 			BYTE *m_imageBuffer;
 
-			friend Core::ReturnValue LoadTGA(Image *image, const std::string &path);
+			friend Core::ReturnValue LoadTGA(Image *image, const std::string &path, bool flipForOpenGL);
 			friend Core::ReturnValue SaveTGA(Image *image, const std::string &path);
 
-			friend Core::ReturnValue LoadPNG(Image *image, const std::string &path);
+			friend Core::ReturnValue LoadPNG(Image *image, const std::string &path, bool flipForOpenGL);
 			friend Core::ReturnValue SavePNG(Image *image, const std::string &path);
 
-			friend Core::ReturnValue LoadPPM(Image *image, const std::string &path);
+			friend Core::ReturnValue LoadPPM(Image *image, const std::string &path, bool flipForOpenGL);
 			friend Core::ReturnValue SavePPM(Image *image, const std::string &path);
 		};
 

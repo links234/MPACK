@@ -22,7 +22,7 @@ namespace MPACK
 			}
 		}
 
-		ReturnValue LoadPNG(Image *image, const std::string &path)
+		ReturnValue LoadPNG(Image *image, const std::string &path, bool flipForOpenGL)
 		{
 			image->Unload();
 
@@ -152,9 +152,19 @@ namespace MPACK
 			{
 				goto ERROR_LABEL;
 			}
-			for (::int32_t i = 0; i < height; ++i)
+			if (flipForOpenGL)
 			{
-				rowPtrs[height - (i + 1)] = image->m_imageBuffer + i * rowSize;
+				for (::int32_t i = 0; i < height; ++i)
+				{
+					rowPtrs[height - (i + 1)] = image->m_imageBuffer + i * rowSize;
+				}
+			}
+			else
+			{
+				for (::int32_t i = 0; i < height; ++i)
+				{
+					rowPtrs[i] = image->m_imageBuffer + i * rowSize;
+				}
 			}
 			// Reads image content.
 			png_read_image(pngPtr, rowPtrs);

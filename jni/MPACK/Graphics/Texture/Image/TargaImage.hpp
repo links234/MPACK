@@ -15,7 +15,7 @@ namespace MPACK
 {
 	namespace Graphics
 	{
-		Core::ReturnValue LoadTGA(Image *image, const std::string &path);
+		Core::ReturnValue LoadTGA(Image *image, const std::string &path, bool flipForOpenGL = true);
 		Core::ReturnValue SaveTGA(Image *image, const std::string &path);
 	}
 }

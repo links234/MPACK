@@ -71,6 +71,8 @@ namespace MPACK
 				GLfloat xPos = GLfloat(ch % 16) * oneOverSixteen;
 				GLfloat yPos = GLfloat(ch / 16) * oneOverSixteen;
 
+				LOGD("%c is at %d %d", str[i], chX, chY);
+
 				if(!m_monospaced)
 				{
 					x-=m_fontSize*m_cellSpacing[chX][chY].left;
@@ -165,7 +167,9 @@ namespace MPACK
 				}
 				quadData.push_back(vertex);
 
-				if(!m_monospaced)
+				LOGD("(1-m_cellSpacing[chX][chY].right) = %lf",(1-m_cellSpacing[chX][chY].right));
+
+				if(m_monospaced)
 				{
 					x+=m_fontSize*(1-m_cellSpacing[chX][chY].right)+m_charPadding*m_fontSize;
 				}
@@ -245,8 +249,6 @@ namespace MPACK
 
 			m_formatType = format;
 
-			pFontImage->FlipVertical();
-
 			if(format == ALPHA)
 			{
 				BuildCellSpacing_ALPHA(pFontImage);
@@ -256,7 +258,6 @@ namespace MPACK
 				BuildCellSpacing_RGB_MAGNITUDE(pFontImage);
 			}
 
-			pFontImage->FlipVertical();
 			if (!m_texture.Load(pFontImage, FILTER_BILINEAR))
 			{
 				LOGE("Texture Mapped Font: Could not load font image to texture memory: %s",textureName.c_str());
@@ -347,7 +348,7 @@ namespace MPACK
 
 							if(color.Magnitude()>=FORMATTYPE_RGB_MAGNITUDE_THRESHOLD)
 							{
-								cell.AddPoint(Vector2f((GLfloat)(cj),(GLfloat)(ci)));
+								cell.AddPoint(Vector2f((GLfloat)(ci),(GLfloat)(cj)));
 							}
 						}
 					}
@@ -404,7 +405,7 @@ namespace MPACK
 
 							if(alpha>=FORMATTYPE_ALPHA_THRESHOLD)
 							{
-								cell.AddPoint(Vector2f((GLfloat)(cj),(GLfloat)(ci)));
+								cell.AddPoint(Vector2f((GLfloat)(ci),(GLfloat)(cj)));
 							}
 						}
 					}
