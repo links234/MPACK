@@ -38,6 +38,7 @@ namespace MPACK
 			bool IsWhiteSpace(const char &ch);
 			bool IsPunctuation(const char &ch);
 
+			bool ToInt(const std::string &str, int &number);
 			int ToInt(const std::string &str);
 			bool ToBool(const std::string &str);
 			double ToDouble(const std::string &str);
