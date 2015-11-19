@@ -88,7 +88,6 @@ namespace MPACK
 			{
 				png_set_tRNS_to_alpha(pngPtr);
 				transparency = true;
-				goto ERROR_LABEL;
 			}
 
 			if (depth < 8)
