@@ -6,6 +6,7 @@
 #include "Physics.hpp"
 #include "DemoAndroidApplication.hpp"
 #include "TextureMappedFont.hpp"
+#include "TextureAtlasDataBase.hpp"
 #include "Global.hpp"
 #include "Context.hpp"
 #include "Particles.hpp"
@@ -21,6 +22,8 @@ namespace Demo
 {
 	PlayGame::PlayGame()
 	{
+		TextureAtlasDataBase::LoadAtlases("@Atlases/atlas.json");
+
 		m_pWorld = new World(1/60.0f,15);
 		m_pWorld->EnableDebugDraw();
 
@@ -57,8 +60,8 @@ namespace Demo
 		m_enemyTexture=new Texture2D;
 		m_playerTexture=new Texture2D;
 
-		m_enemyTexture->Load("[0]/Ships/enemy1.png");
-		m_playerTexture->Load("[0]/Ships/Player.png");
+		m_enemyTexture->Load("@Sprites/Ships/enemy1.png");
+		m_playerTexture->Load("@Sprites/Ships/Player.png");
 
 		//Player sprite setup
 		m_playerSprite=new Sprite;

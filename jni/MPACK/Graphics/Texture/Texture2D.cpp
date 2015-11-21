@@ -3,6 +3,7 @@
 #include "Image.hpp"
 #include "Math.hpp"
 #include "Misc.hpp"
+#include "TextureAtlasDataBase.hpp"
 
 using namespace std;
 
@@ -14,18 +15,27 @@ namespace MPACK
 
 		Texture2D::Texture2D(bool needUpdate)
 			: m_texId(0), m_sWrapMode(GL_REPEAT), m_tWrapMode(GL_REPEAT), m_filteringType(FILTER_TRILINEAR),
-			  m_needUpdate(needUpdate), m_width(0), m_height(0)
+			  m_needUpdate(needUpdate), m_width(0), m_height(0),
+			  m_pAtlasTex(NULL), m_atlasLeft(0.0), m_atlasRight(1.0), m_atlasTop(0.0), m_atlasBottom(1.0)
 		{
 		}
 
 		Texture2D::~Texture2D()
 		{
-			GL_CHECK( glDeleteTextures(1, &m_texId) );
+			if (m_texId)
+			{
+				GL_CHECK( glDeleteTextures(1, &m_texId) );
+			}
 		}
 
 		bool Texture2D::Load(string path, FilteringType filtering, GLenum s_mode, GLenum t_mode)
 		{
 			m_path = path;
+			if (TextureAtlasDataBase::GetTexture(path,m_pAtlasTex,m_atlasLeft,m_atlasTop,m_atlasRight,m_atlasBottom))
+			{
+				return true;
+			}
+
 			Image *image = new Image;
 			image->Load(path.c_str());
 			LOGI("Texture2D::Load - path = %s",path.c_str());
@@ -91,6 +101,12 @@ namespace MPACK
 
 		void Texture2D::Bind(GLenum TEXTURE)
 		{
+			if (m_pAtlasTex)
+			{
+				m_pAtlasTex->Bind(TEXTURE);
+				return;
+			}
+
 			BindTextureToSlot(m_texId,TEXTURE);
 
 			if(m_needUpdate)
@@ -119,6 +135,25 @@ namespace MPACK
 			{
 				m_tWrapMode=t_mode;
 				m_needUpdate=true;
+			}
+		}
+
+		bool Texture2D::IsOnAtlas() const
+		{
+			return m_pAtlasTex != NULL;
+		}
+
+		Texture2D *Texture2D::GetAtlas() const
+		{
+			return m_pAtlasTex;
+		}
+
+		void Texture2D::MapUVForAtlas(double &u, double &v)
+		{
+			if(m_pAtlasTex)
+			{
+				u = m_atlasLeft + (m_atlasRight - m_atlasLeft) * u;
+				v = m_atlasTop + (m_atlasBottom - m_atlasTop) * v;
 			}
 		}
 

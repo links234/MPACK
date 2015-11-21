@@ -71,7 +71,7 @@ namespace MPACK
 				GLfloat xPos = GLfloat(ch % 16) * oneOverSixteen;
 				GLfloat yPos = GLfloat(ch / 16) * oneOverSixteen;
 
-				LOGD("%c is at %d %d", str[i], chX, chY);
+				//LOGD("%c is at %d %d", str[i], chX, chY);
 
 				if(!m_monospaced)
 				{
@@ -167,7 +167,7 @@ namespace MPACK
 				}
 				quadData.push_back(vertex);
 
-				LOGD("(1-m_cellSpacing[chX][chY].right) = %lf",(1-m_cellSpacing[chX][chY].right));
+				//LOGD("(1-m_cellSpacing[chX][chY].right) = %lf",(1-m_cellSpacing[chX][chY].right));
 
 				if(m_monospaced)
 				{

@@ -56,12 +56,34 @@ namespace MPACK
 												m_width * 2.0, m_height * 2.0, 0.0, 1.0, 0.0, 1.0);
 #endif
 
-			SpriteVertex vertexData[]={	SpriteVertex(v[0].x,v[0].y,	0,0,	m_color[0].x,m_color[0].y,m_color[0].z,m_color[0].w,	m_spriteShadingType),
-										SpriteVertex(v[1].x,v[1].y,	1,0,	m_color[1].x,m_color[1].y,m_color[1].z,m_color[1].w,	m_spriteShadingType),
-										SpriteVertex(v[2].x,v[2].y,	1,1,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),
-										SpriteVertex(v[3].x,v[3].y,	0,1,	m_color[3].x,m_color[3].y,m_color[3].z,m_color[3].w,	m_spriteShadingType) };
+			double zeroU = 0.0;
+			double zeroV = 0.0;
+			double oneU = 1.0;
+			double oneV = 1.0;
 
-			Batcher::SendSpriteVertexQuad(vertexData,4,m_texture,IndexData::TRIANGLES,m_layer);
+			m_texture->MapUVForAtlas(zeroU,zeroV);
+			m_texture->MapUVForAtlas(oneU,oneV);
+
+			if (m_texture->IsOnAtlas())
+			{
+
+
+				SpriteVertex vertexData[]={	SpriteVertex(v[0].x,v[0].y,	zeroU,zeroV,	m_color[0].x,m_color[0].y,m_color[0].z,m_color[0].w,	m_spriteShadingType),
+											SpriteVertex(v[1].x,v[1].y,	oneU,zeroV,	m_color[1].x,m_color[1].y,m_color[1].z,m_color[1].w,	m_spriteShadingType),
+											SpriteVertex(v[2].x,v[2].y,	oneU,oneV,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),
+											SpriteVertex(v[3].x,v[3].y,	zeroU,oneV,	m_color[3].x,m_color[3].y,m_color[3].z,m_color[3].w,	m_spriteShadingType) };
+
+				Batcher::SendSpriteVertexQuad(vertexData,4,m_texture->GetAtlas(),IndexData::TRIANGLES,m_layer);
+			}
+			else
+			{
+				SpriteVertex vertexData[]={	SpriteVertex(v[0].x,v[0].y,	zeroU,zeroV,	m_color[0].x,m_color[0].y,m_color[0].z,m_color[0].w,	m_spriteShadingType),
+											SpriteVertex(v[1].x,v[1].y,	oneU,zeroV,	m_color[1].x,m_color[1].y,m_color[1].z,m_color[1].w,	m_spriteShadingType),
+											SpriteVertex(v[2].x,v[2].y,	oneU,oneV,	m_color[2].x,m_color[2].y,m_color[2].z,m_color[2].w,	m_spriteShadingType),
+											SpriteVertex(v[3].x,v[3].y,	zeroU,oneV,	m_color[3].x,m_color[3].y,m_color[3].z,m_color[3].w,	m_spriteShadingType) };
+
+				Batcher::SendSpriteVertexQuad(vertexData,4,m_texture,IndexData::TRIANGLES,m_layer);
+			}
 		}
 
 		void Sprite::SetSize(const GLfloat &width, const GLfloat &height)
