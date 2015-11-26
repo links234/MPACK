@@ -15,7 +15,7 @@ namespace MPACK
 	{
 		TextureMappedFont::TextureMappedFont()
 			: m_layer(1000.0f), m_fontSize(40.0f),
-			  m_charSpacing(0.6f), m_charPadding(0.05f),
+			  m_charSpacing(0.2f), m_charPadding(0.05f),
 			  m_monospaced(false), m_caseType(NONE),
 			  m_formatType(RGB_MAGNITUDE)
 		{
@@ -38,16 +38,16 @@ namespace MPACK
 				break;
 			}
 
-			if(alignType==ALIGN_CENTER)
+			if (alignType==ALIGN_CENTER)
 			{
 				GLfloat width=GetTextWidth(str);
 				GLfloat height=m_fontSize;
-
 				x-=width*0.5;
 				y-=height*0.5;
 			}
 
 			GLfloat spacing(m_fontSize*m_charSpacing);
+			GLfloat padding(m_fontSize*m_charPadding);
 
 			vector<SpriteVertex> quadData;
 			SpriteVertex vertex;
@@ -63,6 +63,12 @@ namespace MPACK
 			int ind=0;
 			for(string::size_type i = 0; i < str.size(); ++i)
 			{
+				if (str[i] == ' ')
+				{
+					x += spacing;
+					continue;
+				}
+
 				const GLfloat oneOverSixteen = 1.0f / 16.0f;
 
 				GLuint ch = GLuint(str[i]);
@@ -71,12 +77,11 @@ namespace MPACK
 				GLfloat xPos = GLfloat(ch % 16) * oneOverSixteen;
 				GLfloat yPos = GLfloat(ch / 16) * oneOverSixteen;
 
-				//LOGD("%c is at %d %d", str[i], chX, chY);
-
 				if(!m_monospaced)
 				{
-					x-=m_fontSize*m_cellSpacing[chX][chY].left;
+					xPos+=m_cellSpacing[chX][chY].left*oneOverSixteen;
 				}
+
 
 				////////////////////////////////////
 				vertex.x=x;
@@ -101,9 +106,15 @@ namespace MPACK
 				}
 				quadData.push_back(vertex);
 
-				vertex.x=x+m_fontSize;
+				if (!m_monospaced)
+					vertex.x=x+m_fontSize*(1 - m_cellSpacing[chX][chY].left - m_cellSpacing[chX][chY].right);
+				else
+					vertex.x=x+m_fontSize;
 				vertex.y=y+m_fontSize;
-				vertex.s=xPos+oneOverSixteen;
+				if (!m_monospaced)
+					vertex.s=xPos+oneOverSixteen *(1 - m_cellSpacing[chX][chY].left - m_cellSpacing[chX][chY].right);
+				else
+					vertex.s=xPos+oneOverSixteen;
 				vertex.t=1.0f-yPos-oneOverSixteen;
 				if(!colorPattern)
 				{
@@ -123,9 +134,15 @@ namespace MPACK
 				}
 				quadData.push_back(vertex);
 
-				vertex.x=x+m_fontSize;
+				if (!m_monospaced)
+					vertex.x=x+m_fontSize*(1 - m_cellSpacing[chX][chY].left - m_cellSpacing[chX][chY].right);
+				else
+					vertex.x=x+m_fontSize;
 				vertex.y=y;
-				vertex.s=xPos+oneOverSixteen;
+				if (!m_monospaced)
+					vertex.s=xPos+oneOverSixteen *(1 - m_cellSpacing[chX][chY].left - m_cellSpacing[chX][chY].right);
+				else
+					vertex.s=xPos+oneOverSixteen;
 				vertex.t=1.0f-yPos;
 				if(!colorPattern)
 				{
@@ -167,15 +184,15 @@ namespace MPACK
 				}
 				quadData.push_back(vertex);
 
-				//LOGD("(1-m_cellSpacing[chX][chY].right) = %lf",(1-m_cellSpacing[chX][chY].right));
-
-				if(m_monospaced)
+				if(!m_monospaced)
 				{
-					x+=m_fontSize*(1-m_cellSpacing[chX][chY].right)+m_charPadding*m_fontSize;
+					x+= m_fontSize*(1-m_cellSpacing[chX][chY].right-m_cellSpacing[chX][chY].left);
+					if (i < str.size() - 1 && str[i] != ' ' && str[i+1] != ' ')
+						x+=padding;
 				}
 				else
 				{
-					x+=spacing;
+					x+= m_fontSize + padding;
 				}
 			}
 
@@ -266,7 +283,7 @@ namespace MPACK
 			}
 			delete pFontImage;
 
-			AutoCalibrate();
+			//AutoCalibrate();
 			return true;
 		}
 
@@ -301,20 +318,28 @@ namespace MPACK
 			else
 			{
 				GLfloat x=0.0f;
+				int count_padding = 0;
 				for(string::size_type i = 0; i < str.size(); ++i)
 				{
+					if (str[i] == ' ')
+					{
+						width+=m_fontSize*m_charSpacing;
+						continue;
+					}
 					const GLfloat oneOverSixteen = 1.0f / 16.0f;
 
 					GLuint ch = GLuint(str[i]);
 					GLuint chX = ch / 16;
 					GLuint chY = ch % 16;
-					GLfloat xPos = GLfloat(ch % 16) * oneOverSixteen;
-					GLfloat yPos = GLfloat(ch / 16) * oneOverSixteen;
 
-					width-=m_fontSize*m_cellSpacing[chX][chY].left;
-					width+=m_fontSize*(1-m_cellSpacing[chX][chY].right);
+					width+=m_fontSize*(1 - m_cellSpacing[chX][chY].left - m_cellSpacing[chX][chY].right);
+					
+					if (i < str.size()-1 && str[i+1] != ' ')
+						count_padding++;
 				}
-				width+=m_fontSize*m_charPadding*(str.size()-1);
+
+
+				width+=m_fontSize*m_charPadding*count_padding;
 			}
 			return width;
 		}
@@ -329,6 +354,7 @@ namespace MPACK
 			float OneOverCellWidth=1.0f/(GLfloat)(cellWidth);
 			float OneOverCellHeight=1.0f/(GLfloat)(cellHeight);
 			AABB2Df cell;
+			
 			for(register GLuint i=0;i<16;++i)
 			{
 				for(register GLuint j=0;j<16;++j)
@@ -338,8 +364,8 @@ namespace MPACK
 					{
 						for(register GLuint cj=0;cj<cellHeight;++cj)
 						{
-							GLuint ri=i*cellWidth+ci;
-							GLuint rj=j*cellHeight+cj;
+							GLuint ri=j * cellWidth + ci;
+							GLuint rj=(15-i) * cellHeight + (cellHeight - 1 - cj);
 							Color c=pFontImage->GetPixel(ri,rj);
 							BYTE b=c.b;
 							BYTE g=c.g;
@@ -357,8 +383,8 @@ namespace MPACK
 					{
 						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
 						m_cellSpacing[i][j].right=OneOverCellWidth*(cellWidth>>1);
-						m_cellSpacing[i][j].top=OneOverCellWidth*(cellHeight>>1);
-						m_cellSpacing[i][j].bottom=OneOverCellWidth*(cellHeight>>1);
+						m_cellSpacing[i][j].top=OneOverCellHeight*(cellHeight>>1);
+						m_cellSpacing[i][j].bottom=OneOverCellHeight*(cellHeight>>1);
 					}
 					else
 					{
@@ -398,8 +424,8 @@ namespace MPACK
 					{
 						for(register GLuint cj=0;cj<cellHeight;++cj)
 						{
-							GLuint ri=i*cellWidth+ci;
-							GLuint rj=j*cellHeight+cj;
+							GLuint ri=j * cellWidth + ci;
+							GLuint rj=(15-i) * cellHeight + (cellHeight - 1 - cj);
 							Color c=pFontImage->GetPixel(ri,rj);
 							BYTE alpha=c.a;
 
@@ -410,19 +436,20 @@ namespace MPACK
 						}
 					}
 
+
 					if(cell.m_xmin>cellWidth)
 					{
 						m_cellSpacing[i][j].left=OneOverCellWidth*(cellWidth>>1);
 						m_cellSpacing[i][j].right=OneOverCellWidth*(cellWidth>>1);
-						m_cellSpacing[i][j].top=OneOverCellWidth*(cellHeight>>1);
-						m_cellSpacing[i][j].bottom=OneOverCellWidth*(cellHeight>>1);
+						m_cellSpacing[i][j].top=OneOverCellHeight*(cellHeight>>1);
+						m_cellSpacing[i][j].bottom=OneOverCellHeight*(cellHeight>>1);
 					}
 					else
 					{
-						m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellHeight;
-						m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellHeight;
-						m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellWidth;
-						m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellWidth;
+						m_cellSpacing[i][j].left=(GLfloat)(cell.m_xmin)*OneOverCellWidth;
+						m_cellSpacing[i][j].right=(GLfloat)(cellWidth-cell.m_xmax)*OneOverCellWidth;
+						m_cellSpacing[i][j].top=(GLfloat)(cell.m_ymin)*OneOverCellHeight;
+						m_cellSpacing[i][j].bottom=(GLfloat)(cellHeight-cell.m_ymax)*OneOverCellHeight;
 					}
 				}
 			}
