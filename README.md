@@ -42,3 +42,6 @@ make -f "jni/Linux.mk"
 [gitter-link]: https://gitter.im/links234/MSuite?utm_source=share-link&utm_medium=link&utm_campaign=share-link
 [gitter-logo]: https://img.shields.io/badge/GITTER-join%20chat-green.svg "Gitter Chat"
 
+
+
+[![Join the chat at https://gitter.im/links234/MPACK](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/links234/MPACK?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
