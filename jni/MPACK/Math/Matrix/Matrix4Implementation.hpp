@@ -6,12 +6,12 @@ namespace MPACK
 	template<class T> inline Math::Matrix4<T> Math::Matrix4<T>::operator* (const Math::Matrix4<T> &matrix) const
 	{
 		Math::Matrix4<T> rmatrix;
-		for(register int i=0;i<4;++i)
+		for(int i=0;i<4;++i)
 		{
-			for(register int j=0;j<4;++j)
+			for(int j=0;j<4;++j)
 			{
 				rmatrix.m_matrix[i][j]=0;
-				for(register int k=0;k<4;++k)
+				for(int k=0;k<4;++k)
 				{
 					rmatrix.m_matrix[i][j]+=this->m_matrix[i][k]*matrix.m_matrix[k][j];
 				}

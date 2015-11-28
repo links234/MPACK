@@ -123,7 +123,7 @@ namespace MPACK
 		Vector2<T> C(static_cast<T>(0.5),static_cast<T>(0.5));
 		Vector2<T> V(*this-C);
 		const static Vector2<T> P[]={Vector2<T>(static_cast<T>(0),static_cast<T>(0)),Vector2<T>(static_cast<T>(0),static_cast<T>(1)),Vector2<T>(static_cast<T>(1),static_cast<T>(1)),Vector2<T>(static_cast<T>(1),static_cast<T>(0))};
-		for(register int i=0;i<3;++i)
+		for(int i=0;i<3;++i)
 		{
 			if(Geom<T>::LineIntersect(C,V,P[i],P[i+1],I))
 			{
@@ -150,7 +150,7 @@ namespace MPACK
 		Vector2<T> C(static_cast<T>(0.5),static_cast<T>(0.5));
 		Vector2<T> V(*this-C);
 		const static Vector2<T> P[]={Vector2<T>(static_cast<T>(0),static_cast<T>(0)),Vector2<T>(static_cast<T>(0),static_cast<T>(1)),Vector2<T>(static_cast<T>(1),static_cast<T>(1)),Vector2<T>(static_cast<T>(1),static_cast<T>(0))};
-		for(register int i=0;i<3;++i)
+		for(int i=0;i<3;++i)
 		{
 			if(LineIntersect(C,V,P[i],P[i+1],I))
 			{
