@@ -17,7 +17,6 @@ namespace Demo
 
 	NetworkServer::~NetworkServer()
 	{
-		delete m_sock;
 	}
 
 	int NetworkServer::Run()
