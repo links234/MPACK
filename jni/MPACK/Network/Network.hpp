@@ -1,5 +1,5 @@
-#ifndef NETWORK_HPP
-#define NETWORK_HPP
+#ifndef MPACK_NETWORK_HPP
+#define MPACK_NETWORK_HPP
 
 #include "SocketWrapper.hpp"
 #include "SocketAddress.hpp"

@@ -1,5 +1,5 @@
-#ifndef TCPSOCKETPASSIVE_HPP
-#define TCPSOCKETPASSIVE_HPP
+#ifndef MPACK_TCPSOCKETPASSIVE_HPP
+#define MPACK_TCPSOCKETPASSIVE_HPP
 
 #include "TCPSocket.hpp"
 #include "TCPSocketActive.hpp"

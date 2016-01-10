@@ -1,5 +1,5 @@
-#ifndef TCPSOCKETACTIVE_HPP
-#define TCPSOCKETACTIVE_HPP
+#ifndef MPACK_TCPSOCKETACTIVE_HPP
+#define MPACK_TCPSOCKETACTIVE_HPP
 
 #include "TCPSocket.hpp"
 #include "UDPMessage.hpp"

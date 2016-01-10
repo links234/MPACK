@@ -1,5 +1,5 @@
-#ifndef SOCKETWRAPPER_HPP
-#define SOCKETWRAPPER_HPP
+#ifndef MPACK_SOCKETWRAPPER_HPP
+#define MPACK_SOCKETWRAPPER_HPP
 
 #ifdef WINDOWS_PLATFORM
 	#pragma comment(lib,"Ws2_32.lib")

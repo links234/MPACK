@@ -1,5 +1,5 @@
-#ifndef TCPSOCKET_HPP
-#define TCPSOCKET_HPP
+#ifndef MPACK_TCPSOCKET_HPP
+#define MPACK_TCPSOCKET_HPP
 
 #include "SocketWrapper.hpp"
 #include "SocketAddress.hpp"

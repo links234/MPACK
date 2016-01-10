@@ -1,5 +1,5 @@
-#ifndef UDPSOCKET_HPP
-#define UDPSOCKET_HPP
+#ifndef MPACK_UDPSOCKET_HPP
+#define MPACK_UDPSOCKET_HPP
 
 #include "SocketWrapper.hpp"
 #include "SocketAddress.hpp"

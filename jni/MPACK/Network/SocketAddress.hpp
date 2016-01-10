@@ -1,5 +1,5 @@
-#ifndef SOCKETADDRESS_HPP
-#define SOCKETADDRESS_HPP
+#ifndef MPACK_SOCKETADDRESS_HPP
+#define MPACK_SOCKETADDRESS_HPP
 
 #include "SocketWrapper.hpp"
 
