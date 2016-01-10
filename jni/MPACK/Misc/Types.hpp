@@ -84,6 +84,13 @@ typedef double				GLclampd;
 typedef void				GLvoid;
 typedef unsigned char		BYTE;
 
+typedef unsigned int		uint32;
+typedef int					int32;
+typedef unsigned short int	uint16;
+typedef short int			int16;
+typedef unsigned char		uint8;
+typedef char				int8;
+
 namespace MPACK
 {
 	namespace Core
