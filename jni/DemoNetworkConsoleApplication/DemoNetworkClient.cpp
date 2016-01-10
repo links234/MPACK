@@ -23,24 +23,36 @@ namespace Demo
 		Network::UDPMessage	msg;
 
 		char buffer[BUFFER_SIZE];
-
-		while(1)
+		pthread_t stdinThread;
+		int rc = pthread_create(&stdinThread, NULL, NetworkClient::STDINThread, (void*)(this));
+		if (rc)
 		{
-			std::cin.getline(buffer,BUFFER_SIZE);
-			msg.Clear();
-			msg.Write(buffer,strlen(buffer)+1);
+			LOGE("NetworkClient::Run() stdin pthread_create failed!");
+			return 1;
+		}
 
-			if(strcmp(buffer,"-quit_both")==0)
+		while (true)
+		{
+			std::string cmd;
+			if (MessageQueuePop(cmd))
 			{
+				if(cmd == "-quit_both")
+				{
+					msg.Clear();
+					msg.Write(cmd.c_str(),cmd.size());
+					m_sock->SendTo(msg,m_serverAddress);
+					break;
+				}
+				else if(cmd == "-quit")
+				{
+					break;
+				}
+
+				msg.Clear();
+				msg.Write(cmd.c_str(),cmd.size());
+
 				m_sock->SendTo(msg,m_serverAddress);
-				break;
 			}
-			if(strcmp(buffer,"-quit")==0)
-			{
-				break;
-			}
-
-			m_sock->SendTo(msg,m_serverAddress);
 
 			while(m_sock->Poll(msg))
 			{
@@ -53,5 +65,37 @@ namespace Demo
 		LOGI("Client shutdown!");
 
 		return 0;
+	}
+
+	void *NetworkClient::STDINThread(void *param)
+	{
+		NetworkClient *client = (NetworkClient*)(param);
+
+		char buffer[BUFFER_SIZE];
+
+		while (true)
+		{
+			std::cin.getline(buffer,BUFFER_SIZE);
+
+			client->MessageQueuePush(std::string(buffer));
+		}
+
+		return NULL;
+	}
+
+	void NetworkClient::MessageQueuePush(const std::string &message)
+	{
+		m_messageQueue.push(message);
+	}
+
+	bool NetworkClient::MessageQueuePop(std::string &message)
+	{
+		if (!m_messageQueue.empty())
+		{
+			message = m_messageQueue.front();
+			m_messageQueue.pop();
+			return true;
+		}
+		return false;
 	}
 }

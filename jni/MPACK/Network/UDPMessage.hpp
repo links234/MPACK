@@ -21,7 +21,7 @@ namespace MPACK
 			void Clear();
 			void Seek(int count);
 
-			bool Write(char *src, int count);
+			bool Write(const char *src, int count);
 			bool Read(char *dest, int count);
 
 			int Length() const;

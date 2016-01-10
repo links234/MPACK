@@ -24,7 +24,7 @@ namespace MPACK
 			pointer=0;
 		}
 
-		bool UDPMessage::Write(char *src, int count)
+		bool UDPMessage::Write(const char *src, int count)
 		{
 			if(count+length>UDPMSG_MAXBUFFERSIZE)
 			{

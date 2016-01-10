@@ -24,6 +24,7 @@
 	#include <cstdarg>
 	#include <cstdio>
 	#include <time.h>
+	#include <pthread.h>
 #endif
 
 #ifdef LINUX_PLATFORM

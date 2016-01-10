@@ -19,7 +19,7 @@ LOCAL_C_INCLUDES = $(patsubst %, -I%, $(shell /usr/bin/find $(SRC_DIR) -type d))
 INC =  $(LOCAL_C_INCLUDES) 
 
 #Begin each directory location with -L and each flag with -l
-LIBS = -lpng -lm -lXxf86vm -lX11 -lXau -lXdmcp -lXext -lGL -lz 
+LIBS = -lpng -lm -lXxf86vm -lX11 -lXau -lXdmcp -lXext -lGL -lz -lpthread
 
 CC_SRC = $(shell find $(SRC_DIR) -name '*.c')
 CXX_SRC = $(shell find $(SRC_DIR) -name '*.cpp')
