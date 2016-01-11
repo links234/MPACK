@@ -1,5 +1,10 @@
 #include "UDPSocket.hpp"
 
+#include "Types.hpp"
+
+#include "Experimental.hpp"
+#include "CRC32.hpp"
+
 #include "Debug.hpp"
 #include "Log.hpp"
 
@@ -8,7 +13,7 @@ namespace MPACK
 	namespace Network
 	{
 		UDPSocket::UDPSocket()
-			: isNonBlocking(false), isBroadcasting(false)
+			: isNonBlocking(false), isBroadcasting(false), isCRC32Enabled(false)
 		{
 			socket=Wrapper::Socket(Protocol::UDP);
 		}
@@ -83,6 +88,21 @@ namespace MPACK
 			return isBroadcasting;
 		}
 
+		void UDPSocket::EnableCRC32()
+		{
+			isCRC32Enabled = true;
+		}
+
+		void UDPSocket::DisableCRC32()
+		{
+			isCRC32Enabled = false;
+		}
+
+		bool UDPSocket::IsCRC32Enabled() const
+		{
+			return isCRC32Enabled;
+		}
+
 		bool UDPSocket::Poll(UDPMessage &message)
 		{
 			int flag=0;
@@ -96,17 +116,58 @@ namespace MPACK
 			if(ret>0)
 			{
 				message.length=ret;
+
+				if(isCRC32Enabled)
+				{
+					if(message.length <= sizeof(uint32))
+					{
+						return false;
+					}
+
+					uint32 crcValue = 0;
+					memcpy(&crcValue, message.data+message.length-sizeof(uint32), sizeof(uint32));
+
+					CRC32 crc;
+					crc.Reset();
+					crc.AddData(message.data, message.length - sizeof(uint32));
+					if(crcValue != crc.Get())
+					{
+						message.Clear();
+						return false;
+					}
+					else
+					{
+						message.length=ret - sizeof(uint32);
+					}
+				}
+
 				return true;
 			}
 			return false;
 		}
 
-		int UDPSocket::SendTo(const UDPMessage &message, const SocketAddress &address)
+		int UDPSocket::SendTo(UDPMessage &message, const SocketAddress &address)
 		{
 			int flag=0;
+
+			if(message.length == 0)
+			{
+				return 0;
+			}
+
 			if(isNonBlocking)
 			{
 				flag=MSG_DONTWAIT;
+			}
+
+			if(isCRC32Enabled)
+			{
+				message.data[message.length] = 0;
+				CRC32 crc;
+				crc.Reset();
+				crc.AddData(message.data, message.length);
+				uint32 crcValue = crc.Get();
+				message.Write((char*)&crcValue, (int)sizeof(crcValue));
 			}
 
 			return Wrapper::SendPacket(socket, message.data, message.length, flag, (const sockaddr*)address.GetAddrPointer());

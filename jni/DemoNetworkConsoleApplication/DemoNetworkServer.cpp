@@ -13,6 +13,7 @@ namespace Demo
 	NetworkServer::NetworkServer(MPACK::Network::UDPSocket *sock, int searchPort)
 		: m_sock(sock), m_searchPort(searchPort)
 	{
+		m_sock->EnableCRC32();
 	}
 
 	NetworkServer::~NetworkServer()

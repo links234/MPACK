@@ -24,8 +24,12 @@ namespace MPACK
 			bool IsNonBlocking() const;
 			bool IsBroadcasting() const;
 
+			void EnableCRC32();
+			void DisableCRC32();
+			bool IsCRC32Enabled() const;
+
 			bool Poll(UDPMessage &message);
-			int SendTo(const UDPMessage &message, const SocketAddress &address);
+			int SendTo(UDPMessage &message, const SocketAddress &address);
 
 			SocketAddress inAddress, lastContact;
 
@@ -33,6 +37,7 @@ namespace MPACK
 			SOCKET socket;
 			bool isNonBlocking;
 			bool isBroadcasting;
+			bool isCRC32Enabled;
 		};
 	}
 }

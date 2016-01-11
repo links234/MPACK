@@ -12,6 +12,7 @@ namespace Demo
 	NetworkClient::NetworkClient(Network::UDPSocket *sock, Network::SocketAddress serverAddr)
 		: m_sock(sock), m_serverAddress(serverAddr)
 	{
+		m_sock->EnableCRC32();
 	}
 
 	NetworkClient::~NetworkClient()

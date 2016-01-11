@@ -12,8 +12,6 @@ namespace MPACK
 
 		class UDPMessage
 		{
-		friend class UDPSocket;
-		friend class TCPSocketActive;
 		public:
 			UDPMessage();
 			~UDPMessage();
@@ -30,6 +28,9 @@ namespace MPACK
 			char data[UDPMSG_MAXBUFFERSIZE];
 			int length;
 			int pointer;
+
+			friend class UDPSocket;
+			friend class TCPSocketActive;
 		};
 	}
 }
