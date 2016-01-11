@@ -164,7 +164,6 @@ namespace MPACK
 			{
 				message.data[message.length] = 0;
 				CRC32 crc;
-				crc.Reset();
 				crc.AddData(message.data, message.length);
 				uint32 crcValue = crc.Get();
 				message.Write((char*)&crcValue, (int)sizeof(crcValue));
