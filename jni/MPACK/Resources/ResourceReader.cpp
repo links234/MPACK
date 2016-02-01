@@ -28,8 +28,15 @@ namespace MPACK
 			{
 				NextChunk();
 			}
-			--m_bytesLeftInBuffer;
-			return m_buffer[m_bufferIndex++];
+			if(m_bytesLeftInBuffer)
+			{
+				--m_bytesLeftInBuffer;
+				return m_buffer[m_bufferIndex++];
+			}
+			else
+			{
+				return m_buffer[m_bufferIndex];
+			}
 		}
 
 		char ResourceReader::Char()
