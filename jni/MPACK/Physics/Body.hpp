@@ -58,7 +58,16 @@ namespace MPACK
 
 			void *userData;
 
+			bool keepTrajectory;
+			bool ghost;
+			bool forceCollision;
+
 		private:
+			void SaveState();
+			void ReloadState();
+
+			bool KeepState(Body *body);
+
 			void IntegrateForces(float delta);
 			void IntegrateVelocity(float delta);
 
@@ -82,6 +91,18 @@ namespace MPACK
 			float m_tempInverseMomentOfInertia;
 			float m_tempMass;
 			float m_tempInverseMass;
+
+
+
+			MPACK::Math::Vector2f m_position_save;
+			MPACK::Math::Vector2f m_velocity_save;
+
+			float m_angularVelocity_save;
+			float m_torque_save;
+			float m_orientation_save;
+
+			MPACK::Math::Vector2f m_force_save;
+
 
 			Material m_material;
 

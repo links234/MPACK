@@ -97,11 +97,35 @@ namespace MPACK
 				m_contacts[i].Initialize();
 			}
 
+			for(int i=0;i<m_contacts.size();++i)
+			{
+				if(m_contacts[i].m_A->KeepState(m_contacts[i].m_B))
+				{
+					m_contacts[i].m_A->SaveState();
+				}
+				if(m_contacts[i].m_B->KeepState(m_contacts[i].m_A))
+				{
+					m_contacts[i].m_B->SaveState();
+				}
+			}
+
 			for(int j=0;j<m_iterations;++j)
 			{
 				for(int i=0;i<m_contacts.size();++i)
 				{
 					m_contacts[i].ApplyImpulse();
+				}
+			}
+
+			for(int i=0;i<m_contacts.size();++i)
+			{
+				if(m_contacts[i].m_A->KeepState(m_contacts[i].m_B))
+				{
+					m_contacts[i].m_A->ReloadState();
+				}
+				if(m_contacts[i].m_B->KeepState(m_contacts[i].m_A))
+				{
+					m_contacts[i].m_B->ReloadState();
 				}
 			}
 
@@ -112,7 +136,23 @@ namespace MPACK
 
 			for(int i=0;i<m_contacts.size();++i)
 			{
+				if(m_contacts[i].m_A->KeepState(m_contacts[i].m_B))
+				{
+					m_contacts[i].m_A->SaveState();
+				}
+				if(m_contacts[i].m_B->KeepState(m_contacts[i].m_A))
+				{
+					m_contacts[i].m_B->SaveState();
+				}
 				m_contacts[i].PositionalCorrection();
+				if(m_contacts[i].m_A->KeepState(m_contacts[i].m_B))
+				{
+					m_contacts[i].m_A->ReloadState();
+				}
+				if(m_contacts[i].m_B->KeepState(m_contacts[i].m_A))
+				{
+					m_contacts[i].m_B->ReloadState();
+				}
 			}
 
 			for(unordered_set<Body*>::iterator it=m_bodies.begin();it!=m_bodies.end();++it)
