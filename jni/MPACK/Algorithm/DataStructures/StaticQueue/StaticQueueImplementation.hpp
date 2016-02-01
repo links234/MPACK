@@ -60,6 +60,16 @@ namespace MPACK
 			return m_data[m_begin];
 		}
 
+		template<class T, unsigned int QueueSize> T StaticQueue<T,QueueSize>::Back() const
+		{
+			int index = m_end;
+			if(m_state==e_empty)
+			{
+				return m_data[0];
+			}
+			return m_data[m_end];
+		}
+
 		template<class T, unsigned int QueueSize> void StaticQueue<T,QueueSize>::Clear()
 		{
 			m_begin=0;

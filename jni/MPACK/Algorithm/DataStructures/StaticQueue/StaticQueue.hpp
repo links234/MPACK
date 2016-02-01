@@ -15,6 +15,7 @@ namespace MPACK
 			void Push(const T &value);
 			void Pop();
 			T Front() const;
+			T Back() const;
 
 			void Clear();
 
