@@ -5,6 +5,7 @@
 #include "AndroidConsole.hpp"
 #include "LinuxConsole.hpp"
 #include "WindowsConsole.hpp"
+#include "StubConsole.hpp"
 
 using namespace std;
 
