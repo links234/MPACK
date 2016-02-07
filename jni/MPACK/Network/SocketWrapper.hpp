@@ -9,7 +9,7 @@
 	#endif
 	#include <windows.h>
 	#include <winsock2.h>
-#elif defined(LINUX_PLATFORM)
+#elif defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 	#include <memory.h>
 	#include <errno.h>
 	#include <unistd.h>
@@ -76,7 +76,7 @@ namespace MPACK
 
 			int Receive(SOCKET sock, char *data, int size, int flag);
 			int Send(SOCKET sock, const char *data, int size, int flag);
-	
+
 			void LogLastError(const char *message);
 			int LogLastError_EWOULDBLOCK(const char *message);
 		}
@@ -85,4 +85,3 @@ namespace MPACK
 
 
 #endif
-
