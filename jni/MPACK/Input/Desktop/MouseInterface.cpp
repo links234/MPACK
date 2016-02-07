@@ -1,4 +1,4 @@
-#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 
 #include "MouseInterface.hpp"
 
@@ -78,4 +78,3 @@ namespace MPACK
 }
 
 #endif
-

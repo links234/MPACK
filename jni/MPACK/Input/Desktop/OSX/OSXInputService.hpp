@@ -1,7 +1,7 @@
-#ifdef WINDOWS_PLATFORM
+#ifdef OSX_PLATFORM
 
-#ifndef MPACK_WINDOWSINPUTSERVICE_HPP
-#define MPACK_WINDOWSINPUTSERVICE_HPP
+#ifndef MPACK_OSXINPUTSERVICE_HPP
+#define MPACK_OSXINPUTSERVICE_HPP
 
 #include "Types.hpp"
 #include "MouseInterface.hpp"
@@ -19,11 +19,11 @@ namespace MPACK
 {
 	namespace Input
 	{
-		class WindowsInputService
+		class OSXInputService
 		{
 		public:
-			WindowsInputService();
-			~WindowsInputService();
+			OSXInputService();
+			~OSXInputService();
 
 			void Update();
 			void Reset();
