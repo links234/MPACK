@@ -67,7 +67,7 @@ namespace MPACK
 			{
 				return (InputResource*)(new FileInputResource(pPath+1));
 			}
-	#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 			char pathBuffer[PATH_BUFFER_SIZE];
 			if(pPath[0]=='@')
 			{
@@ -95,7 +95,7 @@ namespace MPACK
 			{
 				return StringEx::Substring(path,1);
 			}
-	#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	#elif	defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 			if(path[0]=='@')
 			{
 				return string("assets/")+StringEx::Substring(path,1);
