@@ -188,7 +188,7 @@ namespace MPACK
 
 		void Batcher::SendSpriteVertexQuad(SpriteVertex *vertexPointer,GLuint vertexCount, Texture2D *texture, IndexData::Type type)
 		{
-			if(vertexCount&3!=0)
+			if((vertexCount&3)!=0)
 			{
 				LOGE("SpriteBatcher::Send quad data is corrupted");
 				return;
