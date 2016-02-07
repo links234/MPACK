@@ -4,6 +4,7 @@
 #include "TimeService.hpp"
 #include "Render.hpp"
 #include "Texture2D.hpp"
+#include "TextureAtlasDataBase.hpp"
 #include "TextureMappedFont.hpp"
 #include "Log.hpp"
 #include "Particles.hpp"
@@ -40,6 +41,8 @@ namespace MPACK
 			Render::EnableOrthoMode();
 			Render::EnableAlphaBlend();
 
+			TextureAtlasDataBase::Init();
+
 			LoadResources();
 
 			PostEffect::Init(Render::GetScreenWidth(),Render::GetScreenHeight());
@@ -54,6 +57,8 @@ namespace MPACK
 			PostEffect::Shutdown();
 
 			UnloadResources();
+
+			TextureAtlasDataBase::Cleanup();
 
 			Render::DisableAlphaBlend();
 			Render::DisableOrthoMode();

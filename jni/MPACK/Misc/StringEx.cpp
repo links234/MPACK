@@ -192,6 +192,24 @@ namespace MPACK
 				return !IsAlphaNumeric(ch) && IsVisible(ch);
 			}
 
+
+			bool ToInt(const string &str, int &number)
+			{	
+				if (str.size() == 0) return false;
+				int i = 0;
+				if (str[i] == '-' || str[i] == '+') 
+				{
+					if (str.size() == 1) return false;
+					i++;
+				}
+				for (i = 0; i < str.size(); i++)
+					if (!IsDigit(str[i]))
+						return false;
+
+				number = ToInt(str);
+				return true;
+			}
+
 			int ToInt(const string &str)
 			{
 				int ans=0;

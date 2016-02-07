@@ -1,5 +1,7 @@
 #include "DemoConsoleApplication.hpp"
 
+using namespace MPACK::Graphics;
+
 namespace Demo
 {
 	ConsoleApplication::ConsoleApplication()
@@ -54,6 +56,17 @@ namespace Demo
 		jsonParser.Save("assets/local/save_pretty.json", dom, JSONParser::STYLE_PRETTY);
 		jsonParser.Save("assets/local/save_minify.json", dom, JSONParser::STYLE_MINIFIY);
 
+		Image *img = new Image;
+		img->InitColor(5000,5000,Color(255,255,255,0));
+		Image *imgArrow = new Image;
+		imgArrow->Load("@Sprites/Cursor.png", false);
+		img->Blit(imgArrow, 100, 100);
+
+		imgArrow->Save("assets/local/test2.png");
+		delete imgArrow;
+
+		img->Save("assets/local/test.png");
+		delete img;
 		return 0;
 	}
 }

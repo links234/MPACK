@@ -68,7 +68,7 @@ namespace MPACK
 					header.imageTypeCode == TFT_GRAYSCALE);
 		}
 
-		Core::ReturnValue LoadTGA(Image *image, const string& path)
+		Core::ReturnValue LoadTGA(Image *image, const string& path, bool flipForOpenGL)
 		{
 			image->Unload();
 
@@ -82,6 +82,7 @@ namespace MPACK
 			}
 
 			unsigned char* pointer = (unsigned char*)pInputResource->Bufferize();
+
 
 			TargaHeader header = *((TargaHeader*)(pointer));
 			pointer += sizeof(TargaHeader);
@@ -120,7 +121,6 @@ namespace MPACK
 			unsigned int imageSize = image->m_width * image->m_height * image->m_bytesPerPixel;
 
 			image->m_imageBuffer = new BYTE[imageSize];
-
 			if (header.idLength > 0)
 			{
 				pointer += header.idLength;
@@ -214,12 +214,20 @@ namespace MPACK
 					}
 				} while(currentpixel < pixelcount);
 			}
-
 			if ((header.imageDesc & TOP_LEFT) == TOP_LEFT)
 			{
-				image->FlipVertical();
+				if (flipForOpenGL)
+				{
+					image->FlipVertical();
+				}
 			}
-
+			else
+			{
+				if(!flipForOpenGL)
+				{
+					image->FlipVertical();
+				}
+			}
 		LOADTGA_ERROR:
 			delete pInputResource;
 			if (!result)

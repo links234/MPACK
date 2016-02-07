@@ -15,7 +15,7 @@ namespace MPACK
 {
 	namespace Graphics
 	{
-		Core::ReturnValue LoadPNG(Image *image, const std::string &path);
+		Core::ReturnValue LoadPNG(Image *image, const std::string &path, bool flipForOpenGL = true);
 		Core::ReturnValue SavePNG(Image *image, const std::string &path);
 	}
 }

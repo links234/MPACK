@@ -5,6 +5,7 @@
 
 #include "Algorithm.hpp"
 #include "Core.hpp"
+#include "Network.hpp"
 #include "Debug.hpp"
 #include "Graphics.hpp"
 #include "Input.hpp"
@@ -14,6 +15,8 @@
 #include "Sound.hpp"
 #include "Time.hpp"
 #include "Misc.hpp"
+
+#include "Experimental.hpp"
 
 #include "GoogleAds.hpp"
 

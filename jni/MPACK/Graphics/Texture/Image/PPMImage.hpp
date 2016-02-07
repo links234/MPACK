@@ -15,7 +15,7 @@ namespace MPACK
 {
 	namespace Graphics
 	{
-		Core::ReturnValue LoadPPM(Image *image, const std::string &path);
+		Core::ReturnValue LoadPPM(Image *image, const std::string &path, bool flipForOpenGL = true);
 		Core::ReturnValue SavePPM(Image *image, const std::string &path);
 	}
 }

@@ -52,7 +52,7 @@ namespace MPACK
 			m_imageBuffer = new BYTE[m_width * m_height * m_bytesPerPixel];
 		}
 
-		ReturnValue Image::Load(const std::string& path, FileFormatType fileFormatType)
+		ReturnValue Image::Load(const std::string& path, bool flipForOpenGL, FileFormatType fileFormatType)
 		{
 			Unload();
 
@@ -83,21 +83,21 @@ namespace MPACK
 			switch(fileFormatType)
 			{
 				case FileFormatType::TGA:
-					if (LoadTGA(this, path) == RETURN_VALUE_KO)
+					if (LoadTGA(this, path, flipForOpenGL) == RETURN_VALUE_KO)
 					{
 						LOGE("Image::Load() fail to load TGA image: %s", path.c_str());
 						return RETURN_VALUE_KO;
 					}
 				break;
 				case FileFormatType::PNG:
-					if (LoadPNG(this, path) == RETURN_VALUE_KO)
+					if (LoadPNG(this, path, flipForOpenGL) == RETURN_VALUE_KO)
 					{
 						LOGE("Image::Load() fail to load PNG image: %s", path.c_str());
 						return RETURN_VALUE_KO;
 					}
 				break;
 				case FileFormatType::PPM:
-					if (LoadPPM(this, path) == RETURN_VALUE_KO)
+					if (LoadPPM(this, path, flipForOpenGL) == RETURN_VALUE_KO)
 					{
 						LOGE("Image::Load() fail to load PPM image: %s", path.c_str());
 						return RETURN_VALUE_KO;
@@ -164,9 +164,9 @@ namespace MPACK
 
 		void Image::FillColor(const Rect &rect, const Color &c)
 		{
-			for(int i = 0; i < m_height; ++i)
+			for(int i = 0; i < m_width; ++i)
 			{
-				for(int j = 0; j < m_width; ++j)
+				for(int j = 0; j < m_height; ++j)
 				{
 					SetPixel(rect.x + i, rect.y + j, c);
 				}
@@ -190,17 +190,17 @@ namespace MPACK
 
 		void Image::FlipVertical()
 		{
-			for(int i = 0; i < (m_width >> 1); ++i)
+			for(int i = 0; i < m_width; ++i)
 			{
-				for(int j = 0; j < m_height; ++j)
+				for(int j = 0; j < (m_height >> 1); ++j)
 				{
-					int offset1 = i * m_width + j;
+					int offset1 = j * m_width + i;
 					offset1 *= m_bytesPerPixel;
 
-					int vi = m_width - i - 1;
-					int vj = j;
+					int vi = i;
+					int vj = m_height - j - 1;
 
-					int offset2 = vi * m_width + vj;
+					int offset2 = vj * m_width + vi;
 					offset2 *= m_bytesPerPixel;
 
 					StringEx::MemSwap((char*)(m_imageBuffer + offset1),(char*)(m_imageBuffer + offset2),m_bytesPerPixel);
@@ -210,17 +210,17 @@ namespace MPACK
 
 		void Image::FlipHorizontal()
 		{
-			for(int i = 0; i < m_width; ++i)
+			for(int i = 0; i < (m_width >> 1); ++i)
 			{
-				for(int j = 0; j < (m_height >> 1); ++j)
+				for(int j = 0; j < m_height; ++j)
 				{
-					int offset1 = i * m_width + j;
+					int offset1 = j * m_width + i;
 					offset1 *= m_bytesPerPixel;
 
-					int vi = i;
-					int vj = m_height - j + 1;
+					int vi = m_width - i - 1;
+					int vj = j;
 
-					int offset2 = vi * m_width + vj;
+					int offset2 = vj * m_width + vi;
 					offset2 *= m_bytesPerPixel;
 
 					StringEx::MemSwap((char*)(m_imageBuffer + offset1),(char*)(m_imageBuffer + offset2),m_bytesPerPixel);
@@ -266,14 +266,14 @@ namespace MPACK
 
 		const BYTE* Image::GetPixelPointer(const GLushort &x, const GLushort &y) const
 		{
-			int index=x * m_width + y;
+			int index = y * m_width + x;
 			index *= m_bytesPerPixel;
 			return m_imageBuffer + index;
 		}
 
 		Color Image::GetPixel(const GLushort &x, const GLushort &y) const
 		{
-			int index=x * m_width + y;
+			int index =  y * m_width + x;
 			index *= m_bytesPerPixel;
 			if (m_bytesPerPixel == 4)
 			{
@@ -299,7 +299,7 @@ namespace MPACK
 
 		void Image::SetPixel(const GLushort &x, const GLushort &y, const Color &c)
 		{
-			int index=x * m_width + y;
+			int index = y * m_width + x;
 			index *= m_bytesPerPixel;
 			if (m_bytesPerPixel == 4)
 			{
@@ -369,11 +369,11 @@ namespace MPACK
 				rect.height = maxHeight - point.y;
 			}
 
-			for (int i = 0; i < rect.height; ++i)
+			for (int i = 0; i < rect.width; ++i)
 			{
-				for (int j = 0; j < rect.width; ++j)
+				for (int j = 0; j < rect.height; ++j)
 				{
-					SetPixel(point.y + i,point.x + j, image->GetPixel(i + rect.y, j + rect.x));
+					SetPixel(point.x + i,point.y + j, image->GetPixel(rect.x + i, rect.y + j));
 				}
 			}
 		}

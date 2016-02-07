@@ -34,6 +34,11 @@ namespace MPACK
 			void SetFilteringType(FilteringType filtering);
 			void SetWrapMode(GLenum s_mode,GLenum t_mode);
 
+			void MapUVForAtlas(double &u, double &v);
+
+			bool IsOnAtlas() const;
+			Texture2D *GetAtlas() const;
+
 			GLuint GetWidth() const;
 			GLuint GetHeight() const;
 			std::string GetPath() const;
@@ -50,6 +55,13 @@ namespace MPACK
 			FilteringType	m_filteringType;
 
 			std::string		m_path;
+
+
+			Texture2D *m_pAtlasTex;
+			double m_atlasLeft;
+			double m_atlasRight;
+			double m_atlasTop;
+			double m_atlasBottom;
 		};
 	
 		void InitTextureSlots();
