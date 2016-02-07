@@ -6,6 +6,7 @@
 #include "Context.hpp"
 #include <cassert>
 
+using namespace std;
 using namespace MPACK;
 using namespace MPACK::Math;
 using namespace MPACK::Graphics;
@@ -103,11 +104,14 @@ void WaterObject::Update(float dtime)
 		m_springs[i].Update(dtime);
 	}
 
-	Vector2f leftDeltas[m_springs.size()];
-	Vector2f rightDeltas[m_springs.size()];
+	vector<Vector2f> leftDeltas;
+	vector<Vector2f> rightDeltas;
 
 	for (int i = 0; i < m_springs.size(); ++ i)
-		leftDeltas[i] = rightDeltas[i] = Vector2f(0.f, 0.f);
+	{
+		leftDeltas.push_back(Vector2f(0.f, 0.f));
+		rightDeltas.push_back(Vector2f(0.f, 0.f));
+	}
 
 	for (int j = 0; j < 8; j++)
 	{
@@ -140,7 +144,7 @@ void WaterObject::Render()
 	CreateWavesVertices();
 }
 
- int WaterObject::GetSpringsCount()
+int WaterObject::GetSpringsCount()
 {
 	return m_springsCount;
 }
