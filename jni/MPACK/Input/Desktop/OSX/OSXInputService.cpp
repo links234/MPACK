@@ -6,6 +6,10 @@
 #include "OSXMouseInterface.hpp"
 #include "OSXKeyboardInterface.hpp"
 
+using namespace std;
+using namespace MPACK;
+using namespace MPACK::Core;
+
 namespace MPACK
 {
 	namespace Input
