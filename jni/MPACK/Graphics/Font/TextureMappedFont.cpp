@@ -36,6 +36,8 @@ namespace MPACK
 				case UPPERCASE:
 					str=StringEx::ToUpper(str);
 				break;
+				default:
+				break;
 			}
 
 			if (alignType==ALIGN_CENTER)
@@ -303,7 +305,7 @@ namespace MPACK
 			if(m_monospaced)
 			{
 				GLfloat spacing(m_fontSize*m_charSpacing);
-				for(register int i=0;i<str.size();++i)
+				for(int i=0;i<str.size();++i)
 				{
 					if(str[i]==' ')
 					{
@@ -333,7 +335,7 @@ namespace MPACK
 					GLuint chY = ch % 16;
 
 					width+=m_fontSize*(1 - m_cellSpacing[chX][chY].left - m_cellSpacing[chX][chY].right);
-					
+
 					if (i < str.size()-1 && str[i+1] != ' ')
 						count_padding++;
 				}
@@ -354,15 +356,15 @@ namespace MPACK
 			float OneOverCellWidth=1.0f/(GLfloat)(cellWidth);
 			float OneOverCellHeight=1.0f/(GLfloat)(cellHeight);
 			AABB2Df cell;
-			
-			for(register GLuint i=0;i<16;++i)
+
+			for(GLuint i=0;i<16;++i)
 			{
-				for(register GLuint j=0;j<16;++j)
+				for(GLuint j=0;j<16;++j)
 				{
 					cell.Clear();
-					for(register GLuint ci=0;ci<cellWidth;++ci)
+					for(GLuint ci=0;ci<cellWidth;++ci)
 					{
-						for(register GLuint cj=0;cj<cellHeight;++cj)
+						for(GLuint cj=0;cj<cellHeight;++cj)
 						{
 							GLuint ri=j * cellWidth + ci;
 							GLuint rj=(15-i) * cellHeight + (cellHeight - 1 - cj);
@@ -415,14 +417,14 @@ namespace MPACK
 			float OneOverCellWidth=1.0f/(GLfloat)(cellWidth);
 			float OneOverCellHeight=1.0f/(GLfloat)(cellHeight);
 			AABB2Df cell;
-			for(register GLuint i=0;i<16;++i)
+			for(GLuint i=0;i<16;++i)
 			{
-				for(register GLuint j=0;j<16;++j)
+				for(GLuint j=0;j<16;++j)
 				{
 					cell.Clear();
-					for(register GLuint ci=0;ci<cellWidth;++ci)
+					for(GLuint ci=0;ci<cellWidth;++ci)
 					{
-						for(register GLuint cj=0;cj<cellHeight;++cj)
+						for(GLuint cj=0;cj<cellHeight;++cj)
 						{
 							GLuint ri=j * cellWidth + ci;
 							GLuint rj=(15-i) * cellHeight + (cellHeight - 1 - cj);
