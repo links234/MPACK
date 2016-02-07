@@ -19,21 +19,21 @@ namespace MPACK
 {
 	namespace Core
 	{
-		#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+		#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 		FileLogger *pFileLogger;
 		#endif
 
 
 		void Log::Initialize()
 		{
-	#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 			pFileLogger=new FileLogger("log.html");
 	#endif
 		}
 
 		void Log::Destroy()
 		{
-	#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	#if defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 			delete pFileLogger;
 	#endif
 		}
@@ -49,7 +49,7 @@ namespace MPACK
 	#ifdef ANDROID_PLATFORM
 			__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_INFO, LOG_TAG, "\n");
-	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 			Console::SetFGColor(Console::FG_WHITE);
 			printf("[  INFO ]   %s\n", buffer);
 			Console::Reset();
@@ -68,7 +68,7 @@ namespace MPACK
 	#ifdef ANDROID_PLATFORM
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_ERROR, LOG_TAG, "\n");
-	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 			Console::SetFGColor(Console::FG_RED);
 			printf("[ ERROR ]   %s\n", buffer);
 			Console::Reset();
@@ -87,7 +87,7 @@ namespace MPACK
 	#ifdef ANDROID_PLATFORM
 			__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_WARN, LOG_TAG, "\n");
-	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 			Console::SetFGColor(Console::FG_YELLOW);
 			printf("[WARNING]   %s\n", buffer);
 			Console::Reset();
@@ -106,7 +106,7 @@ namespace MPACK
 	#ifdef ANDROID_PLATFORM
 			__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "%s", buffer);
 			__android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, "\n");
-	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM)
+	#elif defined(WINDOWS_PLATFORM) || defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 			Console::SetFGColor(Console::FG_MAGENTA);
 			printf("[ DEBUG ]   %s\n", buffer);
 			Console::Reset();
