@@ -16,10 +16,10 @@ SRC_DIR = jni
 
 #Path to includes (begin each entry with -I)
 LOCAL_C_INCLUDES = $(patsubst %, -I%, $(shell /usr/bin/find $(SRC_DIR) -type d))
-INC =  $(LOCAL_C_INCLUDES)
+INC =  $(LOCAL_C_INCLUDES) -I/usr/local/include
 
 #Begin each directory location with -L and each flag with -l
-LIBS = -lpng -lm -lXxf86vm -lX11 -lXau -lXdmcp -lXext -lGL -lz
+LIBS = -L/usr/local/lib -lpng -lm -lz
 
 CC_SRC = $(shell find $(SRC_DIR) -name '*.c')
 CXX_SRC = $(shell find $(SRC_DIR) -name '*.cpp')
@@ -34,8 +34,8 @@ OBJ_FOLDERS = $(patsubst $(SRC_DIR)%, $(OBJ_DIR)%, $(shell /usr/bin/find $(SRC_D
 OBJS = $(patsubst %,$(OBJ_DIR)%,$(CC_OBJS))
 OBJS += $(patsubst %,$(OBJ_DIR)%,$(CXX_OBJS))
 
-CFLAGS := -O2 -g -DOSX_PLATFORM
-CXXFLAGS := -O2 -g -std=c++11 -stdlib=libc++ -DOSX_PLATFORM
+CFLAGS := -O2 -g -framework OpenGL -DOSX_PLATFORM
+CXXFLAGS := -O2 -g -framework OpenGL -std=c++11 -stdlib=libc++ -DOSX_PLATFORM
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	mkdir -p $(OBJ_FOLDERS)
