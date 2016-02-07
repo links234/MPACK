@@ -9,7 +9,7 @@ MPACK_MAIN
 {
 	MPACK_INITIALIZE;
 
-	MPACK_RUN(Demo::NetworkConsoleApplication, result);
+	MPACK_RUN(Demo::ConsoleApplication, result);
 
     MPACK_SHUTDOWN;
 
