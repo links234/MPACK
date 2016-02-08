@@ -9,7 +9,7 @@ CC  = clang++
 IDIR = jni
 
 #Directory where the .o files will be placed
-OBJ_DIR = obj_linux
+OBJ_DIR = obj_osx
 
 #Directory where the source files are located
 SRC_DIR = jni
