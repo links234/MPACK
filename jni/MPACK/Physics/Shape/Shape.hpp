@@ -27,6 +27,8 @@ namespace MPACK
 			};
 
 			Shape();
+			virtual ~Shape();
+
 			virtual Shape *Clone() const = 0;
 			virtual void Initialize() = 0;
 			virtual void ComputeMass(float density) = 0;
