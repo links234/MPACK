@@ -3,8 +3,9 @@
 #include <iostream>
 
 #include "AndroidConsole.hpp"
-#include "LinuxConsole.hpp"
 #include "WindowsConsole.hpp"
+#include "LinuxConsole.hpp"
+#include "OSXConsole.hpp"
 #include "StubConsole.hpp"
 
 using namespace std;
@@ -147,10 +148,12 @@ namespace MPACK
                         {
 #if defined(ANDROID_PLATFORM)
                                 s_pConsole = new AndroidConsole();
-#elif defined(LINUX_PLATFORM)
-                                s_pConsole = new LinuxConsole();
 #elif defined(WINDOWS_PLATFORM)
                                 s_pConsole = new WindowsConsole();
+#elif defined(LINUX_PLATFORM)
+                                s_pConsole = new LinuxConsole();
+#elif defined(OSX_PLATFORM)
+                                s_pConsole = new OSXConsole();
 #else
                                 s_pConsole = new StubConsole();
 #endif
