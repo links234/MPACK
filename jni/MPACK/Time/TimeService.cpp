@@ -4,6 +4,7 @@
 #include "AndroidTimeService.hpp"
 #include "WindowsTimeService.hpp"
 #include "LinuxTimeService.hpp"
+#include "OSXTimeService.hpp"
 
 namespace MPACK
 {
@@ -22,12 +23,14 @@ namespace MPACK
 		TimeService* TimeService::Initialize()
 		{
 			TimeService *pTimeService = NULL;
-#ifdef ANDROID_PLATFORM
+#if defined(ANDROID_PLATFORM)
 			pTimeService = (TimeService*) new AndroidTimeService();
 #elif	defined(WINDOWS_PLATFORM)
 			pTimeService = (TimeService*) new WindowsTimeService();
 #elif	defined(LINUX_PLATFORM)
 			pTimeService = (TimeService*) new LinuxTimeService();
+#elif defined(OSX_PLATFORM)
+			pTimeService = (TimeService*) new OSXTimeService();
 #endif
 			return pTimeService;
 		}
