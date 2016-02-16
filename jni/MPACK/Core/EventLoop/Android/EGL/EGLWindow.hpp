@@ -20,41 +20,64 @@ namespace MPACK
 		class EGLWindow
 		{
 		public:
+			enum
+			{
+				EGL_UNINITIALIZED = 0,
+				EGL_INITIALIZED = 1,
+				EGL_HAS_SURFACE = 2,
+				EGL_IS_BOUND = 3
+			};
+
 			EGLWindow();
 			~EGLWindow();
 
 			ReturnValue Init();
 			ReturnValue ChooseConfig(EGLint redSize=8, EGLint greenSize=8, EGLint blueSize=8, EGLint depthSize=24);
-			ReturnValue GetFormat(EGLint &format) const;
-			ReturnValue CreateSurface(NativeWindowType &window);
-			ReturnValue CreateContext();
-			ReturnValue Bind(EGLint &width, EGLint &height);
+
+			bool Bind();
+			bool Unbind();
+
 			void Destroy();
 
-			bool IsContextBound();
-			bool IsSurfaceCreated();
-			bool IsContextCreated();
-
-			void InvalidateSurface();
-			void InvalidateContext();
+			bool SetWindow(ANativeWindow* window);
 
 			ReturnValue SwapBuffers();
 
 			EGLint GetMajorVersion() const;
 			EGLint GetMinorVersion() const;
 
-		private:
-			EGLDisplay 	m_display;
-			EGLSurface	m_surface;
-			EGLContext 	m_context;
+			int32_t GetSurfaceWidth();
+			int32_t GetSurfaceHeight();
 
-			EGLConfig 	m_config;
+			bool CreateContext();
+
+			bool CreateSurface();
+			bool DestroySurface();
+
+			bool IsReadyToRender(bool allocateIfNeeded);
+
+			bool IsBound();
+			bool HasSurface();
+			bool HasContext();
+
+			EGLDisplay GetDisplay();
+			EGLConfig GetConfig();
+			EGLContext GetContext();
+			EGLSurface GetSurface();
+			ANativeWindow* GetWindow();
+
+		private:
+			EGLDisplay 		m_display;
+			EGLSurface		m_surface;
+			EGLContext 		m_context;
+			ANativeWindow* 	m_window;
+			int 			m_status;
+			int 			m_width;
+			int				m_height;
+
+			EGLConfig 		m_config;
 
 			EGLint 		m_majorVersion, m_minorVersion;
-
-			bool 		m_isContextBound;
-			bool		m_haveSurface;
-			bool		m_haveContext;
 
 			friend class EGLBufferConfigManager;
 		};

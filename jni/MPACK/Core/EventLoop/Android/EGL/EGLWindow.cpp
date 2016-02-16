@@ -8,8 +8,9 @@ namespace MPACK
 	{
 		EGLWindow::EGLWindow()
 			: m_display(EGL_NO_DISPLAY), m_surface(EGL_NO_CONTEXT), m_context(EGL_NO_SURFACE),
+			  m_window(NULL), m_status(EGL_UNINITIALIZED),
 			  m_config(0), m_majorVersion(0), m_minorVersion(0),
-			  m_isContextBound(false), m_haveSurface(false), m_haveContext(false)
+			  m_width(0), m_height(0)
 		{
 		}
 
@@ -58,34 +59,13 @@ namespace MPACK
 				LOGE("EGLDisplay::ChooseConfig() unable to select display configuration");
 				return RETURN_VALUE_KO;
 			}
+
+			m_status = EGL_INITIALIZED;
+
 			return RETURN_VALUE_OK;
 		}
 
-		ReturnValue EGLWindow::GetFormat(EGLint &format) const
-		{
-			EGLint result = 0;
-			EGL_CHECK( result = eglGetConfigAttrib(m_display, m_config, EGL_NATIVE_VISUAL_ID, &format) );
-			if (!result)
-			{
-				LOGE("EGLDisplay::GetFormat() unable to configure window format");
-				return RETURN_VALUE_KO;
-			}
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue EGLWindow::CreateSurface(NativeWindowType &window)
-		{
-			EGL_CHECK( m_surface = eglCreateWindowSurface(m_display, m_config, window, NULL) );
-			if (m_surface == EGL_NO_SURFACE)
-			{
-				LOGE("EGLDisplay::CreateSurface() failed to create surface");
-				return RETURN_VALUE_KO;
-			}
-			m_haveSurface = true;
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue EGLWindow::CreateContext()
+		bool EGLWindow::CreateContext()
 		{
 			const EGLint contextAttrib[] =
 			{
@@ -96,51 +76,14 @@ namespace MPACK
 			if (m_context == EGL_NO_CONTEXT)
 			{
 				LOGE("EGLDisplay::CreateContext() failed to create context");
-				return RETURN_VALUE_KO;
+				return false;
 			}
 
-			m_haveContext = true;
-			return RETURN_VALUE_OK;
-		}
-
-		ReturnValue EGLWindow::Bind(EGLint &width, EGLint &height)
-		{
-			EGLint result = 0;
-
-			width=0;
-			height=0;
-
-			EGL_CHECK( result = eglMakeCurrent(m_display, m_surface, m_surface, m_context) );
-			if(!result)
-			{
-				LOGE("EGLDisplay::Bind() failed to bind display");
-				return RETURN_VALUE_KO;
-			}
-
-			EGL_CHECK( result = eglQuerySurface(m_display, m_surface, EGL_WIDTH, &width) );
-			if(!result)
-			{
-				LOGE("EGLDisplay::Bind() failed to get display width");
-				return RETURN_VALUE_KO;
-			}
-
-			EGL_CHECK( result = eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &height) );
-			if(!result)
-			{
-				LOGE("EGLDisplay::Bind() failed to get display height");
-				return RETURN_VALUE_KO;
-			}
-
-			m_isContextBound = true;
-			return RETURN_VALUE_OK;
+			return true;
 		}
 
 		void EGLWindow::Destroy()
 		{
-			m_isContextBound = false;
-			m_haveSurface = false;
-			m_haveContext = false;
-
 			m_majorVersion = 0;
 			m_minorVersion = 0;
 			if (m_display != EGL_NO_DISPLAY)
@@ -159,33 +102,178 @@ namespace MPACK
 				EGL_CHECK( eglTerminate(m_display) );
 				m_display = EGL_NO_DISPLAY;
 			}
+			m_status = EGL_UNINITIALIZED;
 		}
 
-		bool EGLWindow::IsContextBound()
+		bool EGLWindow::SetWindow(ANativeWindow* window)
 		{
-			return m_isContextBound;
+		    if (window != m_window)
+		    {
+		        LOGI("EGLWindow::SetWindow() Window has changed!");
+		        DestroySurface();
+		    }
+
+		    m_window = window;
+
+		    m_width = m_window ? ANativeWindow_getWidth(m_window) : 0;
+		    m_height = m_window ? ANativeWindow_getHeight(m_window) : 0;
+
+		    return true;
 		}
 
-		bool EGLWindow::IsSurfaceCreated()
+		bool EGLWindow::CreateSurface()
 		{
-			return m_haveSurface;
+		    if (m_status >= EGL_HAS_SURFACE)
+		        return true;
+
+		    if (!m_window)
+		        return false;
+
+		    if (m_status < EGL_INITIALIZED)
+		        return false;
+
+		    EGLint m_format;
+		    EGLint result = 0;
+			EGL_CHECK( result = eglGetConfigAttrib(m_display, m_config, EGL_NATIVE_VISUAL_ID, &m_format) );
+			if (!result)
+			{
+				LOGE("EGLDisplay::CreateSurface() unable to configure window format");
+				return false;
+			}
+
+		    ANativeWindow_setBuffersGeometry(m_window, 0, 0, m_format);
+
+		    EGL_CHECK( m_surface = eglCreateWindowSurface(m_display, m_config, m_window, NULL) );
+		    if (m_surface != EGL_NO_SURFACE)
+		    {
+		        int32_t w = ANativeWindow_getWidth(m_window);
+		        int32_t h = ANativeWindow_getHeight(m_window);
+		        EGLint sw, sh;
+		        eglQuerySurface(m_display, m_surface, EGL_WIDTH, &sw);
+		        eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &sh);
+		        //mNewWindow = true;
+		    }
+		    else
+		    {
+		        return false;
+		    }
+
+		    m_status = EGL_HAS_SURFACE;
+
+		    return true;
 		}
 
-		bool EGLWindow::IsContextCreated()
+		bool EGLWindow::IsReadyToRender(bool allocateIfNeeded)
 		{
-			return m_haveContext;
+		    if (m_status >= EGL_IS_BOUND)
+		    {
+		        return true;
+		    }
+
+		    if (!allocateIfNeeded)
+		    {
+		        return false;
+		    }
+
+		    // If we have not bound the context and surface, do we even _have_ a surface?
+		    if (m_status < EGL_HAS_SURFACE)
+		    {
+		        if (m_status < EGL_INITIALIZED)
+		        {
+		            return false;
+		        }
+		        if (!CreateSurface())
+		        {
+		            return false;
+		        }
+		    }
+
+		    // We have a surface and (possibly) context, so bind them
+		    if (!Bind())
+		    {
+		        return false;
+		    }
+
+		    return true;
 		}
 
-		void EGLWindow::InvalidateSurface()
+		bool EGLWindow::Bind()
 		{
-			LOGD("SURFACE INVALIDATED");
-			m_isContextBound = false;
-			m_haveSurface = false;
+		    if (m_status >= EGL_IS_BOUND)
+		        return true;
+
+		    if (m_status < EGL_HAS_SURFACE)
+		        return false;
+
+		    if (m_context == EGL_NO_CONTEXT)
+		    {
+		        LOGI("EGLWindow::Bind() Creating context inside of bind()");
+		        if (!CreateContext())
+		            return false;
+		    }
+
+		    EGL_CHECK( eglMakeCurrent(m_display, m_surface, m_surface, m_context) );
+
+		    m_status = EGL_IS_BOUND;
+
+		    return true;
 		}
 
-		void EGLWindow::InvalidateContext()
+		bool EGLWindow::Unbind()
 		{
-			m_haveContext=false;
+		    if (m_status < EGL_IS_BOUND)
+		        return true;
+
+		    EGL_CHECK( eglMakeCurrent(m_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) );
+
+		    m_status = EGL_HAS_SURFACE;
+
+		    return true;
+		}
+
+		int32_t EGLWindow::GetSurfaceWidth()
+		{
+		    EGLint width;
+		    if ((m_status >= EGL_HAS_SURFACE) && eglQuerySurface(m_display, m_surface, EGL_WIDTH, &width))
+		    {
+		        return width;
+		    }
+		    else
+		    {
+		    	return m_width;
+		    }
+		}
+
+		int32_t EGLWindow::GetSurfaceHeight()
+		{
+		    EGLint height;
+		    if ((m_status >= EGL_HAS_SURFACE) && eglQuerySurface(m_display, m_surface, EGL_HEIGHT, &height))
+		    {
+		        return height;
+		    }
+		    else
+		    {
+		    	return m_height;
+		    }
+		}
+
+		bool EGLWindow::DestroySurface()
+		{
+		    if (m_status < EGL_HAS_SURFACE)
+		        return true;
+
+		    if (m_status >= EGL_IS_BOUND)
+		    {
+		        EGL_CHECK( eglMakeCurrent(m_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) );
+		    }
+
+		    EGL_CHECK( eglDestroySurface(m_display, m_surface) );
+
+		    m_surface = EGL_NO_SURFACE;
+
+		    m_status = EGL_INITIALIZED;
+
+		    return true;
 		}
 
 		ReturnValue EGLWindow::SwapBuffers()
@@ -208,6 +296,46 @@ namespace MPACK
 		EGLint EGLWindow::GetMinorVersion() const
 		{
 			return m_minorVersion;
+		}
+
+		bool EGLWindow::IsBound()
+		{
+			return m_status == EGL_IS_BOUND;
+		}
+
+		bool EGLWindow::HasSurface()
+		{
+			return m_status >= EGL_HAS_SURFACE;
+		}
+
+		bool EGLWindow::HasContext()
+		{
+			return m_context != EGL_NO_CONTEXT;
+		}
+
+		EGLDisplay EGLWindow::GetDisplay()
+		{
+			return m_display;
+		}
+
+		EGLConfig EGLWindow::GetConfig()
+		{
+			return m_config;
+		}
+
+		EGLContext EGLWindow::GetContext()
+		{
+			return m_context;
+		}
+
+		EGLSurface EGLWindow::GetSurface()
+		{
+			return m_surface;
+		}
+
+		ANativeWindow* EGLWindow::GetWindow()
+		{
+			return m_window;
 		}
 	}
 }
