@@ -18,10 +18,10 @@ namespace MPACK
 		void AnimatedSprite::Render()
 		{
 			const AABB2Df &frame=m_frames[m_currentFrame];
-			const GLfloat &Um=frame.m_xmin;
-			const GLfloat &UM=frame.m_xmax;
-			const GLfloat &Vm=frame.m_ymin;
-			const GLfloat &VM=frame.m_ymax;
+			double Um=frame.m_xmin;
+			double UM=frame.m_xmax;
+			double Vm=frame.m_ymin;
+			double VM=frame.m_ymax;
 
 			Math::Vector2f v[4];
 			v[0].x=-m_width;v[0].y=-m_height;
@@ -42,6 +42,9 @@ namespace MPACK
 
 			swap(v[0],v[3]);
 			swap(v[1],v[2]);
+
+			m_texture->MapUVForAtlas(Um,Vm);
+			m_texture->MapUVForAtlas(UM,VM);
 
 			SpriteVertex vertexData[]={	SpriteVertex(v[0].x,v[0].y,	Um,Vm,	m_color[0].x,m_color[0].y,m_color[0].z,m_color[0].w,	m_spriteShadingType),
 										SpriteVertex(v[1].x,v[1].y,	UM,Vm,	m_color[1].x,m_color[1].y,m_color[1].z,m_color[1].w,	m_spriteShadingType),
