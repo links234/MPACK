@@ -22,7 +22,6 @@ namespace MPACK
 
 		ParticleEmitterCircle::~ParticleEmitterCircle()
 		{
-
 		}
 
 		void ParticleEmitterCircle::Update(GLfloat delta)
