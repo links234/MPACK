@@ -14,6 +14,8 @@ namespace MPACK
 	namespace Graphics
 	{
 		unordered_map<string, TextureInTexture> TextureAtlasDataBase::s_pathToAtlasMap;
+		int TextureAtlasDataBase::s_loadingProcessState = 0;
+		vector<pair<string,string> > TextureAtlasDataBase::s_loadingProcessAtlases;
 
 		void TextureAtlasDataBase::Init()
 		{
@@ -33,6 +35,30 @@ namespace MPACK
 				delete *it;
 			}
 			textureToDelete.clear();
+		}
+
+		void TextureAtlasDataBase::StartLoadAtlasesProcess(std::string pathToJson)
+		{
+			JSONParser parser;
+			DOM *dom = parser.Load(pathToJson);
+			s_loadingProcessState = 0;
+			s_loadingProcessAtlases.clear();
+			for(SearchList<string,DOM*>::Iterator it=dom->Childs().Begin();it!=dom->Childs().End();++it)
+			{
+				s_loadingProcessAtlases.push_back(pair<string,string>(it->key, it->value->GetValue()));
+			}
+			delete dom;
+		}
+
+		bool TextureAtlasDataBase::ContinueLoadingProcess()
+		{
+			if(s_loadingProcessState == s_loadingProcessAtlases.size())
+			{
+				return false;
+			}
+			LoadAtlas(s_loadingProcessAtlases[s_loadingProcessState].first,s_loadingProcessAtlases[s_loadingProcessState].second);
+			++s_loadingProcessState;
+			return true;
 		}
 
 		void TextureAtlasDataBase::LoadAtlas(std::string pathToJSON, std::string pathToImage)
@@ -62,10 +88,16 @@ namespace MPACK
 				LOGD("width = %d",width);
 				LOGD("height = %d",height);
 */
-				texInTex.xMin = double(x) / double(atlasWidth - 1);
-				texInTex.xMax = double(x + width - 1) / double(atlasWidth - 1);
-				texInTex.yMin = 1.0 - double(y) / double(atlasHeight - 1);
-				texInTex.yMax = 1.0 - double(y + height - 1) / double(atlasHeight - 1);
+
+				//--y;
+
+
+				texInTex.xMin = double(x) / double(atlasWidth);
+				texInTex.xMax = double(x + width) / double(atlasWidth);
+				texInTex.yMin = 1.0 - double(y) / double(atlasHeight);
+				texInTex.yMax = 1.0 - double(y + height) / double(atlasHeight);
+				texInTex.width = width;
+				texInTex.height = height;
 
 				s_pathToAtlasMap[texPath] = texInTex;
 			}
@@ -84,7 +116,7 @@ namespace MPACK
 			delete dom;
 		}
 
-		bool TextureAtlasDataBase::GetTexture(std::string pathToTexture, Texture2D* &texture, double &xMin, double &yMin, double &xMax, double &yMax)
+		bool TextureAtlasDataBase::GetTexture(std::string pathToTexture, Texture2D* &texture, double &xMin, double &yMin, double &xMax, double &yMax, int &width, int &height)
 		{
 			unordered_map<string, TextureInTexture>::iterator it = s_pathToAtlasMap.find(pathToTexture);
 			if (it != s_pathToAtlasMap.end())
@@ -94,6 +126,8 @@ namespace MPACK
 				xMax = it->second.xMax;
 				yMin = it->second.yMin;
 				yMax = it->second.yMax;
+				width = it->second.width;
+				height = it->second.height;
 				return true;
 			}
 			return false;
