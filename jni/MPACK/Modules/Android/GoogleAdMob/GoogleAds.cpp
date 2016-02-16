@@ -10,15 +10,18 @@ namespace MPACK
 {
 	namespace ADS
 	{
-		GoogleAds::GoogleAds()
+		GoogleAds::GoogleAds(bool showAds)
 		{
 
 			mActivity = MPACK::Global::pAndroidApp->activity;
 			mJvm = MPACK::Global::pAndroidApp->activity->vm;
-			callMainActivityJavaFunction("sendGoogleAdsJavaVmToCpp");
-
+			callMainActivityJavaFunction("sendGoogleAdsJavaVmToCpp", showAds);
 		}
 
+		void GoogleAds::removeAllAds()
+		{
+			callGoogleAdsVoidJavaFunctionWithoutParams("removeAllAds");
+		}
 
 		void GoogleAds::showBanner(bool top)
 		{
@@ -71,7 +74,79 @@ namespace MPACK
 			callGoogleAdsVoidJavaFunctionWithoutParams("showVideoInterstitial");
 		}
 
-		void GoogleAds::callMainActivityJavaFunction(const char *name )
+		bool GoogleAds::isBannerShowed()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isBannerShowed");
+		}
+
+		bool GoogleAds::isLargeBannerShowed()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isLargeBannerShowed");
+		}
+
+		bool GoogleAds::isSmartBannerShowed()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isSmartBannerShowed");
+		}
+
+		int GoogleAds::getSmartBannerWidth()
+		{
+			return callGoogleAdsIntJavaFunctionWithoutParams("getSmartBannerWidth");
+		}
+
+		int GoogleAds::getSmartBannerHeight()
+		{
+			return callGoogleAdsIntJavaFunctionWithoutParams("getSmartBannerHeight");
+		}
+
+		int GoogleAds::getBannerWidth()
+		{
+			return callGoogleAdsIntJavaFunctionWithoutParams("getBannerWidth");
+		}
+
+		int GoogleAds::getBannerHeight()
+		{
+			return callGoogleAdsIntJavaFunctionWithoutParams("getBannerHeight");
+		}
+
+		int GoogleAds::getLargeBannerWidth()
+		{
+			return callGoogleAdsIntJavaFunctionWithoutParams("getLargeBannerWidth");
+		}
+
+		int GoogleAds::getLargeBannerHeight()
+		{
+			return callGoogleAdsIntJavaFunctionWithoutParams("getLargeBannerHeight");
+		}
+
+		bool GoogleAds::isTIVInterstitialShowed()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isTIVInterstitialShowed");
+		}
+		bool GoogleAds::isVInterstitialShowed()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isVInterstitialShowed");
+		}
+		bool GoogleAds::isTIInterstitialShowed()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isTIInterstitialShowed");
+		}
+
+		bool GoogleAds::isTIVInterstitialLoaded()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isTIVInterstitialLoaded");
+		}
+		bool GoogleAds::isVInterstitialLoaded()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isVInterstitialLoaded");
+		}
+		bool GoogleAds::isTIInterstitialLoaded()
+		{
+			return callGoogleAdsBoolJavaFunctionWithoutParams("isTIInterstitialLoaded");
+		}
+
+
+		void GoogleAds::callMainActivityJavaFunction(const char *name, bool p)
 		{
 			JNIEnv* env = NULL;
 
@@ -81,14 +156,44 @@ namespace MPACK
 
 			jclass clazz = env->GetObjectClass( mActivity->clazz);
 
-			jmethodID methodID = env->GetMethodID(clazz, name, "()V");
+			jboolean param = p;
+			jmethodID methodID = env->GetMethodID(clazz, name, "(Z)V");
 
-			env ->CallVoidMethod(mActivity->clazz, methodID);
+			env ->CallVoidMethod(mActivity->clazz, methodID, param);
 
 			mJvm->DetachCurrentThread();
 
 		}
 
+		bool GoogleAds::callGoogleAdsBoolJavaFunctionWithoutParams(const char * name)
+		{
+			JNIEnv* env = NULL;
+
+			GoogleAdsJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
+
+			int res = GoogleAdsJvm->AttachCurrentThread(&env, NULL);
+
+			jclass cls = env->GetObjectClass(GoogleAdsJobject);
+			jmethodID methodID =  env ->GetMethodID(cls, name , "()Z");
+			jboolean state = env ->CallIntMethod(GoogleAdsJobject, methodID);
+			GoogleAdsJvm->DetachCurrentThread();
+			return (bool)state;
+		}
+
+		int GoogleAds::callGoogleAdsIntJavaFunctionWithoutParams(const char * name)
+		{
+			JNIEnv* env = NULL;
+
+			GoogleAdsJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
+
+			int res = GoogleAdsJvm->AttachCurrentThread(&env, NULL);
+
+			jclass cls = env->GetObjectClass(GoogleAdsJobject);
+			jmethodID methodID =  env ->GetMethodID(cls, name , "()I");
+			jint state = env ->CallIntMethod(GoogleAdsJobject, methodID);
+			GoogleAdsJvm->DetachCurrentThread();
+			return (int)state;
+		}
 
 		void GoogleAds::callGoogleAdsVoidJavaFunctionWithoutParams(const char * name)
 		{
@@ -166,7 +271,7 @@ namespace MPACK
 
 extern "C"
 {
-	JNIEXPORT void JNICALL Java_com_PukApp_MPACK_GoogleAds_nativeGoogleAds(JNIEnv *env,jobject obj)
+	JNIEXPORT void JNICALL Java_com_PukApp_ElasticEscape_GoogleAds_nativeGoogleAds(JNIEnv *env,jobject obj)
 	{
 		 int status = env->GetJavaVM( &GoogleAdsJvm);
 

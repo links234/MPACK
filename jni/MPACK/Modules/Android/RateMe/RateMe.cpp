@@ -38,11 +38,6 @@ namespace MPACK
 				return callRateMeIntJavaFunctionWithoutParams("check");
 			}
 
-			void RateMe::update()
-			{
-				callRateMeVoidJavaFunctionWithoutParams("update");
-			}
-
 			void RateMe::reset()
 			{
 				callRateMeVoidJavaFunctionWithoutParams("reset");
@@ -108,7 +103,7 @@ namespace MPACK
 
 extern "C"
 {
-	JNIEXPORT void JNICALL Java_com_PukApp_MPACK_RateMe_nativeRateMe(JNIEnv *env,jobject obj)
+	JNIEXPORT void JNICALL Java_com_PukApp_ElasticEscape_RateMe_nativeRateMe(JNIEnv *env,jobject obj)
 	{
 		 int status = env->GetJavaVM( &RateMeJvm);
 

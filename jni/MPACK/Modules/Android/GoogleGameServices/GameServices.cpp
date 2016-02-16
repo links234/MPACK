@@ -2,19 +2,23 @@
 
 #include "GameServices.hpp"
 #include "Global.hpp"
-#include "AssetInputResource.hpp"
+#include "Resources.hpp"
 
 
 namespace MPACK
 {
 	namespace SERVICES
 	{
+		bool mCanceledGameServicesLoginProcess = false;
+
 		GameServices::GameServices()
 		{
 			mActivity = MPACK::Global::pAndroidApp->activity;
 			mClazz = MPACK::Global::pAndroidApp->activity->clazz;
+			mProcessing = 0;
 
 			//init
+			mSilentLogin = true;
 			mPlatformConfiguration.SetActivity(mClazz);
 			mGameServices = gpg::GameServices::Builder()
 			        .SetDefaultOnLog(gpg::LogLevel::VERBOSE)
@@ -28,10 +32,26 @@ namespace MPACK
 			        .Create(mPlatformConfiguration);
 		}
 
+		GameServices::~GameServices()
+		{
+			LOGI("DEACTIVTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			//mGameServices->FlushBlocking();
+			mGameServices.reset();
+			mGameServices = nullptr;
+		}
+
 		void GameServices::OnAuthActionStarted(gpg::AuthOperation op)
 		{
+			mProcessing++;
+			if (mConnectionState != DISCONNECTING)
+				mConnectionState = CONNECTING;
 			LOGI("OnAuthActionStarted %d", op);
-			mConnectionState = CONNECTING;
+			//mConnectionState = CONNECTING;
+		}
+
+		int GameServices::isProcessing()
+		{
+			return mProcessing;
 		}
 
 		void GameServices::OnAuthActionFinished(gpg::AuthOperation op, gpg::AuthStatus status)
@@ -42,43 +62,53 @@ namespace MPACK
 				LOGI("RIGHT HERE");
 				mConnectionState = OFFLINE;
 				LOGI("HEREEEEEE");
+				mSilentLogin = false;
+				mProcessing--;
 				return;
 			}
 			LOGI("OnAuthActionFinisged %d",status);
-			mConnectionState = gpg::IsSuccess(status) ? ONLINE : ERROR_CONNECTING;
 			if (gpg::IsSuccess(status))
 			{
-				mConnectionState = ONLINE;
-				gpg::PlayerManager::FetchSelfResponse response = mGameServices->Players().FetchSelfBlocking(std::chrono::milliseconds(1000));
-				if (gpg::IsSuccess(response.status))
+				if (mGameServices != nullptr)
 				{
-					mConnectedClientId = response.data.Id();
-					LOGI("%s",response.data.Id().c_str());
+					gpg::PlayerManager::FetchSelfResponse response = mGameServices->Players().FetchSelfBlocking(std::chrono::milliseconds(2000));
+					if (gpg::IsSuccess(response.status))
+					{
+						mConnectedClientId = response.data.Id();
+						LOGI("mConnectClientId = %s",response.data.Id().c_str());
+					}
+					else
+					{
+						LOGI("Error fetching reponse");
+						mConnectedClientId = "";
+					}
+					fetchSaves();
 				}
-				else
-				{
-					LOGI("Error fetching reponse");
-					mConnectedClientId = "";
-				}
-				fetchSaves();
+				mSilentLogin = false;
 			}
 			else
 			{
 				LOGI("STATUS = %d", status);
-				mConnectionState = ERROR_CONNECTING;
+				if (!mCanceledGameServicesLoginProcess && !mSilentLogin)
+					mConnectionState = ERROR_CONNECTING;
+				else
+					mConnectionState = OFFLINE;
+				mCanceledGameServicesLoginProcess = false;
+				mSilentLogin = false;
 			}
+			mProcessing--;
 			LOGI("Schimbare status onAuthActionFinished");
 		}
 
 		void GameServices::signOut()
 		{
 			LOGI("mConnectionState = %d", mConnectionState);
-			if (mConnectionState == ONLINE && mGameServices->IsAuthorized()
+			if (mGameServices != nullptr && mConnectionState == ONLINE && mGameServices->IsAuthorized()
 					&& (mSavedGameState != SAVING && mSavedGameState != LOADING))
 			{
 				LOGI("Signout process started");
 				mCurrentSnapshotData.clear();
-				mGameServices->SignOut();
+				if (mGameServices != nullptr) mGameServices->SignOut();
 				mConnectionState = DISCONNECTING;
 				mConnectedClientId = "";
 			}
@@ -86,12 +116,13 @@ namespace MPACK
 
 		void GameServices::signIn()
 		{
-			if (!mGameServices->IsAuthorized() && (mConnectionState == OFFLINE || mConnectionState == ERROR_CONNECTING) )
+
+			if (mGameServices != nullptr && !mGameServices->IsAuthorized() && (mConnectionState == OFFLINE || mConnectionState == ERROR_CONNECTING) )
 			{
 				LOGI("Signin process started");
 				mConnectedClientId = "";
 				mConnectionState = CONNECTING;
-				mGameServices->StartAuthorizationUI();
+				if (mGameServices != nullptr)  mGameServices->StartAuthorizationUI();
 			}
 		}
 
@@ -99,15 +130,24 @@ namespace MPACK
 		{
 			if (mConnectionState == ONLINE)
 			{
-				if (mConnectedClientId != "")
+				if (mConnectedClientId == "")
 				{
-					gpg::PlayerManager::FetchSelfResponse response = mGameServices->Players().FetchSelfBlocking(std::chrono::milliseconds(1000));
-					if (gpg::IsSuccess(response.status))
+					if (mGameServices != nullptr)
 					{
-						mConnectedClientId = response.data.Id();
-						LOGI("id == %s",response.data.Id().c_str());
+						gpg::PlayerManager::FetchSelfResponse response = mGameServices->Players().FetchSelfBlocking(std::chrono::milliseconds(2000));
+						if (gpg::IsSuccess(response.status))
+						{
+							mConnectedClientId = response.data.Id();
+							LOGI("id == %s",response.data.Id().c_str());
+						}
+						else
+						{
+							LOGI("Error fetching response for id!");
+							return mConnectedClientId;
+						}
 					}
-					return mConnectedClientId;
+					else
+						return "";
 				}
 				else
 				{
@@ -123,11 +163,11 @@ namespace MPACK
 			return mConnectionState;
 		}
 
-		void GameServices::destroy()
+		void GameServices::resetConnectionState()
 		{
-			mGameServices.reset();
+			if (mConnectionState == ERROR_CONNECTING)
+				mConnectionState = OFFLINE;
 		}
-
 
 		void GameServices::initSavedGames(const int max_snapshots,const bool allow_create, const bool allow_delete, const char* title)
 		{
@@ -179,13 +219,20 @@ namespace MPACK
 
 		void GameServices::save(const vector<unsigned char> new_data, const char* description, const char* png_path)
 		{
+			mProcessing++;
 			if (!ableToStartSavingProcess())
 			{
 				LOGI("Another process already! %d %d",mConnectionState, mSavedGameState);
+				mProcessing--;
 				return;
 			}
 			mSavedGameState = SAVING;
 			std::string fileName;
+			if (mCurrentSnapshot.Valid() == false)
+			{
+				fetchSnapshot();
+			}
+
 			if (mCurrentSnapshot.Valid() == false)
 			{
 				fileName = generateSaveFileName();
@@ -196,72 +243,81 @@ namespace MPACK
 				fileName = mCurrentSnapshot.FileName();
 			}
 
-			mGameServices->Snapshots().Open(fileName, gpg::SnapshotConflictPolicy::LONGEST_PLAYTIME, [this, png_path, description, new_data](gpg::SnapshotManager::OpenResponse const & response)
-			{
-				LOGI("Opened file");
-				if (IsSuccess(response.status))
+			if (mGameServices != nullptr)
+				mGameServices->Snapshots().Open(fileName, gpg::SnapshotConflictPolicy::LONGEST_PLAYTIME, [this, png_path, description, new_data](gpg::SnapshotManager::OpenResponse const & response)
 				{
-					gpg::SnapshotMetadata metadata = response.data;
-					if (response.conflict_id != "")
+					LOGI("Opened file");
+					if (IsSuccess(response.status))
 					{
-						//Conflict detected
-						LOGI("Snapshot conflict detected going to resolve that");
-						bool b = resolveConflicts(response, 0);
-						if (!b)
+						gpg::SnapshotMetadata metadata = response.data;
+						if (response.conflict_id != "")
 						{
-							LOGI("Failed resolving conflicts");
-							mSavedGameState = SAVING_ERROR;
-							return;
+							//Conflict detected
+							LOGI("Snapshot conflict detected going to resolve that");
+							bool b = resolveConflicts(response, 0);
+							if (!b)
+							{
+								LOGI("Failed resolving conflicts");
+								mSavedGameState = SAVING_ERROR;
+								mProcessing--;
+								return;
+							}
 						}
-					}
 
-					//Create image to represent the snapshot
-					//Reading png from asset for now
-					std::vector<unsigned char> pngData = getImageBytes(png_path);
+						//Create image to represent the snapshot
+						//Reading png from asset for now
+						std::vector<unsigned char> pngData = getImageBytes(png_path);
 
-					gpg::SnapshotMetadataChange::Builder builder;
-					gpg::SnapshotMetadataChange metadata_change =
-					builder.SetDescription(description)
-						.SetCoverImageFromPngData(pngData).Create();
+						gpg::SnapshotMetadataChange::Builder builder;
+						gpg::SnapshotMetadataChange metadata_change =
+						builder.SetDescription(description)
+							.SetCoverImageFromPngData(pngData).Create();
 
-					LOGI("Got here2");
-					// Save the snapshot.
-					gpg::SnapshotManager::CommitResponse commitResponse = mGameServices->Snapshots()
-						  .CommitBlocking(metadata, metadata_change, new_data);
+						// Save the snapshot.
+						gpg::SnapshotManager::CommitResponse commitResponse = mGameServices->Snapshots()
+							  .CommitBlocking(metadata, metadata_change, new_data);
 
-					LOGI("Got here3");
 
-					if (IsSuccess(commitResponse.status))
-					{
-						mSavedGameState = SAVING_OK;
-						LOGI("Saved game");
-						if (mCurrentSnapshot.Valid() == false)
-							fetchSaves();
-						else
+						if (IsSuccess(commitResponse.status))
+						{
+							mSavedGameState = SAVING_OK;
+							LOGI("Saved game");
+//							if (mCurrentSnapshot.Valid() == false)
+//								fetchSaves();
+//							else
 							mCurrentSnapshotData = new_data;
+						}
+						else
+						{
+							mSavedGameState = SAVING_ERROR;
+							LOGI("Saved game failed error: %d", commitResponse.status);
+						}
+						mProcessing--;
 					}
 					else
 					{
 						mSavedGameState = SAVING_ERROR;
-						LOGI("Saved game failed error: %d", commitResponse.status);
+						mProcessing--;
 					}
-				}
-				else
-				{
-					mSavedGameState = SAVING_ERROR;
-				}
-			});
+				});
 		}
 
 		void GameServices::save(const vector<unsigned char> new_data, const char* description)
 		{
+			mProcessing++;
 			if (!ableToStartSavingProcess())
 			{
 				LOGI("Another process already! %d %d",mConnectionState, mSavedGameState);
+				mProcessing--;
 				return;
 			}
 			mSavedGameState = SAVING;
 			std::string fileName;
+			if (mCurrentSnapshot.Valid() == false)
+			{
+				fetchSnapshot();
+			}
+
 			if (mCurrentSnapshot.Valid() == false)
 			{
 				fileName = generateSaveFileName();
@@ -272,71 +328,83 @@ namespace MPACK
 				fileName = mCurrentSnapshot.FileName();
 			}
 
-			mGameServices->Snapshots().Open(fileName, gpg::SnapshotConflictPolicy::LONGEST_PLAYTIME, [this,  description, new_data](gpg::SnapshotManager::OpenResponse const & response)
-			{
-				LOGI("Opened file");
-				if (IsSuccess(response.status))
+			if (mGameServices != nullptr)
+				mGameServices->Snapshots().Open(fileName, gpg::SnapshotConflictPolicy::LONGEST_PLAYTIME, [this,  description, new_data](gpg::SnapshotManager::OpenResponse const & response)
 				{
-					gpg::SnapshotMetadata metadata = response.data;
-					if (response.conflict_id != "")
+					LOGI("Opened file");
+					if (IsSuccess(response.status))
 					{
-						//Conflict detected
-						LOGI("Snapshot conflict detected going to resolve that");
-						bool b = resolveConflicts(response, 0);
-						if (!b)
+						gpg::SnapshotMetadata metadata = response.data;
+						if (response.conflict_id != "")
 						{
-							LOGI("Failed resolving conflicts");
-							mSavedGameState = SAVING_ERROR;
-							return;
+							//Conflict detected
+							LOGI("Snapshot conflict detected going to resolve that");
+							bool b = resolveConflicts(response, 0);
+							if (!b)
+							{
+								LOGI("Failed resolving conflicts");
+								mSavedGameState = SAVING_ERROR;
+								mProcessing--;
+								return;
+							}
 						}
-					}
 
-					//Create image to represent the snapshot
-					//Reading png from asset for now
+						//Create image to represent the snapshot
+						//Reading png from asset for now
 
-					gpg::SnapshotMetadataChange::Builder builder;
-					gpg::SnapshotMetadataChange metadata_change =
-					builder.SetDescription(description)
-						.Create();
+						gpg::SnapshotMetadataChange::Builder builder;
+						gpg::SnapshotMetadataChange metadata_change =
+						builder.SetDescription(description)
+							.Create();
 
-					LOGI("Got here2");
-					// Save the snapshot.
-					gpg::SnapshotManager::CommitResponse commitResponse = mGameServices->Snapshots()
-						  .CommitBlocking(metadata, metadata_change, new_data);
+						LOGI("Got here2");
+						// Save the snapshot.
+						gpg::SnapshotManager::CommitResponse commitResponse = mGameServices->Snapshots()
+							  .CommitBlocking(metadata, metadata_change, new_data);
 
-					LOGI("Got here3");
+						LOGI("Got here3");
 
-					if (IsSuccess(commitResponse.status))
-					{
-						mSavedGameState = SAVING_OK;
-						LOGI("Saved game");
-						if (mCurrentSnapshot.Valid() == false)
-							fetchSaves();
-						else
+						if (IsSuccess(commitResponse.status))
+						{
+							mSavedGameState = SAVING_OK;
+							LOGI("Saved game");
+//							if (mCurrentSnapshot.Valid() == false)
+//							{
+//								fetchSaves();
+//							}
 							mCurrentSnapshotData = new_data;
+						}
+						else
+						{
+							mSavedGameState = SAVING_ERROR;
+							LOGI("Saved game failed error: %d", commitResponse.status);
+						}
+						mProcessing--;
 					}
 					else
 					{
 						mSavedGameState = SAVING_ERROR;
-						LOGI("Saved game failed error: %d", commitResponse.status);
+						mProcessing--;
 					}
-				}
-				else
-				{
-					mSavedGameState = SAVING_ERROR;
-				}
-			});
+				});
 		}
 
 		void GameServices::save(const vector<unsigned char> new_data, const char* description, const vector<unsigned char> & png)
 		{
+			mProcessing++;
 			if (!ableToStartSavingProcess())
 			{
 				LOGI("Another process already! %d %d",mConnectionState, mSavedGameState);
+				mProcessing--;
 				return;
 			}
 			mSavedGameState = SAVING;
 			std::string fileName;
+			if (mCurrentSnapshot.Valid() == false)
+			{
+				fetchSnapshot();
+			}
+
 			if (mCurrentSnapshot.Valid() == false)
 			{
 				fileName = generateSaveFileName();
@@ -362,6 +430,7 @@ namespace MPACK
 						{
 							LOGI("Failed resolving conflicts");
 							mSavedGameState = SAVING_ERROR;
+							mProcessing--;
 							return;
 						}
 					}
@@ -385,134 +454,185 @@ namespace MPACK
 					{
 						mSavedGameState = SAVING_OK;
 						LOGI("Saved game");
-						if (mCurrentSnapshot.Valid() == false)
-							fetchSaves();
-						else
-							mCurrentSnapshotData = new_data;
+//						if (mCurrentSnapshot.Valid() == false)
+//							fetchSaves();
+//						else
+						mCurrentSnapshotData = new_data;
 					}
 					else
 					{
 						mSavedGameState = SAVING_ERROR;
 						LOGI("Saved game failed error: %d", commitResponse.status);
 					}
+					mProcessing--;
 				}
 				else
 				{
 					mSavedGameState = SAVING_ERROR;
+					mProcessing--;
 				}
 			});
 		}
 
+		void GameServices::fetchSnapshot()
+		{
+			gpg::SnapshotManager::FetchAllResponse response;
+			do
+			{
+				response = mGameServices->Snapshots().FetchAllBlocking(std::chrono::milliseconds(1000));
+			}
+			while (!IsSuccess(response.status));
+
+			if (response.data.size() > 0)
+			{
+				mCurrentSnapshot = response.data[0];
+			}
+		}
+
 		void GameServices::loadSnapShotUI()
 		{
+			mProcessing++;
 			if (!ableToStartLoadingProcess())
 			{
 				LOGI("Another process already! %d %d",mConnectionState, mSavedGameState);
+				mProcessing--;
 				return;
 			}
 			mSavedGameState = LOADING;
-			mGameServices->Snapshots().ShowSelectUIOperation(
-			      mAllowCreateSnapshotInUI,
-			      mAllowDeleteSnapshotInUI,
-			      mMaxSnapshots,
-			      mSnapshotUITitle,
-			      [this](gpg::SnapshotManager::SnapshotSelectUIResponse const & response)
-			      {
-						LOGI("Snapshot selected");
-						if (IsSuccess(response.status))
-						{
-							if (response.data.Valid())
+			if (mGameServices != nullptr)
+				mGameServices->Snapshots().ShowSelectUIOperation(
+					  mAllowCreateSnapshotInUI,
+					  mAllowDeleteSnapshotInUI,
+					  mMaxSnapshots,
+					  mSnapshotUITitle,
+					  [this](gpg::SnapshotManager::SnapshotSelectUIResponse const & response)
+					  {
+							LOGI("Snapshot selected");
+							if (IsSuccess(response.status))
 							{
-								LOGI("Description: %s", response.data.Description().c_str());
-								LOGI("FileName %s", response.data.FileName().c_str());
+								if (response.data.Valid())
+								{
+									LOGI("Description: %s", response.data.Description().c_str());
+									LOGI("FileName %s", response.data.FileName().c_str());
 
-								//Opening the snapshot data
-								mCurrentSnapshot = response.data;
-								loadFromSnapshot();
+									//Opening the snapshot data
+									mCurrentSnapshot = response.data;
+									loadFromSnapshot();
+								}
+								else
+								{
+									mSavedGameState = LOADING_ERROR;
+									LOGI("Creating new snapshot");
+									//saveSnapshot();
+								}
 							}
 							else
 							{
+								LOGI("ShowSelectUIOperation returns an error %d", response.status);
 								mSavedGameState = LOADING_ERROR;
-								LOGI("Creating new snapshot");
-								//saveSnapshot();
 							}
-						}
-						else
-						{
-							LOGI("ShowSelectUIOperation returns an error %d", response.status);
-							mSavedGameState = LOADING_ERROR;
-						}
-			      });
+							mProcessing--;
+					  });
 		}
 
 		void GameServices::fetchSaves()
 		{
+			mProcessing++;
+			mSavedGameState = LOADING;
 			LOGI("FetchSaves");
-			gpg::SnapshotManager::FetchAllResponse response = mGameServices->Snapshots().FetchAllBlocking(std::chrono::milliseconds(1000));
-			if (IsSuccess(response.status))
+			if (mGameServices != nullptr)
 			{
-				if (response.data.size() > 0)
-					mCurrentSnapshot = response.data[0];
+				gpg::SnapshotManager::FetchAllResponse response;
+				do
+				{
+					response = mGameServices->Snapshots().FetchAllBlocking(std::chrono::milliseconds(1000));
+				}
+				while (!IsSuccess(response.status));
+
+				if (IsSuccess(response.status))
+				{
+					LOGI("Success FetchingAllResponse");
+					if (response.data.size() > 0)
+					{
+						mCurrentSnapshot = response.data[0];
+					}
+				}
+				else
+					LOGI("FetchingAllResponse error!");
+				loadFromSnapshot();
 			}
-			loadFromSnapshot();
+			mProcessing--;
 		}
 
 		void GameServices::loadFromSnapshot()
 		{
+			mProcessing++;
 			if (!mCurrentSnapshot.Valid()) {
 			    LOGI("Snapshot is not valid!");
 			    mSavedGameState = LOADING_ERROR;
+			    mConnectionState = ONLINE;
+			    mProcessing--;
 			    return;
 			  }
 			LOGI("Opening file");
-			mGameServices->Snapshots()
-				.Open(mCurrentSnapshot.FileName(),
-				gpg::SnapshotConflictPolicy::LONGEST_PLAYTIME,
-				[this](gpg::SnapshotManager::OpenResponse const & response)
-					{
-						LOGI("Opened file");
-						if (IsSuccess(response.status))
+			if (mGameServices != nullptr)
+				mGameServices->Snapshots()
+					.Open(mCurrentSnapshot.FileName(),
+					gpg::SnapshotConflictPolicy::LONGEST_PLAYTIME,
+					[this](gpg::SnapshotManager::OpenResponse const & response)
 						{
-							  //Do need conflict resolution?
-							  if (response.data.Valid() == false)
-							  {
-									if (response.conflict_id != "")
-									{
-										LOGI("Need conflict resolution");
-										bool b = resolveConflicts(response, 0);
-										if (!b)
+							LOGI("Opened file");
+							if (IsSuccess(response.status))
+							{
+								  //Do need conflict resolution?
+								  if (response.data.Valid() == false)
+								  {
+										if (response.conflict_id != "")
+										{
+											LOGI("Need conflict resolution");
+											bool b = resolveConflicts(response, 0);
+											if (!b)
+											{
+												mSavedGameState = LOADING_ERROR;
+												LOGI("Failed resolving conflicts");
+												mProcessing--;
+												return;
+											}
+										}
+										else
 										{
 											mSavedGameState = LOADING_ERROR;
-											LOGI("Failed resolving conflicts");
+											mProcessing--;
 											return;
 										}
-									}
-									else
-									{
-										mSavedGameState = LOADING_ERROR;
-										return;
-									}
-							  }
+								  }
 
-							  LOGI("Reading file");
-							  gpg::SnapshotManager::ReadResponse responseRead =
-								  mGameServices->Snapshots().ReadBlocking(response.data);
-							  if (IsSuccess(responseRead.status))
-							  {
-								  LOGI("Data loaded");
-								  mCurrentSnapshotData = responseRead.data;
-								  mSavedGameState = LOADING_OK;
-							  }
-							  else
-								  mSavedGameState = LOADING_ERROR;
-						}
-						else
-						{
-							mSavedGameState = LOADING_ERROR;
-							LOGI("Error opening snapshot!");
-						}
+								  LOGI("Reading file %d", mProcessing);
+								  if (mGameServices != nullptr)
+								  {
+									  gpg::SnapshotManager::ReadResponse responseRead =
+										  mGameServices->Snapshots().ReadBlocking(response.data);
+									  if (IsSuccess(responseRead.status))
+									  {
+										  LOGI("Data loaded");
+										  mCurrentSnapshotData = responseRead.data;
+										  mSavedGameState = LOADING_OK;
+									  }
+									  else
+										  mSavedGameState = LOADING_ERROR;
+								  }
+								  mProcessing--;
+								  mConnectionState = ONLINE;
+							}
+							else
+							{
+								mSavedGameState = LOADING_ERROR;
+								LOGI("Error opening snapshot!");
+								mConnectionState = ONLINE;
+								mProcessing--;
+							}
 
-					});
+						});
 		}
 
 		bool GameServices::resolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse, const int retry)
@@ -533,6 +653,12 @@ namespace MPACK
 			return str.str();
 		}
 	}
+}
+
+
+void setCancel()
+{
+	MPACK::SERVICES::mCanceledGameServicesLoginProcess = true;
 }
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
@@ -556,57 +682,61 @@ extern "C" {
 	 * provided by Android, so no additional processing is necessary.
 	 */
 	JNIEXPORT void
-	Java_com_PukApp_MPACK_MainActivity_nativeOnActivityResult(
+	Java_com_PukApp_ElasticEscape_MainActivity_nativeOnActivityResult(
 		JNIEnv *env, jobject thiz, jobject activity, jint requestCode,
 		jint resultCode, jobject data)
 	{
+	  if (resultCode == 0)
+	  {
+		  setCancel();
+	  }
 	  gpg::AndroidSupport::OnActivityResult(env, activity, requestCode, resultCode,
 											data);
 	}
 
 	JNIEXPORT void
-	Java_com_PukApp_MPACK_MainActivity_nativeOnActivityCreated(
+	Java_com_PukApp_ElasticEscape_MainActivity_nativeOnActivityCreated(
 		JNIEnv *env, jobject thiz, jobject activity, jobject saved_instance_state)
 	{
 	  gpg::AndroidSupport::OnActivityCreated(env, activity, saved_instance_state);
 	}
 
 	JNIEXPORT void
-	Java_com_PukApp_MPACK_MainActivity_nativeOnActivityDestroyed(
+	Java_com_PukApp_ElasticEscape_MainActivity_nativeOnActivityDestroyed(
 		JNIEnv *env, jobject thiz, jobject activity)
 	{
 	  gpg::AndroidSupport::OnActivityDestroyed(env, activity);
 	}
 
 	JNIEXPORT void
-	Java_com_PukApp_MPACK_MainActivity_nativeOnActivityPaused(
+	Java_com_PukApp_ElasticEscape_MainActivity_nativeOnActivityPaused(
 		JNIEnv *env, jobject thiz, jobject activity) {
 	  gpg::AndroidSupport::OnActivityPaused(env, activity);
 	}
 
 	JNIEXPORT void
-	Java_com_PukApp_MPACK_MainActivity_nativeOnActivityResumed(
+	Java_com_PukApp_ElasticEscape_MainActivity_nativeOnActivityResumed(
 		JNIEnv *env, jobject thiz, jobject activity)
 	{
 	  gpg::AndroidSupport::OnActivityResumed(env, activity);
 	}
 
 	JNIEXPORT void
-	Java_com_PukApp_MPACK_MainActivity_nativeOnActivitySaveInstanceState(
+	Java_com_PukApp_ElasticEscape_MainActivity_nativeOnActivitySaveInstanceState(
 		JNIEnv *env, jobject thiz, jobject activity, jobject out_state)
 	{
 	  gpg::AndroidSupport::OnActivitySaveInstanceState(env, activity, out_state);
 	}
 
 	JNIEXPORT void
-	Java_com_PukApp_MPACK_MainActivity_nativeOnActivityStarted(
+	Java_com_PukApp_ElasticEscape_MainActivity_nativeOnActivityStarted(
 		JNIEnv *env, jobject thiz, jobject activity)
 	{
 	  gpg::AndroidSupport::OnActivityStarted(env, activity);
 	}
 
 	JNIEXPORT void
-	Java_com_PukApp_MPACK_MainActivity_nativeOnActivityStopped(
+	Java_com_PukApp_ElasticEscape_MainActivity_nativeOnActivityStopped(
 		JNIEnv *env, jobject thiz, jobject activity)
 	{
 	  gpg::AndroidSupport::OnActivityStopped(env, activity);

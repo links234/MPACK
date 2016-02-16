@@ -15,10 +15,21 @@ namespace MPACK
 
 			InAppPurchases::InAppPurchases()
 			{
-				//mIsLoaded = false;
 				mActivity = MPACK::Global::pAndroidApp->activity;
 				mJvm = MPACK::Global::pAndroidApp->activity->vm;
+				mLoadedPrices = false;
+				mPrices.clear();
 				callMainActivityJavaFunction("sendInAppPurchasesJavaVmToCpp");
+			}
+
+			bool InAppPurchases::isPriceQueried()
+			{
+				return callInAppPurchasesBoolJavaFunctionWithoutParams("isPriceQueried");
+			}
+
+			bool InAppPurchases::isQueried()
+			{
+				return callInAppPurchasesBoolJavaFunctionWithoutParams("isQueried");
 			}
 
 			void InAppPurchases::bindServices()
@@ -26,8 +37,10 @@ namespace MPACK
 				callInAppPurchasesVoidJavaFunctionWithoutParams("bindServices");
 			}
 
-			void InAppPurchases::destroy()
+			InAppPurchases::~InAppPurchases()
 			{
+				mLoadedPrices = false;
+				mPrices.clear();
 				callInAppPurchasesVoidJavaFunctionWithoutParams("destroy");
 			}
 
@@ -68,6 +81,8 @@ namespace MPACK
 
 			void InAppPurchases::startPriceQuery(const vector<string> & ids)
 			{
+				mLoadedPrices = false;
+				mPrices.clear();
 				callInAppPurchasesVoidJavaFunctionVectorString("startPriceQuery", ids);
 			}
 			void InAppPurchases::consumeAllPurchases(const string developerPayload)
@@ -77,19 +92,23 @@ namespace MPACK
 
 			vector<pair<string,string> > InAppPurchases::getAllPrices()
 			{
-				vector<string> res;
-				vector<pair<string,string> > ans;
-				res = callInAppPurchasesVectorStringJavaFunctionWithoutParams("getAllPrices");
 
-				for (int i = 0;i < res.size();i++)
+				if (!mLoadedPrices)
 				{
-					string s = res[i];
-					int ind = s.find(SEPARATOR);
+					mLoadedPrices = true;
+					vector<string> res;
+					res = callInAppPurchasesVectorStringJavaFunctionWithoutParams("getAllPrices");
 
-					ans.push_back(make_pair(s.substr(0,ind), s.substr(ind + SEPARATOR.size()) ));
+					for (int i = 0;i < res.size();i++)
+					{
+						string s = res[i];
+						int ind = s.find(SEPARATOR);
+
+						mPrices.push_back(make_pair(s.substr(0,ind), s.substr(ind + SEPARATOR.size()) ));
+					}
 				}
 
-				return ans;
+				return mPrices;
 			}
 
 			vector<string> InAppPurchases::getConsumedItems()
@@ -123,18 +142,33 @@ namespace MPACK
 			 int InAppPurchases::callInAppPurchasesIntJavaFunctionWithoutParams(const char * name)
 			 {
 
-			 	JNIEnv* env = NULL;
+				JNIEnv* env = NULL;
 
-			 	InAppPurchasesJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
+				InAppPurchasesJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
 
-			 	int res = InAppPurchasesJvm->AttachCurrentThread(&env, NULL);
+				int res = InAppPurchasesJvm->AttachCurrentThread(&env, NULL);
 
-			 	jclass cls = env->GetObjectClass(InAppPurchasesJobject);
-			 	jmethodID methodID =  env ->GetMethodID(cls, name , "()I");
-			 	jint state = env ->CallIntMethod(InAppPurchasesJobject, methodID);
-			 	InAppPurchasesJvm->DetachCurrentThread();
-			 	return (int)state;
+				jclass cls = env->GetObjectClass(InAppPurchasesJobject);
+				jmethodID methodID =  env ->GetMethodID(cls, name , "()I");
+				jint state = env ->CallIntMethod(InAppPurchasesJobject, methodID);
+				InAppPurchasesJvm->DetachCurrentThread();
+				return (int)state;
 			 }
+
+			bool InAppPurchases::callInAppPurchasesBoolJavaFunctionWithoutParams(const char * name)
+			{
+				JNIEnv* env = NULL;
+
+				InAppPurchasesJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
+
+				int res = InAppPurchasesJvm->AttachCurrentThread(&env, NULL);
+
+				jclass cls = env->GetObjectClass(InAppPurchasesJobject);
+				jmethodID methodID =  env ->GetMethodID(cls, name , "()Z");
+				jboolean state = env ->CallBooleanMethod(InAppPurchasesJobject, methodID);
+				InAppPurchasesJvm->DetachCurrentThread();
+				return (bool)state;
+			}
 
 			void InAppPurchases::callInAppPurchasesVoidJavaFunctionWithoutParams(const char * name)
 			{
@@ -279,7 +313,7 @@ namespace MPACK
 
 extern "C"
 {
-	JNIEXPORT void JNICALL Java_com_PukApp_MPACK_InAppPurchases_nativeInAppPurchases(JNIEnv *env,jobject obj)
+	JNIEXPORT void JNICALL Java_com_PukApp_ElasticEscape_InAppPurchases_nativeInAppPurchases(JNIEnv *env,jobject obj)
 	{
 		int status = env->GetJavaVM( &InAppPurchasesJvm);
 

@@ -35,27 +35,48 @@ namespace MPACK
 			//	jobject mGoogleAdsJobject;
 
 			public:
-				void callMainActivityJavaFunction(const char *);
+				void callMainActivityJavaFunction(const char *, bool p);
 				void callGoogleAdsVoidJavaFunctionWithoutParams(const char * );
 				void callGoogleAdsVoidJavaFunctionBool(const char *,jboolean);
+				bool callGoogleAdsBoolJavaFunctionWithoutParams(const char *);
+				int callGoogleAdsIntJavaFunctionWithoutParams(const char *);
 				//Ordinea : int, bool, float, string
 
 			public:
 
-				GoogleAds();
+				GoogleAds(bool showAds = true);
 				void showBanner(bool top);
 				void showSmartBanner(bool top);
 				void showLargeBanner(bool top);
 
+				void removeAllAds();
 				void hideBanner();
 				void hideSmartBanner();
 				void hideLargeBanner();
-
 
 				void showTextImageInterstitial();
 				void showTextImageVideoInterstitial();
 				void showVideoInterstitial();
 
+				bool isBannerShowed();
+				bool isLargeBannerShowed();
+				bool isSmartBannerShowed();
+
+				int getBannerWidth();
+				int getBannerHeight();
+				int getLargeBannerWidth();
+				int getLargeBannerHeight();
+				int getSmartBannerWidth();
+				int getSmartBannerHeight();
+
+
+				 bool isTIVInterstitialShowed();
+				 bool isVInterstitialShowed();
+				 bool isTIInterstitialShowed();
+
+				 bool isTIVInterstitialLoaded();
+				 bool isVInterstitialLoaded();
+				 bool isTIInterstitialLoaded();
 		};
 	}
 }
