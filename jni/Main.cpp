@@ -9,7 +9,7 @@ MPACK_MAIN
 {
 	MPACK_INITIALIZE;
 
-	MPACK_RUN(Demo::AndroidApplication, result);
+	MPACK_RUN(Demo::NetworkConsoleApplication, result);
 
     MPACK_SHUTDOWN;
 
