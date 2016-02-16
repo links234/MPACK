@@ -12,7 +12,7 @@ namespace MPACK
 			int Init()
 			{
 				LOGI("Network::Wrapper::Init() start");
-#ifdef	WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM)
 				WORD versionRequested;
 				WSADATA wsaData;
 				DWORD bufferSize = 0;
@@ -86,7 +86,7 @@ namespace MPACK
 
 			void Shutdown()
 			{
-#ifdef WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM)
 				WSACleanup();
 #endif
 				LOGI("Network::Wrapper::Shutdown() successfully");
@@ -112,10 +112,10 @@ namespace MPACK
 				if((sock = socket(AF_INET, type, proto)) == INVALID_SOCKET)
 				{
 					LOGI("Network::Socket() - socket() failed");
-	
+
 					LogLastError("socket()");
 				}
-	
+
 				return sock;
 			}
 
@@ -123,19 +123,19 @@ namespace MPACK
 			{
 				u_long set = setMode;
 
-#ifdef	WINDOWS_PLATFORM
+#if	defined(WINDOWS_PLATFORM)
 				return ioctlsocket(sock, FIONBIO, &set);
-#elif	defined(LINUX_PLATFORM)
+#elif	defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 				return ioctl(sock, FIONBIO, &set);
 #endif
 			}
 
 			int SetBroadcast(const SOCKET sock, const u_long setMode)
 			{
-#ifdef 	WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM)
 				char set = setMode;
 				if(setsockopt(sock, SOL_SOCKET, SO_BROADCAST, (const char*)&set, sizeof(set))==SOCKET_ERROR)
-#elif	defined(LINUX_PLATFORM)
+#elif	defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 				u_long set = setMode;
 				if(setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &set, sizeof(set))==SOCKET_ERROR)
 #endif
@@ -163,9 +163,9 @@ namespace MPACK
 
 			void CloseSocket(SOCKET sock)
 			{
-#ifdef	WINDOWS_PLATFORM
+#if	defined(WINDOWS_PLATFORM)
 				closesocket(sock);
-#elif	defined(LINUX_PLATFORM)
+#elif	defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 				close(sock);
 #endif
 			}
@@ -266,24 +266,24 @@ namespace MPACK
 
 			void LogLastError(const char *message)
 			{
-#ifdef	WINDOWS_PLATFORM
+#if defined(WINDOWS_PLATFORM)
 				int errnumber = WSAGetLastError();
 				LOGE("Error in %s : code %d : %s", message, errnumber, strerror(errno));
-#elif	defined(LINUX_PLATFORM)
+#elif	defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 				LOGE("Error in %s : code %d : %s", message, errno, strerror(errno));
 #endif
 			}
 
 			int LogLastError_EWOULDBLOCK(const char *message)
 			{
-#ifdef	WINDOWS_PLATFORM
+#if	defined(WINDOWS_PLATFORM)
 				int errnumber = WSAGetLastError();
 				if(errnumber == WSAEWOULDBLOCK)
 				{
 					return 0;
 				}
 				LOGE("Error in %s : code %d : %s", message, errnumber, strerror(errno));
-#elif	defined(LINUX_PLATFORM)
+#elif	defined(LINUX_PLATFORM) || defined(OSX_PLATFORM)
 				if(errno == EWOULDBLOCK)
 				{
 					return 0;
@@ -295,4 +295,3 @@ namespace MPACK
 		}
 	}
 }
-

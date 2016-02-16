@@ -132,6 +132,13 @@ namespace MPACK
 		#define		FRAGMENTSHADER_FXAAI	"@Shaders/OpenGL2/PostFX/FXAAI.frag"
 		#define		VERTEXSHADER_FXAAII		"@Shaders/OpenGL2/PostFX/FXAAII.vert"
 		#define		FRAGMENTSHADER_FXAAII	"@Shaders/OpenGL2/PostFX/FXAAII.frag"
+		#elif	defined(OSX_PLATFORM)
+		#define		VERTEXSHADER_SPRITE		"@Shaders/OpenGL2/Sprite.vert"
+		#define		FRAGMENTSHADER_SPRITE	"@Shaders/OpenGL2/Sprite.frag"
+		#define		VERTEXSHADER_FXAAI		"@Shaders/OpenGL2/PostFX/FXAAI.vert"
+		#define		FRAGMENTSHADER_FXAAI	"@Shaders/OpenGL2/PostFX/FXAAI.frag"
+		#define		VERTEXSHADER_FXAAII		"@Shaders/OpenGL2/PostFX/FXAAII.vert"
+		#define		FRAGMENTSHADER_FXAAII	"@Shaders/OpenGL2/PostFX/FXAAII.frag"
 		#endif
 
 		bool LoadShaders()

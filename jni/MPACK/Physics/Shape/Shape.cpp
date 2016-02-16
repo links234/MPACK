@@ -8,5 +8,9 @@ namespace MPACK
 			: body(NULL)
 		{
 		}
+
+		Shape::~Shape()
+		{
+		}
 	}
 }

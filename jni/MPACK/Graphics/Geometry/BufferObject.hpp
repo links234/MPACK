@@ -35,7 +35,7 @@ namespace MPACK
 		};
 
 		template<GLenum target> inline BufferObject<target>::BufferObject()
-			: m_ibo(NULL), m_size(NULL), m_usage(NULL)
+			: m_ibo(0), m_size(0), m_usage(0)
 		{
 		}
 

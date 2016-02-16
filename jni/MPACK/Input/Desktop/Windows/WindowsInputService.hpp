@@ -11,6 +11,14 @@ namespace MPACK
 {
 	namespace Input
 	{
+		struct Finger;
+	}
+}
+
+namespace MPACK
+{
+	namespace Input
+	{
 		class WindowsInputService
 		{
 		public:

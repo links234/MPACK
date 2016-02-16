@@ -2,8 +2,9 @@
 #define MPACK_HPP
 
 #include "MPACKAndroid.hpp"
-#include "MPACKLinux.hpp"
 #include "MPACKWindows.hpp"
+#include "MPACKLinux.hpp"
+#include "MPACKOSX.hpp"
 
 #if defined(ANDROID_PLATFORM)
 	#define MPACK_MAIN	MPACK_ANDROID_MAIN
@@ -20,6 +21,11 @@
 	#define MPACK_INITIALIZE MPACK_LINUX_INITIALIZE
 	#define MPACK_RUN(pApp,result) MPACK_LINUX_RUN(pApp,result)
 	#define MPACK_RETURN(x) MPACK_LINUX_RETURN(x)
+#elif defined(OSX_PLATFORM)
+	#define MPACK_MAIN MPACK_OSX_MAIN
+	#define MPACK_INITIALIZE MPACK_OSX_INITIALIZE
+	#define MPACK_RUN(pApp,result) MPACK_OSX_RUN(pApp,result)
+	#define MPACK_RETURN(x) MPACK_OSX_RETURN(x)
 #endif
 
 #define MPACK_SHUTDOWN 							\

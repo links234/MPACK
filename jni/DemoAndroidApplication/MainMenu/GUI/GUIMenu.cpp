@@ -64,7 +64,7 @@ void GUIMenu::Render()
 	for(vector<GUIMenuButton*>::iterator it=m_button.begin();it!=m_button.end();++it)
 	{
 		m_sprite->m_position=(*it)->m_pos;
-		for(register int i=0;i<4;++i)
+		for(int i=0;i<4;++i)
 		{
 			Vector2f pos=m_sprite->m_position;
 			pos.x+=DX[i];

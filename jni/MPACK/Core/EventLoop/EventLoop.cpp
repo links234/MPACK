@@ -3,6 +3,7 @@
 #include "AndroidEventLoop.hpp"
 #include "WindowsEventLoop.hpp"
 #include "LinuxEventLoop.hpp"
+#include "OSXEventLoop.hpp"
 
 namespace MPACK
 {
@@ -34,6 +35,8 @@ namespace MPACK
 			pEventLoop=(EventLoop*)new WindowsEventLoop(data);
 	#elif	defined(LINUX_PLATFORM)
 			pEventLoop=(EventLoop*)new LinuxEventLoop(data);
+	#elif defined(OSX_PLATFORM)
+			pEventLoop=(EventLoop*)new OSXEventLoop(data);
 	#endif
 			return pEventLoop;
 		}

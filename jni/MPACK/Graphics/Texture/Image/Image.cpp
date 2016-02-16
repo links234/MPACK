@@ -103,6 +103,8 @@ namespace MPACK
 						return RETURN_VALUE_KO;
 					}
 				break;
+				default:
+				break;
 			}
 
 			return RETURN_VALUE_OK;
@@ -137,6 +139,8 @@ namespace MPACK
 						LOGE("Image::Save() fail to save image as PPM");
 						return RETURN_VALUE_KO;
 					}
+				break;
+				default:
 				break;
 			}
 			return RETURN_VALUE_OK;

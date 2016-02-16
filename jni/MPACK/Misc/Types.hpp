@@ -25,6 +25,13 @@
 	#include <cstdio>
 	#include <time.h>
 	#include <pthread.h>
+#elif defined(OSX_PLATFORM)
+	#include "GLee.h"
+	#include <OpenGL/gl.h>
+	#include <OpenGL/glu.h>
+	#include <cstdarg>
+	#include <cstdio>
+	#include <time.h>
 #endif
 
 #ifdef LINUX_PLATFORM
@@ -59,7 +66,7 @@
 #include <set>
 #include <map>
 
-#if defined(LINUX_PLATFORM) || defined(ANDROID_PLATFORM)
+#if defined(LINUX_PLATFORM) || defined(ANDROID_PLATFORM) || defined(OSX_PLATFORM)
 	#include <unordered_map>
 	#include <unordered_set>
 #endif

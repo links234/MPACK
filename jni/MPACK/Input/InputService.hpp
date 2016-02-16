@@ -5,6 +5,7 @@
 #include "Android/AndroidInputService.hpp"
 #include "Windows/WindowsInputService.hpp"
 #include "Linux/LinuxInputService.hpp"
+#include "OSX/OSXInputService.hpp"
 
 namespace MPACK
 {
@@ -24,12 +25,14 @@ namespace MPACK
 			Math::Vector2f 	m_pos;
 		};
 
-	#ifdef ANDROID_PLATFORM
+	#if defined(ANDROID_PLATFORM)
 		typedef	 AndroidInputService	InputService;
 	#elif	defined(WINDOWS_PLATFORM)
 		typedef	 WindowsInputService	InputService;
 	#elif	defined(LINUX_PLATFORM)
 		typedef LinuxInputService		InputService;
+	#elif defined(OSX_PLATFORM)
+		typedef OSXInputService	InputService;
 	#endif
 	}
 }

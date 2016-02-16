@@ -44,6 +44,7 @@ namespace MPACK
 				Read(pBuffer,count);
 				SetOffset(oldOffset);
 			}
+			return RETURN_VALUE_OK;
 		}
 
 		const void* FileInputResource::Bufferize()

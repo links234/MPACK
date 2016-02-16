@@ -12,6 +12,9 @@ src/com/android/vending/billing/IInAppBillingService.aidl
 #Local development assets
 assets/local/
 
+#OSX files
+*.DS_Store
+
 #Windows distro files
 game.exe
 
@@ -26,6 +29,9 @@ obj_win/
 
 #Linux binary folders
 obj_linux/
+
+#OSX binary folders
+obj_osx/
 
 #Android NDK/SDK binary folders
 bin/
@@ -50,4 +56,3 @@ lint.xml
 
 #Patterns
 *~
-
