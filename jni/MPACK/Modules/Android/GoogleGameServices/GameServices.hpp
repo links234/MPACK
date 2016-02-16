@@ -3,7 +3,7 @@
 #ifndef GAMESERVICES_H
 #define GAMESERVICES_H
 
-#define JUIHELPER_CLASS_NAME "com.PukApp.MPACK"
+#define JUIHELPER_CLASS_NAME "com.PukApp.ElasticEscape"
 
 #include <jni.h>
 #include <android_native_app_glue.h>
@@ -41,7 +41,9 @@ namespace MPACK
 				std::unique_ptr<gpg::GameServices> mGameServices;
 				string mConnectedClientId = "";
 				int mConnectionState = OFFLINE;
+				bool mSilentLogin = false;
 
+				int mProcessing = 0;
 				int mMaxRetry;
 				int mMaxSnapshots;
 				bool mAllowCreateSnapshotInUI;
@@ -54,13 +56,15 @@ namespace MPACK
 			public:
 				//GameServices login methods
 				GameServices();
+				~GameServices();
 				void signIn();
 				void signOut();
 				int getState();
 				void loadSnapShotUI();
-				void destroy();
 				int getConnectionState();
 				string getConnectedClientId();
+				int isProcessing();
+				void resetConnectionState();
 
 			public:
 				//Saved games methods
@@ -81,6 +85,7 @@ namespace MPACK
 			private :
 				//private Save games methods
 				bool resolveConflicts(gpg::SnapshotManager::OpenResponse const &openResponse, const int retry);
+				void fetchSnapshot();
 				void loadFromSnapshot();
 				string generateSaveFileName();
 				vector<unsigned char> setupSnapshotData();

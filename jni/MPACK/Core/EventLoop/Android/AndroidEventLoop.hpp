@@ -19,6 +19,16 @@ namespace MPACK
 {
 	namespace Core
 	{
+		enum
+		{
+			APP_STATUS_RUNNING          = 0x00000001,
+			APP_STATUS_ACTIVE           = 0x00000002,
+			APP_STATUS_FOCUSED          = 0x00000004,
+			APP_STATUS_HAS_REAL_SURFACE  = 0x00000008,
+
+			APP_STATUS_INTERACTABLE		= 0x0000000F
+		};
+
 		class AndroidEventLoop : public EventLoop
 		{
 		public:
@@ -28,15 +38,9 @@ namespace MPACK
 			void* GetWindowHandle() const;
 
 		protected:
-			void Activate();
-			void Deactivate();
-
 			void ProcessAppEvent(int32_t pCommand);
 			int32_t ProcessInputEvent(AInputEvent* pEvent);
 			void ProcessSensorEvent();
-
-			ReturnValue InitializeDisplay();
-			void DestroyDisplay();
 
 		private:
 			// Private callbacks handling events occuring in the thread loop.
@@ -44,12 +48,20 @@ namespace MPACK
 			static int32_t callback_input(android_app* pApplication, AInputEvent* pEvent);
 
 		private:
-			bool m_enabled;
-			bool m_quit;
-			bool m_paused;
+			bool ShouldRender();
+			bool IsAppInteractable();
+			bool IsContextLost();
+			bool IsContextBound();
+			bool IsAppRunning();
+			bool IsExiting();
+			void RequestExit();
+
+			bool m_requestExit;
 
 			EGLint		m_width, m_height;
-			EGLWindow 	m_window;
+			EGLWindow 	m_egl;
+
+			int m_state;
 		};
 	}
 }

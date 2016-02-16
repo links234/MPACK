@@ -7,7 +7,6 @@
 #include "CursorDrawer.hpp"
 
 #include "Texture2D.hpp"
-#include "TextureAtlasDataBase.hpp"
 #include "RenderTexture.hpp"
 #include "Image.hpp"
 #include "PNGImage.hpp"

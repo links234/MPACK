@@ -93,14 +93,14 @@ namespace MPACK
 
 		ReturnValue LinuxEventLoop::InitializeDisplay()
 		{
-			int width = 54*8;
-			int height = 95*8;
+			int width = 800;
+			int height = 600;
 			m_width = width;
 			m_height = height;
 			m_newWidth = width;
 			m_newHeight = height;
 			int bpp = 32;
-			bool fullscreen=false;
+			bool fullscreen = false;
 
 			m_display = XOpenDisplay(0);
 

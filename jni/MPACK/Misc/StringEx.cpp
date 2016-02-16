@@ -192,12 +192,11 @@ namespace MPACK
 				return !IsAlphaNumeric(ch) && IsVisible(ch);
 			}
 
-
 			bool ToInt(const string &str, int &number)
-			{	
+			{
 				if (str.size() == 0) return false;
 				int i = 0;
-				if (str[i] == '-' || str[i] == '+') 
+				if (str[i] == '-' || str[i] == '+')
 				{
 					if (str.size() == 1) return false;
 					i++;
@@ -234,6 +233,31 @@ namespace MPACK
 					ans+=str[index]-'0';
 				}
 				return semn*ans;
+			}
+
+			string ToString(const int number)
+			{
+				int x;
+				if (number < 0)
+					x = -number;
+				else
+					x = number;
+				string res;
+
+				if (x == 0)
+					return "0";
+
+				while (x)
+				{
+					res += (char)(x%10 + '0');
+					x/=10;
+				}
+
+				if (number < 0)
+					res += "-";
+
+				std::reverse(res.begin(), res.end());
+				return res;
 			}
 
 			bool ToBool(const string &str)

@@ -8,6 +8,7 @@
 
 #include "ParticleEffector.hpp"
 #include "ParticleEffectorColor.hpp"
+#include "ParticleEffectorColorAlpha.hpp"
 #include "ParticleEffectorGravity.hpp"
 
 #endif

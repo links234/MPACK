@@ -18,42 +18,49 @@ namespace MPACK
 			public:
 				static const string SEPARATOR;
 
-				const static int BINDING = 0;
-				const static int BINDING_ERROR = -1;
-				const static int BINDING_DONE = 1;
+				const static int BINDING = 1;
+				const static int BINDING_ERROR = 2;
+				const static int BINDING_DONE = 3;
 
-				const static int NO_PROCESS = 0;
-				const static int PROCESSING = 1;
-				const static int SUCCESS = 2;
-				const static int PURCHASE_CANCELED = 3;
-				const static int PURCHASE_ERROR = -1;
-				const static int CONSUME_ERROR = -2;
-				const static int CONSUMING_QUERY = 4;
+				const static int NO_PROCESS = 4;
+				const static int PROCESSING = 5;
+				const static int SUCCESS = 6;
+				const static int PURCHASE_CANCELED = 7;
+				const static int PURCHASE_ERROR = 8;
+				const static int CONSUME_ERROR = 9;
+				const static int CONSUMING_QUERY = 10;
 
-				const static int NO_TYPE = 0;
-				const static int PURCHASE_TYPE = 1;
-				const static int SUBSCRIPTION_TYPE = 2;
+				const static int NO_TYPE = 11;
+				const static int PURCHASE_TYPE = 12;
+				const static int SUBSCRIPTION_TYPE = 13;
 
-				const static int QUERYING = 1;
-				const static int QUERY_FINISHED = 2;
-				const static int QUERY_CONSUMING = 3;
-				const static int QUERY_ERROR = -1;
-				const static int QUERY_PRICE_FINISHED = 4;
-				const static int QUERYING_PRICE = 5;
+				const static int QUERYING = 14;
+				const static int QUERY_FINISHED = 15;
+				const static int QUERY_CONSUMING = 16;
+				const static int QUERY_ERROR = 17;
+				const static int QUERY_PRICE_FINISHED = 18;
+				const static int QUERYING_PRICE = 19;
 
 				ANativeActivity* mActivity;
 				JavaVM* mJvm;
+				bool mLoadedPrices;
+				bool mConsumed;
+				vector<pair<string, string>> mPrices;
 
 			public:
 				InAppPurchases();
+				~InAppPurchases();
 				void bindServices();
-				void destroy();
+
 				int getServiceBindingState();
 
 				void purchase(const string purchase_id, const string developerPayload);
 				void subscribe(const string purchase_id, const string developerPayload);
 				int getCurrentProcessState();
 				int getCurrentProcessType();
+
+				bool isQueried();
+				bool isPriceQueried();
 
 				int getCurrentQueryProcessState();
 				void startQuery();
@@ -65,6 +72,7 @@ namespace MPACK
 			private:
 				void callMainActivityJavaFunction(const char * );
 				int callInAppPurchasesIntJavaFunctionWithoutParams(const char *);
+				bool callInAppPurchasesBoolJavaFunctionWithoutParams(const char *);
 				void callInAppPurchasesVoidJavaFunctionWithoutParams(const char *);
 				void callInAppPurchasesVoidJavaFunctionString(const char * , const string);
 				void callInAppPurchasesVoidJavaFunction2String(const char * , const string, const string);

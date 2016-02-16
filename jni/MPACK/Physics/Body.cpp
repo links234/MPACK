@@ -9,7 +9,7 @@ namespace MPACK
 	namespace Physics
 	{
 		Body::Body(Shape *shape)
-		  : m_shape(shape->Clone()), userData(0)
+		  : m_shape(shape->Clone()), userData(0), ghost(false), keepTrajectory(false), forceCollision(false)
 		{
 			maskBits=1;
 			categoryBits=1;
@@ -34,6 +34,15 @@ namespace MPACK
 			m_tempInverseMomentOfInertia=m_inverseMomentOfInertia;
 			m_tempMass=m_mass;
 			m_tempInverseMass=m_inverseMass;
+
+			m_position_save = m_position;
+			m_velocity_save = m_velocity;
+
+			m_angularVelocity_save = m_angularVelocity;
+			m_torque_save = m_torque;
+			m_orientation_save = m_orientation;
+
+			m_force_save = m_force;
 		}
 
 		Body::~Body()
@@ -168,6 +177,44 @@ namespace MPACK
 				m_mass=0.0f;
 				m_inverseMass=0.0f;
 			}
+		}
+
+		void Body::SaveState()
+		{
+			m_position_save = m_position;
+			m_velocity_save = m_velocity;
+
+			m_angularVelocity_save = m_angularVelocity;
+			m_torque_save = m_torque;
+			m_orientation_save = m_orientation;
+
+			m_force_save = m_force;
+		}
+
+		void Body::ReloadState()
+		{
+			m_position = m_position_save;
+			m_velocity = m_velocity_save;
+
+			m_angularVelocity = m_angularVelocity_save;
+			m_torque = m_torque_save;
+			m_orientation = m_orientation_save;
+
+			m_force = m_force_save;
+		}
+
+		bool Body::KeepState(Body *body)
+		{
+			if(body->forceCollision)
+			{
+				return false;
+			}
+
+			if(keepTrajectory)
+			{
+				return true;
+			}
+			return body->ghost;
 		}
 
 		void Body::IntegrateForces(float delta)

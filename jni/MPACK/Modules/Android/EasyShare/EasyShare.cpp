@@ -21,22 +21,22 @@ namespace MPACK
 
 
 			void EasyShare::callMainActivityJavaFunction(const char *name)
-					{
-						JNIEnv* env = NULL;
+			{
+				JNIEnv* env = NULL;
 
-						mJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
+				mJvm->GetEnv( (void **)&env, JNI_VERSION_1_6);
 
-						jint res = mJvm->AttachCurrentThread(&env, NULL);
+				jint res = mJvm->AttachCurrentThread(&env, NULL);
 
-						jclass clazz = env->GetObjectClass( mActivity->clazz);
+				jclass clazz = env->GetObjectClass( mActivity->clazz);
 
-						jmethodID methodID = env->GetMethodID(clazz, name, "()V");
+				jmethodID methodID = env->GetMethodID(clazz, name, "()V");
 
-						env ->CallVoidMethod(mActivity->clazz, methodID);
+				env ->CallVoidMethod(mActivity->clazz, methodID);
 
-						mJvm->DetachCurrentThread();
+				mJvm->DetachCurrentThread();
 
-					}
+			}
 
 
 			void EasyShare::callEasyShareVoidJavaFunctionWithoutParams(const char * name)
@@ -75,7 +75,7 @@ namespace MPACK
 
 			}
 
-			void EasyShare::callEasyShareVoidJavaFunctionString(const char * name , string p1, string p2)
+			void EasyShare::callEasyShareVoidJavaFunctionString(const char * name ,const string p1, const string p2)
 			{
 
 
@@ -114,7 +114,7 @@ namespace MPACK
 
 			}
 
-			void EasyShare::Share(string shareSubject,string shareBody )
+			void EasyShare::Share(const string shareSubject,const string shareBody )
 			{
 
 				callEasyShareVoidJavaFunctionString("Share",shareSubject,shareBody);
@@ -126,7 +126,7 @@ namespace MPACK
 
 extern "C"
 {
-	JNIEXPORT void JNICALL Java_com_PukApp_MPACK_EasyShare_nativeEasyShare(JNIEnv *env,jobject obj)
+	JNIEXPORT void JNICALL Java_com_PukApp_ElasticEscape_EasyShare_nativeEasyShare(JNIEnv *env,jobject obj)
 	{
 		 int status = env->GetJavaVM( &EasyShareJvm);
 

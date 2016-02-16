@@ -40,6 +40,7 @@ namespace MPACK
 
 			bool ToInt(const std::string &str, int &number);
 			int ToInt(const std::string &str);
+			std::string ToString(const int number);
 			bool ToBool(const std::string &str);
 			double ToDouble(const std::string &str);
 

@@ -96,7 +96,7 @@ namespace MPACK
 {
 	namespace Core
 	{
-		typedef int		int32_t;
+		typedef int			int32_t;
 		typedef int32_t	 	ReturnValue;
 
 		const ReturnValue RETURN_VALUE_OK   = 0;

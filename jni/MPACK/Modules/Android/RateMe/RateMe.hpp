@@ -39,7 +39,6 @@ namespace MPACK
 				void rateNever();
 				void rateLater();
 				int check();
-				void update();
 				void reset();
 		};
 	}

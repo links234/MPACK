@@ -31,8 +31,11 @@ namespace MPACK
 		bool Texture2D::Load(string path, FilteringType filtering, GLenum s_mode, GLenum t_mode)
 		{
 			m_path = path;
-			if (TextureAtlasDataBase::GetTexture(path,m_pAtlasTex,m_atlasLeft,m_atlasTop,m_atlasRight,m_atlasBottom))
+			int width, height;
+			if (TextureAtlasDataBase::GetTexture(path,m_pAtlasTex,m_atlasLeft,m_atlasTop,m_atlasRight,m_atlasBottom,width,height))
 			{
+				m_width = width;
+				m_height = height;
 				return true;
 			}
 
@@ -153,7 +156,7 @@ namespace MPACK
 			if(m_pAtlasTex)
 			{
 				u = m_atlasLeft + (m_atlasRight - m_atlasLeft) * u;
-				v = m_atlasTop + (m_atlasBottom - m_atlasTop) * v;
+				v = m_atlasTop + (m_atlasBottom - m_atlasTop) * (1.0-v);
 			}
 		}
 

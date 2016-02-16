@@ -20,15 +20,12 @@ namespace MPACK
 
 			public:
 				EasyShare();
+				void Share(const string shareSubject,const string shareBody);
 
-			public:
+			private:
 				void callMainActivityJavaFunction(const char * );
 				void callEasyShareVoidJavaFunctionWithoutParams(const char *);
-				void callEasyShareVoidJavaFunctionString(const char *, string,string);
-
-			public:
-
-				void Share(string ,string);
+				void callEasyShareVoidJavaFunctionString(const char *,const string, const string);
 		};
 	}
 }

@@ -52,6 +52,12 @@ namespace MVFS
 
 	FileReaderMPACK* FileReaderMPACK::Open(const char *pPath)
 	{
-		return new FileReaderMPACK(pPath);
+		FileReaderMPACK *fileReaderMPACK = new FileReaderMPACK(pPath);
+		if(fileReaderMPACK)
+		{
+			return fileReaderMPACK;
+		}
+		LOGE("FileReaderMPACK::Open fileReaderMPACK is NULL");
+		return NULL;
 	}
 }
