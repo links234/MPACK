@@ -1,10 +1,10 @@
 #include "GraphicsService.hpp"
 
+#include "TextureAtlasDataBase.hpp"
 #include "Global.hpp"
 #include "TimeService.hpp"
 #include "Render.hpp"
 #include "Texture2D.hpp"
-#include "TextureAtlasDataBase.hpp"
 #include "TextureMappedFont.hpp"
 #include "Log.hpp"
 #include "Particles.hpp"
@@ -41,9 +41,9 @@ namespace MPACK
 			Render::EnableOrthoMode();
 			Render::EnableAlphaBlend();
 
-			TextureAtlasDataBase::Init();
-
 			LoadResources();
+
+			TextureAtlasDataBase::Init();
 
 			PostEffect::Init(Render::GetScreenWidth(),Render::GetScreenHeight());
 
@@ -81,9 +81,9 @@ namespace MPACK
 
 			GL_CHECK( glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) );
 
-			MPACK_DEV_PROFILE_BEGIN("Batcher");
+			//PROFILE_BEGIN("Batcher");
 			Batcher::FlushAll();
-			MPACK_DEV_PROFILE_END();
+			//PROFILE_END();
 
 			PostEffect::End();
 
