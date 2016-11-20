@@ -17,11 +17,12 @@ namespace MPACK
 		public:
 			enum InternalFormatType {NONE, GRAY, GRAY_ALPHA, RGB, RGBA};
 			enum FileFormatType {AUTO, PNG, TGA, PPM};
+			enum SeamCarvingType {RANDOM_PATH, GREEDY_PATH, BEST_PATH};
 
 			Image();
 			~Image();
 
-			void Init(const int &width, const int &height);
+			void Init(const int &width, const int &height, const bool grayscale = false);
 			Core::ReturnValue Load(const std::string& path, bool flipForOpenGL = true, FileFormatType fileFormatType = AUTO);
 			Core::ReturnValue Save(const std::string& path, FileFormatType fileFormatType = AUTO);
 			void Unload();
@@ -35,6 +36,20 @@ namespace MPACK
 
 			void FlipVertical();
 			void FlipHorizontal();
+			Image* Clone();
+
+			Image* Grayscale();
+			Image* Sobel();
+			Image* SeamCarvingHorizontalDownsize(SeamCarvingType type = BEST_PATH);
+			Image* SeamCarvingHorizontalDownsize(int downsize, SeamCarvingType type = BEST_PATH);
+
+			Image* RotateClockwise();
+			Image* RotateCounterClockwise();
+
+			Image* SeamCarvingVerticalDownsize(SeamCarvingType type = BEST_PATH);
+			Image* SeamCarvingVerticalDownsize(int downsize, SeamCarvingType type = BEST_PATH);
+
+			Image* SeamCarvingDownsize(int horizontalDownsize, int verticalDownsize, SeamCarvingType type = BEST_PATH);
 
 			GLushort GetWidth() const;
 			GLushort GetHeight() const;
@@ -47,7 +62,7 @@ namespace MPACK
 
 			const BYTE* GetImageData() const;
 			const BYTE* GetPixelPointer(const GLushort &x, const GLushort &y) const;
-			Color GetPixel(const GLushort &x, const GLushort &y) const;
+			Color GetPixel(GLushort x, GLushort y) const;
 			void SetPixel(const GLushort &x, const GLushort &y, const Color &c);
 
 		protected:

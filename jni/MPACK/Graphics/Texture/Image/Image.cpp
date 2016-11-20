@@ -1,5 +1,7 @@
 #include "Image.hpp"
 
+#include "Math.hpp"
+#include "Misc.hpp"
 #include "StringEx.hpp"
 #include "TargaImage.hpp"
 #include "PNGImage.hpp"
@@ -22,7 +24,7 @@ namespace MPACK
 			Unload();
 		}
 
-		void Image::Init(const int &width, const int &height)
+		void Image::Init(const int &width, const int &height, const bool grayscale)
 		{
 			Unload();
 
@@ -46,9 +48,18 @@ namespace MPACK
 				m_height = height;
 			}
 
-			m_bytesPerPixel = 4;
-			m_GLFormatType = GL_RGBA;
-
+			if (grayscale)
+			{
+				m_bytesPerPixel = 1;
+				m_GLFormatType = GL_LUMINANCE;
+				m_internalFormatType = InternalFormatType::GRAY;
+			}
+			else
+			{
+				m_bytesPerPixel = 4;
+				m_GLFormatType = GL_RGBA;
+				m_internalFormatType = InternalFormatType::RGBA;
+			}
 			m_imageBuffer = new BYTE[m_width * m_height * m_bytesPerPixel];
 		}
 
@@ -232,6 +243,277 @@ namespace MPACK
 			}
 		}
 
+		Image* Image::Clone()
+		{
+			Image *img = new Image;
+			img->Init(this->GetWidth(), this->GetHeight());
+			img->Blit(this, 0, 0);
+			return img;
+		}
+
+		Image* Image::Grayscale()
+		{
+			Image *img = new Image();
+			img->Init(this->GetWidth(), this->GetHeight());
+			for(int i = 0; i < m_width; ++i)
+			{
+				for(int j = 0; j < m_height; ++j)
+				{
+					img->SetPixel(i, j, GetPixel(i, j));
+				}
+			}
+			return img;
+		}
+
+		Image* Image::Sobel()
+		{
+			double kernelX[3][3] = {{-1, 0, 1},
+                       {-2, 0, 2},
+                       {-1, 0, 1}};
+
+		  double kernelY[3][3] = {{-1, -2, -1},
+                       {0,  0,  0},
+                       {1,  2,  1}};
+
+			Image *grayscale = this->Grayscale();
+			Image *img = grayscale->Clone();
+
+			for (int i = 0; i < grayscale->m_width; ++i)
+			{
+					for (int j = 0; j < grayscale->m_height; ++j)
+					{
+						double magX = 0.0;
+						double magY = 0.0;
+						for(int a = 0; a < 3; a++)
+						{
+						    for(int b = 0; b < 3; b++)
+						    {
+						        int xn = i + a - 1;
+						        int yn = j + b - 1;
+
+						        magX += grayscale->GetPixel(xn, yn).r * kernelX[a][b];
+										magY += grayscale->GetPixel(xn, yn).r * kernelY[a][b];
+						    }
+						 }
+						 double mag = Math::Misc<double>::Abs(magX) + Math::Misc<double>::Abs(magY);
+						 //double mag = Math::Misc<double>::Sqrt(magX * magX + magY * magY);
+						 img->SetPixel(i, j, Color(mag, mag, mag));
+					}
+			}
+			delete grayscale;
+			return img;
+		}
+
+		Image* Image::SeamCarvingHorizontalDownsize(SeamCarvingType type)
+		{
+			Image *energy = Sobel();
+			double *dpBestEnergy = new double[energy->m_width * energy->m_height];
+			int *dpBestPath = new int[energy->m_width * energy->m_height];
+
+			if (type == SeamCarvingType::BEST_PATH)
+			{
+				for (int i = 0; i < energy->m_width; ++i)
+				{
+					int offset = i * m_height + 0;
+					dpBestEnergy[offset] = energy->GetPixel(i, 0).r;
+					dpBestPath[offset] = 0;
+				}
+				for (int j = 1; j < energy->m_height; ++j)
+				{
+					for (int i = 0; i < energy->m_width; ++i)
+					{
+						int offset = i * energy->m_height + j;
+						dpBestEnergy[offset] = dpBestEnergy[i * energy->m_height + j - 1];
+						dpBestPath[offset] = dpBestPath[i * energy->m_height + j - 1];
+						if (i > 0)
+						{
+							int offset2 = (i - 1) * energy->m_height + j - 1;
+							if (dpBestEnergy[offset] > dpBestEnergy[offset2])
+							{
+								dpBestEnergy[offset] = dpBestEnergy[offset2];
+								dpBestPath[offset] = -1;
+							}
+						}
+						if (i < energy->m_width - 1)
+						{
+							int offset2 = (i + 1) * energy->m_height + j - 1;
+							if (dpBestEnergy[offset] > dpBestEnergy[offset2])
+							{
+								dpBestEnergy[offset] = dpBestEnergy[offset2];
+								dpBestPath[offset] = 1;
+							}
+						}
+						dpBestEnergy[offset] += energy->GetPixel(i, j).r;
+					}
+				}
+				int bestX = 0, bestY = energy->m_height - 1;
+				for (int i = 0; i < energy->m_width; ++i)
+				{
+					int bestOffset = bestX * energy->m_height + bestY;
+					int offset = i * energy->m_height + energy->m_height - 1;
+					if (dpBestEnergy[bestOffset] > dpBestEnergy[offset])
+					{
+						bestX = i;
+						bestY = energy->m_height - 1;
+					}
+				}
+				while (bestY >= 0)
+				{
+						int offset = bestX * energy->m_height + bestY;
+						dpBestEnergy[offset] = -1;
+						bestX += dpBestPath[offset];
+						--bestY;
+				}
+			}
+			else if (type == SeamCarvingType::RANDOM_PATH)
+			{
+				for (int i = 0; i < m_width; ++i)
+				{
+					for (int j = 0; j < m_height; ++j)
+					{
+						int offset = i * m_height + j;
+						dpBestEnergy[offset] = 0;
+					}
+				}
+				int x = Core::Random::Int(0, m_width - 1);
+				for (int y = 0; y < m_height; ++y)
+				{
+						int offset = x * m_height + y;
+						dpBestEnergy[offset] = -1;
+						x += Core::Random::Int(-1, 1);
+						x = Math::Misc<int>::Clamp(0, x, m_height - 1);
+				}
+			}
+			else if (type == SeamCarvingType::GREEDY_PATH)
+			{
+				for (int i = 0; i < m_width; ++i)
+				{
+					for (int j = 0; j < m_height; ++j)
+					{
+						int offset = i * m_height + j;
+						dpBestEnergy[offset] = 0;
+					}
+				}
+				int bestX = 0;
+				for (int x = 0; x < m_width; ++x)
+				{
+					if (energy->GetPixel(x, 0).r < energy->GetPixel(bestX, 0).r)
+					{
+						bestX = x;
+					}
+				}
+				int x = bestX;
+				int offset = x * m_height + 0;
+				dpBestEnergy[offset] = -1;
+				for (int y = 1; y < m_height; ++y)
+				{
+					if (x > 0) {
+						if (energy->GetPixel(x, y).r > energy->GetPixel(x - 1, y).r) {
+							x = x - 1;
+						}
+					}
+
+					if (x < m_width - 1) {
+						if (energy->GetPixel(x, y).r > energy->GetPixel(x + 1, y).r ) {
+							x = x + 1;
+						}
+					}
+
+					offset = x * m_height + y;
+					dpBestEnergy[offset] = -1;
+				}
+			}
+			delete energy;
+			Image *img = new Image();
+			img->Init(m_width - 1, m_height);
+			for (int j = 0; j < m_height; ++j)
+			{
+				int currentI = 0;
+				for (int i = 0; i < m_width; ++i)
+				{
+					int offset = i * m_height + j;
+					if (dpBestEnergy[offset] != -1)
+					{
+						img->SetPixel(currentI, j, GetPixel(i, j));
+						++currentI;
+					}
+				}
+			}
+			delete[] dpBestEnergy;
+			delete[] dpBestPath;
+			return img;
+		}
+
+		Image* Image::SeamCarvingHorizontalDownsize(int downsize, SeamCarvingType type)
+		{
+			if (downsize <= 0)
+			{
+				return Clone();
+			}
+			if (downsize == 1)
+			{
+				return SeamCarvingHorizontalDownsize(type);
+			}
+			Image *lastImg = SeamCarvingHorizontalDownsize(type);
+			for (int i = 1; i < downsize; ++i)
+			{
+				Image *img = lastImg->SeamCarvingHorizontalDownsize(type);
+				delete lastImg;
+				lastImg = img;
+			}
+			return lastImg;
+		}
+
+		Image* Image::RotateClockwise()
+		{
+			Image *img = new Image();
+			img->Init(m_height, m_width);
+			for (int i = 0; i < img->m_width; ++i) {
+				for (int j = 0; j < img->m_height; ++j) {
+					img->SetPixel(i, j, GetPixel(j, m_height - i - 1));
+				}
+			}
+			return img;
+		}
+
+		Image* Image::RotateCounterClockwise()
+		{
+			Image *img = new Image();
+			img->Init(m_height, m_width);
+			for (int i = 0; i < img->m_width; ++i) {
+				for (int j = 0; j < img->m_height; ++j) {
+					img->SetPixel(i, j, GetPixel(m_width - j - 1, i));
+				}
+			}
+			return img;
+		}
+
+		Image* Image::SeamCarvingVerticalDownsize(SeamCarvingType type)
+		{
+			Image *rotatedImg = RotateClockwise();
+			Image *img = rotatedImg->SeamCarvingHorizontalDownsize(type);
+			delete rotatedImg;
+			rotatedImg = img->RotateCounterClockwise();
+			return rotatedImg;
+		}
+
+		Image* Image::SeamCarvingVerticalDownsize(int downsize, SeamCarvingType type)
+		{
+			Image *rotatedImg = RotateClockwise();
+			Image *img = rotatedImg->SeamCarvingHorizontalDownsize(downsize, type);
+			delete rotatedImg;
+			rotatedImg = img->RotateCounterClockwise();
+			return rotatedImg;
+		}
+
+		Image* Image::SeamCarvingDownsize(int horizontalDownsize, int verticalDownsize, SeamCarvingType type)
+		{
+			Image *horizontalDownsizeImg = SeamCarvingHorizontalDownsize(horizontalDownsize, type);
+			Image *verticalDownsizeImg = horizontalDownsizeImg->SeamCarvingVerticalDownsize(verticalDownsize, type);
+			delete horizontalDownsizeImg;
+			return verticalDownsizeImg;
+		}
+
 		GLushort Image::GetWidth() const
 		{
 			return m_width;
@@ -275,8 +557,20 @@ namespace MPACK
 			return m_imageBuffer + index;
 		}
 
-		Color Image::GetPixel(const GLushort &x, const GLushort &y) const
+		Color Image::GetPixel(GLushort x, GLushort y) const
 		{
+			if (x < 0) {
+				x = 0;
+			}
+			if (y < 0) {
+				y = 0;
+			}
+			if (x >= m_width - 1) {
+				x = m_width - 1;
+			}
+			if (y >= m_height - 1) {
+				y = m_height - 1;
+			}
 			int index =  y * m_width + x;
 			index *= m_bytesPerPixel;
 			if (m_bytesPerPixel == 4)
