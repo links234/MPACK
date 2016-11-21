@@ -11,6 +11,7 @@ src/com/android/vending/billing/IInAppBillingService.aidl
 
 #Local development assets
 assets/local/
+img/results
 
 #OSX files
 *.DS_Store

@@ -84,6 +84,8 @@ namespace MPACK
 			static void SeamCarvingAddRectangleEnergyModifier(std::vector<SeamCarvingEdit> *energyModifiers, int x, int y, int xSize, int ySize, double add, double multiply = 1.0);
 
 		protected:
+			static void SeamCarvingVerticalExtendSeam(int *dest, int *src, int height);
+			static Image* SeamCarvingAddVertical(int *seam, Image *img);
 			static void ApplyVerticalSeamOnEnergyModifiers(std::vector<SeamCarvingEdit> *energyModifiers, int *seam, int height);
 			static void SeamCarvingApplyEnergyModifiers(double *energyMap, int width, int height, std::vector<SeamCarvingEdit> *energyModifiers);
 			static void RotateEnergyModifiersClockwise(std::vector<SeamCarvingEdit> *energyModifiers, int width, int height);

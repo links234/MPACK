@@ -251,7 +251,11 @@ namespace MPACK
 		Image* Image::Clone()
 		{
 			Image *img = new Image;
-			img->Init(this->GetWidth(), this->GetHeight());
+			if (m_bytesPerPixel == 1) {
+				img->Init(this->GetWidth(), this->GetHeight(), true);
+			} else {
+				img->Init(this->GetWidth(), this->GetHeight());
+			}
 			img->Blit(this, 0, 0);
 			return img;
 		}
@@ -259,7 +263,7 @@ namespace MPACK
 		Image* Image::Grayscale()
 		{
 			Image *img = new Image();
-			img->Init(this->GetWidth(), this->GetHeight());
+			img->Init(this->GetWidth(), this->GetHeight(), true);
 			for(int i = 0; i < m_width; ++i)
 			{
 				for(int j = 0; j < m_height; ++j)
@@ -296,8 +300,8 @@ namespace MPACK
 						        int xn = i + a - 1;
 						        int yn = j + b - 1;
 
-						        magX += grayscale->GetPixel(xn, yn).r * kernelX[a][b];
-										magY += grayscale->GetPixel(xn, yn).r * kernelY[a][b];
+						        magX += (double)(grayscale->GetPixel(xn, yn).r) * kernelX[a][b];
+										magY += (double)(grayscale->GetPixel(xn, yn).r) * kernelY[a][b];
 						    }
 						 }
 						 double mag = Math::Misc<double>::Abs(magX) + Math::Misc<double>::Abs(magY);
@@ -315,28 +319,70 @@ namespace MPACK
 			{
 				for (int j = 0; j < ySize; ++j)
 				{
-					energyModifiers->push_back(SeamCarvingEdit(x + i, y + i, add, multiply));
+					energyModifiers->push_back(SeamCarvingEdit(x + i, y + j, add, multiply));
 				}
 			}
 		}
 
+		void Image::SeamCarvingVerticalExtendSeam(int *dest, int *src, int height)
+		{
+			for (int j = 0; j < height; ++j)
+			{
+				if (dest[j] > src[j])
+				{
+					++dest[j];
+				}
+			}
+		}
+
+		Image* Image::SeamCarvingAddVertical(int *seam, Image *img)
+		{
+			Image *result = new Image();
+			result->Init(img->GetWidth() + 1, img->GetHeight());
+			for (int j = 0; j < img->GetHeight(); ++j)
+			{
+				int currentI = 0;
+				for (int i = 0; i < img->GetWidth(); ++i)
+				{
+					if (seam[j] != i)
+					{
+						result->SetPixel(currentI, j, img->GetPixel(i, j));
+					}
+					else if (seam[j] == i)
+					{
+						Color color = img->GetPixel(i, j);
+						result->SetPixel(currentI, j, color);
+						++currentI;
+						Color colorL = img->GetPixel(i - 1, j);
+						Color colorR = img->GetPixel(i + 1, j);
+						color.r = ((double)(colorL.r) + (double)(color.r) + (double)(colorR.r))/3.0;
+						color.g = ((double)(colorL.g) + (double)(color.g) + (double)(colorR.g))/3.0;
+						color.b = ((double)(colorL.b) + (double)(color.b) + (double)(colorR.b))/3.0;
+						color.a = ((double)(colorL.a) + (double)(color.a) + (double)(colorR.a))/3.0;
+						result->SetPixel(currentI, j, color);
+					}
+					++currentI;
+				}
+			}
+			return result;
+		}
+
 		void Image::ApplyVerticalSeamOnEnergyModifiers(std::vector<SeamCarvingEdit> *energyModifiers, int *seam, int height)
 		{
-			vector<vector<SeamCarvingEdit>::iterator> toDelete;
+			vector<SeamCarvingEdit> tmp;
 			for (vector<SeamCarvingEdit>::iterator it = energyModifiers->begin(); it != energyModifiers->end(); ++it)
 			{
-				if (seam[it->pixel.y] > it->pixel.x)
+				if (seam[it->pixel.y] < it->pixel.x)
 				{
 					--it->pixel.x;
+					tmp.push_back(*it);
 				}
-				else if (seam[it->pixel.y] == it->pixel.x)
+				else if (seam[it->pixel.y] != it->pixel.x)
 				{
-					toDelete.push_back(it);
+					tmp.push_back(*it);
 				}
 			}
-			for (vector<vector<SeamCarvingEdit>::iterator>::reverse_iterator it = toDelete.rbegin(); it != toDelete.rend(); ++it) {
-				energyModifiers->erase(*it);
-			}
+			*energyModifiers = tmp;
 		}
 
 		void Image::SeamCarvingApplyEnergyModifiers(double *energyMap, int width, int height, vector<SeamCarvingEdit> *energyModifiers)
@@ -407,7 +453,7 @@ namespace MPACK
 					{
 						int offset = i * img->GetHeight() + j;
 						dpBestEnergy[offset] = dpBestEnergy[i * img->GetHeight() + j - 1];
-						dpBestPath[offset] = dpBestPath[i * img->GetHeight() + j - 1];
+						dpBestPath[offset] = 0;
 						if (i > 0)
 						{
 							int offset2 = (i - 1) * img->GetHeight() + j - 1;
@@ -443,6 +489,8 @@ namespace MPACK
 				while (bestY >= 0)
 				{
 						seam[bestY] = bestX;
+						int offset = bestX * img->GetHeight() + bestY;
+						bestX += dpBestPath[offset];
 						--bestY;
 				}
 				delete[] energyMap;
@@ -456,7 +504,7 @@ namespace MPACK
 				{
 						seam[y] = x;
 						x += Core::Random::Int(-1, 1);
-						x = Math::Misc<int>::Clamp(0, x, img->GetHeight() - 1);
+						x = Math::Misc<int>::Clamp(0, x, img->GetWidth() - 1);
 				}
 			}
 			else if (type == Image::SeamCarvingType::GREEDY_PATH)
@@ -594,10 +642,19 @@ namespace MPACK
 
 		Image* Image::SeamCarvingVerticalDownsize(SeamCarvingType type, vector<SeamCarvingEdit> *energyModifiers)
 		{
+			if (energyModifiers)
+			{
+				Image::RotateEnergyModifiersClockwise(energyModifiers, m_width, m_height);
+			}
 			Image *rotatedImg = RotateClockwise();
 			Image *img = rotatedImg->SeamCarvingHorizontalDownsize(type, energyModifiers);
 			delete rotatedImg;
 			rotatedImg = img->RotateCounterClockwise();
+			if (energyModifiers)
+			{
+				Image::RotateEnergyModifiersCounterClockwise(energyModifiers, img->m_width, img->m_height);
+			}
+			delete img;
 			return rotatedImg;
 		}
 
@@ -615,6 +672,7 @@ namespace MPACK
 			{
 				Image::RotateEnergyModifiersCounterClockwise(energyModifiers, img->m_width, img->m_height);
 			}
+			delete img;
 			return rotatedImg;
 		}
 
@@ -628,7 +686,78 @@ namespace MPACK
 
 		Image* Image::SeamCarvingHorizontalUpsize(int upsize, SeamCarvingType type, vector<SeamCarvingEdit> *energyModifiers)
 		{
+			if (upsize == 0)
+			{
+				return Clone();
+			}
+			vector<int*> seams;
+			Image *lastImg = this;
+			bool internalModifiers = false;
+			if (!energyModifiers)
+			{
+				internalModifiers = true;
+				energyModifiers = new vector<SeamCarvingEdit>;
+			}
+			for (int i = 0; i < upsize; ++i)
+			{
+				int *seam = Image::GetSeam(lastImg, type, energyModifiers);
+				Image *img = new Image();
+				img->Init(m_width - 1, m_height);
+				for (int j = 0; j < m_height; ++j)
+				{
+					int currentI = 0;
+					for (int i = 0; i < m_width; ++i)
+					{
+						if (seam[j] != i)
+						{
+							img->SetPixel(currentI, j, GetPixel(i, j));
+							++currentI;
+						}
+						else
+						{
+							energyModifiers->push_back(SeamCarvingEdit(i, j, -100, -2));
+						}
+					}
+				}
+				if (energyModifiers)
+				{
+					Image::ApplyVerticalSeamOnEnergyModifiers(energyModifiers, seam, m_height);
+				}
+				if (lastImg != this)
+				{
+					delete lastImg;
+				}
+				lastImg = img;
+				seams.push_back(seam);
+			}
+			if (internalModifiers) {
+				delete energyModifiers;
+			}
 
+			for (int i = 0; i < (int)(seams.size()); ++i)
+			{
+					for (int j = 0; j < i; ++j)
+					{
+							Image::SeamCarvingVerticalExtendSeam(seams[j], seams[i], m_height);
+					}
+			}
+
+			lastImg = this;
+			for (int i = (int)(seams.size()); i > 0; --i)
+			{
+				int *seam = seams[i];
+				Image *img = Image::SeamCarvingAddVertical(seam, lastImg);
+				for (int j = 0; i < j; ++j)
+				{
+					Image::SeamCarvingVerticalExtendSeam(seams[j], seam, m_height);
+				}
+				if (lastImg != this)
+				{
+					delete lastImg;
+				}
+				lastImg = img;
+			}
+			return lastImg;
 		}
 
 		Image* Image::SeamCarvingVerticalUpsize(int upsize, SeamCarvingType type, vector<SeamCarvingEdit> *energyModifiers)
@@ -645,13 +774,14 @@ namespace MPACK
 			{
 				Image::RotateEnergyModifiersCounterClockwise(energyModifiers, img->m_width, img->m_height);
 			}
+			delete img;
 			return rotatedImg;
 		}
 
 		Image* Image::SeamCarvingUpsize(int horizontalUpsize, int verticalUpsize, SeamCarvingType type, vector<SeamCarvingEdit> *energyModifiers)
 		{
 				Image *horizontalUpsizeImg = SeamCarvingHorizontalUpsize(horizontalUpsize, type, energyModifiers);
-				Image *verticalUpsizeImg = SeamCarvingVerticalUpsize(verticalUpsize, type, energyModifiers);
+				Image *verticalUpsizeImg = horizontalUpsizeImg->SeamCarvingVerticalUpsize(verticalUpsize, type, energyModifiers);
 				delete horizontalUpsizeImg;
 				return verticalUpsizeImg;
 		}
