@@ -1,3 +1,5 @@
+#define LINUX_PLATFORM
+
 #include "MPACK.hpp"
 #include "DemoConsoleApplication.hpp"
 #include "DemoAndroidApplication.hpp"
@@ -10,7 +12,7 @@ MPACK_MAIN
 {
 	MPACK_INITIALIZE;
 
-	MPACK_RUN(Demo::SeamCarvingApplication, result);
+	MPACK_RUN(Demo::AndroidApplication, result);
 
     MPACK_SHUTDOWN;
 
